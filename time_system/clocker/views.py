@@ -4,6 +4,10 @@ from models import Employee
 
 
 def main_page(request):
+    """
+    The clock in page.  Grabs user input data to determine if the user can clock in/out.  Returns back a dictionary
+    with information about the success or failure of clocking the employee in/out.
+    """
 
     if request.method == 'POST':
         user_name = request.POST.get('user_name')
@@ -23,7 +27,5 @@ def main_page(request):
 
         except Employee.DoesNotExist:
             return render_to_response('main_page.html', {'error':"user", 'user_name':user_name}, context_instance=RequestContext(request))
-
-        return render_to_response('main_page.html', context_instance=RequestContext(request))
 
     return render_to_response('main_page.html', context_instance=RequestContext(request))

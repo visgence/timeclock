@@ -29,7 +29,6 @@ body
     left: 35%;
     background-image:url(visgence.png);
     background-repeat:no-repeat;
-    border-style:solid;
 }
 
 .user_name
@@ -65,7 +64,6 @@ body
     width:500px;
     position:relative;
     top:70%;
-    border-style:dotted;
 }
 
 
