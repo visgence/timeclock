@@ -1,6 +1,8 @@
 from django.shortcuts import render_to_response
 from django.template import RequestContext
+from django.contrib.auth import authenticate, login, logout
 from models import Employee
+import check_access
 
 
 def main_page(request):
@@ -9,7 +11,11 @@ def main_page(request):
     with information about the success or failure of clocking the employee in/out.
     """
 
-    if request.method == 'POST':
+    #response = check_access(request)
+    #if(response):
+    #    return response
+
+    if (request.method == 'POST'):
         user_name = request.POST.get('user_name')
         status = request.POST.get('status')
 
@@ -29,3 +35,4 @@ def main_page(request):
             return render_to_response('main_page.html', {'error':"user", 'user_name':user_name}, context_instance=RequestContext(request))
 
     return render_to_response('main_page.html', context_instance=RequestContext(request))
+

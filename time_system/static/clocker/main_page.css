@@ -26,12 +26,22 @@ body
     height:400px;
     position:fixed;
     top: 20%;
-    left: 35%;
+    left: 40%;
     background-image:url(visgence.png);
     background-repeat:no-repeat;
 }
 
 .user_name
+{
+    width:130px;
+    height:50px;
+    position:relative;
+    top:200px;
+    left:50px;
+    float:left;
+}
+
+.password
 {
     width:130px;
     height:50px;
@@ -51,12 +61,18 @@ body
     position:relative;
 }
 
-.submit
+.submit_login
 {
     position:relative;
-    top:265px;
-    width:100px;
-    right:100px;
+    top:300px;
+    right:85px;
+}
+
+.submit_clock
+{
+    position:relative;
+    top:260px;
+    right:25px;
 }
 
 .message
