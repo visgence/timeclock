@@ -19,10 +19,6 @@ def main_page(request):
         user_name = request.POST.get('user_name')
         status = request.POST.get('status')
 
-        #base cases for when the use simply hits submit with no user name
-        if(user_name == ''):
-            return render_to_response('main_page.html', {'error':"empty"}, context_instance=RequestContext(request))
-
         try:
 
             employee = Employee.objects.get(user__username=user_name)

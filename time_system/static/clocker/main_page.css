@@ -82,5 +82,12 @@ body
     top:70%;
 }
 
+.error
+{
+    position:relative;
+    top:200px;
+    left:50px;
+}
+
 
 

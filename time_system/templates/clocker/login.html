@@ -1,7 +1,7 @@
 {%extends "base.html"%}
 {%block content%}
 <div style="margin-left: auto;px;margin-right: auto; width:200px;">
-    <div style="color:red">{{error}}</div>
+    <div style="color:red" class="error">{{error}}</div>
     <form action="../login/" method="post">
         {% csrf_token %}
         <div class="user_name"> 
