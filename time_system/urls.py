@@ -14,6 +14,7 @@ urlpatterns = patterns('clocker.views',
     # url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
 
     url(r'^timeclock/$', 'main_page'),
+    url(r'^timeclock/hours/$', 'total_hours'),
     url(r'^$', redirect_to, {'url':'/timeclock/'}),
 
 

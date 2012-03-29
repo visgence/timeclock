@@ -26,7 +26,7 @@ class Employee(models.Model):
 
         #Employee has never clocked in before or has previously clocked out
         if(len(record) == 0 or record[0].time_out != None):
-            time = Time(employee=self,
+            time = Time(employee=self.user,
                         time_in=datetime.now())
             time.save()
             return "none"

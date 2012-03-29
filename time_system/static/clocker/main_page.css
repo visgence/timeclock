@@ -61,6 +61,13 @@ body
     position:relative;
 }
 
+.from
+{
+    position:relative:
+    top:50%;
+    left:100px;
+}
+
 .submit_login
 {
     position:relative;

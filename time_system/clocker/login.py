@@ -15,7 +15,7 @@ def view(request):
     try:
         redirect_to = request.REQUEST["next"]
     except KeyError:
-        redirect_to = "../"
+        redirect_to = "/"
 
     if request.method == 'POST':
         user = authenticate(username=request.POST["username"], password=request.POST["password"])
@@ -36,5 +36,5 @@ def view(request):
 
 def logout(request):
     auth_logout(request)
-    return HttpResponseRedirect("login/")
+    return HttpResponseRedirect("/login/")
 
