@@ -13,6 +13,7 @@
                     defaultDate: "+1w",
                     changeMonth: true,
                     numberOfMonths: 1,
+                    dateFormat: 'yy-mm-dd',
                     onSelect: function( selectedDate ) {
                         var option = this.id == "from" ? "minDate" : "maxDate",
                         instance = $( this ).data( "datepicker" ),
@@ -62,13 +63,13 @@
                         From<input type="text" id="from" name="from"/>
                         to<input type="text" id="to" name="to"/>
 
-                        <select>
+                        <select name="user_name">
                             {% for emp in employee %}
                                 <option value="{{emp.user.username}}">{{emp}}</option>
                             {% endfor %}
                         </select> 
 
-                        <input type="submit" value="submit">
+                        <input type="submit" value="submit" name="submit'>
 
                     </form>
 
