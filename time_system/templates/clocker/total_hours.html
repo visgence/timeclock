@@ -1,0 +1,45 @@
+
+<html>
+
+    <head>
+
+    </head>
+
+    <body> 
+
+
+            <div>
+                {% if user.first_name %}
+                    Hello {{user.first_name}} {{user.last_name}} (<a href="/logout/">logout</a>)
+                {% endif %}
+            </div>
+            <table border="1">
+
+                <tr>
+                    <th colspan="2">{{employee_hours.employee}} </th>
+                </tr>
+
+                <tr>
+                    <th>Date</th>
+                    <th>total hours</th>
+                </tr>
+
+            {% for key,value in employee_hours.times %}
+
+                <tr>
+                    <td>{{ key }}  </td>
+                    <td>{{value}}</td>
+                </tr>
+            {% endfor %}
+
+                <tr>
+                    <th><b>Total hours</b></th>
+                    <th>{{employee_hours.total}}</th>
+                </tr>
+
+
+
+           </table>
+    </body>
+
+</html>
