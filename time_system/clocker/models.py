@@ -21,12 +21,12 @@ class Employee(models.Model):
         "in" if the user was not able to clock in
         """
 
-        max_id = Time.objects.filter(employee=self.user).aggregate(employee=models.Max('id'))
+        max_id = Time.objects.filter(employee=self).aggregate(employee=models.Max('id'))
         record = Time.objects.filter(id=max_id['employee'])
 
         #Employee has never clocked in before or has previously clocked out
         if(len(record) == 0 or record[0].time_out != None):
-            time = Time(employee=self.user,
+            time = Time(employee=self,
                         time_in=datetime.now())
             time.save()
             return "none"
@@ -40,7 +40,7 @@ class Employee(models.Model):
         "out" if the user was not able to clock out.
         """
 
-        max_id = Time.objects.filter(employee=self.user).aggregate(employee=models.Max('id'))
+        max_id = Time.objects.filter(employee=self).aggregate(employee=models.Max('id'))
         record = Time.objects.filter(id=max_id['employee'])
 
         #Employee has never clocked out before or has not clocked in yet.

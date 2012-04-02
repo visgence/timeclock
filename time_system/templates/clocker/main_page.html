@@ -69,7 +69,7 @@
                             {% endfor %}
                         </select> 
 
-                        <input type="submit" value="submit" name="submit'>
+                        <input type="submit" value="submit" name="submit">
 
                     </form>
 
@@ -87,8 +87,8 @@
 
                     {% else %}
 
-                        {% ifequal error "user" %}
-                            {{ user_name }} is not a valid user name.  Please enter a valid user name. 
+                        {% ifequal error "exception" %}
+                            An unexpected error occured.  Maybe try logging out and then back in.
                         {% endifequal %}
 
                         {% ifequal error "out" %}
