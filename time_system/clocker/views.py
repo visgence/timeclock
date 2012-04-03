@@ -13,16 +13,10 @@ def total_hours(request):
     if(response):
         return response
 
-    #verify the user name
-    user_name = ""
-    if(request.user.username != None and request.user.username != ""):
-        user_name = request.user.username
-    else:
-        return render_to_response('login.html', context_instance=RequestContext(request))
-
     if(request.method == 'POST'):
         start_time = request.POST.get('from')
         end_time = request.POST.get('to')
+        user_name = request.POST.get('user_name')
         time_info = {'employee':user_name, 'times':[]}
 
 
@@ -38,19 +32,24 @@ def total_hours(request):
 
         #Get all Time records for the given time range
         time = Time.objects.filter(employee__user__username = user_name).filter(time_in__gte = start_time.date()).filter(time_in__lt = end_time.date())
+        #print time
 
         if(len(time) > 0):
             total_time = datetime.strptime("00:00", '%H:%M')
             #total_time = datetime.time()
 
+            #print num_days
             for day in range(num_days.days):
-                date = time.filter(time_in__day = start_time.day)
+                #print day
+                date = time.filter(time_in__day = start_time.day).filter(time_in__month = start_time.month).filter(time_in__year = start_time.year)
+                print date
                 sum_time = datetime.strptime("00:00", '%H:%M')
 
                 #Sum the times for a given day
                 for record in date:
-                    print record
-                    if(record.time_out != None):
+                    #print record
+                    if(record.time_out != None and record.time_out != ''):
+                        print "record time-out, %s" % record.time_out
                         sum_time += record.time_out - record.time_in
                         total_time += record.time_out - record.time_in
 
@@ -67,8 +66,7 @@ def total_hours(request):
                         sum_time = sum_time + timedelta(minutes = (15 - remainder))
                         total_time = total_time + timedelta(minutes = (15 - remainder))
 
-                    time_info['times'].append([datetime.strftime(start_time, "%Y-%m-%d %H:%M"), datetime.strftime(sum_time, "%H:%M")])
-
+                    time_info['times'].append([datetime.strftime(start_time, "%Y-%m-%d"), datetime.strftime(sum_time, "%H:%M")])
                 start_time += timedelta(1)
 
             time_info['total'] = datetime.strftime(total_time, "%H:%M")
