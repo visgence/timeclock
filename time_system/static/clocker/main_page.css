@@ -56,7 +56,7 @@ body
     width:100px;
     height:50px;
     top:205px;
-    left:75px;
+    left:130px;
     float:left;
     position:relative;
 }
@@ -79,7 +79,7 @@ body
 {
     position:relative;
     top:260px;
-    right:25px;
+    left:30px;
 }
 
 .message

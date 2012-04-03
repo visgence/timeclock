@@ -8,13 +8,16 @@
         <script src="/static/clocker/js/js/jquery-ui-1.8.18.custom.min.js" type="text/javascript"></script>
 
         <script>
-            $(document).ready(function() {
-                var dates = $( "#from, #to" ).datepicker({
+            $(document).ready(function() 
+            {
+                var dates = $( "#from, #to" ).datepicker(
+                {
                     defaultDate: "+1w",
                     changeMonth: true,
                     numberOfMonths: 1,
                     dateFormat: 'yy-mm-dd',
-                    onSelect: function( selectedDate ) {
+                    onSelect: function( selectedDate ) 
+                    {
                         var option = this.id == "from" ? "minDate" : "maxDate",
                         instance = $( this ).data( "datepicker" ),
                         date = $.datepicker.parseDate(
@@ -101,7 +104,7 @@
 
                     </form>
 
-                           </div>
+                </div>
 
                 <div class="message">
 

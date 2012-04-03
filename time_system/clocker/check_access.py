@@ -8,7 +8,7 @@ from django.http import HttpResponseRedirect
 def check_access(request):
 
     if(request.user.username == ''):
-        return HttpResponseRedirect("/login/?next=%s" % (request.path))
+        return HttpResponseRedirect("/login/")
 
     t = loader.get_template('login.html');
 
