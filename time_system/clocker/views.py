@@ -20,13 +20,13 @@ def total_hours(request):
         user_name = request.POST.get('user_name')
         time_info = {'employee':user_name, 'times':[]}
 
-        start_date = datetime.strptime(start_time, '%Y-%m-%d')
-        end_date = datetime.strptime(end_time, '%Y-%m-%d')
- 
         #make sure we have actual date ranges coming in
         if(start_time == "" or end_time == ""):
             start_time = datetime.strftime(datetime.now(), '%Y-%m-%d')
             end_time = datetime.strftime(datetime.now(), '%Y-%m-%d')
+
+        start_date = datetime.strptime(start_time, '%Y-%m-%d')
+        end_date = datetime.strptime(end_time, '%Y-%m-%d')
 
         start_time = datetime.strptime(start_time, '%Y-%m-%d')
         end_time = datetime.strptime(end_time, '%Y-%m-%d')
@@ -51,7 +51,7 @@ def total_hours(request):
             #if there is not shifts on this date enter 0 hours.
             if not shifts:
                 print "\nNo shifts on %s" % single_date#DEBUG
-                time_info['times'].append([datetime.strftime(single_date, "%Y-%m-%d"), '0'])
+                time_info['times'].append([datetime.strftime(single_date, "%Y-%m-%d"), '00:00'])
 
             #else loop through the shifts and calculate total_hours for the day
             else:
@@ -194,10 +194,26 @@ def sec_to_shift(seconds):
 
 
     #handle the case where minutes was rounded to 60 and increment hour
-    if minutes == 60:
+    if minutes >= 60:
         hours +=1
         minutes = 0 
         print "New adjusted hour: %s" % hours
         print "New adjusted minute: %s" % minutes
 
+    hours = str(hours);
+    minutes = str(minutes);
+
+    if(len(hours) == 1):
+        hours = '0' + hours;
+    if(len(minutes) == 1):
+        minutes = '0' + minutes;
+
     return {'hours':hours, 'minutes':minutes}
+
+
+
+
+
+
+
+
