@@ -47,7 +47,6 @@
                 {% endif %}
             </div>
 
-            {% if is_admin %}
             <div align="left">
                 <form name="admin" action="hours/" method="post">
                     {% csrf_token %}
@@ -73,9 +72,13 @@
                             <th> 
 
                                 <select name="user_name">
-                                    {% for emp in employee %}
-                                    <option value="{{emp.user.username}}">{{emp}}</option>
-                                    {% endfor %}
+                                    {% if is_admin %}
+                                        {% for emp in employee %}
+                                        <option value="{{emp.user.username}}">{{emp}}</option>
+                                        {% endfor %}
+                                    {% else %}
+                                        <option value="{{user.username}}">{{user.username}}</option>
+                                    {% endif %}
                                 </select> 
                             </th>
                         </tr>
@@ -88,9 +91,6 @@
 
                 </form>
             </div>
-            {% endif %}
-
-
         
             <div class="login">
 
