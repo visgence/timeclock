@@ -63,7 +63,7 @@ def total_hours(request):
                     #print "total seconds: %s" % shift_in_seconds
                     
                     
-#                    hours = abs(time_dif).total_seconds() / 3600.0
+                    #hours = abs(time_dif).total_seconds() / 3600.0
 
                     if(time_in != None and time_out != None):
                         time_dif = time_out - time_in
@@ -143,8 +143,11 @@ def main_page(request):
         return response
 
     user_name = ""
+    user_status = ""
+    
     if(request.user.username != None and request.user.username != ""):
         user_name = request.user.username
+        user_status = Employee.objects.get(user__username=user_name).which_clock()
     else:
         return render_to_response('login.html', context_instance=RequestContext(request))
 
@@ -154,17 +157,17 @@ def main_page(request):
             employee = Employee.objects.get(user__username=user_name)
 
             if(status == "Out" or status == "out"):
-                extra = {'employee':Employee.objects.all(), 'is_admin':request.user.is_staff, 'error':employee.clock_out(), 'status':"out"}
+                extra = {'employee':Employee.objects.all(), 'is_admin':request.user.is_staff, 'error':employee.clock_out(), 'status':"out", 'user_status':user_status}
                 return render_to_response('main_page.html', extra , context_instance=RequestContext(request))
             elif(status == "In" or status == "in"):
-                extra = {'employee':Employee.objects.all(), 'is_admin':request.user.is_staff, 'error':employee.clock_in(), 'status':"in"}
+                extra = {'employee':Employee.objects.all(), 'is_admin':request.user.is_staff, 'error':employee.clock_in(), 'status':"in", 'user_status':user_status}
                 return render_to_response('main_page.html', extra, context_instance=RequestContext(request))
 
         except Employee.DoesNotExist:
-            extra = {'employee':Employee.objects.all(), 'is_admin':request.user.is_staff, 'error':"exception", 'user_name':user_name}
+            extra = {'employee':Employee.objects.all(), 'is_admin':request.user.is_staff, 'error':"exception", 'user_name':user_name, 'user_status':user_status}
             return render_to_response('main_page.html', extra, context_instance=RequestContext(request))
 
-    extra = {'employee':Employee.objects.all(), 'is_admin':request.user.is_staff}
+    extra = {'employee':Employee.objects.all(), 'is_admin':request.user.is_staff, 'user_status':user_status}
     return render_to_response('main_page.html', extra, context_instance=RequestContext(request))
 
 

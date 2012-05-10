@@ -54,6 +54,19 @@ class Employee(models.Model):
             time.save()
             return "none"
 
+    def which_clock(self):
+        """
+        Checks to see whether an employee is clocked in or out.  Returns the string "out" or "in".
+        """
+
+        max_id = Time.objects.filter(employee=self).aggregate(employee=models.Max('id'))
+        record = Time.objects.filter(id=max_id['employee'])
+
+        if(len(record) == 0 or record[0].time_out != None):
+            return "out"
+        
+        return "in"
+
 class Time(models.Model):
     employee = models.ForeignKey('Employee')
     time_in = models.DateTimeField('clock in time')
