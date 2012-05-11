@@ -17,55 +17,69 @@ class Employee(models.Model):
 
     def clock_in(self):
         """
-        Clocks an employee in.  Returns the error message "none" if the user clocked in and
-        "in" if the user was not able to clock in
+        Clocks an employee in.  
+        
+        Returns: 
+            The error message "none" if the user clocked in and "in" if the user was not able to clock in
         """
 
-        max_id = Time.objects.filter(employee=self).aggregate(employee=models.Max('id'))
-        record = Time.objects.filter(id=max_id['employee'])
+        dictionary = self.which_clock()
 
         #Employee has never clocked in before or has previously clocked out
-        if(len(record) == 0 or record[0].time_out != None):
+        if(dictionary['status'] == "in"):
+            return "in"
+        else:
             time = Time(employee=self,
                         time_in=datetime.now())
             time.save()
             return "none"
-        else:
-
-            return "in"
 
     def clock_out(self):
         """
-        Clocks an employee out.  Returns the error message "none" if the user clocked out and
-        "out" if the user was not able to clock out.
+        Clocks an employee out.  
+        
+        Returns: 
+            The error message "none" if the user clocked out and "out" if the user was not able to clock out.
         """
-
-        max_id = Time.objects.filter(employee=self).aggregate(employee=models.Max('id'))
-        record = Time.objects.filter(id=max_id['employee'])
+        
+        dictionary = self.which_clock()
 
         #Employee has never clocked out before or has not clocked in yet.
-        if(len(record) == 0 or record[0].time_out != None):
+        if(dictionary['status'] == "out"):
             return "out"
         else:
-            time = Time(id=record[0].id,
-                        employee=record[0].employee,
-                        time_in=record[0].time_in,
+            time = Time(id=dictionary['max_record'][0].id,
+                        employee=dictionary['max_record'][0].employee,
+                        time_in=dictionary['max_record'][0].time_in,
                         time_out=datetime.now())
             time.save()
             return "none"
 
     def which_clock(self):
         """
-        Checks to see whether an employee is clocked in or out.  Returns the string "out" or "in".
+        Checks to see whether an employee is clocked in or out. 
+
+        Returns:
+            A dictionary with the status of the employee and the maximum time record that was used to determine this.
+            Keys: 'status' 'max_record'
         """
 
         max_id = Time.objects.filter(employee=self).aggregate(employee=models.Max('id'))
         record = Time.objects.filter(id=max_id['employee'])
+        stuff = {
+                    'max_record':record
+                }
 
         if(len(record) == 0 or record[0].time_out != None):
-            return "out"
+            stuff['status'] = "out"
+            return stuff 
+       
+        stuff['status'] = "in"
+        return stuff 
+
+    #def get_current_time(self):
         
-        return "in"
+
 
 class Time(models.Model):
     employee = models.ForeignKey('Employee')

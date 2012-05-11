@@ -144,18 +144,18 @@ def get_extra(employee, status, error):
 
     if((status == "Out" or status == "out") and error == ""):
         extra['error'] = employee.clock_out()
-        extra['user_status'] = Employee.objects.get(user__username=employee.user.username).which_clock()
+        extra['user_status'] = Employee.objects.get(user__username=employee.user.username).which_clock()['status']
         extra['status'] = "out"
     elif((status == "In" or status == "in") and error == ""):
         extra['error'] = employee.clock_in()
-        extra['user_status'] = Employee.objects.get(user__username=employee.user.username).which_clock()
+        extra['user_status'] = Employee.objects.get(user__username=employee.user.username).which_clock()['status']
         extra['status'] = "in"
     elif(status == "" and error == "employee_does_not_exist"):
         extra['error'] = "exception"
         extra['user_name'] = employee.user.username
-        extra['user_status'] = Employee.objects.get(user__username=employee.user.username).which_clock()
+        extra['user_status'] = Employee.objects.get(user__username=employee.user.username).which_clock()['status']
     elif(status == "" and error == ""):
-        extra['user_status'] = Employee.objects.get(user__username=employee.user.username).which_clock()
+        extra['user_status'] = Employee.objects.get(user__username=employee.user.username).which_clock()['status']
 
     return extra
 
