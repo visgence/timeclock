@@ -87,51 +87,6 @@ def total_hours(request):
         total_time_worked =  sec_to_shift(period_total)
         time_info['total'] = "%s:%s" % (total_time_worked['hours'],total_time_worked['minutes'])
         print "Total time worked for this period: %s" % time_info['total'] 
-        
-        """ 
-        #TODO Not calculating correct hours
-        #Get all Time records for the given time range
-        time = Time.objects.filter(employee__user__username = user_name).filter(time_in__gte = start_time.date()).filter(time_in__lt = end_time.date())
-        #print time
-
-        if(len(time) > 0):
-            total_time = datetime.strptime("00:00", '%H:%M')
-            #total_time = datetime.time()
-
-            #print num_days
-            for day in range(num_days.days):
-                #print "Day: %s" % day
-                date = time.filter(time_in__day = start_time.day).filter(time_in__month = start_time.month).filter(time_in__year = start_time.year)
-                #print date
-                #print "Day: %s" % date
-                sum_time = datetime.strptime("00:00", '%H:%M')
-
-                #Sum the times for a given day
-                for record in date:
-                    #print record
-                    if(record.time_out != None and record.time_out != ''):
-                        #print "record time-out, %s" % record.time_out
-                        sum_time += record.time_out - record.time_in
-                        total_time += record.time_out - record.time_in
-
-                #print datetime.strftime(total_time, "%H:%M") #DEBUG
-
-                if(len(date) > 0):
-                    #rounding minutes to nearest 15
-                    remainder = sum_time.minute % 15
-
-                    if(remainder <= 7):
-                        sum_time = sum_time - timedelta(minutes = remainder)
-                        total_time = total_time - timedelta(minutes = remainder)
-                    else:
-                        sum_time = sum_time + timedelta(minutes = (15 - remainder))
-                        total_time = total_time + timedelta(minutes = (15 - remainder))
-
-                    time_info['times'].append([datetime.strftime(start_time, "%Y-%m-%d"), datetime.strftime(sum_time, "%H:%M")])
-                start_time += timedelta(1)
-
-            time_info['total'] = datetime.strftime(total_time, "%H:%M")
-            """
         return render_to_response('total_hours.html', {'employee_hours':time_info}, context_instance=RequestContext(request))
 
     return render_to_response('login.html', context_instance=RequestContext(request))
@@ -143,50 +98,69 @@ def main_page(request):
         return response
 
     user_name = ""
-    user_status = ""
+    employee = None
     
     if(request.user.username != None and request.user.username != ""):
         user_name = request.user.username
     else:
         return render_to_response('login.html', context_instance=RequestContext(request))
 
-    if (request.method == 'POST'):
-        status = request.POST.get('status')
-        try:
-            employee = Employee.objects.get(user__username=user_name)
-
+    try:
+        employee = Employee.objects.get(user__username=user_name)
+        if (request.method == 'POST'):
+            status = request.POST.get('status')
             if(status == "Out" or status == "out"):
-                extra = {
-                            'employee':Employee.objects.all(), 
-                            'is_admin':request.user.is_staff, 
-                            'error':employee.clock_out(), 
-                            'status':"out", 'user_status':Employee.objects.get(user__username=user_name).which_clock()
-                        }
+                extra = get_extra(employee, "out", "")
                 return render_to_response('main_page.html', extra , context_instance=RequestContext(request))
             elif(status == "In" or status == "in"):
-                extra = {
-                            'employee':Employee.objects.all(), 
-                            'is_admin':request.user.is_staff, 
-                            'error':employee.clock_in(), 
-                            'status':"in", 'user_status':Employee.objects.get(user__username=user_name).which_clock()
-                        }
+                extra = get_extra(employee, "in", "")
                 return render_to_response('main_page.html', extra, context_instance=RequestContext(request))
 
-        except Employee.DoesNotExist:
-            extra = {
-                        'employee':Employee.objects.all(), 
-                        'is_admin':request.user.is_staff, 
-                        'error':"exception", 'user_name':user_name,
-                        'user_status':Employee.objects.get(user__username=user_name).which_clock()
-                    }
-            return render_to_response('main_page.html', extra, context_instance=RequestContext(request))
+    except Employee.DoesNotExist:
+        extra = get_extra(employee, status, "employee_does_not_exists")
+        return render_to_response('main_page.html', extra, context_instance=RequestContext(request))
+
+    extra = get_extra(employee, "", "")
+    return render_to_response('main_page.html', extra, context_instance=RequestContext(request))
+
+
+def get_extra(employee, status, error):
+    '''
+    Helper function that based on a status and error message packages up a dictionary of extra stuff needed by the main page request.
+
+    Parameters: 
+        employee = The Employee that is logged in and doing stuff.
+        status   = in/out based on whether or not the employee is clocking in/out.  Can be "" if not clocking.
+        error    = "" if no error otherwise specific errors based on the main page.
+
+    Returns:
+        A dictionary with all the stuff needed by the main page so that it can return.
+    '''
 
     extra = {
-                'employee':Employee.objects.all(), 
-                'is_admin':request.user.is_staff, 
-                'user_status':Employee.objects.get(user__username=user_name).which_clock()
+                'employee':Employee.objects.all(),
+                'is_admin':employee.user.is_staff,
             }
-    return render_to_response('main_page.html', extra, context_instance=RequestContext(request))
+
+    if((status == "Out" or status == "out") and error == ""):
+        extra['error'] = employee.clock_out()
+        extra['user_status'] = Employee.objects.get(user__username=employee.user.username).which_clock()
+        extra['status'] = "out"
+    elif((status == "In" or status == "in") and error == ""):
+        extra['error'] = employee.clock_in()
+        extra['user_status'] = Employee.objects.get(user__username=employee.user.username).which_clock()
+        extra['status'] = "in"
+    elif(status == "" and error == "employee_does_not_exist"):
+        extra['error'] = "exception"
+        extra['user_name'] = employee.user.username
+        extra['user_status'] = Employee.objects.get(user__username=employee.user.username).which_clock()
+    elif(status == "" and error == ""):
+        extra['user_status'] = Employee.objects.get(user__username=employee.user.username).which_clock()
+
+    return extra
+
+
+                
 
 
 #This helper function will take seconds and will return a dictionary with 
