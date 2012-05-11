@@ -107,6 +107,7 @@ def main_page(request):
 
     try:
         employee = Employee.objects.get(user__username=user_name)
+        
         if (request.method == 'POST'):
             status = request.POST.get('status')
             if(status == "Out" or status == "out"):
@@ -121,6 +122,7 @@ def main_page(request):
         return render_to_response('main_page.html', extra, context_instance=RequestContext(request))
 
     extra = get_extra(employee, "", "")
+    employee.get_current_time()
     return render_to_response('main_page.html', extra, context_instance=RequestContext(request))
 
 
@@ -170,12 +172,9 @@ def get_extra(employee, status, error):
 def sec_to_shift(seconds):
     hours = seconds / 3600 
     minutes = (seconds - (hours * 3600)) /60
-    print "Hours for the day %s" % hours
-    print "Minutes for the day %s" % minutes 
 
     #rounding minutes to nearest 15
     remainder = minutes % 15
-    print "remainder: %s" % remainder
 
     if(remainder <= 7):
         minutes = minutes - remainder
@@ -184,16 +183,10 @@ def sec_to_shift(seconds):
         #sum_time = sum_time + timedelta(minutes = (15 - remainder))
         #total_time = total_time + timedelta(minutes = (15 - remainder))
 
-    #print "Hours after rounding %s" % hours
-    print "Minutes after rounding %s" % minutes 
-
-
     #handle the case where minutes was rounded to 60 and increment hour
     if minutes >= 60:
         hours +=1
         minutes = 0 
-        print "New adjusted hour: %s" % hours
-        print "New adjusted minute: %s" % minutes
 
     hours = str(hours);
     minutes = str(minutes);

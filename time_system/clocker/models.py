@@ -77,7 +77,15 @@ class Employee(models.Model):
         stuff['status'] = "in"
         return stuff 
 
-    #def get_current_time(self):
+    def get_current_time(self):
+
+        dictionary = self.which_clock()
+
+        if(dictionary['status'] == "in"):
+            time_in = dictionary['max_record'][0].time_in
+            time_now = datetime.now()
+            print time_in
+            print time_now
         
 
 
