@@ -118,7 +118,7 @@ def main_page(request):
                 return render_to_response('main_page.html', extra, context_instance=RequestContext(request))
 
     except Employee.DoesNotExist:
-        extra = get_extra(employee, status, "employee_does_not_exists")
+        extra = get_extra(employee, "", "employee_does_not_exists")
         return render_to_response('main_page.html', extra, context_instance=RequestContext(request))
 
     extra = get_extra(employee, "", "")
@@ -146,18 +146,31 @@ def get_extra(employee, status, error):
 
     if((status == "Out" or status == "out") and error == ""):
         extra['error'] = employee.clock_out()
-        extra['user_status'] = Employee.objects.get(user__username=employee.user.username).which_clock()['status']
         extra['status'] = "out"
+
+        which_clock = Employee.objects.get(user__username=employee.user.username).which_clock()
+        shift = which_clock['max_record'].time_out - which_clock['max_record'].time_in
+        extra['user_status'] = which_clock['status']
+        extra['time'] = sec_to_shift(shift.days * 86400 + shift.seconds)
     elif((status == "In" or status == "in") and error == ""):
         extra['error'] = employee.clock_in()
-        extra['user_status'] = Employee.objects.get(user__username=employee.user.username).which_clock()['status']
         extra['status'] = "in"
+        
+        which_clock = Employee.objects.get(user__username=employee.user.username).which_clock()
+        shift = datetime.now() - which_clock['max_record'].time_in
+        extra['user_status'] = which_clock['status']
+        extra['time'] = sec_to_shift(shift.days * 86400 + shift.seconds)
     elif(status == "" and error == "employee_does_not_exist"):
         extra['error'] = "exception"
+
+        which_clock = Employee.objects.get(user__username=employee.user.username).which_clock()
+
         extra['user_name'] = employee.user.username
-        extra['user_status'] = Employee.objects.get(user__username=employee.user.username).which_clock()['status']
+        extra['user_status'] = which_clock['status']
     elif(status == "" and error == ""):
-        extra['user_status'] = Employee.objects.get(user__username=employee.user.username).which_clock()['status']
+        which_clock = Employee.objects.get(user__username=employee.user.username).which_clock()
+
+        extra['user_status'] = which_clock['status']
 
     return extra
 
