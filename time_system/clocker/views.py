@@ -1,5 +1,4 @@
-from django.shortcuts import render_to_response
-from django.template import RequestContext
+from django.shortcuts import render_to_response from django.template import RequestContext
 from django.http import HttpResponse
 from django.contrib.auth import authenticate, login, logout
 from models import Employee, Time
@@ -15,10 +14,10 @@ def total_hours(request):
         return response
 
     if(request.method == 'POST'):
+        pay_period = {} 
         start_time = request.POST.get('from')
         end_time = request.POST.get('to')
         user_name = request.POST.get('user_name')
-        time_info = {'employee':user_name, 'times':[]}
 
         #make sure we have actual date ranges coming in
         if(start_time == "" or end_time == ""):
@@ -33,22 +32,22 @@ def total_hours(request):
         end_time += timedelta(1)
         num_days = end_time - start_time
 
-        total_time = datetime.strptime("00:00", '%H:%M')#total time for work period
         period_total = 0 #total time for work period
 
         #iterate through our date-range
         day_count = (end_date - start_date).days + 1
         for single_date in [d for d in (start_date + timedelta(n) for n in range(day_count)) if d <= end_date]:
             daily_stuff = get_daily_hours(single_date, user_name)
-            time_info['times'].append(daily_stuff['time_info'])
-            period_total += daily_stuff['daily_total']
+            period_total += daily_stuff['total']
 
         #calculate total time
-        total_time_worked =  sec_to_shift(period_total)
-        time_info['total'] = "%s:%s" % (total_time_worked['hours'],total_time_worked['minutes'])
-        return render_to_response('total_hours.html', {'employee_hours':time_info}, context_instance=RequestContext(request))
+        return render_to_response('total_hours.html', {'pay_period':pay_period, 'employee':user_name}, context_instance=RequestContext(request))
 
     return render_to_response('login.html', context_instance=RequestContext(request))
+
+
+def get_week_range(begin_date, end_date):
+
 
 
 
@@ -67,28 +66,30 @@ def get_daily_hours(date, user_name):
     '''
 
     daily_total = 0
-    time_info = None
+    daily_info = None
+    shifts = []
  
     #find all clock in-outs for this day
     shifts = Time.objects.filter(employee__user__username = user_name).filter(time_in__year = date.year).filter(time_in__month = date.month).filter(time_in__day = date.day)
 
     #No shifts for this day so 00 hours and minutes
     if not shifts:
-        time_info = [datetime.strftime(date, "%Y-%m-%d"), '00:00']
-
+        daily_info = {'date': date, 'shifts':shifts, 'total':"0.0"}
     else:
         for shift in shifts:
             time_in = shift.time_in
             time_out = shift.time_out
 
             if(time_in != None and time_out != None):
-                time_dif = get_seconds(time_out) - get_seconds(time_in)
+                time_dif = round_seconds(get_seconds(time_out) - get_seconds(time_in))
+                shifts.append({'in':time_in, 'out':time_out, 'total':time_dif}) 
                 daily_total += time_dif
 
-        time_worked_daily= sec_to_shift(daily_total)
-        time_info = [datetime.strftime(date, "%Y-%m-%d"), '%s:%s' % (time_worked_daily['hours'],time_worked_daily['minutes'])]
+        daily_info = {'date': date, 'shifts':shifts, 'total':daily_total}
 
-    return {'time_info':time_info, 'daily_total':daily_total}
+    return daily_info
+
+
 
 def get_seconds(date):
     '''
@@ -167,7 +168,7 @@ def get_extra(employee, status, error):
         which_clock = Employee.objects.get(user__username=employee.user.username).which_clock()
         shift = which_clock['max_record'].time_out - which_clock['max_record'].time_in
         extra['user_status'] = which_clock['status']
-        extra['time'] = sec_to_shift(shift.days * 86400 + shift.seconds)
+        #extra['time'] = round_seconds(shift.days * 86400 + shift.seconds)
     elif((status == "In" or status == "in") and error == ""):
         extra['error'] = employee.clock_in()
         extra['status'] = "in"
@@ -186,7 +187,7 @@ def get_extra(employee, status, error):
 
         which_clock = Employee.objects.get(user__username=employee.user.username).which_clock()
         shift = datetime.now() - which_clock['max_record'].time_in
-        extra['time'] = sec_to_shift(shift.days * 86400 + shift.seconds)
+        #extra['time'] = round_seconds(shift.days * 86400 + shift.seconds)
         extra['user_status'] = which_clock['status']
 
     return extra
@@ -194,11 +195,20 @@ def get_extra(employee, status, error):
 
                 
 
+def round_seconds(seconds):
+    minutes = seconds / 60
+    remainder = seconds % 60 
+
+    if(remainder >= 30):
+        minutes += 1
+
+    return minutes * 60
 
 #This helper function will take seconds and will return a dictionary with 
 #hours and minutes. It will properly round minutes and increment the hour
 #if it rounds to 60 min.
 #return: dictionary in the form {'hour':hours, 'minutes': minutes}
+'''
 def sec_to_shift(seconds):
     hours = seconds / 3600 
     minutes = (seconds - (hours * 3600)) /60
@@ -218,15 +228,8 @@ def sec_to_shift(seconds):
         hours +=1
         minutes = 0 
 
-    hours = str(hours);
-    minutes = str(minutes);
-
-    if(len(hours) == 1):
-        hours = '0' + hours;
-    if(len(minutes) == 1):
-        minutes = '0' + minutes;
-
-    return {'hours':hours, 'minutes':minutes}
+    return (hours * 3600) + (minutes * 60)
+'''
 
 
 
