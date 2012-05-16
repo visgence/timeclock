@@ -43,48 +43,28 @@ def total_hours(request):
             time_info['times'].append(daily_stuff['time_info'])
             period_total += daily_stuff['daily_total']
 
-            '''
-            daily_total = 0 #total time worked for a specific day in seconds
-            #print "Date: %s" % strftime("%Y-%m-%d", single_date.timetuple())#DEBUG
-            #print "Day: %s" % single_date#DEBUG
-
-            #find all clock in-outs for this day
-            shifts = Time.objects.filter(employee__user__username = user_name).filter(time_in__year = single_date.year).filter(time_in__month = single_date.month).filter(time_in__day = single_date.day)
-            #print "time : %s" % time#DEBUG
-
-            #if there is not shifts on this date enter 0 hours.
-            if not shifts:
-                #print "\nNo shifts on %s" % single_date#DEBUG
-                time_info['times'].append([datetime.strftime(single_date, "%Y-%m-%d"), '00:00'])
-
-            #else loop through the shifts and calculate total_hours for the day
-            else:
-                for shift in shifts:
-                    time_in = shift.time_in
-                    time_out = shift.time_out
-
-                    #print "\nshift: %s" % shift#DEBUG
-                    
-                    if(time_in != None and time_out != None):
-                        time_dif = time_out - time_in
-                        shift_in_seconds = time_dif.days * 86400 + time_dif.seconds
-
-                        daily_total += shift_in_seconds
-                        period_total += shift_in_seconds
-                        
-                time_worked_daily= sec_to_shift(daily_total)
-                time_info['times'].append([datetime.strftime(single_date, "%Y-%m-%d"), '%s:%s' % (time_worked_daily['hours'],time_worked_daily['minutes'])])
-            '''
-
         #calculate total time
         total_time_worked =  sec_to_shift(period_total)
         time_info['total'] = "%s:%s" % (total_time_worked['hours'],total_time_worked['minutes'])
-        print "Total time worked for this period: %s" % time_info['total'] 
         return render_to_response('total_hours.html', {'employee_hours':time_info}, context_instance=RequestContext(request))
 
     return render_to_response('login.html', context_instance=RequestContext(request))
 
+
+
 def get_daily_hours(date, user_name):
+    '''
+    Gets the total hours and minutes worked for a given date.  
+
+    Paremeters: 
+        date      = The date we are calculating hours for
+        user_name = The employee that we are calculating hours for
+
+    Returns:
+        A dictionary with the following keys:
+            time_info   = A list with the calculated daily hours for a specific date: [date, hours:minutes]
+            daily_total = The total number of seconds for the day worked
+    '''
 
     daily_total = 0
     time_info = None
@@ -102,16 +82,28 @@ def get_daily_hours(date, user_name):
             time_out = shift.time_out
 
             if(time_in != None and time_out != None):
-                time_dif = time_out - time_in
-                print "difference is: %s" % time_dif
-                shift_in_seconds = time_dif.days * 86400 + time_dif.seconds
-                print shift_in_seconds
-                daily_total += shift_in_seconds
+                time_dif = get_seconds(time_out) - get_seconds(time_in)
+                daily_total += time_dif
 
         time_worked_daily= sec_to_shift(daily_total)
         time_info = [datetime.strftime(date, "%Y-%m-%d"), '%s:%s' % (time_worked_daily['hours'],time_worked_daily['minutes'])]
 
     return {'time_info':time_info, 'daily_total':daily_total}
+
+def get_seconds(date):
+    '''
+    returns the number of seconds for a given datetime stamp.
+
+    Parameters:
+        date = The datetime object
+
+    Returns:
+        0 if date is null or the number of total seconds given for the given datetime object
+    '''
+
+    if(date):
+        return (date.hour * 3600) + (date.minute * 60) + date.second
+    return 0
 
 
 
