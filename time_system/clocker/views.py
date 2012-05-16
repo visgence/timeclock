@@ -39,10 +39,14 @@ def total_hours(request):
         #iterate through our date-range
         day_count = (end_date - start_date).days + 1
         for single_date in [d for d in (start_date + timedelta(n) for n in range(day_count)) if d <= end_date]:
+            daily_stuff = get_daily_hours(single_date, user_name)
+            time_info['times'].append(daily_stuff['time_info'])
+            period_total += daily_stuff['daily_total']
+
+            '''
             daily_total = 0 #total time worked for a specific day in seconds
             #print "Date: %s" % strftime("%Y-%m-%d", single_date.timetuple())#DEBUG
             #print "Day: %s" % single_date#DEBUG
-            #sum_time = datetime.strptime("00:00", '%H:%M')#total time for a specific day
 
             #find all clock in-outs for this day
             shifts = Time.objects.filter(employee__user__username = user_name).filter(time_in__year = single_date.year).filter(time_in__month = single_date.month).filter(time_in__day = single_date.day)
@@ -50,7 +54,7 @@ def total_hours(request):
 
             #if there is not shifts on this date enter 0 hours.
             if not shifts:
-                print "\nNo shifts on %s" % single_date#DEBUG
+                #print "\nNo shifts on %s" % single_date#DEBUG
                 time_info['times'].append([datetime.strftime(single_date, "%Y-%m-%d"), '00:00'])
 
             #else loop through the shifts and calculate total_hours for the day
@@ -59,29 +63,18 @@ def total_hours(request):
                     time_in = shift.time_in
                     time_out = shift.time_out
 
-                    print "\nshift: %s" % shift#DEBUG
-                    #print "total seconds: %s" % shift_in_seconds
+                    #print "\nshift: %s" % shift#DEBUG
                     
-                    
-                    #hours = abs(time_dif).total_seconds() / 3600.0
-
                     if(time_in != None and time_out != None):
                         time_dif = time_out - time_in
                         shift_in_seconds = time_dif.days * 86400 + time_dif.seconds
 
-                        #a
                         daily_total += shift_in_seconds
                         period_total += shift_in_seconds
-                    
                         
                 time_worked_daily= sec_to_shift(daily_total)
-                print "time: %s" % time_worked_daily
                 time_info['times'].append([datetime.strftime(single_date, "%Y-%m-%d"), '%s:%s' % (time_worked_daily['hours'],time_worked_daily['minutes'])])
-            #time_info['times'].append([datetime.strftime(single_date, "%Y-%m-%d"), datetime.strftime(sum_time, "%H:%M")])
-
-            
-            #add total time for this day
-            #time_info['times'].append([datetime.strftime(single_date, "%Y-%m-%d"),"%s:%s" % (hours,minutes)])
+            '''
 
         #calculate total time
         total_time_worked =  sec_to_shift(period_total)
@@ -90,6 +83,37 @@ def total_hours(request):
         return render_to_response('total_hours.html', {'employee_hours':time_info}, context_instance=RequestContext(request))
 
     return render_to_response('login.html', context_instance=RequestContext(request))
+
+def get_daily_hours(date, user_name):
+
+    daily_total = 0
+    time_info = None
+ 
+    #find all clock in-outs for this day
+    shifts = Time.objects.filter(employee__user__username = user_name).filter(time_in__year = date.year).filter(time_in__month = date.month).filter(time_in__day = date.day)
+
+    #No shifts for this day so 00 hours and minutes
+    if not shifts:
+        time_info = [datetime.strftime(date, "%Y-%m-%d"), '00:00']
+
+    else:
+        for shift in shifts:
+            time_in = shift.time_in
+            time_out = shift.time_out
+
+            if(time_in != None and time_out != None):
+                time_dif = time_out - time_in
+                print "difference is: %s" % time_dif
+                shift_in_seconds = time_dif.days * 86400 + time_dif.seconds
+                print shift_in_seconds
+                daily_total += shift_in_seconds
+
+        time_worked_daily= sec_to_shift(daily_total)
+        time_info = [datetime.strftime(date, "%Y-%m-%d"), '%s:%s' % (time_worked_daily['hours'],time_worked_daily['minutes'])]
+
+    return {'time_info':time_info, 'daily_total':daily_total}
+
+
 
 def main_page(request):
 
@@ -131,9 +155,9 @@ def get_extra(employee, status, error):
     Helper function that based on a status and error message packages up a dictionary of extra stuff needed by the main page request.
 
     Parameters: 
-        employee = The Employee that is logged in and doing stuff.
-        status   = in/out based on whether or not the employee is clocking in/out.  Can be "" if not clocking.
-        error    = "" if no error otherwise specific errors based on the main page.
+        employee    = The Employee that is logged in and doing stuff.
+        status      = in/out based on whether or not the employee is clocking in/out.  Can be "" if not clocking.
+        error       = "" if no error otherwise specific errors based on the main page.
 
     Returns:
         A dictionary with all the stuff needed by the main page so that it can return.
@@ -155,21 +179,22 @@ def get_extra(employee, status, error):
     elif((status == "In" or status == "in") and error == ""):
         extra['error'] = employee.clock_in()
         extra['status'] = "in"
-        
+
         which_clock = Employee.objects.get(user__username=employee.user.username).which_clock()
-        shift = datetime.now() - which_clock['max_record'].time_in
         extra['user_status'] = which_clock['status']
-        extra['time'] = sec_to_shift(shift.days * 86400 + shift.seconds)
     elif(status == "" and error == "employee_does_not_exist"):
         extra['error'] = "exception"
+        extra['user_name'] = employee.user.username
 
         which_clock = Employee.objects.get(user__username=employee.user.username).which_clock()
-
-        extra['user_name'] = employee.user.username
         extra['user_status'] = which_clock['status']
     elif(status == "" and error == ""):
-        which_clock = Employee.objects.get(user__username=employee.user.username).which_clock()
+        extra['error'] = "none"
+        extra['status'] = "none"
 
+        which_clock = Employee.objects.get(user__username=employee.user.username).which_clock()
+        shift = datetime.now() - which_clock['max_record'].time_in
+        extra['time'] = sec_to_shift(shift.days * 86400 + shift.seconds)
         extra['user_status'] = which_clock['status']
 
     return extra
