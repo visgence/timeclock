@@ -120,9 +120,11 @@
                     {% ifequal error "none" %}
 
                         {% ifequal status "out" %}  
-                            You have clocked out succesfully.
+                            You have clocked out succesfully. <br />
+                            You worked a total of {{ time.hours }} hours and {{ time.minutes }} minutes
                         {% else %}
                             Your have clocked in succesfully.
+                            You have been clocked in for {{ time.hours }} hours and {{ time.minutes }} minutes
                         {% endifequal %}
 
                     {% else %}

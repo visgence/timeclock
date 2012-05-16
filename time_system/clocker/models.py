@@ -48,9 +48,9 @@ class Employee(models.Model):
         if(dictionary['status'] == "out"):
             return "out"
         else:
-            time = Time(id=dictionary['max_record'][0].id,
-                        employee=dictionary['max_record'][0].employee,
-                        time_in=dictionary['max_record'][0].time_in,
+            time = Time(id=dictionary['max_record'].id,
+                        employee=dictionary['max_record'].employee,
+                        time_in=dictionary['max_record'].time_in,
                         time_out=datetime.now())
             time.save()
             return "none"
@@ -65,12 +65,12 @@ class Employee(models.Model):
         """
 
         max_id = Time.objects.filter(employee=self).aggregate(employee=models.Max('id'))
-        record = Time.objects.filter(id=max_id['employee'])
+        record = Time.objects.get(id=max_id['employee'])
         stuff = {
                     'max_record':record
                 }
 
-        if(len(record) == 0 or record[0].time_out != None):
+        if(record == None or record.time_out != None):
             stuff['status'] = "out"
             return stuff 
        
@@ -82,7 +82,7 @@ class Employee(models.Model):
         dictionary = self.which_clock()
 
         if(dictionary['status'] == "in"):
-            time_in = dictionary['max_record'][0].time_in
+            time_in = dictionary['max_record'].time_in
             time_now = datetime.now()
             print time_in
             print time_now
