@@ -1,4 +1,5 @@
-from django.shortcuts import render_to_response from django.template import RequestContext
+from django.shortcuts import render_to_response 
+from django.template import RequestContext
 from django.http import HttpResponse
 from django.contrib.auth import authenticate, login, logout
 from models import Employee, Time
@@ -38,17 +39,12 @@ def total_hours(request):
         day_count = (end_date - start_date).days + 1
         for single_date in [d for d in (start_date + timedelta(n) for n in range(day_count)) if d <= end_date]:
             daily_stuff = get_daily_hours(single_date, user_name)
-            period_total += daily_stuff['total']
+#            period_total += daily_stuff['total']
 
         #calculate total time
         return render_to_response('total_hours.html', {'pay_period':pay_period, 'employee':user_name}, context_instance=RequestContext(request))
 
     return render_to_response('login.html', context_instance=RequestContext(request))
-
-
-def get_week_range(begin_date, end_date):
-
-
 
 
 def get_daily_hours(date, user_name):
@@ -67,28 +63,28 @@ def get_daily_hours(date, user_name):
 
     daily_total = 0
     daily_info = None
-    shifts = []
+    shift_info = []
  
     #find all clock in-outs for this day
     shifts = Time.objects.filter(employee__user__username = user_name).filter(time_in__year = date.year).filter(time_in__month = date.month).filter(time_in__day = date.day)
 
     #No shifts for this day so 00 hours and minutes
     if not shifts:
-        daily_info = {'date': date, 'shifts':shifts, 'total':"0.0"}
+        daily_info = {'date': date, 'shifts':shift_info, 'total':0}
     else:
         for shift in shifts:
+            print shift
             time_in = shift.time_in
             time_out = shift.time_out
 
             if(time_in != None and time_out != None):
                 time_dif = round_seconds(get_seconds(time_out) - get_seconds(time_in))
-                shifts.append({'in':time_in, 'out':time_out, 'total':time_dif}) 
+                shift_info.append({'in':time_in, 'out':time_out, 'total':time_dif}) 
                 daily_total += time_dif
 
-        daily_info = {'date': date, 'shifts':shifts, 'total':daily_total}
+        daily_info = {'date': date, 'shifts':shift_info, 'total':daily_total}
 
     return daily_info
-
 
 
 def get_seconds(date):
