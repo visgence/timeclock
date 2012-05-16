@@ -1,4 +1,5 @@
-from django.shortcuts import render_to_response from django.template import RequestContext
+from django.shortcuts import render_to_response 
+from django.template import RequestContext
 from django.http import HttpResponse
 from django.contrib.auth import authenticate, login, logout
 from models import Employee, Time
@@ -18,7 +19,7 @@ def total_hours(request):
         start_time = request.POST.get('from')
         end_time = request.POST.get('to')
         user_name = request.POST.get('user_name')
-
+        
         #make sure we have actual date ranges coming in
         if(start_time == "" or end_time == ""):
             start_time = datetime.strftime(datetime.now(), '%Y-%m-%d')
@@ -47,7 +48,10 @@ def total_hours(request):
 
 
 def get_week_range(begin_date, end_date):
-
+    
+    new_begin = begin_date - timedelta(days = begin_date.weekday())
+    new_end = end_date + timedelta(days = (6 - end_date.weekday()))
+    return {'begin':new_begin, 'end':new_end}
 
 
 
@@ -84,7 +88,6 @@ def get_daily_hours(date, user_name):
                 time_dif = round_seconds(get_seconds(time_out) - get_seconds(time_in))
                 shifts.append({'in':time_in, 'out':time_out, 'total':time_dif}) 
                 daily_total += time_dif
-
         daily_info = {'date': date, 'shifts':shifts, 'total':daily_total}
 
     return daily_info
