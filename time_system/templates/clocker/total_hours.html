@@ -21,17 +21,17 @@
                         {% for day in week.days%}
                             {% for shift in day.shifts%}
                                 {%ifequal shift.display_flag True%}
-                                <li><b>IN: {{ shift.in }} OUT: {{shift.out}} Total: {{ shift.total |to_hour}}</b> </li>
+                                <li><b>IN: {{ shift.in }} OUT: {{shift.out}} Total: {{shift.total|to_hour}}</b> </li>
                                 {%else%}
-                                    <li>IN: {{shift.in}} OUT: {{shift.out}} Total: {{ shift.total |to_hour}}</li>
+                                    <li>IN: {{shift.in}} OUT: {{shift.out}} Total: {{shift.total|to_hour}}</li>
                                 {% endifequal %}
                             {% endfor %}
                             
-                            <br /><li><b>Daily Total: {{ day.daily_total |to_hour}} Daily Adjusted: {{ day.daily_adjusted |to_hour}}</b></li>
+                            <br /><li><b>Daily Total: {{day.daily_total|to_hour}} Daily Adjusted: {{day.daily_adjusted|to_hour}}</b></li>
 
                         {% endfor %}
 
-                        <li><b>Weekly Total: {{ week.weekly_total |to_hour}} Weekly Adjusted: {{ week.weekly_adjusted |to_hour}} Weekly Overtime: {{ week.weekly_overtime |to_hour}}</b></li>
+                        <li><b>Weekly Total: {{week.weekly_total|to_hour}} Weekly Adjusted: {{week.weekly_adjusted|to_hour}} Weekly Overtime: {{week.weekly_overtime|to_hour}}</b></li>
                     {% endfor %}
 
 
