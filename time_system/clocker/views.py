@@ -28,7 +28,9 @@ def total_hours(request):
             end_time = datetime.strftime(datetime.now(), '%Y-%m-%d')
 
         start_date = datetime.strptime(start_time, '%Y-%m-%d')
-        end_date = datetime.strptime(end_time, '%Y-%m-%d')
+        end_date = datetime.strptime(end_time + " 23:59:59", '%Y-%m-%d %H:%M:%S')
+
+        print end_date
 
         #Get weekly period for our start and end range
         period_range = get_week_range(start_date, end_date)
@@ -36,6 +38,8 @@ def total_hours(request):
         period_end = period_range['end']
         week_begin = period_begin
         week_end = week_begin + timedelta(days = 6)
+        #print "beginning period %s" % period_begin #DEBUG 
+        #print "ending period %s" % period_end 
 
 
         period_total = 0 #total time for work period
@@ -44,8 +48,7 @@ def total_hours(request):
 
         #iterate through our date-range
         day_count = (period_end - period_begin).days + 1
-        
-        
+
         for single_date in [d for d in (period_begin + timedelta(n) for n in range(day_count)) if d <= period_end]:
             
             daily_info = get_daily_hours(single_date, start_date, end_date, user_name)
@@ -110,14 +113,17 @@ def get_daily_hours(date, start, end, user_name):
         daily_info = {'date':  datetime.strftime(date, '%Y-%m-%d'), 'shifts':shift_info, 'daily_total':0, 'daily_adjusted':0}
     else:
         for shift in shifts:
-            print shift
             time_in = shift.time_in
             time_out = shift.time_out
 
+            print shift
+
             if(time_in != None and time_out != None):
                 time_dif = round_seconds(get_seconds(time_out) - get_seconds(time_in))
+
                 time_calc = Decimal(time_dif)/3600
                 print "time calculation: %s" % time_calc    
+
                 if(time_in >= start and time_out <= end):
                     shift_info.append({'in':time_in, 'out':time_out, 'total':time_dif, 'display_flag':True}) 
                     adjusted_time += time_dif
