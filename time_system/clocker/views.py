@@ -6,6 +6,7 @@ from models import Employee, Time
 from datetime import timedelta, datetime, time
 from time import strftime
 from check_access import check_access
+from decimal import *
 
 
 def total_hours(request):
@@ -36,12 +37,15 @@ def total_hours(request):
         week_begin = period_begin
         week_end = week_begin + timedelta(days = 6)
 
+
         period_total = 0 #total time for work period
         period_adjusted = 0
         week = {'weekly_total':0, 'weekly_adjusted':0, 'weekly_overtime':0, 'days':[]}
 
         #iterate through our date-range
-        day_count = (end_date - start_date).days + 1
+        day_count = (period_end - period_begin).days + 1
+        
+        
         for single_date in [d for d in (period_begin + timedelta(n) for n in range(day_count)) if d <= period_end]:
             
             daily_info = get_daily_hours(single_date, start_date, end_date, user_name)
@@ -51,6 +55,7 @@ def total_hours(request):
             pay_period['period_total'] += daily_info['daily_total']
             pay_period['period_adjusted'] += daily_info['daily_adjusted']
 
+            
             if(single_date >= week_end):
                 if((week['weekly_total'] / 3600) > 40):
                    weekly_overtime = ((week['weekly_total'] / 3600) - 40) * 3600
@@ -62,8 +67,8 @@ def total_hours(request):
                 week_end = week_begin + timedelta(days = 6)
                 week = {'weekly_total':0, 'weekly_adjusted':0, 'weekly_overtime':0, 'days':[]}
 
+    
 
-        #calculate total time
         return render_to_response('total_hours.html', {'pay_period':pay_period, 'employee':user_name}
                 , context_instance=RequestContext(request))
 
@@ -102,7 +107,7 @@ def get_daily_hours(date, start, end, user_name):
 
     #No shifts for this day so 00 hours and minutes
     if not shifts:
-        daily_info = {'date': date, 'shifts':shift_info, 'daily_total':0, 'daily_adjusted':0}
+        daily_info = {'date':  datetime.strftime(date, '%Y-%m-%d'), 'shifts':shift_info, 'daily_total':0, 'daily_adjusted':0}
     else:
         for shift in shifts:
             print shift
@@ -111,7 +116,8 @@ def get_daily_hours(date, start, end, user_name):
 
             if(time_in != None and time_out != None):
                 time_dif = round_seconds(get_seconds(time_out) - get_seconds(time_in))
-                
+                time_calc = Decimal(time_dif)/3600
+                print "time calculation: %s" % time_calc    
                 if(time_in >= start and time_out <= end):
                     shift_info.append({'in':time_in, 'out':time_out, 'total':time_dif, 'display_flag':True}) 
                     adjusted_time += time_dif
