@@ -3,7 +3,7 @@ from django.template import RequestContext
 from django.http import HttpResponse
 from django.contrib.auth import authenticate, login, logout
 from models import Employee, Time
-from datetime import timedelta, datetime, time
+from datetime import timedelta, datetime, time, date
 from time import strftime
 from check_access import check_access
 from decimal import *
@@ -33,7 +33,7 @@ def total_hours(request):
         period_range = get_week_range(start_date, end_date)
         period_begin = period_range['begin']
         period_end = period_range['end']
-        week_begin = period_begin
+        week_begin = date(period_begin.year, period_begin.month, period_begin.day)
         week_end = week_begin + timedelta(days = 6)
         #print "beginning period %s" % period_begin #DEBUG 
         #print "ending period %s" % period_end 
@@ -47,7 +47,8 @@ def total_hours(request):
         day_count = (period_end - period_begin).days + 1
 
         for single_date in [d for d in (period_begin + timedelta(n) for n in range(day_count)) if d <= period_end]:
-            
+            single_date = date(single_date.year, single_date.month, single_date.day) 
+
             daily_info = get_daily_hours(single_date, start_date, end_date, user_name)
             week['weekly_adjusted'] += daily_info['daily_adjusted']
             week['weekly_total'] += daily_info['daily_total']
@@ -55,7 +56,7 @@ def total_hours(request):
             pay_period['period_total'] += daily_info['daily_total']
             pay_period['period_adjusted'] += daily_info['daily_adjusted']
 
-            
+            print week_end    
             if(single_date >= week_end):
                 if(week['weekly_total'] > 144000):
                    weekly_overtime = week['weekly_total'] - 144000
@@ -67,9 +68,6 @@ def total_hours(request):
                 week_begin = week_end
                 week_end = week_begin + timedelta(days = 6)
                 week = {'weekly_total':0, 'weekly_adjusted':0, 'weekly_overtime':0, 'days':[]}
-
-    
-        pay_periods = get_daily_hours(single_date, start_date, end_date, user_name)
 
         return render_to_response('total_hours.html', {'pay_period':pay_period, 'employee':user_name}
                 , context_instance=RequestContext(request))
@@ -115,13 +113,11 @@ def get_daily_hours(date, start, end, user_name):
             time_in = shift.time_in
             time_out = shift.time_out
 
-            print shift
-
             if(time_in != None and time_out != None):
                 time_dif = round_seconds(get_seconds(time_out) - get_seconds(time_in))
 
                 time_calc = Decimal(time_dif)/3600
-                print "time calculation: %s" % time_calc    
+                #print "time calculation: %s" % time_calc    
 
                 if(time_in >= start and time_out <= end):
                     shift_info.append({'in':time_in, 'out':time_out, 'total':time_dif, 'display_flag':True}) 
