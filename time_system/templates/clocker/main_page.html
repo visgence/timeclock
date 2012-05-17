@@ -99,10 +99,14 @@
                     <form name="main_page" method="post">
                         {% csrf_token %}
  
-
                         <div class="radio_buttons">
-                            <input type="radio" name="status" value="In" checked="checked"/> Clock In<br />
-                            <input type="radio" name="status" value="Out"/> Clock Out
+                            {% ifequal user_status "out" %}
+                                <input type="radio" name="status" value="In" checked="checked"/> Clock In<br />
+                                <input type="radio" name="status" value="Out" disabled="disabled"/> Clock Out
+                            {% else %}
+                                <input type="radio" name="status" value="In" disabled="disabled"/> Clock In<br />
+                                <input type="radio" name="status" value="Out" checked="checked"/> Clock Out
+                            {% endifequal %}
                         </div>
                         
                         <input type="submit" value="submit" class="submit_clock">
@@ -116,9 +120,18 @@
                     {% ifequal error "none" %}
 
                         {% ifequal status "out" %}  
-                            You have clocked out succesfully.
-                        {% else %}
+                            You have clocked out succesfully. <br />
+                            <!--You worked a total of {{ time.hours }} hours and {{ time.minutes }} minutes-->
+                        {% endifequal %}
+
+                        {% ifequal status "in" %}
                             Your have clocked in succesfully.
+                        {% endifequal %}
+                            
+                        {% ifequal status "none" %}  
+                            {% ifequal user_status "in" %}  
+                                <!--You have been clocked in for {{ time.hours }} hours and {{ time.minutes }} minutes-->
+                            {% endifequal %}
                         {% endifequal %}
 
                     {% else %}

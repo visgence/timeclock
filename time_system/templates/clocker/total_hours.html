@@ -1,44 +1,59 @@
-
 <html>
 
     <head>
     </head>
 
-    <body> 
-        
+<body> 
 
-            <div>
-                {% if user.first_name %}
-                    Hello {{user.first_name}} {{user.last_name}} (<a href="/logout/">logout</a>)
-                {% endif %}
-            </div>
+    <div>
+        {% if user.first_name %}
+        Hello {{user.first_name}} {{user.last_name}} (<a href="/logout/">logout</a>)
+        {% endif %}
+    </div>
 
-            <div align="center">
-                <table border="1">
+    <h2>Work Hours for {{employee}}</h2>
+   
+    <div align="left">
 
-                    <tr>
-                        <th colspan="2">{{employee_hours.employee}} </th>
-                    </tr>
+        {% load math_helper %}
 
-                    <tr>
-                        <th>Date</th>
-                        <th>total hours</th>
-                    </tr>
+                {% for week in pay_period.weekly_info%}
+                <b>Work Week: {{week.week_start}} - {{week.week_end}}</b>
+            <ul type="none">
+                    {% for day in week.days%}
+                        <li type="none"><b> {{day.date}} Shifts: </b></li>
+                        <ul type="none">
+                            {% for shift in day.shifts%}
+                                {%ifequal shift.display_flag True%}
+                                    <li type="none"><b>IN: {{ shift.in }} OUT: {{shift.out}} Total: {{shift.total|to_hour}}</b> </li>
+                                {%else%}
+                                    <li type="none">IN: {{shift.in}} OUT: {{shift.out}} Total: {{shift.total|to_hour}}</li>
+                                {% endifequal %}
+                            
+                            {% endfor %}
+                                                            
+                                <li type="none">Daily Total: {{day.daily_total|to_hour}}</li> 
+                                <li type="none">Daily Adjusted: {{day.daily_adjusted|to_hour}}</li>
 
-                    {% for key,value in employee_hours.times %}
-
-                    <tr>
-                        <td>{{ key }}  </td>
-                        <td>{{value}}</td>
-                    </tr>
+                        </ul>
                     {% endfor %}
+            <br>
+            <li type="none"><b> Weekly Total: {{week.weekly_total|to_hour}} Weekly Adjusted: {{week.weekly_adjusted|to_hour}} Weekly Overtime: {{week.weekly_overtime|to_hour}}</b></li>
+            
+            </ul>
+            
+            {% endfor %}
 
-                    <tr>
-                        <th><b>Total hours</b></th>
-                        <th>{{employee_hours.total}}</th>
-                    </tr>
-                </table>
-        </div>
-    </body>
+            <b>Total: {{pay_period.period_total|to_hour}} </b> 
+            <br>
+            <b>Total Adjusted: {{pay_period.period_adjusted|to_hour}} </b>
+            <br>
+            <b>Total Overtime: {{pay_period.period_overtime|to_hour}}</b>
+
+            <br>
+            <br>
+            <b> Signature ________________________</b>
+    </div>
+</body>
 
 </html>
