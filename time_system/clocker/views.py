@@ -54,6 +54,8 @@ def total_hours(request):
             week['weekly_adjusted'] += daily_info['daily_adjusted']
             week['weekly_total'] += daily_info['daily_total']
             week['days'].append(daily_info)
+            week['week_start'] = week_begin
+            week['week_end'] = week_end
             pay_period['period_total'] += daily_info['daily_total']
             pay_period['period_adjusted'] += daily_info['daily_adjusted']
 
@@ -67,10 +69,9 @@ def total_hours(request):
                 pay_period['weekly_info'].append(week)
                 week_begin = week_end
                 week_end = week_begin + timedelta(days = 6)
-                week = {'weekly_total':0, 'weekly_adjusted':0, 'weekly_overtime':0, 'days':[]}
+                week = {'weekly_total':0, 'weekly_adjusted':0, 'weekly_overtime':0, 'week_start':week_begin, 'week_end':week_end, 'days':[]}
 
     
-        pay_periods = get_daily_hours(single_date, start_date, end_date, user_name)
 
         return render_to_response('total_hours.html', {'pay_period':pay_period, 'employee':user_name}
                 , context_instance=RequestContext(request))
