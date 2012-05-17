@@ -17,7 +17,6 @@ def total_hours(request):
 
     if(request.method == 'POST'):
         pay_period = {'weekly_info':[], 'period_total':0, 'period_adjusted':0, 'period_overtime':0} 
-        pay_periods = [] 
         start_time = request.POST.get('from')
         end_time = request.POST.get('to')
         user_name = request.POST.get('user_name')
@@ -71,6 +70,7 @@ def total_hours(request):
                 week = {'weekly_total':0, 'weekly_adjusted':0, 'weekly_overtime':0, 'days':[]}
 
     
+        pay_periods = get_daily_hours(single_date, start_date, end_date, user_name)
 
         return render_to_response('total_hours.html', {'pay_period':pay_period, 'employee':user_name}
                 , context_instance=RequestContext(request))
