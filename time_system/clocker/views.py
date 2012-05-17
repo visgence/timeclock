@@ -62,8 +62,9 @@ def total_hours(request):
                 week_end = week_begin + timedelta(days = 6)
                 week = {'weekly_total':0, 'weekly_adjusted':0, 'weekly_overtime':0, 'days':[]}
 
-        
-        return render_to_response('total_hours.html', {'pay_period':to_hour(pay_period), 'employee':user_name}
+
+        #calculate total time
+        return render_to_response('total_hours.html', {'pay_period':pay_period, 'employee':user_name}
                 , context_instance=RequestContext(request))
 
     return render_to_response('login.html', context_instance=RequestContext(request))
@@ -75,11 +76,6 @@ def get_week_range(begin_date, end_date):
     new_end = end_date + timedelta(days = (6 - end_date.weekday()))
     return {'begin':new_begin, 'end':new_end}
 
-#convert to hours
-def to_hours(pay_period):
-    for week in pay_period['weekly_info']:
-
-        print week
 
 
 def get_daily_hours(date, start, end, user_name):

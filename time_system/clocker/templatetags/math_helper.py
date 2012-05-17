@@ -1,5 +1,8 @@
 from django import template
+from decimal import *
 register = template.Library()
-register.filter('to_hour', to_hour)
+
+getcontext().prec = 4
+@register.filter
 def to_hour(value):
-    return float(value) / 3600.
+    return Decimal(value) / 3600
