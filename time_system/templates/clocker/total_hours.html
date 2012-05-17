@@ -1,4 +1,3 @@
-
 <html>
 
     <head>
@@ -14,30 +13,28 @@
             </div>
 
             <div align="center">
-                <table border="1">
 
-                    <tr>
-                        <th colspan="2">{{employee_hours.employee}} </th>
-                    </tr>
+                    <b>{{employee}}</b>
+                    {% load math_helper %}
 
-                    <tr>
-                        <th>Date</th>
-                        <th>total hours</th>
-                    </tr>
+                    {% for week in pay_period.weekly_info%}
+                        {% for day in week.days%}
+                            {% for shift in day.shifts%}
+                                {%ifequal shift.display_flag True%}
+                                <li><b>IN: {{ shift.in }} OUT: {{shift.out}} Total: {{ shift.total |to_hour}}</b> </li>
+                                {%else%}
+                                    <li>IN: {{shift.in}} OUT: {{shift.out}} Total: {{ shift.total |to_hour}}</li>
+                                {% endifequal %}
+                            {% endfor %}
+                            
+                            <br /><li><b>Daily Total: {{ day.daily_total |to_hour}} Daily Adjusted: {{ day.daily_adjusted |to_hour}}</b></li>
 
-                    {% for key,value in employee_hours.times %}
+                        {% endfor %}
 
-                    <tr>
-                        <td>{{ key }}  </td>
-                        <td>{{value}}</td>
-                    </tr>
+                        <li><b>Weekly Total: {{ week.weekly_total |to_hour}} Weekly Adjusted: {{ week.weekly_adjusted |to_hour}} Weekly Overtime: {{ week.weekly_overtime |to_hour}}</b></li>
                     {% endfor %}
 
-                    <tr>
-                        <th><b>Total hours</b></th>
-                        <th>{{employee_hours.total}}</th>
-                    </tr>
-                </table>
+
         </div>
     </body>
 

@@ -15,7 +15,8 @@ def total_hours(request):
         return response
 
     if(request.method == 'POST'):
-        pay_period = {} 
+        pay_period = {'weekly_info':[], 'period_total':0, 'period_adjusted':0, 'period_overtime':0} 
+        pay_periods = [] 
         start_time = request.POST.get('from')
         end_time = request.POST.get('to')
         user_name = request.POST.get('user_name')
@@ -28,21 +29,42 @@ def total_hours(request):
         start_date = datetime.strptime(start_time, '%Y-%m-%d')
         end_date = datetime.strptime(end_time, '%Y-%m-%d')
 
-        start_time = datetime.strptime(start_time, '%Y-%m-%d')
-        end_time = datetime.strptime(end_time, '%Y-%m-%d')
-        end_time += timedelta(1)
-        num_days = end_time - start_time
+        #Get weekly period for our start and end range
+        period_range = get_week_range(start_date, end_date)
+        period_begin = period_range['begin']
+        period_end = period_range['end']
+        week_begin = period_begin
+        week_end = week_begin + timedelta(days = 6)
 
         period_total = 0 #total time for work period
+        period_adjusted = 0
+        week = {'weekly_total':0, 'weekly_adjusted':0, 'weekly_overtime':0, 'days':[]}
 
         #iterate through our date-range
         day_count = (end_date - start_date).days + 1
-        for single_date in [d for d in (start_date + timedelta(n) for n in range(day_count)) if d <= end_date]:
-            daily_stuff = get_daily_hours(single_date, user_name)
-#            period_total += daily_stuff['total']
+        for single_date in [d for d in (period_begin + timedelta(n) for n in range(day_count)) if d <= period_end]:
+            
+            daily_info = get_daily_hours(single_date, start_date, end_date, user_name)
+            week['weekly_adjusted'] += daily_info['daily_adjusted']
+            week['weekly_total'] += daily_info['daily_total']
+            week['days'].append(daily_info)
+            pay_period['period_total'] += daily_info['daily_total']
+            pay_period['period_adjusted'] += daily_info['daily_adjusted']
 
-        #calculate total time
-        return render_to_response('total_hours.html', {'pay_period':pay_period, 'employee':user_name}, context_instance=RequestContext(request))
+            if(single_date >= week_end):
+                if((week['weekly_total'] / 3600) > 40):
+                   weekly_overtime = ((week['weekly_total'] / 3600) - 40) * 3600
+                   week['weekly_overtime'] = weekly_overtime
+                   pay_period['period_overtime'] += weekly_overtime
+
+                pay_period['weekly_info'].append(week)
+                week_begin = week_end
+                week_end = week_begin + timedelta(days = 6)
+                week = {'weekly_total':0, 'weekly_adjusted':0, 'weekly_overtime':0, 'days':[]}
+
+        
+        return render_to_response('total_hours.html', {'pay_period':to_hour(pay_period), 'employee':user_name}
+                , context_instance=RequestContext(request))
 
     return render_to_response('login.html', context_instance=RequestContext(request))
 
@@ -53,9 +75,14 @@ def get_week_range(begin_date, end_date):
     new_end = end_date + timedelta(days = (6 - end_date.weekday()))
     return {'begin':new_begin, 'end':new_end}
 
+#convert to hours
+def to_hours(pay_period):
+    for week in pay_period['weekly_info']:
+
+        print week
 
 
-def get_daily_hours(date, user_name):
+def get_daily_hours(date, start, end, user_name):
     '''
     Gets the total hours and minutes worked for a given date.  
 
@@ -70,6 +97,7 @@ def get_daily_hours(date, user_name):
     '''
 
     daily_total = 0
+    adjusted_time = 0 
     daily_info = None
     shift_info = []
  
@@ -78,7 +106,7 @@ def get_daily_hours(date, user_name):
 
     #No shifts for this day so 00 hours and minutes
     if not shifts:
-        daily_info = {'date': date, 'shifts':shift_info, 'total':0}
+        daily_info = {'date': date, 'shifts':shift_info, 'daily_total':0, 'daily_adjusted':0}
     else:
         for shift in shifts:
             print shift
@@ -87,10 +115,16 @@ def get_daily_hours(date, user_name):
 
             if(time_in != None and time_out != None):
                 time_dif = round_seconds(get_seconds(time_out) - get_seconds(time_in))
-                shift_info.append({'in':time_in, 'out':time_out, 'total':time_dif}) 
+                
+                if(time_in >= start and time_out <= end):
+                    shift_info.append({'in':time_in, 'out':time_out, 'total':time_dif, 'display_flag':True}) 
+                    adjusted_time += time_dif
+                else:
+                    shift_info.append({'in':time_in, 'out':time_out, 'total':time_dif, 'display_flag':False}) 
+
                 daily_total += time_dif
 
-        daily_info = {'date': date, 'shifts':shift_info, 'total':daily_total}
+        daily_info = {'date': date, 'shifts':shift_info, 'daily_total':daily_total, 'daily_adjusted':adjusted_time}
 
     return daily_info
 
@@ -208,32 +242,6 @@ def round_seconds(seconds):
 
     return minutes * 60
 
-#This helper function will take seconds and will return a dictionary with 
-#hours and minutes. It will properly round minutes and increment the hour
-#if it rounds to 60 min.
-#return: dictionary in the form {'hour':hours, 'minutes': minutes}
-'''
-def sec_to_shift(seconds):
-    hours = seconds / 3600 
-    minutes = (seconds - (hours * 3600)) /60
-
-    #rounding minutes to nearest 15
-    remainder = minutes % 15
-
-    if(remainder <= 7):
-        minutes = minutes - remainder
-    else:
-        minutes = minutes + (15 - remainder)
-        #sum_time = sum_time + timedelta(minutes = (15 - remainder))
-        #total_time = total_time + timedelta(minutes = (15 - remainder))
-
-    #handle the case where minutes was rounded to 60 and increment hour
-    if minutes >= 60:
-        hours +=1
-        minutes = 0 
-
-    return (hours * 3600) + (minutes * 60)
-'''
 
 
 
