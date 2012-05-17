@@ -7,7 +7,7 @@ from datetime import timedelta, datetime, time, date
 from time import strftime
 from check_access import check_access
 from decimal import *
-
+import check_db
 
 def total_hours(request):
     #make sure the employee is logged in
@@ -16,6 +16,8 @@ def total_hours(request):
         return response
 
     if(request.method == 'POST'):
+        check_db.main()
+
         pay_period = {'weekly_info':[], 'period_total':0, 'period_adjusted':0, 'period_overtime':0} 
         start_time = request.POST.get('from')
         end_time = request.POST.get('to')
@@ -109,7 +111,7 @@ def get_daily_hours(date, start, end, user_name):
 
     #No shifts for this day so 00 hours and minutes
     if not shifts:
-        daily_info = {'date':  datetime.strftime(date, '%Y-%m-%d'), 'shifts':shift_info, 'daily_total':0, 'daily_adjusted':0}
+        daily_info = {'date':  date, 'shifts':shift_info, 'daily_total':0, 'daily_adjusted':0}
     else:
         for shift in shifts:
             time_in = shift.time_in
