@@ -29,8 +29,6 @@ def total_hours(request):
         start_date = datetime.strptime(start_time, '%Y-%m-%d')
         end_date = datetime.strptime(end_time + " 23:59:59", '%Y-%m-%d %H:%M:%S')
 
-        print end_date
-
         #Get weekly period for our start and end range
         period_range = get_week_range(start_date, end_date)
         period_begin = period_range['begin']
@@ -61,8 +59,9 @@ def total_hours(request):
 
             
             if(single_date >= week_end):
-                if((week['weekly_total'] / 3600) > 40):
-                   weekly_overtime = ((week['weekly_total'] / 3600) - 40) * 3600
+                if(week['weekly_total'] > 144000):
+                   weekly_overtime = week['weekly_total'] - 144000
+                   
                    week['weekly_overtime'] = weekly_overtime
                    pay_period['period_overtime'] += weekly_overtime
 
