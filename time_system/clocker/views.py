@@ -6,6 +6,7 @@ from models import Employee, Time
 from datetime import timedelta, datetime, time
 from time import strftime
 from check_access import check_access
+from decimal import *
 
 
 def total_hours(request):
@@ -27,7 +28,9 @@ def total_hours(request):
             end_time = datetime.strftime(datetime.now(), '%Y-%m-%d')
 
         start_date = datetime.strptime(start_time, '%Y-%m-%d')
-        end_date = datetime.strptime(end_time, '%Y-%m-%d')
+        end_date = datetime.strptime(end_time + " 23:59:59", '%Y-%m-%d %H:%M:%S')
+
+        print end_date
 
         #Get weekly period for our start and end range
         period_range = get_week_range(start_date, end_date)
@@ -107,13 +110,18 @@ def get_daily_hours(date, start, end, user_name):
         daily_info = {'date': date, 'shifts':shift_info, 'daily_total':0, 'daily_adjusted':0}
     else:
         for shift in shifts:
-            print shift
             time_in = shift.time_in
             time_out = shift.time_out
 
+            print shift
+
             if(time_in != None and time_out != None):
                 time_dif = round_seconds(get_seconds(time_out) - get_seconds(time_in))
-                
+                time_calc = Decimal(time_dif) / 3600
+                #print "total time : %f\n" % time_calc
+
+                print "\ntime_out is: %s" % time_out
+                print "end is: %s\n" % end
                 if(time_in >= start and time_out <= end):
                     shift_info.append({'in':time_in, 'out':time_out, 'total':time_dif, 'display_flag':True}) 
                     adjusted_time += time_dif
