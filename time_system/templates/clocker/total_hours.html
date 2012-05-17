@@ -12,13 +12,17 @@
                 {% endif %}
             </div>
 
-            <div align="center">
+            <div align="left">
 
-                    <b>{{employee}}</b>
                     {% load math_helper %}
-
+                    
+                    <h2>Work Hours for {{employee}}</h2>
+                    <ul>
                     {% for week in pay_period.weekly_info%}
+                            <ul>
+                            <b>Daily</b>
                         {% for day in week.days%}
+                            <ul>
                             {% for shift in day.shifts%}
                                 {%ifequal shift.display_flag True%}
                                 <li><b>IN: {{ shift.in }} OUT: {{shift.out}} Total: {{shift.total|to_hour}}</b> </li>
@@ -26,14 +30,17 @@
                                     <li>IN: {{shift.in}} OUT: {{shift.out}} Total: {{shift.total|to_hour}}</li>
                                 {% endifequal %}
                             {% endfor %}
-                            
+                            </ul>
                             <br /><li><b>Date: {{day.date}} Daily Total: {{day.daily_total|to_hour}} Daily Adjusted: {{day.daily_adjusted|to_hour}}</b></li>
 
                         {% endfor %}
 
+                            </ul>
+
                         <li><b>Weekly Total: {{week.weekly_total|to_hour}} Weekly Adjusted: {{week.weekly_adjusted|to_hour}} Weekly Overtime: {{week.weekly_overtime|to_hour}}</b></li>
                     {% endfor %}
 
+                            </ul>
                     <li><b>Total: {{pay_period.period_total|to_hour}} Total Adjusted: {{pay_period.period_adjusted|to_hour}} Total Overtime: {{pay_period.period_overtime|to_hour}}</b></li>
 
         </div>
