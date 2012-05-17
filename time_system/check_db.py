@@ -13,7 +13,7 @@ def correct_record(record):
     and inserts time records that have the employee clocked out before midnight each day and clocked in right after midnight the next day.  It will recognize that an employee is still clocked in and
     simply make the last inserted record not have a clock out time so that the employee can do so.
     """
-
+    print "success"
     if(record.time_out == None):
         end_time = datetime.now()
     else:
