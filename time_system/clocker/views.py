@@ -48,7 +48,8 @@ def total_hours(request):
         #iterate through our date-range
         day_count = (period_end - period_begin).days + 1
 
-        for single_date in [d for d in (period_begin + timedelta(n) for n in range(day_count)) if d <= period_end]:
+        for single_date in [d for d in (period_begin + timedelta(n) for n in range(day_count)) if d <= end_date]:
+            
             single_date = date(single_date.year, single_date.month, single_date.day) 
 
             daily_info = get_daily_hours(single_date, start_date, end_date, user_name)
@@ -60,8 +61,9 @@ def total_hours(request):
             pay_period['period_total'] += daily_info['daily_total']
             pay_period['period_adjusted'] += daily_info['daily_adjusted']
 
-            print week_end    
-            if(single_date >= week_end):
+            print single_date 
+            if(single_date >= week_end or single_date >= end_date.date()):
+                print "weekend: %s" % week_end 
                 if(week['weekly_total'] > 144000):
                    weekly_overtime = week['weekly_total'] - 144000
                    
@@ -69,7 +71,7 @@ def total_hours(request):
                    pay_period['period_overtime'] += weekly_overtime
 
                 pay_period['weekly_info'].append(week)
-                week_begin = week_end
+                week_begin = week_end + timedelta(days = 1)
                 week_end = week_begin + timedelta(days = 6)
                 week = {'weekly_total':0, 'weekly_adjusted':0, 'weekly_overtime':0, 'week_start':week_begin, 'week_end':week_end, 'days':[]}
 
@@ -186,6 +188,7 @@ def main_page(request):
     extra = get_extra(employee, "", "")
     employee.get_current_time()
     return render_to_response('main_page.html', extra, context_instance=RequestContext(request))
+    #return render_to_response('main_page.html', context_instance=RequestContext(request))
 
 
 def get_extra(employee, status, error):
@@ -201,6 +204,7 @@ def get_extra(employee, status, error):
         A dictionary with all the stuff needed by the main page so that it can return.
     '''
 
+    #print employee
     extra = {
                 'employee':Employee.objects.all(),
                 'is_admin':employee.user.is_staff,
