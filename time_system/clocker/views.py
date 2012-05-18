@@ -126,14 +126,17 @@ def get_daily_hours(date, start, end, user_name):
                 #print "time calculation: %s" % time_calc    
 
                 if(time_in >= start and time_out <= end):
-                    shift_info.append({'in':time_in, 'out':time_out, 'total':time_dif, 'display_flag':True}) 
+                    shift_info.append({'in':time_in, 'out':time_out, 'total':time_dif, 'display_flag':'True'}) 
                     adjusted_time += time_dif
                 else:
-                    shift_info.append({'in':time_in, 'out':time_out, 'total':time_dif, 'display_flag':False}) 
+                    shift_info.append({'in':time_in, 'out':time_out, 'total':time_dif, 'display_flag':'False'}) 
 
                 daily_total += time_dif
 
-        daily_info = {'date': date, 'shifts':shift_info, 'daily_total':daily_total, 'daily_adjusted':adjusted_time}
+        if(date >= start.date() and date <= end.date()):
+            daily_info = {'date': date, 'shifts':shift_info, 'daily_total':daily_total, 'daily_adjusted':adjusted_time, 'display_flag':'True'}
+        else:
+            daily_info = {'date': date, 'shifts':shift_info, 'daily_total':daily_total, 'daily_adjusted':adjusted_time, 'display_flag':'False'}
 
     return daily_info
 

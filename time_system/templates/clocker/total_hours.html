@@ -19,21 +19,34 @@
 
                 {% for week in pay_period.weekly_info%}
                 <b>Work Week: {{week.week_start}} - {{week.week_end}}</b>
-            <ul type="none">
+                <ul type="none">
                     {% for day in week.days%}
-                        <li type="none"><b> {{day.date}} Shifts: </b></li>
-                        <ul type="none">
-                            {% for shift in day.shifts%}
-                                {%ifequal shift.display_flag True%}
-                                    <li type="none"><b>IN: {{ shift.in }} OUT: {{shift.out}} Total: {{shift.total|to_hour}}</b> </li>
-                                {%else%}
-                                    <li type="none">IN: {{shift.in}} OUT: {{shift.out}} Total: {{shift.total|to_hour}}</li>
-                                {% endifequal %}
+
+                        {%ifequal day.display_flag 'True'%}
+                            <li type="none"><b> {{day.date}} Shifts: </b></li>
+                            <ul type="none">
+                        {%else%}
+                            <li type="none"> <font color="gray"> {{day.date}} Shifts:</font> </li>
+                            <ul type="none">
+                        {% endifequal %}
+
+                        {% for shift in day.shifts%}
+                        
+                            {%ifequal shift.display_flag 'True'%}
+                                <li type="none">IN: {{ shift.in }} OUT: {{shift.out}} Total: {{shift.total|to_hour}} </li>
+                            {%else%}
+                                <li type="none"><font color="gray">IN: {{shift.in}} OUT: {{shift.out}} Total: {{shift.total|to_hour}} </font></li>
+                            {% endifequal %}
                             
-                            {% endfor %}
+                        {% endfor %}
                                                             
-                                <li type="none">Daily Total: {{day.daily_total|to_hour}}</li> 
-                                <li type="none">Daily Adjusted: {{day.daily_adjusted|to_hour}}</li>
+                        {%ifequal day.display_flag 'True'%}
+                            <li type="none">  Daily Total: {{day.daily_total|to_hour}} </li>
+                            <li type="none"> Daily Adjusted: {{day.daily_adjusted|to_hour}}</li>
+                        {%else%}
+                            <li type="none"> <font color="gray"> Daily Total: {{day.daily_total|to_hour}}</font> </li>
+                            <li type="none"><font color="gray"> Daily Adjusted: {{day.daily_adjusted|to_hour}} </font></li>
+                        {% endifequal %}
 
                         </ul>
                     {% endfor %}
@@ -44,11 +57,11 @@
             
             {% endfor %}
 
-            <b>Total: {{pay_period.period_total|to_hour}} </b> 
+            <b>Total Hours for Pay Period: {{pay_period.period_total|to_hour}} </b> 
             <br>
-            <b>Total Adjusted: {{pay_period.period_adjusted|to_hour}} </b>
+            <b>Total Adjusted Hours for Pay Period: {{pay_period.period_adjusted|to_hour}} </b>
             <br>
-            <b>Total Overtime: {{pay_period.period_overtime|to_hour}}</b>
+            <b>Total Overtime Hours for Pay Period: {{pay_period.period_overtime|to_hour}}</b>
 
             <br>
             <br>
