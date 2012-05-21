@@ -248,7 +248,7 @@ def get_extra(employee, status, error):
         #print employee.user
         user= User.objects.get(username=employee.user)  
         print user.is_staff
-        extra ={'is_admin':user.is_staff, 'employee':Employee.objects.all(),'user_status':'out'}
+        extra ={'is_admin':user.is_staff, 'employee':Employee.objects.all(),'user_status':'out', 'error':"none", 'status':"none"}
         return extra 
 
 

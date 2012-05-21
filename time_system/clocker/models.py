@@ -66,7 +66,9 @@ class Employee(models.Model):
         """
 
         max_id = Time.objects.filter(employee=self).aggregate(employee=models.Max('id'))
-        print "max: %s" %  max_id
+
+        #print "max: %s" %  max_id #DEBUG
+
         if(max_id['employee'] == None):
             stuff = {'status':"out", 'max_record':None}
             return stuff
