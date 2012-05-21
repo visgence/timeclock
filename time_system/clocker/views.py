@@ -2,6 +2,7 @@ from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.http import HttpResponse
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.models import User
 from models import Employee, Time
 from datetime import timedelta, datetime, time, date
 from time import strftime
@@ -48,7 +49,8 @@ def total_hours(request):
         #iterate through our date-range
         day_count = (period_end - period_begin).days + 1
 
-        for single_date in [d for d in (period_begin + timedelta(n) for n in range(day_count)) if d <= period_end]:
+        for single_date in [d for d in (period_begin + timedelta(n) for n in range(day_count)) if d <= end_date]:
+            
             single_date = date(single_date.year, single_date.month, single_date.day) 
 
             daily_info = get_daily_hours(single_date, start_date, end_date, user_name)
@@ -60,8 +62,7 @@ def total_hours(request):
             pay_period['period_total'] += daily_info['daily_total']
             pay_period['period_adjusted'] += daily_info['daily_adjusted']
 
-            print week_end    
-            if(single_date >= week_end):
+            if(single_date >= week_end or single_date >= end_date.date()):
                 if(week['weekly_total'] > 144000):
                    weekly_overtime = week['weekly_total'] - 144000
                    
@@ -69,7 +70,7 @@ def total_hours(request):
                    pay_period['period_overtime'] += weekly_overtime
 
                 pay_period['weekly_info'].append(week)
-                week_begin = week_end
+                week_begin = week_end + timedelta(days = 1)
                 week_end = week_begin + timedelta(days = 6)
                 week = {'weekly_total':0, 'weekly_adjusted':0, 'weekly_overtime':0, 'week_start':week_begin, 'week_end':week_end, 'days':[]}
 
@@ -124,14 +125,17 @@ def get_daily_hours(date, start, end, user_name):
                 #print "time calculation: %s" % time_calc    
 
                 if(time_in >= start and time_out <= end):
-                    shift_info.append({'in':time_in, 'out':time_out, 'total':time_dif, 'display_flag':True}) 
+                    shift_info.append({'in':time_in, 'out':time_out, 'total':time_dif, 'display_flag':'True'}) 
                     adjusted_time += time_dif
                 else:
-                    shift_info.append({'in':time_in, 'out':time_out, 'total':time_dif, 'display_flag':False}) 
+                    shift_info.append({'in':time_in, 'out':time_out, 'total':time_dif, 'display_flag':'False'}) 
 
                 daily_total += time_dif
 
-        daily_info = {'date': date, 'shifts':shift_info, 'daily_total':daily_total, 'daily_adjusted':adjusted_time}
+        if(date >= start.date() and date <= end.date()):
+            daily_info = {'date': date, 'shifts':shift_info, 'daily_total':daily_total, 'daily_adjusted':adjusted_time, 'display_flag':'True'}
+        else:
+            daily_info = {'date': date, 'shifts':shift_info, 'daily_total':daily_total, 'daily_adjusted':adjusted_time, 'display_flag':'False'}
 
     return daily_info
 
@@ -186,6 +190,7 @@ def main_page(request):
     extra = get_extra(employee, "", "")
     employee.get_current_time()
     return render_to_response('main_page.html', extra, context_instance=RequestContext(request))
+    #return render_to_response('main_page.html', context_instance=RequestContext(request))
 
 
 def get_extra(employee, status, error):
@@ -200,42 +205,51 @@ def get_extra(employee, status, error):
     Returns:
         A dictionary with all the stuff needed by the main page so that it can return.
     '''
+    try:
+     
+        #print employee
+        extra = {
+                    'employee':Employee.objects.all(),
+                    'is_admin':employee.user.is_staff,
+                }
 
-    extra = {
-                'employee':Employee.objects.all(),
-                'is_admin':employee.user.is_staff,
-            }
+        if((status == "Out" or status == "out") and error == ""):
+            extra['error'] = employee.clock_out()
+            extra['status'] = "out"
 
-    if((status == "Out" or status == "out") and error == ""):
-        extra['error'] = employee.clock_out()
-        extra['status'] = "out"
+            which_clock = Employee.objects.get(user__username=employee.user.username).which_clock()
+            shift = which_clock['max_record'].time_out - which_clock['max_record'].time_in
+            extra['user_status'] = which_clock['status']
+            #extra['time'] = round_seconds(shift.days * 86400 + shift.seconds)
+        elif((status == "In" or status == "in") and error == ""):
+            extra['error'] = employee.clock_in()
+            extra['status'] = "in"
 
-        which_clock = Employee.objects.get(user__username=employee.user.username).which_clock()
-        shift = which_clock['max_record'].time_out - which_clock['max_record'].time_in
-        extra['user_status'] = which_clock['status']
-        #extra['time'] = round_seconds(shift.days * 86400 + shift.seconds)
-    elif((status == "In" or status == "in") and error == ""):
-        extra['error'] = employee.clock_in()
-        extra['status'] = "in"
+            which_clock = Employee.objects.get(user__username=employee.user.username).which_clock()
+            extra['user_status'] = which_clock['status']
+        elif(status == "" and error == "employee_does_not_exist"):
+            extra['error'] = "exception"
+            extra['user_name'] = employee.user.username
 
-        which_clock = Employee.objects.get(user__username=employee.user.username).which_clock()
-        extra['user_status'] = which_clock['status']
-    elif(status == "" and error == "employee_does_not_exist"):
-        extra['error'] = "exception"
-        extra['user_name'] = employee.user.username
+            which_clock = Employee.objects.get(user__username=employee.user.username).which_clock()
+            extra['user_status'] = which_clock['status']
+        elif(status == "" and error == ""):
+            extra['error'] = "none"
+            extra['status'] = "none"
 
-        which_clock = Employee.objects.get(user__username=employee.user.username).which_clock()
-        extra['user_status'] = which_clock['status']
-    elif(status == "" and error == ""):
-        extra['error'] = "none"
-        extra['status'] = "none"
+            which_clock = Employee.objects.get(user__username=employee.user.username).which_clock()
+            shift = datetime.now() - which_clock['max_record'].time_in
+            #extra['time'] = round_seconds(shift.days * 86400 + shift.seconds)
+            extra['user_status'] = which_clock['status']
 
-        which_clock = Employee.objects.get(user__username=employee.user.username).which_clock()
-        shift = datetime.now() - which_clock['max_record'].time_in
-        #extra['time'] = round_seconds(shift.days * 86400 + shift.seconds)
-        extra['user_status'] = which_clock['status']
+        return extra
 
-    return extra
+    except Exception, e:
+        #print employee.user
+        user= User.objects.get(username=employee.user)  
+        print user.is_staff
+        extra ={'is_admin':user.is_staff, 'employee':Employee.objects.all(),'user_status':'out'}
+        return extra 
 
 
                 

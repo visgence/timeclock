@@ -62,9 +62,15 @@ class Employee(models.Model):
         Returns:
             A dictionary with the status of the employee and the maximum time record that was used to determine this.
             Keys: 'status' 'max_record'
+        TODO: It is possible for an admin to never be clocked into our time system. 
         """
 
         max_id = Time.objects.filter(employee=self).aggregate(employee=models.Max('id'))
+        print "max: %s" %  max_id
+        if(max_id['employee'] == None):
+            stuff = {'status':"out", 'max_record':None}
+            return stuff
+
         record = Time.objects.get(id=max_id['employee'])
         stuff = {
                     'max_record':record
