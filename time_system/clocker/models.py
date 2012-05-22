@@ -29,7 +29,7 @@ class Employee(models.Model):
         if(dictionary['status'] == "in"):
             return "in"
         else:
-            time = Time(employee=self,
+            time = Shift(employee=self,
                         time_in=datetime.now())
             time.save()
             return "none"
@@ -48,7 +48,7 @@ class Employee(models.Model):
         if(dictionary['status'] == "out"):
             return "out"
         else:
-            time = Time(id=dictionary['max_record'].id,
+            time = Shift(id=dictionary['max_record'].id,
                         employee=dictionary['max_record'].employee,
                         time_in=dictionary['max_record'].time_in,
                         time_out=datetime.now())
@@ -65,7 +65,7 @@ class Employee(models.Model):
         TODO: It is possible for an admin to never be clocked into our time system. 
         """
 
-        max_id = Time.objects.filter(employee=self).aggregate(employee=models.Max('id'))
+        max_id = Shift.objects.filter(employee=self).aggregate(employee=models.Max('id'))
 
         #print "max: %s" %  max_id #DEBUG
 
@@ -73,7 +73,7 @@ class Employee(models.Model):
             stuff = {'status':"out", 'max_record':None}
             return stuff
 
-        record = Time.objects.get(id=max_id['employee'])
+        record = Shift.objects.get(id=max_id['employee'])
         stuff = {
                     'max_record':record
                 }
@@ -97,27 +97,49 @@ class Employee(models.Model):
         
 
 
-class Time(models.Model):
+class Shift(models.Model):
     employee = models.ForeignKey('Employee')
     time_in = models.DateTimeField('clock in time')
     time_out = models.DateTimeField('clock out time', null = True, blank=True)
 
     class Meta:
-        db_table = 'Time'
+        db_table = 'Shift'
+        ordering = ['time_in', 'employee']
 
     def __unicode__(self):
-        data = self.employee.user.username + " time_in: " + self.time_in.strftime("%Y-%m-%d %H:%M") + " time_out: "
+        data = "TIME_IN: " + self.time_in.strftime("%Y-%m-%d %H:%M") + " TIME_OUT: "
         if(self.time_out != None):
-            data += self.time_out.strftime("%Y-%m-%d %H:%M")
+            data += self.time_out.strftime("%Y-%m-%d %H:%M") + " " + self.employee.user.first_name + " " + self.employee.user.last_name
+        else:
+            data += " " + self.employee.user.first_name + " " + self.employee.user.last_name
+
         return data
 
 
+class ShiftSummary(models.Model):
+    job = models.ForeignKey('Job')
+    employee = models.ForeignKey('Employee')
+    shift = models.ForeignKey('Shift')
+    hours = models.IntegerField('total hours')
+    miles = models.DecimalField(max_digits = 6, decimal_places = 2, null = True, blank=True)
+    note = models.TextField('notes about job')
+
+    class Meta:
+        db_table = 'Shift Summary'
+        ordering = ['shift', 'employee', 'job']
+
+    def __unicode__(self):
+        data = self.shift.time_in.date().strftime("%Y-%m-%d") + "    EMPLOYEE: " + self.employee.user.first_name + "  " + self.employee.user.last_name + "    JOB: " + self.job.name
+        return data
+
 class Job(models.Model):
+    name = models.CharField('job name', max_length = 25)
     description = models.TextField('job description')
     is_active = models.BooleanField() 
 
     class Meta:
         db_table = 'Job'
+        ordering = ['-is_active']
 
     def __unicode__(self):
-        return description
+        return self.name
