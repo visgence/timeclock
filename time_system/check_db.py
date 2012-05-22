@@ -30,7 +30,7 @@ def correct_record(record):
         minute = record.time_in.minute
 
         #Insert the first day
-        date_time = Time(employee = record.employee,
+        date_time = Shift(employee = record.employee,
                          time_in = record.time_in,
                          time_out = datetime(year, month, day, 23, 59))
         date_time.save()
@@ -41,7 +41,7 @@ def correct_record(record):
             new_date = record.time_in + timedelta(i)
             month = new_date.month
             day = new_date.day
-            date_time = Time(employee = record.employee,
+            date_time = Shift(employee = record.employee,
                              time_in = datetime(year, month, day, 00, 00),
                              time_out = datetime(year, month, day, 23, 59))
             date_time.save()
@@ -52,11 +52,11 @@ def correct_record(record):
         day = end_time.day
 
         if(record.time_out == None):
-            date_time = Time(employee = record.employee,
+            date_time = Shift(employee = record.employee,
                              time_in = datetime(year, month, day, 00, 00),
                              time_out = None)
         else:
-            date_time = Time(employee = record.employee,
+            date_time = Shift(employee = record.employee,
                              time_in = datetime(year, month, day, 00, 00),
                              time_out = end_time)
         date_time.save()
@@ -66,7 +66,7 @@ def correct_record(record):
 
 def main():
 
-    for record in Time.objects.all():
+    for record in Shift.objects.all():
         correct_record(record)
 
 

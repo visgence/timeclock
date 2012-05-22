@@ -3,7 +3,7 @@ from django.template import RequestContext
 from django.http import HttpResponse
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
-from models import Employee, Time
+from models import Employee, Shift, Job
 from datetime import timedelta, datetime, time, date
 from time import strftime
 from check_access import check_access
@@ -108,7 +108,7 @@ def get_daily_hours(date, start, end, user_name):
     shift_info = []
  
     #find all clock in-outs for this day
-    shifts = Time.objects.filter(employee__user__username = user_name).filter(time_in__year = date.year).filter(time_in__month = date.month).filter(time_in__day = date.day)
+    shifts = Shift.objects.filter(employee__user__username = user_name).filter(time_in__year = date.year).filter(time_in__month = date.month).filter(time_in__day = date.day)
 
     #No shifts for this day so 00 hours and minutes
     if not shifts:
@@ -178,6 +178,10 @@ def main_page(request):
             status = request.POST.get('status')
             if(status == "Out" or status == "out"):
                 extra = get_extra(employee, "out", "")
+
+                if(extra['error'] == "none"):
+                    return render_to_response('shift_summary.html', extra , context_instance=RequestContext(request))
+
                 return render_to_response('main_page.html', extra , context_instance=RequestContext(request))
             elif(status == "In" or status == "in"):
                 extra = get_extra(employee, "in", "")
@@ -190,7 +194,6 @@ def main_page(request):
     extra = get_extra(employee, "", "")
     employee.get_current_time()
     return render_to_response('main_page.html', extra, context_instance=RequestContext(request))
-    #return render_to_response('main_page.html', context_instance=RequestContext(request))
 
 
 def get_extra(employee, status, error):
@@ -216,11 +219,16 @@ def get_extra(employee, status, error):
         if((status == "Out" or status == "out") and error == ""):
             extra['error'] = employee.clock_out()
             extra['status'] = "out"
-
             which_clock = Employee.objects.get(user__username=employee.user.username).which_clock()
-            shift = which_clock['max_record'].time_out - which_clock['max_record'].time_in
             extra['user_status'] = which_clock['status']
-            #extra['time'] = round_seconds(shift.days * 86400 + shift.seconds)
+            
+            if(extra['error'] == "none"):
+                total_time = round_seconds(get_seconds(which_clock['max_record'].time_out) - get_seconds(which_clock['max_record'].time_in))
+                extra['total_time'] = total_time
+                extra['jobs'] = list(Job.objects.filter(is_active = True))
+                print extra['jobs']
+                
+
         elif((status == "In" or status == "in") and error == ""):
             extra['error'] = employee.clock_in()
             extra['status'] = "in"
@@ -238,14 +246,12 @@ def get_extra(employee, status, error):
             extra['status'] = "none"
 
             which_clock = Employee.objects.get(user__username=employee.user.username).which_clock()
-            shift = datetime.now() - which_clock['max_record'].time_in
-            #extra['time'] = round_seconds(shift.days * 86400 + shift.seconds)
             extra['user_status'] = which_clock['status']
 
         return extra
 
     except Exception, e:
-        #print employee.user
+        print e
         user= User.objects.get(username=employee.user)  
         print user.is_staff
         extra ={'is_admin':user.is_staff, 'employee':Employee.objects.all(),'user_status':'out', 'error':"none", 'status':"none"}
