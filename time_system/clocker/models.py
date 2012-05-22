@@ -112,3 +112,12 @@ class Time(models.Model):
         return data
 
 
+class Job(models.Model):
+    description = models.TextField('job description')
+    is_active = models.BooleanField() 
+
+    class Meta:
+        db_table = 'Job'
+
+    def __unicode__(self):
+        return description
