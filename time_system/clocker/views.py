@@ -267,7 +267,9 @@ def round_seconds(seconds):
 
 
 
+def shift_summary(request):
 
+    return render_to_response('shift_summary.html', context_instance=RequestContext(request))
 
 
 
