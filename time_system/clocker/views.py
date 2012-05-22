@@ -173,13 +173,14 @@ def main_page(request):
 
     try:
         employee = Employee.objects.get(user__username=user_name)
-        
+        print employee
         if (request.method == 'POST'):
             status = request.POST.get('status')
             if(status == "Out" or status == "out"):
                 extra = get_extra(employee, "out", "")
 
                 if(extra['error'] == "none"):
+                    print extra
                     return render_to_response('shift_summary.html', extra , context_instance=RequestContext(request))
 
                 return render_to_response('main_page.html', extra , context_instance=RequestContext(request))
