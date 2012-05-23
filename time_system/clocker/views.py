@@ -1,6 +1,5 @@
 from django.shortcuts import render_to_response 
 from django.template import RequestContext
-from django.http import HttpResponse
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from models import Employee, Shift, Job
@@ -222,6 +221,7 @@ def get_extra(username, status, error):
             extra['user_status'] = which_clock['status']
             
             if(extra['error'] == "none"):
+                extra['shift_id'] = which_clock['max_record'].id
                 total_time = round_seconds(get_seconds(which_clock['max_record'].time_out) - get_seconds(which_clock['max_record'].time_in))
                 extra['total_time'] = total_time
                 extra['jobs'] = list(Job.objects.filter(is_active = True))
