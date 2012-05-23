@@ -1,6 +1,5 @@
 from django.shortcuts import render_to_response 
 from django.template import RequestContext
-from django.http import HttpResponse
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from models import Employee, Shift, Job

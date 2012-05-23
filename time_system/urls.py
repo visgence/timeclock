@@ -27,5 +27,9 @@ urlpatterns = patterns('clocker.views',
 urlpatterns += patterns('clocker.login',
     url(r'^login/$', 'view'),
     url(r'^logout/$', 'logout'),
+)
 
+#shift_summary stuff
+urlpatterns += patterns('clocker.shift_summary',
+    url(r'^timeclock/summary/shift_summary/$', 'summary'),
 )
