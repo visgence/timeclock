@@ -12,9 +12,9 @@ function create_slider_handler(job_id)
     ({
         slide: function(event, ui)
         {
-            alert(ui.value);
+            alert(ui);
             var hours = Math.floor(ui.value / 3600);
-            var minutes = ui.value - (hours * 3600);
+            var minutes = Math.floor(ui.value - (hours * 3600))/60);
             //var minutes = Math.floor((ui.value - (hours * 3660))/60);
 
             if(hours.length == 1) hours = '0' + hours;
