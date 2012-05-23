@@ -1,0 +1,38 @@
+<html>
+
+    <head>
+
+        <link rel="stylesheet" type="text/css" href="/static/clocker/js/css/redmond/jquery-ui-1.8.18.custom.css"/>
+        <link rel="stylesheet" type="text/css" href="/static/clocker/main_page.css"/>
+        <script src="/static/clocker/js/js/jquery-1.7.1.min.js" type="text/javascript"></script>
+        <script src="/static/clocker/js/js/jquery-ui-1.8.18.custom.min.js" type="text/javascript"></script>
+        <script src="/static/clocker/js/js/job_slider.js" type="text/javascript"></script>
+
+
+    </head>
+
+    <body> 
+
+        <div id="content">
+
+            <div>
+                {% if user.first_name %}
+                    Hello {{user.first_name}} {{user.last_name}} (<a href="/logout/">logout</a>)
+                {% endif %}
+            </div>
+
+            <div align="center">
+                <b id="total_time"> </b>
+
+        <div id="job1" class="job_slider"></div>
+        <span class="value">0</span>
+
+        <div idclass="job_slider"></div>
+        <span class="value">0</span>
+            </div>
+        
+        </div> <!--End content-->
+
+    </body>
+
+</html>
