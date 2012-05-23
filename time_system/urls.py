@@ -15,7 +15,6 @@ urlpatterns = patterns('clocker.views',
 
     url(r'^timeclock/$', 'main_page'),
     url(r'^timeclock/hours/$', 'total_hours'),
-    url(r'^timeclock/summary/$', 'shift_summary'),
     url(r'^$', redirect_to, {'url':'/timeclock/'}),
 
 

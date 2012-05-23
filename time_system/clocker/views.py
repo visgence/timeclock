@@ -1,9 +1,8 @@
 from django.shortcuts import render_to_response 
 from django.template import RequestContext
-from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from models import Employee, Shift, Job
-from datetime import timedelta, datetime, time, date
+from datetime import timedelta, datetime, date
 from time import strftime
 from check_access import check_access
 from decimal import *
@@ -89,16 +88,16 @@ def get_week_range(begin_date, end_date):
 
 def get_daily_hours(date, start, end, user_name):
     '''
-    Gets the total hours and minutes worked for a given date.  
+        Gets the total hours and minutes worked for a given date.  
 
-    Paremeters: 
-        date      = The date we are calculating hours for
-        user_name = The employee that we are calculating hours for
+        Paremeters: 
+            date      = The date we are calculating hours for
+            user_name = The employee that we are calculating hours for
 
-    Returns:
-        A dictionary with the following keys:
-            time_info   = A list with the calculated daily hours for a specific date: [date, hours:minutes]
-            daily_total = The total number of seconds for the day worked
+        Returns:
+            A dictionary with the following keys:
+                time_info   = A list with the calculated daily hours for a specific date: [date, hours:minutes]
+                daily_total = The total number of seconds for the day worked
     '''
 
     daily_total = 0
@@ -121,7 +120,6 @@ def get_daily_hours(date, start, end, user_name):
                 time_dif = round_seconds(get_seconds(time_out) - get_seconds(time_in))
 
                 time_calc = Decimal(time_dif)/3600
-                #print "time calculation: %s" % time_calc    
 
                 if(time_in >= start and time_out <= end):
                     shift_info.append({'in':time_in, 'out':time_out, 'total':time_dif, 'display_flag':'True'}) 
@@ -141,13 +139,13 @@ def get_daily_hours(date, start, end, user_name):
 
 def get_seconds(date):
     '''
-    returns the number of seconds for a given datetime stamp.
+        returns the number of seconds for a given datetime/date stamp.
 
-    Parameters:
-        date = The datetime object
+        Parameters:
+            date = The datetime object
 
-    Returns:
-        0 if date is null or the number of total seconds given for the given datetime object
+        Returns:
+            0 if date is null or the number of total seconds given for the given datetime object
     '''
 
     if(date):
@@ -157,33 +155,38 @@ def get_seconds(date):
 
 
 def main_page(request):
-
+    
+    #Make sure we're logged in otherwise go log in
     response = check_access(request)
     if(response):
         return response
 
-    user_name = ""
-    
-    if(request.user.username != None and request.user.username != ""):
-        user_name = request.user.username
-    else:
-        return render_to_response('login.html', context_instance=RequestContext(request))
+    user_name = request.user.username
 
     try:
+        #Makes sure this person is an employee, otherwise we do something different
         Employee.objects.get(user__username=user_name)
+
         if (request.method == 'POST'):
             status = request.POST.get('status')
+            
+            #Clocking out
             if(status == "Out" or status == "out"):
                 extra = get_extra(user_name, "out", "")
-
+                
+                #Clocked out successfully
                 if(extra['error'] == "none"):
                     extra['total_time'] = ((3600 * 4) + (30 * 60))
+                    
+                    #Go to summary page after clocking out
                     if(extra['total_time'] != 0):
                         return render_to_response('shift_summary.html', extra , context_instance=RequestContext(request))
                     else:
                         return render_to_response('main_page.html', extra , context_instance=RequestContext(request))
 
                 return render_to_response('main_page.html', extra , context_instance=RequestContext(request))
+
+            #Clocking in
             elif(status == "In" or status == "in"):
                 extra = get_extra(user_name, "in", "")
                 return render_to_response('main_page.html', extra, context_instance=RequestContext(request))
@@ -201,17 +204,19 @@ def get_extra(username, status, error):
     Helper function that based on a status and error message packages up a dictionary of extra stuff needed by the main page request.
 
     Parameters: 
-        employee    = The Employee that is logged in and doing stuff.
+        username    = The employees username that is logged in
         status      = in/out based on whether or not the employee is clocking in/out.  Can be "" if not clocking.
         error       = "" if no error otherwise specific errors based on the main page.
 
     Returns:
         A dictionary with all the stuff needed by the main page so that it can return.
     '''
+
     try:
      
         extra = {}
-
+        
+        #Employee is clocking out and there is no error thus far
         if((status == "Out" or status == "out") and error == ""):
             extra['employee'] = Employee.objects.all()
             extra['this_employee'] = Employee.objects.get(user__username=username)
@@ -220,14 +225,15 @@ def get_extra(username, status, error):
             extra['status'] = "out"
             which_clock = extra['this_employee'].which_clock()
             extra['user_status'] = which_clock['status']
-            
+           
+            #If there's no error in clocking out package up some extra's needed for the summary page
             if(extra['error'] == "none"):
                 extra['shift_id'] = which_clock['max_record'].id
                 total_time = round_seconds(get_seconds(which_clock['max_record'].time_out) - get_seconds(which_clock['max_record'].time_in))
                 extra['total_time'] = total_time
                 extra['jobs'] = list(Job.objects.filter(is_active = True))
-                print extra['jobs']
 
+        #Employee is clocking in and there is no error thus far
         elif((status == "In" or status == "in") and error == ""):
             extra['employee'] = Employee.objects.all()
             extra['this_employee'] = Employee.objects.get(user__username=username)
@@ -237,10 +243,12 @@ def get_extra(username, status, error):
             which_clock = extra['this_employee'].which_clock()
             extra['user_status'] = which_clock['status']
 
+        #Technically this shouldn't ever happen here but just in case...
         elif(status == "" and error == "employee_does_not_exist"):
             extra['error'] = "exception"
             extra['user_name'] = username
 
+        #If an employee is logged in and navigates to the main page.
         elif(status == "" and error == ""):
             extra['employee'] = Employee.objects.all()
             extra['this_employee'] = Employee.objects.get(user__username=username)
@@ -253,14 +261,12 @@ def get_extra(username, status, error):
         return extra
 
     except Exception, e:
-        print e
+        #This takes care of admins who are not Employee's and don't have any shift records
         user= User.objects.get(username=username)  
-        print user.is_staff
         extra ={'is_admin':user.is_staff, 'employee':Employee.objects.all(),'user_status':'out', 'error':"none", 'status':"none"}
         return extra 
 
 
-                
 
 def round_seconds(seconds):
     minutes = seconds / 60
@@ -270,14 +276,5 @@ def round_seconds(seconds):
         minutes += 1
 
     return minutes * 60
-
-
-
-
-
-def shift_summary(request):
-
-    return render_to_response('shift_summary.html', context_instance=RequestContext(request))
-
 
 
