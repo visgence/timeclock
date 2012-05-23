@@ -172,13 +172,13 @@ def main_page(request):
 
     try:
         Employee.objects.get(user__username=user_name)
-        
         if (request.method == 'POST'):
             status = request.POST.get('status')
             if(status == "Out" or status == "out"):
                 extra = get_extra(user_name, "out", "")
 
                 if(extra['error'] == "none"):
+                    print extra
                     return render_to_response('shift_summary.html', extra , context_instance=RequestContext(request))
 
                 return render_to_response('main_page.html', extra , context_instance=RequestContext(request))
@@ -272,7 +272,9 @@ def round_seconds(seconds):
 
 
 
+def shift_summary(request):
 
+    return render_to_response('shift_summary.html', context_instance=RequestContext(request))
 
 
 
