@@ -12,8 +12,9 @@ function create_slider_handler(job_id)
     ({
         slide: function(event, ui)
         {
+            alert(ui.value);
             var hours = Math.floor(ui.value / 3600);
-            var minutes = ui.value - (hours * 3660);
+            var minutes = ui.value - (hours * 3600);
             //var minutes = Math.floor((ui.value - (hours * 3660))/60);
 
             if(hours.length == 1) hours = '0' + hours;
@@ -33,7 +34,8 @@ function create_slider_handler(job_id)
 $("document").ready(function ()
 {
     //Convert total time from seconds to hour:min
-    //TODO This is breaking something$("#total_time").val(sec_to_time($("#total_time").val()));
+    total_time = sec_to_time($("#total_time").val();
+    $("#total_time").val(total_time);
 
     //Find all job slider divs
     job_ids = $(".job_slider");
@@ -41,7 +43,7 @@ $("document").ready(function ()
     //create a handler for each slider
     for (var i = 0; i < job_ids.length; i++) 
     {   
-        create_slider_handler(job_ids[i].id)
+        create_slider_handler(job_ids[i].id);
     }
 
 })
@@ -54,5 +56,5 @@ function sec_to_time(sec)
     if(hours.length == 1) hours = '0' + hours;
     if(minutes.length == 1) minutes = '0' + minutes;
     
-    return hours + ':' + minutes ;
+    return hours + ':' + minutes;
 }//end sec_to_time

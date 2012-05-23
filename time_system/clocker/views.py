@@ -177,6 +177,7 @@ def main_page(request):
                 extra = get_extra(user_name, "out", "")
 
                 if(extra['error'] == "none"):
+                    extra['total_time'] = ((3600 * 4) + (30 * 60))
                     if(extra['total_time'] != 0):
                         return render_to_response('shift_summary.html', extra , context_instance=RequestContext(request))
                     else:
