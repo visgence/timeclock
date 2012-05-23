@@ -12,9 +12,8 @@ function create_slider_handler(job_id)
     ({
         slide: function(event, ui)
         {
-            alert(ui);
             var hours = Math.floor(ui.value / 3600);
-            var minutes = Math.floor(ui.value - (hours * 3600))/60);
+            var minutes = Math.floor(ui.value - (hours * 3600)/60);
             //var minutes = Math.floor((ui.value - (hours * 3660))/60);
 
             if(hours.length == 1) hours = '0' + hours;
@@ -23,7 +22,7 @@ function create_slider_handler(job_id)
             $('#hours_' + job_id).val(hours+':'+minutes); 
 
         },
-        max:$("#total_time").val()
+        //max:$("#total_time").val()
 
     });
 
@@ -34,7 +33,7 @@ function create_slider_handler(job_id)
 $("document").ready(function ()
 {
     //Convert total time from seconds to hour:min
-    total_time = sec_to_time($("#total_time").val();
+    total_time = sec_to_time($("#total_time").val());
     $("#total_time").val(total_time);
 
     //Find all job slider divs
@@ -51,7 +50,7 @@ $("document").ready(function ()
 function sec_to_time(sec)
 {
     var hours = Math.floor(sec / 3600);
-    var minutes = Math.floor((sec - (hours * 3660))/60);
+    var minutes = Math.floor((sec - (hours * 3600))/60);
 
     if(hours.length == 1) hours = '0' + hours;
     if(minutes.length == 1) minutes = '0' + minutes;
