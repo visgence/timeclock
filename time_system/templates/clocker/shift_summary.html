@@ -22,13 +22,17 @@
             </div>
 
             <div align="center">
-                <b id="total_time"> </b>
+                Total Time Worked:<input type="text" id="total_time" value="{{total_time}}" readonly="readonly" /><br />
 
-        <div id="job1" class="job_slider"></div>
-        <span class="value">0</span>
+                {% for job in jobs %}
+                <div align="center">
+                    <span class="value">{{job.name}}</span>
+                    <input type="text" id ="hours_{{job.id}}" readonly="readonly" /><br />
+                    <div id="{{job.id}}" class="job_slider"></div>
+                    <span class="value">{{job.id}}</span>
+                </div>
+                {% endfor %}
 
-        <div idclass="job_slider"></div>
-        <span class="value">0</span>
             </div>
         
         </div> <!--End content-->
