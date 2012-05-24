@@ -21,7 +21,6 @@ function create_slider_handler(job_id, total_time)
             if(minutes%60 == 0 && minutes != 0) 
             {
                 hours =  hours + 1;
-                //alert("hours: " + hours + " minutes: " + minutes);
                 minutes = minutes - (hours * 60)
             }
 
@@ -30,12 +29,52 @@ function create_slider_handler(job_id, total_time)
 
             $('#hours_' + job_id).val(hours+':'+minutes); 
 
+            value = ui.value - $(this).slider("value");
 
             var time = time_to_sec($("#total_time").val());
-            $('#debug').html('total_seconds: ' + time);
-            $("#total_time").val(sec_to_time(total_time - (minutes*60) - (hours*3600)));
+
+            $("#total_time").val(sec_to_time(time - value*60));
+
+
+            //$('#debug').html('time passed in: ' + $("#total_time").val()+ " hours: " + hours + " minutes: " +minutes)
+            /*
+            var time = time_to_sec($("#total_time").val());
+
+            if(ui.value > $(this).slider("value"))
+            {
+                //increasing
+                $("#total_time").val(sec_to_time(time - 60));
+                $('#debug').html('increasing');
+            }
+            else if(ui.value < $(this).slider("value"))
+            {
+                $("#total_time").val(sec_to_time(time + 60));
+                $('#debug').html('decreasing');
+
+            }
+ */
+            //$('#debug').html('time: ' + time);
 
         },
+
+
+        stop: function(event, ui) 
+        {
+            var selector_string = ".job_slider:not(#" + job_id + ")";
+            alert(job_id);
+            var job_ids = $(selector_string);
+            //var job_ids = $(".job_slider");
+
+
+            for (var i = 0; i < job_ids.length; i++) 
+            {   
+                var job_id = job_ids[i].id;
+                //alert(job_id);
+
+            }//end for
+
+        },
+
         max:Math.floor(total_time/60)
 
     });
@@ -118,6 +157,6 @@ function time_to_sec(time)
     }
     else{minutes = 0;}
     
-    //$('#debug').html('total_seconds: ' + Math.floor((hours * 3600) + ( minutes * 60)))
-    return  Math.floor((hours * 3600) + ( minutes * 60));
+    //$('#debug').html('time passed in: ' + time + " hours: " + hours + " minutes: " +minutes)
+    return  ((hours * 3600) + ( minutes * 60));
 }//end sec_to_time
