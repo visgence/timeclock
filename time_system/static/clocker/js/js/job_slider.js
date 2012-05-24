@@ -202,9 +202,9 @@ function submit_form()
     ({
       type: 'POST',
       url: '/timeclock/shift_summary/',
-      data: JSON.stringify(json),
-      //success: function(){window.location = "/timeclock"},
-      success:on_success,
+      data:'json=' +JSON.stringify(json),
+      success: function(){window.location = "/timeclock"},
+      //success:on_success,
       dataType: 'html'
     });
 

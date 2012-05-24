@@ -3,6 +3,7 @@ from django.http import HttpResponseRedirect
 from django.template import RequestContext
 from check_access import check_access
 from models import ShiftSummary, Shift, Employee, Job
+from django.utils import simplejson
 
 
 def summary(request):
@@ -12,25 +13,28 @@ def summary(request):
         return response
 
     if(request.method == 'POST'):
+        json = simplejson.loads(request.POST['json'])
+        #json = request.POST.get('json')
 
-        summaries = request.POST.get('json')
+        if(json):
 
-        if(summaries):
+            employee = Employee.objects.get(id = json['emp_id'])
+            shift = Shift.objects.get(id = json['shift_id'])
 
-            for summary in summaries:
+            for summary in json['shift_summary']:
 
                 job = Job.objects.get(id = summary['job_id'])
-                employee = Employee.objects.get(id = summary['emp_id'])
-                shift = Shift.objects.get(id = summary['shift_id'])
                 miles = summary['miles']
                 hours = summary['hours']
-                note = summary['note']
+                note = summary['notes']
+
 
                 shift_summary = ShiftSummary(job = job,
                                              employee = employee,
                                              shift = shift,
                                              hours = hours,
                                              note = note)
+
                 shift_summary.save()
 
     return HttpResponseRedirect('/timeclock/')
