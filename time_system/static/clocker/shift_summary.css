@@ -23,8 +23,7 @@ body
 #slider
 {
     width:75%;
-    margin-bottom:25px;
-    border-style:solid;
+    margin-top:75px;
 }
 
 .job_name
@@ -41,7 +40,6 @@ body
     margin-right:auto;
     font-weight:bold;
     font-size:20px;
-    margin-bottom:100px;
     width:60%;
 }
 
@@ -67,24 +65,30 @@ body
 
 .text_area
 {
-    margin-left:300px;
-    border-style:dashed;
+    position:relative;
+    top:-25px;
+    left:100px;
 }
 
 .notes_text
 {
-    margin-left:300px;
+    position:relative;
+    top:-25px;
+    left:100px;
 }
 
 .miles
 {
-    margin-right:300px;
-    border-style:dashed;
+    position:relative;
+    right:200px;
+    top:45px;
 }
 
 .miles_text
 {
-    margin-right:300px;
+    position:relative;
+    right:200px;
+    top:45px;
 }
 
 .submit
