@@ -91,6 +91,9 @@ $("document").ready(function ()
     for (var i = 0; i < job_ids.length; i++) 
     {   
         create_slider_handler(job_ids[i].id, total_time);
+
+        //initialize time to zero
+        $('#hours_' + job_ids[i].id).val('00:00'); 
     }
 
 })
@@ -156,9 +159,32 @@ function time_to_sec(time)
 }//end sec_to_time
 
 
-function submit()
+function submit_form()
 {
-    
+    //Create json object
+    var json = 
+    {
+        "emp_id" : $("#emp_id").val(),
+        "shift_id": $("#shift_id").val(),
+    }
+
+    var job_array = new Array();
+
+    $(".job_slider").not(this).each(function() 
+    {
+        job_id = this.id;
+
+
+        $('#debug').html('job_id: ' + this.id + " miles: " + $("#miles_" + job_id).val() + " notes: " + $("#notes_" + job_id).val() + " hours" + time_to_sec($("#hours_" + job_id).val()));
+        job_array.push
+        ({
+            "job_id":this.id, 
+            "miles":$("#miles_" + job_id).val(),
+            "notes":$("#notes_" + job_id).val(),
+            "hours":time_to_sec($("#hours_" + job_id).val())
+        });
+
+    });
 
 }
 

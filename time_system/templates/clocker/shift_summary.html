@@ -31,12 +31,20 @@
                     <span class="job_name">{{job.name}}</span>
                     <input type="text" class="job_time" id ="hours_{{job.id}}" readonly="readonly" />
                     <div id="{{job.id}}" class="job_slider"></div>
-                    <span>{{job.id}}</span>
+
+                    Miles:
+                    <input type="text" id ="miles_{{job.id}}" />
+
+                    Notes:
+                    <textarea  class="text_area" rows="4" cols="20" id="notes_{{job.id}}">
+                    </textarea>
                 </div>
                 {% endfor %}
 
             </div>
-            <button type="button" id="submit" onClick="submit()">Submit</button>
+             <input type="button" value="Submit" onClick="submit_form()" />
+             <input type="hidden" id="emp_id" value="{{this_employee.id}}" onClick="submit_form()" />
+             <input type="hidden" id="shift_id" value="{{shift_id}}" onClick="submit_form()" />
 
         
             <div id ="debug"> </div>
