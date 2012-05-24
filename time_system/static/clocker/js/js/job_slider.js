@@ -170,12 +170,12 @@ function submit_form()
 
     var job_array = new Array();
 
-    $(".job_slider").not(this).each(function() 
+    $(".job_slider").each(function() 
     {
         job_id = this.id;
 
 
-        $('#debug').html('job_id: ' + this.id + " miles: " + $("#miles_" + job_id).val() + " notes: " + $("#notes_" + job_id).val() + " hours" + time_to_sec($("#hours_" + job_id).val()));
+       // $('#debug').html('job_id: ' + this.id + " miles: " + $("#miles_" + job_id).val() + " notes: " + $("#notes_" + job_id).val() + " hours" + time_to_sec($("#hours_" + job_id).val()));
         job_array.push
         ({
             "job_id":this.id, 
@@ -185,6 +185,27 @@ function submit_form()
         });
 
     });
+    
+    json.shift_summary = job_array;
 
+    function on_success(message)
+    {
+    
+        $('#debug').html("Ajax request Sent");
+
+    }
+    
+        
+    $.ajax
+    ({
+      type: 'POST',
+      url: 'summary/shift_summary/',
+      data: JSON.stringify(json),
+      success: on_success,
+      dataType: json
+    });
+
+        $('#debug').html(JSON.stringify(json));
+//window.location = "/timeclock"
 }
 
