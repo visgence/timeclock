@@ -25,7 +25,7 @@
                 Total Time Worked:<input type="text" id="total_time" value="{{total_time}}" readonly="readonly" /><br />
 
                 {% for job in jobs %}
-                <div align="center">
+                <div align="center" style="width:80%">
                     <span class="value">{{job.name}}</span>
                     <input type="text" id ="hours_{{job.id}}" readonly="readonly" /><br />
                     <div id="{{job.id}}" class="job_slider"></div>
@@ -34,6 +34,8 @@
                 {% endfor %}
 
             </div>
+            <button type="button" onClick="submit()">Submit</button>
+
         
             <div id ="debug"> </div>
         </div> <!--End content-->

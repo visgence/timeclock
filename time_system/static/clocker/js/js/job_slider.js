@@ -6,14 +6,36 @@
  * */
 
 
+
 function create_slider_handler(job_id, total_time)
 {
+    var max_sum = Math.floor(total_time/60);
 
     //alert(total_time);
     return $("#" + job_id).slider
     ({
+        max:Math.floor(total_time/60),
+
         slide: function(event, ui)
         {
+            var sum = 0;
+
+
+            $(".job_slider").not(this).each(function() 
+            {
+                sum += $(this).slider("value");
+            });
+
+            sum += ui.value;
+
+            if (sum > max_sum)
+            {
+                event.preventDefault();
+            }
+            else
+            {
+
+
             var hours = Math.floor(ui.value / 60);
             var minutes = Math.floor(ui.value - (hours * 3600)/60);
 
@@ -33,49 +55,21 @@ function create_slider_handler(job_id, total_time)
 
             var time = time_to_sec($("#total_time").val());
 
-            $("#total_time").val(sec_to_time(time - value*60));
-
-
-            //$('#debug').html('time passed in: ' + $("#total_time").val()+ " hours: " + hours + " minutes: " +minutes)
+                $("#total_time").val(sec_to_time(time - value*60));
+            }
             /*
-            var time = time_to_sec($("#total_time").val());
-
-            if(ui.value > $(this).slider("value"))
-            {
-                //increasing
-                $("#total_time").val(sec_to_time(time - 60));
-                $('#debug').html('increasing');
-            }
-            else if(ui.value < $(this).slider("value"))
-            {
-                $("#total_time").val(sec_to_time(time + 60));
-                $('#debug').html('decreasing');
-
-            }
- */
-            //$('#debug').html('time: ' + time);
-
-        },
-
-
-        stop: function(event, ui) 
-        {
+            //Update max for other sliders
             var selector_string = ".job_slider:not(#" + job_id + ")";
-            alert(job_id);
             var job_ids = $(selector_string);
-            //var job_ids = $(".job_slider");
-
 
             for (var i = 0; i < job_ids.length; i++) 
             {   
-                var job_id = job_ids[i].id;
-                //alert(job_id);
+                var job = job_ids[i].id;
+                var value = $( "#" + job ).slider( "option", "value" );
+                $( "#" + job).slider( "option", "max", (value + time_to_sec($("#total_time").val())/60 ));
+            }//end for*/
+        }
 
-            }//end for
-
-        },
-
-        max:Math.floor(total_time/60)
 
     });
 
@@ -160,3 +154,11 @@ function time_to_sec(time)
     //$('#debug').html('time passed in: ' + time + " hours: " + hours + " minutes: " +minutes)
     return  ((hours * 3600) + ( minutes * 60));
 }//end sec_to_time
+
+
+function submit()
+{
+    
+
+}
+
