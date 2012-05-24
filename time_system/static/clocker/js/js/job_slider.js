@@ -11,7 +11,6 @@ function create_slider_handler(job_id, total_time)
 {
     var max_sum = Math.floor(total_time/60);
 
-    //alert(total_time);
     return $("#" + job_id).slider
     ({
         max:Math.floor(total_time/60),
@@ -57,17 +56,6 @@ function create_slider_handler(job_id, total_time)
 
                 $("#total_time").val(sec_to_time(time - value*60));
             }
-            /*
-            //Update max for other sliders
-            var selector_string = ".job_slider:not(#" + job_id + ")";
-            var job_ids = $(selector_string);
-
-            for (var i = 0; i < job_ids.length; i++) 
-            {   
-                var job = job_ids[i].id;
-                var value = $( "#" + job ).slider( "option", "value" );
-                $( "#" + job).slider( "option", "max", (value + time_to_sec($("#total_time").val())/60 ));
-            }//end for*/
         }
 
 
@@ -143,18 +131,15 @@ function time_to_sec(time)
         if(minutes.substr(0,1) == '0')
         {
             minutes = parseInt(minutes.substr(1,1));
-            //alert(minutes);
         }
         else//both digits are significant
         {
             minutes = parseInt(minutes.substr(0,2));
-            //alert(minutes);
         }
 
     }
     else{minutes = 0;}
     
-    //$('#debug').html('time passed in: ' + time + " hours: " + hours + " minutes: " +minutes)
     return  ((hours * 3600) + ( minutes * 60));
 }//end sec_to_time
 
@@ -177,7 +162,6 @@ function submit_form()
         job_id = this.id;
 
 
-       // $('#debug').html('job_id: ' + this.id + " miles: " + $("#miles_" + job_id).val() + " notes: " + $("#notes_" + job_id).val() + " hours" + time_to_sec($("#hours_" + job_id).val()));
         job_array.push
         ({
             "job_id":this.id, 
@@ -189,14 +173,6 @@ function submit_form()
     });
     
     json.shift_summary = job_array;
-
-    function on_success(message)
-    {
-    
-        //$('#debug').html("Ajax request Sent");
-
-    }
-    
         
     $.ajax
     ({
@@ -204,11 +180,10 @@ function submit_form()
       url: '/timeclock/shift_summary/',
       data:'json=' +JSON.stringify(json),
       success: function(){window.location = "/timeclock"},
-      //success:on_success,
       dataType: 'html'
     });
 
-    $('#debug').html(JSON.stringify(json));
+    //$('#debug').html(JSON.stringify(json));
     
 }
 

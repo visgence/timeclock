@@ -176,11 +176,10 @@ def main_page(request):
                 
                 #Clocked out successfully
                 if(extra['error'] == "none"):
-                    extra['total_time'] = ((3600 * 4) + (30 * 60))
+                    #extra['total_time'] = ((3600 * 4) + (30 * 60))#DEBUG
                     
                     #Go to summary page after clocking out
                     if(extra['total_time'] != 0):
-                        print extra
                         return render_to_response('shift_summary.html', extra , context_instance=RequestContext(request))
                     else:
                         return render_to_response('main_page.html', extra , context_instance=RequestContext(request))
