@@ -22,23 +22,27 @@
             </div>
 
             <div align="center">
-            <div align="right" style="width:60%">
-                Total Time Worked<br /><input type="text" id="total_time" value="{{total_time}}" readonly="readonly" /><br />
+
+                <div class="total_time_text">
+                    Total Time Worked<br /><input type="text" class="total_time" id="total_time" value="{{total_time}}" readonly="readonly" /><br />
                 </div>
 
-                {% for job in jobs %}
-                <div  class ="slider" >
-                    <span class="job_name">{{job.name}}</span>
-                    <input type="text" class="job_time" id ="hours_{{job.id}}" readonly="readonly" />
-                    <div id="{{job.id}}" class="job_slider"></div>
-                    <span>{{job.id}}</span>
-                </div>
-                {% endfor %}
+                <form>
+
+                    {% for job in jobs %}
+                    <div id="slider" >
+                        <div class="job_name">{{job.name}}</div>
+                        <input type="text" class="job_time" id ="hours_{{job.id}}" readonly="readonly" />
+                        <div id="{{job.id}}" class="job_slider"></div>
+                    </div>
+                    {% endfor %}
+
+                    <button type="button" class="submit" id="submit" onClick="submit()">Submit</button>
+
+                </form>
 
             </div>
-            <button type="button" id="submit" onClick="submit()">Submit</button>
 
-        
             <div id ="debug"> </div>
         </div> <!--End content-->
 

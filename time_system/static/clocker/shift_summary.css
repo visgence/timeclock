@@ -20,26 +20,60 @@ body
     height:100%;
 }
 
-.slider
+#slider
 {
-    width:60%;
+    width:100%;
+    margin-bottom:25px;
 }
 
 .job_name
 {
-    float:left;
+   margin-left:auto;
+   margin-right:auto;
+   font-size:20px;
+   width:35%;
+}
+
+.total_time_text
+{
+    margin-left:auto;
+    margin-right:auto;
+    font-weight:bold;
+    font-size:20px;
+    margin-bottom:100px;
+    width:60%;
+}
+
+.total_time
+{
+    text-align:center;
+    font-weight:bold;
+    font-size:medium;
+    width:100px;
 }
 
 .job_time
 {
-    float:right;
+    text-align:center;
+    width:75px;
 }
 
+.job_slider
+{
+    width:60%;
+    margin-top:15px;
+}
 
+.text_area
+{
+    margin-top:15px;
+}
 
 .submit
 {
-    position:relative;
+    margin-left:auto;
+    margin-right:auto;
+    width:auto;
     top:260px;
     left:30px;
 }
