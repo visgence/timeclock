@@ -180,6 +180,7 @@ def main_page(request):
                     
                     #Go to summary page after clocking out
                     if(extra['total_time'] != 0):
+                        print extra
                         return render_to_response('shift_summary.html', extra , context_instance=RequestContext(request))
                     else:
                         return render_to_response('main_page.html', extra , context_instance=RequestContext(request))

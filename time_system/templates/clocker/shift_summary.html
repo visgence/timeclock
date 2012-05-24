@@ -27,23 +27,30 @@
                     Total Time Worked<br /><input type="text" class="total_time" id="total_time" value="{{total_time}}" readonly="readonly" /><br />
                 </div>
 
-                <form>
-
-                    {% for job in jobs %}
-                    <div id="slider" >
+                {% for job in jobs %}
+                    <div  id="slider" >
                         <div class="job_name">{{job.name}}</div>
                         <input type="text" class="job_time" id ="hours_{{job.id}}" readonly="readonly" />
                         <div id="{{job.id}}" class="job_slider"></div>
-                    </div>
-                    {% endfor %}
 
-                    <button type="button" class="submit" id="submit" onClick="submit()">Submit</button>
+                        <div class="miles_text">Miles:</div>
+                        <input type="text" class="miles" id ="miles_{{job.id}}" />
 
-                </form>
+                        <div class="notes_text">Notes:</div>
+                        <textarea  class="text_area" rows="5" cols="50" id="notes_{{job.id}}">
+                        </textarea>
+
+                    </div> <!--End Slider-->
+                {% endfor %} 
+
+                <input type="button" class="submit" value="Submit" onClick="submit_form()" />
+                <input type="hidden" id="emp_id" value="{{this_employee.id}}" onClick="submit_form()" />
+                <input type="hidden" id="shift_id" value="{{shift_id}}" onClick="submit_form()" />
+
+                <div id ="debug"> </div>
 
             </div>
 
-            <div id ="debug"> </div>
         </div> <!--End content-->
 
     </body>

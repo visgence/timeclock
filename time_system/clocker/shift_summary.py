@@ -17,14 +17,6 @@ def summary(request):
 
         if(summaries):
 
-            extra = {
-                        'error':"none",
-                        'is_admin':request.user.is_staff,
-                        'status':"out",
-                        'employee':Employee.objects.all(),
-                        'user_status':"in"
-                    }
-
             for summary in summaries:
 
                 job = Job.objects.get(id = summary['job_id'])
@@ -40,8 +32,6 @@ def summary(request):
                                              hours = hours,
                                              note = note)
                 shift_summary.save()
-
-            return render_to_response('main_page.html', extra, context_instance=RequestContext(request))
 
     return HttpResponseRedirect('/timeclock/')
     

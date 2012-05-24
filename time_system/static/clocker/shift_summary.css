@@ -22,8 +22,9 @@ body
 
 #slider
 {
-    width:100%;
+    width:75%;
     margin-bottom:25px;
+    border-style:solid;
 }
 
 .job_name
@@ -66,7 +67,24 @@ body
 
 .text_area
 {
-    margin-top:15px;
+    margin-left:300px;
+    border-style:dashed;
+}
+
+.notes_text
+{
+    margin-left:300px;
+}
+
+.miles
+{
+    margin-right:300px;
+    border-style:dashed;
+}
+
+.miles_text
+{
+    margin-right:300px;
 }
 
 .submit
@@ -77,6 +95,3 @@ body
     top:260px;
     left:30px;
 }
-
-
-
