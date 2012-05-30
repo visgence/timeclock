@@ -161,14 +161,16 @@ function submit_form()
     {
         job_id = this.id;
 
-
-        job_array.push
-        ({
-            "job_id":this.id, 
-            "miles":$("#miles_" + job_id).val(),
-            "notes":$("#notes_" + job_id).val(),
-            "hours":time_to_sec($("#hours_" + job_id).val())
-        });
+        if(time_to_sec($("#hours_" + job_id).val()) != 0)
+        {
+            job_array.push
+            ({
+                "job_id":this.id, 
+                "miles":$("#miles_" + job_id).val(),
+                "notes":$("#notes_" + job_id).val(),
+                "hours":time_to_sec($("#hours_" + job_id).val())
+            });
+        }
 
     });
     
