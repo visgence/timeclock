@@ -176,7 +176,7 @@ def main_page(request):
                 
                 #Clocked out successfully
                 if(extra['error'] == "none"):
-                    #extra['total_time'] = ((3600 * 4) + (30 * 60))#DEBUG
+                    #extra['total_time'] = ((3600 * 2) + (30 * 60))#DEBUG
                     
                     #Go to summary page after clocking out
                     if(extra['total_time'] != 0):
@@ -194,7 +194,7 @@ def main_page(request):
     except Employee.DoesNotExist:
         extra = get_extra(user_name, "", "employee_does_not_exists")
         return render_to_response('main_page.html', extra, context_instance=RequestContext(request))
-
+    
     extra = get_extra(user_name, "", "")
     return render_to_response('main_page.html', extra, context_instance=RequestContext(request))
 
@@ -222,12 +222,14 @@ def get_extra(username, status, error):
             extra['this_employee'] = Employee.objects.get(user__username=username)
             extra['is_admin'] = extra['this_employee'].user.is_staff
             extra['error'] = extra['this_employee'].clock_out()
-            extra['status'] = "out"
             which_clock = extra['this_employee'].which_clock()
             extra['user_status'] = which_clock['status']
            
             #If there's no error in clocking out package up some extra's needed for the summary page
             if(extra['error'] == "none"):
+                extra['message'] = "You are clocked out.  You last clocked out at "
+                extra['time_stamp'] = which_clock['max_record'].time_out
+                extra['status'] = "out"
                 extra['shift_id'] = which_clock['max_record'].id
                 total_time = round_seconds(get_seconds(which_clock['max_record'].time_out) - get_seconds(which_clock['max_record'].time_in))
                 extra['total_time'] = total_time
@@ -239,9 +241,14 @@ def get_extra(username, status, error):
             extra['this_employee'] = Employee.objects.get(user__username=username)
             extra['is_admin'] = extra['this_employee'].user.is_staff
             extra['error'] = extra['this_employee'].clock_in()
-            extra['status'] = "in"
             which_clock = extra['this_employee'].which_clock()
             extra['user_status'] = which_clock['status']
+    
+            #User clocked in succesfully, package up more stuff
+            if(extra['error'] == "none"):
+                extra['time_stamp'] = which_clock['max_record'].time_in
+                extra['status'] = "in"
+                extra['message'] = "You have clocked in succesfully"
 
         #Technically this shouldn't ever happen here but just in case...
         elif(status == "" and error == "employee_does_not_exist"):
@@ -254,9 +261,17 @@ def get_extra(username, status, error):
             extra['this_employee'] = Employee.objects.get(user__username=username)
             extra['is_admin'] = extra['this_employee'].user.is_staff
             extra['error'] = "none"
-            extra['status'] = "none"
             which_clock = extra['this_employee'].which_clock()
             extra['user_status'] = which_clock['status']
+            extra['status'] = extra['user_status']
+
+            if(extra['status'] == "out"):
+                extra['message'] = "You are clocked out.  You last clocked out at "
+                extra['time_stamp'] = which_clock['max_record'].time_out
+            elif(extra['status'] == "in"):
+                extra['message'] = "You are clocked in.  You clocked in at "
+                extra['time_stamp'] = which_clock['max_record'].time_in
+
 
         return extra
 

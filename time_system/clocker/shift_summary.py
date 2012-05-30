@@ -1,4 +1,3 @@
-from django.shortcuts import render_to_response
 from django.http import HttpResponseRedirect
 from django.template import RequestContext
 from check_access import check_access
@@ -14,7 +13,6 @@ def summary(request):
 
     if(request.method == 'POST'):
         json = simplejson.loads(request.POST['json'])
-        #json = request.POST.get('json')
 
         if(json):
 
@@ -33,6 +31,7 @@ def summary(request):
                                              employee = employee,
                                              shift = shift,
                                              hours = hours,
+                                             miles = miles,
                                              note = note)
 
                 shift_summary.save()

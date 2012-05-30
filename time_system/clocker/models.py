@@ -92,10 +92,7 @@ class Employee(models.Model):
         if(dictionary['status'] == "in"):
             time_in = dictionary['max_record'].time_in
             time_now = datetime.now()
-            print time_in
-            print time_now
         
-
 
 class Shift(models.Model):
     employee = models.ForeignKey('Employee')

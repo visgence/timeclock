@@ -161,7 +161,7 @@ function submit_form()
     {
         job_id = this.id;
 
-        if(time_to_sec($("#hours_" + job_id).val()) != 0)
+        if($("#miles_" + job_id).val() != 0 || time_to_sec($("#hours_" + job_id).val()) != 0)
         {
             job_array.push
             ({

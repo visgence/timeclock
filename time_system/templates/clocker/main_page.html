@@ -120,19 +120,15 @@
                     {% ifequal error "none" %}
 
                         {% ifequal status "out" %}  
-                            You have clocked out succesfully. <br />
+                            {{ message }}
+                            {{ time_stamp }}
                         {% endifequal %}
 
                         {% ifequal status "in" %}
-                            Your have clocked in succesfully.
+                            {{ message }}
+                            {{ time_stamp }}
                         {% endifequal %}
                             
-                        {% ifequal status "none" %}  
-                            {% ifequal user_status "in" %}  
-                                <!-- TODO: if user is still clocked in show how long they've been clocked in for-->
-                            {% endifequal %}
-                        {% endifequal %}
-
                     {% else %}
 
                         {% ifequal error "exception" %}
