@@ -148,6 +148,15 @@ function time_to_sec(time)
 
 function submit_form()
 {
+
+    //If the total time has not been spent, alert
+    if($("#total_time").val() != "00:00")
+    {
+        alert("Please allocate all work time.");
+        return;
+    }
+
+
     //Create json object
     var json = 
     {
