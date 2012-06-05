@@ -17,6 +17,8 @@
 
         {% load math_helper %}
 
+        <b> Selected pay period: {{period_begin}} to {{period_end}}</b></br></br>
+
                 {% for week in pay_period.weekly_info%}
                 <b>Work Week: {{week.week_start}} - {{week.week_end}}</b>
                 <ul type="none">
@@ -57,8 +59,6 @@
             
             {% endfor %}
 
-            <b>Total Hours for Pay Period: {{pay_period.period_total|to_hour}} </b> 
-            <br>
             <b>Total Adjusted Hours for Pay Period: {{pay_period.period_adjusted|to_hour}} </b>
             <br>
             <b>Total Overtime Hours for Pay Period: {{pay_period.period_overtime|to_hour}}</b>

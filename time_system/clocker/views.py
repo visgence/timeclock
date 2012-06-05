@@ -72,7 +72,8 @@ def total_hours(request):
                 week_end = week_begin + timedelta(days = 6)
                 week = {'weekly_total':0, 'weekly_adjusted':0, 'weekly_overtime':0, 'week_start':week_begin, 'week_end':week_end, 'days':[]}
 
-        return render_to_response('total_hours.html', {'pay_period':pay_period, 'employee':user_name}
+        pay_period['period_adjusted'] = pay_period['period_adjusted'] - pay_period['period_overtime'] 
+        return render_to_response('total_hours.html', {'pay_period':pay_period, 'period_begin':start_time, 'period_end':end_time, 'employee':user_name}
                 , context_instance=RequestContext(request))
 
     return render_to_response('login.html', context_instance=RequestContext(request))
