@@ -115,7 +115,7 @@ function time_to_sec(time)
         }
         else//both digits are significant
         {
-            hours = parseInt(minutes.substr(0,2));
+            hours = parseInt(hours.substr(0,2));
             //alert(hours);
         }
 
