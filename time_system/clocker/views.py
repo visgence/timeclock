@@ -17,7 +17,7 @@ def total_hours(request):
     if(request.method == 'POST'):
         check_db.main()
 
-        pay_period = {'weekly_info':[], 'period_total':0, 'period_adjusted':0, 'period_overtime':0} 
+        pay_period = {'weekly_info':[], 'period_total':0, 'period_adjusted':0, 'period_overtime':0,'period_regular':0} 
         start_time = request.POST.get('from')
         end_time = request.POST.get('to')
         user_name = request.POST.get('user_name')
@@ -61,16 +61,19 @@ def total_hours(request):
             pay_period['period_adjusted'] += daily_info['daily_adjusted']
 
             if(single_date >= week_end or single_date >= end_date.date()):
+                week['weekly_regular_hours'] = week['weekly_total']
                 if(week['weekly_total'] > 144000):
-                   weekly_overtime = week['weekly_total'] - 144000
+                    weekly_overtime = week['weekly_total'] - 144000
+                    week['weekly_regular_hours'] = 144000
                    
-                   week['weekly_overtime'] = weekly_overtime
-                   pay_period['period_overtime'] += weekly_overtime
-
+                    week['weekly_overtime'] = weekly_overtime
+                    pay_period['period_overtime'] += weekly_overtime
+                
+                pay_period['period_regular'] += week['weekly_regular_hours']
                 pay_period['weekly_info'].append(week)
                 week_begin = week_end + timedelta(days = 1)
                 week_end = week_begin + timedelta(days = 6)
-                week = {'weekly_total':0, 'weekly_adjusted':0, 'weekly_overtime':0, 'week_start':week_begin, 'week_end':week_end, 'days':[]}
+                week = {'weekly_total':0, 'weekly_adjusted':0,'weekly_regular_hours': 0, 'weekly_overtime':0, 'week_start':week_begin, 'week_end':week_end, 'days':[]}
 
         pay_period['period_adjusted'] = pay_period['period_adjusted'] - pay_period['period_overtime'] 
         return render_to_response('total_hours.html', {'pay_period':pay_period, 'period_begin':start_time, 'period_end':end_time, 'employee':user_name}

@@ -53,13 +53,13 @@
                         </ul>
                     {% endfor %}
             <br>
-            <li type="none"><b> Weekly Total: {{week.weekly_total|to_hour}} Weekly Adjusted: {{week.weekly_adjusted|to_hour}} Weekly Overtime: {{week.weekly_overtime|to_hour}}</b></li>
+            <li type="none"><b> Weekly Total: {{week.weekly_total|to_hour}} Weekly Regular Hours: {{week.weekly_regular_hours|to_hour}} Weekly Overtime: {{week.weekly_overtime|to_hour}} </b></li>
             
             </ul>
             
             {% endfor %}
 
-            <b>Total Adjusted Hours for Pay Period: {{pay_period.period_adjusted|to_hour}} </b>
+            <b>Total Regular Hours for Pay Period: {{pay_period.period_regular|to_hour}} </b>
             <br>
             <b>Total Overtime Hours for Pay Period: {{pay_period.period_overtime|to_hour}}</b>
 
