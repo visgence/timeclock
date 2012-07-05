@@ -61,10 +61,13 @@ def total_hours(request):
             pay_period['period_adjusted'] += daily_info['daily_adjusted']
 
             if(single_date >= week_end or single_date >= end_date.date()):
-                week['weekly_regular_hours'] = week['weekly_total']
+                if(week['weekly_adjusted'] > 144000):
+                    week['weekly_regular_hours'] = 144000
+                else:
+                    week['weekly_regular_hours'] = week['weekly_adjusted']
+
                 if(week['weekly_total'] > 144000):
                     weekly_overtime = week['weekly_total'] - 144000
-                    week['weekly_regular_hours'] = 144000
                    
                     week['weekly_overtime'] = weekly_overtime
                     pay_period['period_overtime'] += weekly_overtime

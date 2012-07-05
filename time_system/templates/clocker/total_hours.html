@@ -44,10 +44,8 @@
                                                             
                         {%ifequal day.display_flag 'True'%}
                             <li type="none">  Daily Total: {{day.daily_total|to_hour}} </li>
-                            <li type="none"> Daily Adjusted: {{day.daily_adjusted|to_hour}}</li>
                         {%else%}
                             <li type="none"> <font color="gray"> Daily Total: {{day.daily_total|to_hour}}</font> </li>
-                            <li type="none"><font color="gray"> Daily Adjusted: {{day.daily_adjusted|to_hour}} </font></li>
                         {% endifequal %}
 
                         </ul>
