@@ -122,20 +122,25 @@ def get_daily_hours(date, start, end, user_name):
         for shift in shifts:
             time_in = shift.time_in
             time_out = shift.time_out
-
+           
             if(time_in != None and time_out != None):
                 time_dif = round_seconds(get_seconds(time_out) - get_seconds(time_in))
 
                 time_calc = Decimal(time_dif)/3600
 
+                str_time_in = time_in.strftime('%I:%M %p') 
+                str_time_out = time_out.strftime('%I:%M %p') 
+
                 if(time_in >= start and time_out <= end):
-                    shift_info.append({'in':time_in, 'out':time_out, 'total':time_dif, 'display_flag':'True'}) 
+                    shift_info.append({'in':str_time_in, 'out':str_time_out, 'total':time_dif, 'display_flag':'True'}) 
                     adjusted_time += time_dif
                 else:
-                    shift_info.append({'in':time_in, 'out':time_out, 'total':time_dif, 'display_flag':'False'}) 
+                    shift_info.append({'in':str_time_in, 'out':str_time_out, 'total':time_dif, 'display_flag':'False'}) 
 
                 daily_total += time_dif
-
+                if daily_total > 86400:
+                    raise Exception('A daily total is greater than 24 hours on the date '+str(date.month)+"-"+str(date.day)+"-"+str(date.year))
+                
         if(date >= start.date() and date <= end.date()):
             daily_info = {'date': date, 'shifts':shift_info, 'daily_total':daily_total, 'daily_adjusted':adjusted_time, 'display_flag':'True'}
         else:
