@@ -37,7 +37,7 @@ def correct_record(record):
 
         i = 1
         #Insert the in-between dates
-        while (day != end_time.day-1):
+        while (day != (end_time - timedelta(1)).day):
             new_date = record.time_in + timedelta(i)
             month = new_date.month
             day = new_date.day
@@ -48,6 +48,7 @@ def correct_record(record):
             i += 1
 
         #Insert the last day and make sure to keep the employee clocked in if they were when this started.
+	year = end_time.year
         month = end_time.month
         day = end_time.day
 
