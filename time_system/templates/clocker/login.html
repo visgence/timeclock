@@ -1,0 +1,21 @@
+{%extends "base.html"%}
+{%block content%}
+<div style="margin-left: auto;px;margin-right: auto; width:200px;">
+    <div style="color:red" class="error">{{error}}</div>
+    <form action="../login/" method="post">
+        {% csrf_token %}
+        <div class="user_name"> 
+            <label for="id_username">Username:</label> <input type="text" name="username" maxlength="30" /> 
+        </div> 
+        <div class="password"> 
+            <label for="id_password">Password:</label> <input type="password" name="password"/> 
+        </div> 
+        <div class="submit_login">  
+            <input type="hidden" name="next" value="{{redirect_to}}"/>
+            <label>&nbsp;</label><input type="submit" value="Log in"/> 
+        </div> 
+    </form> 
+</div>
+{%endblock%}
+
+

@@ -1,0 +1,99 @@
+html
+{
+    width:100%;
+    height:100%;
+}
+
+body
+{
+    width:100%;
+    height:100%;
+    background-image:url(background.png);
+    background-repeat:no-repeat;
+    background-size:cover;
+}
+
+
+#content
+{
+    width:100%;
+    height:100%;
+}
+
+.login
+{
+    width:350px;
+    height:400px;
+    position:fixed;
+    top: 20%;
+    left: 40%;
+    background-repeat:no-repeat;
+}
+
+.user_name
+{
+    width:130px;
+    height:50px;
+    position:relative;
+    top:200px;
+    left:50px;
+    float:left;
+}
+
+.password
+{
+    width:130px;
+    height:50px;
+    position:relative;
+    top:200px;
+    left:50px;
+    float:left;
+}
+
+.radio_buttons
+{
+    width:100px;
+    height:50px;
+    top:205px;
+    left:130px;
+    float:left;
+    position:relative;
+}
+
+.from
+{
+    position:relative:
+    top:50%;
+    left:100px;
+}
+
+.submit_login
+{
+    position:relative;
+    top:300px;
+    right:85px;
+}
+
+.submit_clock
+{
+    position:relative;
+    top:260px;
+    left:30px;
+}
+
+.message
+{
+    width:500px;
+    position:relative;
+    top:70%;
+}
+
+.error
+{
+    position:relative;
+    top:200px;
+    left:50px;
+}
+
+
+

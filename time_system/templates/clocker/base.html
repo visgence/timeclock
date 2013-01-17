@@ -1,0 +1,21 @@
+<html>
+    <head>
+        <!--aplication stylesheets-->
+        <link rel="stylesheet" type="text/css" href="/static/clocker/main_page.css" />
+    </head>
+    <body>
+        <div id="content">
+            <div>
+                {% if user.first_name %}
+                    Hello {{user.first_name}} {{user.last_name}} (<a href="/logout">logout</a>)
+                {% endif %}
+            </div><!--end greeting-->
+    
+            <div class="login">
+                {% block content %} {%endblock%}
+            </div>
+    </body>
+</html>
+
+
+

@@ -1,0 +1,94 @@
+<html>
+
+    <head>
+    </head>
+
+<body> 
+
+    <div>
+        {% if user.first_name %}
+        Hello {{user.first_name}} {{user.last_name}} (<a href="/logout/">logout</a>)
+        {% endif %}
+    </div>
+
+    <h2>Work Hours for {{employee}}</h2>
+   
+    <div align="left">
+
+        {% load math_helper %}
+
+        <b> Selected pay period: {{period_begin}} to {{period_end}}</b></br></br>
+
+        {% for week in pay_period.weekly_info%}
+        <td>
+        <table border="1">
+        <thead>
+            <tr>
+                <th align="center" colspan="4">Work Week: {{week.week_start}} - {{week.week_end}}</th>
+            </tr>
+            <tr>
+                <th>Date</th>
+                <th>Time In</th>
+                <th>Time Out</th>
+                <th>Shift Total</th>
+            </tr>
+        </thead>
+        <tbody>
+                {% for day in week.days%}
+                    {% for shift in day.shifts%}
+                    <tr>
+                        {%ifequal shift.display_flag 'True'%}
+                            <td>{{day.date}}</td>
+                            <td>{{shift.in}}</td>
+                            <td>{{shift.out}}</td>
+                            <td align="right">{{shift.total|to_hour}}</td>
+                        {%else%}
+                            <td style="color:grey">{{day.date}}</td>
+                            <td style="color:grey">{{shift.in}}</td>
+                            <td style="color:grey">{{shift.out}}</td>
+                            <td style="color:grey" align="right">{{shift.total|to_hour}}</td>
+                        {% endifequal %}
+                    </tr>
+                    {% if forloop.last %}
+                    <tr bgcolor="yellow">
+                        {%ifequal day.display_flag 'True'%}
+                            <td>{{day.date}}</td>
+                            <td colspan="2" align="right">Daily Total</td>
+                            <td align="right">{{day.daily_total|to_hour}}</td>
+                        {%else%}
+                            <td style="color:grey">{{day.date}}</td>
+                            <td colspan="2" style="color:grey" align="right">Daily Total</td>
+                            <td style="color:grey" align="right">{{day.daily_total|to_hour}}</td>
+                        {% endifequal %}
+                    </tr>
+                    {% endif %}
+                    {% endfor %} 
+                {% endfor %}
+        </tbody>
+        <tfoot>
+            <tr>
+                <th>Weekly Total</th>
+                <th colspan="2">Weekly Regular</th>
+                <th>Weekly Overtime</th>
+            </tr>
+            <tr>
+                <td align="right">{{week.weekly_total|to_hour}}</td>
+                <td colspan="2" align="right">{{week.weekly_regular_hours|to_hour}}</td>
+                <td align="right">{{week.weekly_overtime|to_hour}}</td>
+            </tr>
+        </tfoot>
+        </table>
+        <br/>
+        {% endfor %}
+
+        <b>Total Regular Hours for Pay Period: {{pay_period.period_regular|to_hour}} </b>
+        <br>
+        <b>Total Overtime Hours for Pay Period: {{pay_period.period_overtime|to_hour}}</b>
+
+        <br>
+        <br>
+        <b> Signature ________________________</b>
+    </div>
+</body>
+
+</html>
