@@ -1,23 +1,17 @@
 <html>
 
     <head>
-        <style>
-                table#total_hours td, th, b
-                {
-                        font-size: 10pt;
-                }
-        </style>
+	<style>
+		table#total_hours td, th, b
+		{
+			font-size: 10pt;	
+		}	
+	</style>
     </head>
 
 <body> 
 
-    <div>
-        {% if user.first_name %}
-        Hello {{user.first_name}} {{user.last_name}} (<a href="/logout/">logout</a>)
-        {% endif %}
-    </div>
-
-    <h2>Work Hours for {{employee}}</h2>
+    <br/>
    
     <div align="left">
 
@@ -26,17 +20,17 @@
         <b> Selected pay period: {{period_begin}} to {{period_end}}</b></br></br>
 
         {% for week in pay_period.weekly_info%}
-        <td>
-        <table border="1">
-        <thead>
-            <tr>
+        <table id="total_hours" style="border: solid black 1px; border-collapse:collapse;">
+        <thead >
+            <tr >
                 <th align="center" colspan="4">Work Week: {{week.week_start}} - {{week.week_end}}</th>
             </tr>
             <tr>
-                <th>Date</th>
-                <th>Time In</th>
-                <th>Time Out</th>
-                <th>Shift Total</th>
+                <th style="border: solid black 1px">Date</th>
+                <th style="border: solid black 1px">Time In</th>
+                <th style="border: solid black 1px">Time Out</th>
+                <th style="border: solid black 1px">Shift Total</th>
+                <th style="border: solid black 1px">Daily Totals</th>
             </tr>
         </thead>
         <tbody>
@@ -48,47 +42,47 @@
                             <td style="border: solid black 1px">{{shift.in}}</td>
                             <td style="border: solid black 1px">{{shift.out}}</td>
                             <td style="border: solid black 1px" align="right">{{shift.total|to_hour}}</td>
-                            {% if forloop.last %}
-                            <td style="bgcolor:yellow; border: solid black 1px;">{{day.daily_total|to_hour}}</td>
-                            {% else %}
-                            <td></td>
+                    	    {% if forloop.last %}
+			    <td style="bgcolor:yellow; border: solid black 1px;">{{day.daily_total|to_hour}}</td>
+			    {% else %}
+			    <td></td>
                             {% endif %}
                         {%else%}
                             <td style="color:grey; border: solid black 1px;">{{day.date}}</td>
                             <td style="color:grey; border: solid black 1px;">{{shift.in}}</td>
                             <td style="color:grey; border: solid black 1px;">{{shift.out}}</td>
                             <td style="color:grey; border: solid black 1px;" align="right">{{shift.total|to_hour}}</td>
-                            {% if forloop.last %}
-                            <td style="color:grey; border: solid black 1px;">{{day.daily_total|to_hour}}</td>
-                            {% else %}
-                            <td></td>
+			    {% if forloop.last %}
+			    <td style="color:grey; border: solid black 1px;">{{day.daily_total|to_hour}}</td>
+			    {% else %}
+			    <td></td>
                             {% endif %}
                         {% endifequal %}
                     </tr>
-                    {% endfor %}
                 {% endfor %}
         </tbody>
         <tfoot>
             <tr>
-                <th>Weekly Total</th>
-                <th colspan="2">Weekly Regular</th>
-                <th>Weekly Overtime</th>
+                <th style="border: solid black 1px">Weekly Total</th>
+                <th style="border: solid black 1px" colspan="2">Weekly Regular</th>
+                <th style="border: solid black 1px">Weekly Overtime</th>
             </tr>
             <tr>
-                <td align="right">{{week.weekly_total|to_hour}}</td>
-                <td colspan="2" align="right">{{week.weekly_regular_hours|to_hour}}</td>
-                <td align="right">{{week.weekly_overtime|to_hour}}</td>
+                <td style="border: solid black 1px" align="right">{{week.weekly_total|to_hour}}</td>
+                <td style="border: solid black 1px" colspan="2" align="right">{{week.weekly_regular_hours|to_hour}}</td>
+                <td style="border: solid black 1px" align="right">{{week.weekly_overtime|to_hour}}</td>
             </tr>
         </tfoot>
         </table>
         <br/>
         {% endfor %}
 
-        <b>Total Regular Hours for Pay Period: {{pay_period.period_regular|to_hour}} </b>
-        <br>
-        <b>Total Overtime Hours for Pay Period: {{pay_period.period_overtime|to_hour}}</b>
+        <b>Total Regular Hours for Pay Period: {{pay_period.period_regular}} @ ${{employee.hourly_rate}}/hr = ${{pay_period.total_regular}}</b>
+	<br/>
+        <b>Total Overtime Hours for Pay Period: {{pay_period.period_overtime}} @ ${{overtime_pay}}/hr = ${{pay_period.total_overtime}}</b>
+	<br/>
+        <b>Total for Pay Period: ${{total}}</b>
 
-        <br>
         <br>
         <b> Signature ________________________</b>
     </div>
