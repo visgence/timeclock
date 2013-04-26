@@ -19,7 +19,6 @@ def correct_record(record):
     else:
         end_time = record.time_out
 
-
     #If there is a difference in days then an employee was clocked in past midnight.  We only consider days and not months as that would be rediculous.
     #Insert new records starting from the time_in and ending at just before midnight and do this for everyday up until time_out
     if(end_time.day - record.time_in.day != 0):
@@ -48,7 +47,7 @@ def correct_record(record):
             i += 1
 
         #Insert the last day and make sure to keep the employee clocked in if they were when this started.
-	year = end_time.year
+	    year = end_time.year
         month = end_time.month
         day = end_time.day
 
