@@ -1,6 +1,12 @@
 <html>
 
     <head>
+        <style>
+                table#total_hours td, th, b
+                {
+                        font-size: 10pt;
+                }
+        </style>
     </head>
 
 <body> 
@@ -38,31 +44,28 @@
                     {% for shift in day.shifts%}
                     <tr>
                         {%ifequal shift.display_flag 'True'%}
-                            <td>{{day.date}}</td>
-                            <td>{{shift.in}}</td>
-                            <td>{{shift.out}}</td>
-                            <td align="right">{{shift.total|to_hour}}</td>
+                            <td style="border: solid black 1px">{{day.date}}</td>
+                            <td style="border: solid black 1px">{{shift.in}}</td>
+                            <td style="border: solid black 1px">{{shift.out}}</td>
+                            <td style="border: solid black 1px" align="right">{{shift.total|to_hour}}</td>
+                            {% if forloop.last %}
+                            <td style="bgcolor:yellow; border: solid black 1px;">{{day.daily_total|to_hour}}</td>
+                            {% else %}
+                            <td></td>
+                            {% endif %}
                         {%else%}
-                            <td style="color:grey">{{day.date}}</td>
-                            <td style="color:grey">{{shift.in}}</td>
-                            <td style="color:grey">{{shift.out}}</td>
-                            <td style="color:grey" align="right">{{shift.total|to_hour}}</td>
+                            <td style="color:grey; border: solid black 1px;">{{day.date}}</td>
+                            <td style="color:grey; border: solid black 1px;">{{shift.in}}</td>
+                            <td style="color:grey; border: solid black 1px;">{{shift.out}}</td>
+                            <td style="color:grey; border: solid black 1px;" align="right">{{shift.total|to_hour}}</td>
+                            {% if forloop.last %}
+                            <td style="color:grey; border: solid black 1px;">{{day.daily_total|to_hour}}</td>
+                            {% else %}
+                            <td></td>
+                            {% endif %}
                         {% endifequal %}
                     </tr>
-                    {% if forloop.last %}
-                    <tr bgcolor="yellow">
-                        {%ifequal day.display_flag 'True'%}
-                            <td>{{day.date}}</td>
-                            <td colspan="2" align="right">Daily Total</td>
-                            <td align="right">{{day.daily_total|to_hour}}</td>
-                        {%else%}
-                            <td style="color:grey">{{day.date}}</td>
-                            <td colspan="2" style="color:grey" align="right">Daily Total</td>
-                            <td style="color:grey" align="right">{{day.daily_total|to_hour}}</td>
-                        {% endifequal %}
-                    </tr>
-                    {% endif %}
-                    {% endfor %} 
+                    {% endfor %}
                 {% endfor %}
         </tbody>
         <tfoot>

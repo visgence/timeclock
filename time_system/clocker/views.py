@@ -21,6 +21,7 @@ def total_hours(request):
         start_time = request.POST.get('from')
         end_time = request.POST.get('to')
         user_name = request.POST.get('user_name')
+        employee = Employee.objects.get(user__username = user_name)
         
         #make sure we have actual date ranges coming in
         if(start_time == "" or end_time == ""):
@@ -79,7 +80,14 @@ def total_hours(request):
                 week = {'weekly_total':0, 'weekly_adjusted':0,'weekly_regular_hours': 0, 'weekly_overtime':0, 'week_start':week_begin, 'week_end':week_end, 'days':[]}
 
         pay_period['period_adjusted'] = pay_period['period_adjusted'] - pay_period['period_overtime'] 
-        return render_to_response('total_hours.html', {'pay_period':pay_period, 'period_begin':start_time, 'period_end':end_time, 'employee':user_name}
+        overtime_pay = employee.hourly_rate + (employee.hourly_rate / Decimal(2.0))
+
+        pay_period['total_regular'] = "%.2f"%(Decimal("%.2f"%(pay_period['period_regular']/3600.0)) * employee.hourly_rate)
+        pay_period['total_overtime'] = "%.2f"%(Decimal("%.2f"%(pay_period['period_overtime']/3600.0)) * overtime_pay)
+        total = Decimal(pay_period['total_overtime'])+Decimal(pay_period['total_regular'])
+        pay_period['period_regular'] = "%.2f"%(Decimal("%.2f"%(pay_period['period_regular']/3600.0)))
+        pay_period['period_overtime'] = "%.2f"%(Decimal("%.2f"%(pay_period['period_overtime']/3600.0)))
+        return render_to_response('total_hours.html', {'pay_period':pay_period, 'period_begin':start_time, 'period_end':end_time, 'employee':employee, 'overtime_pay': overtime_pay, 'total': total}
                 , context_instance=RequestContext(request))
 
     return render_to_response('login.html', context_instance=RequestContext(request))
