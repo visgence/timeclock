@@ -11,6 +11,7 @@ body
     background-image:url(background.png);
     background-repeat:no-repeat;
     background-size:cover;
+    font-size: 12pt;
 }
 
 
@@ -53,8 +54,8 @@ body
 
 .radio_buttons
 {
-    width:100px;
-    height:50px;
+    width: 8em;
+    height: 100px;
     top:205px;
     left:130px;
     float:left;
@@ -75,13 +76,6 @@ body
     right:85px;
 }
 
-.submit_clock
-{
-    position:relative;
-    top:260px;
-    left:30px;
-}
-
 .message
 {
     width:500px;
@@ -96,5 +90,8 @@ body
     left:50px;
 }
 
-
+input[type="text"], input[type="password"]
+{
+    border-width: 2;
+}
 
