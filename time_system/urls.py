@@ -1,5 +1,5 @@
 from django.conf.urls import patterns, include, url
-from django.views.generic.simple import redirect_to
+from django.views.generic import RedirectView
 # Uncomment the next two lines to enable the admin:
 from django.contrib import admin
 admin.autodiscover()
@@ -15,7 +15,7 @@ urlpatterns = patterns('clocker.views',
 
     url(r'^timeclock/$', 'main_page'),
     url(r'^timeclock/hours/$', 'total_hours'),
-    url(r'^$', redirect_to, {'url':'/timeclock/'}),
+    url(r'^$', RedirectView.as_view(url='/timeclock/')),
 
 
     # Uncomment the next line to enable the admin:
