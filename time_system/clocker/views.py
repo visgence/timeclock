@@ -173,7 +173,6 @@ def get_seconds(date):
     return 0
 
 
-
 def main_page(request):
     
     #Make sure we're logged in otherwise go log in
@@ -193,11 +192,10 @@ def main_page(request):
             #Clocking out
             if(status == "Out" or status == "out"):
                 extra = get_extra(user_name, "out", "")
-                
+                 
                 #Clocked out successfully
                 if(extra['error'] == "none"):
                     #extra['total_time'] = ((3600 * 2) + (30 * 60))#DEBUG
-                    
                     #Go to summary page after clocking out
                     if(extra['total_time'] != 0):
                         return render_to_response('shift_summary.html', extra , context_instance=RequestContext(request))
@@ -251,7 +249,10 @@ def get_extra(username, status, error):
                 extra['time_stamp'] = which_clock['max_record'].time_out
                 extra['status'] = "out"
                 extra['shift_id'] = which_clock['max_record'].id
-                total_time = round_seconds(get_seconds(which_clock['max_record'].time_out) - get_seconds(which_clock['max_record'].time_in))
+                time_diff = which_clock['max_record'].time_out - which_clock['max_record'].time_in
+                total_time = round_seconds(time_diff.total_seconds())
+                if total_time < 60:
+                    total_time = 0
                 extra['total_time'] = total_time
                 extra['jobs'] = list(Job.objects.filter(is_active = True))
 
