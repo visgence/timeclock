@@ -10,16 +10,13 @@
     </head>
 
 <body> 
-    
-    <b>{{user.first_name}} {{user.last_name}}</b>
-
-    <br/>
    
-    <div align="left">
+    <div>
+        <span><b>{{user.first_name}} {{user.last_name}}:</b> Selected pay period: {{period_begin}} to {{period_end}}</br></br></span> 
+    </div>
+    <div align="left" sytle="clear: both;">
 
         {% load math_helper %}
-
-        <b> Selected pay period: {{period_begin}} to {{period_end}}</b></br></br>
 
         {% for week in pay_period.weekly_info%}
         <table id="total_hours" style="border: solid black 1px; border-collapse:collapse;">
