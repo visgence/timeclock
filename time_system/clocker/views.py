@@ -41,9 +41,7 @@ def total_hours(request):
         #print "ending period %s" % period_end 
 
 
-        period_total = 0 #total time for work period
-        period_adjusted = 0
-        week = {'weekly_total':0, 'weekly_adjusted':0, 'weekly_overtime':0, 'days':[]}
+        week = {'weekly_total':Decimal(0.0), 'weekly_adjusted': Decimal(0.0), 'weekly_overtime': Decimal(0.0), 'days':[]}
 
         #iterate through our date-range
         day_count = (period_end - period_begin).days + 1
@@ -62,13 +60,13 @@ def total_hours(request):
             pay_period['period_adjusted'] += daily_info['daily_adjusted']
 
             if(single_date >= week_end or single_date >= end_date.date()):
-                if(week['weekly_adjusted'] > 144000):
-                    week['weekly_regular_hours'] = 144000
+                if(week['weekly_adjusted'] > Decimal(40.0)):
+                    week['weekly_regular_hours'] = Decimal(40.0)
                 else:
                     week['weekly_regular_hours'] = week['weekly_adjusted']
 
-                if(week['weekly_total'] > 144000):
-                    weekly_overtime = week['weekly_total'] - 144000
+                if(week['weekly_total'] > Decimal(40.0)):
+                    weekly_overtime = week['weekly_total'] - Decimal(40.0)
                    
                     week['weekly_overtime'] = weekly_overtime
                     pay_period['period_overtime'] += weekly_overtime
@@ -77,16 +75,15 @@ def total_hours(request):
                 pay_period['weekly_info'].append(week)
                 week_begin = week_end + timedelta(days = 1)
                 week_end = week_begin + timedelta(days = 6)
-                week = {'weekly_total':0, 'weekly_adjusted':0,'weekly_regular_hours': 0, 'weekly_overtime':0, 'week_start':week_begin, 'week_end':week_end, 'days':[]}
+                week = {'weekly_total': Decimal(0.0), 'weekly_adjusted':Decimal(0.0),'weekly_regular_hours': Decimal(0.0), 'weekly_overtime': Decimal(0.0), 'week_start':week_begin, 'week_end':week_end, 'days':[]}
 
         pay_period['period_adjusted'] = pay_period['period_adjusted'] - pay_period['period_overtime'] 
 	overtime_pay = employee.hourly_rate + (employee.hourly_rate / Decimal(2.0))
 
-	pay_period['total_regular'] = "%.2f"%(Decimal("%.2f"%(pay_period['period_regular']/3600.0)) * employee.hourly_rate)
-	pay_period['total_overtime'] = "%.2f"%(Decimal("%.2f"%(pay_period['period_overtime']/3600.0)) * overtime_pay)
+	pay_period['total_regular'] = pay_period['period_regular'] * employee.hourly_rate
+	pay_period['total_overtime'] = pay_period['period_overtime'] * overtime_pay
 	total = Decimal(pay_period['total_overtime'])+Decimal(pay_period['total_regular'])
-	pay_period['period_regular'] = "%.2f"%(Decimal("%.2f"%(pay_period['period_regular']/3600.0)))
-	pay_period['period_overtime'] = "%.2f"%(Decimal("%.2f"%(pay_period['period_overtime']/3600.0)))
+
         return render_to_response('total_hours.html', {'pay_period':pay_period, 'period_begin':start_time, 'period_end':end_time, 'employee':employee, 'overtime_pay': overtime_pay, 'total': total}
                 , context_instance=RequestContext(request))
 
@@ -115,39 +112,36 @@ def get_daily_hours(date, start, end, user_name):
                 daily_total = The total number of seconds for the day worked
     '''
 
-    daily_total = 0
-    adjusted_time = 0 
+    daily_total = Decimal(0.0)
+    adjusted_time = Decimal(0.0)
     daily_info = None
     shift_info = []
  
     #find all clock in-outs for this day
-    shifts = Shift.objects.filter(employee__user__username = user_name).filter(time_in__year = date.year).filter(time_in__month = date.month).filter(time_in__day = date.day)
+    shifts = Shift.objects.filter(employee__user__username = user_name).filter(time_in__year = date.year).filter(time_in__month = date.month).filter(time_in__day = date.day).exclude(time_in = None).exclude(time_out = None)
 
     #No shifts for this day so 00 hours and minutes
     if not shifts:
-        daily_info = {'date':  date, 'shifts':shift_info, 'daily_total':0, 'daily_adjusted':0}
+        daily_info = {'date':  date, 'shifts':shift_info, 'daily_total':Decimal(0.0), 'daily_adjusted':Decimal(0.0)}
     else:
         for shift in shifts:
             time_in = shift.time_in
             time_out = shift.time_out
-           
-            if(time_in != None and time_out != None):
-                time_dif = round_seconds(get_seconds(time_out) - get_seconds(time_in))
+          
+            hours = shift.hours
 
-                time_calc = Decimal(time_dif)/3600
+            str_time_in = time_in.strftime('%I:%M %p') 
+            str_time_out = time_out.strftime('%I:%M %p') 
 
-                str_time_in = time_in.strftime('%I:%M %p') 
-                str_time_out = time_out.strftime('%I:%M %p') 
+            if(time_in >= start and time_out <= end):
+                shift_info.append({'in':str_time_in, 'out':str_time_out, 'total':hours, 'display_flag':'True'}) 
+                adjusted_time += hours
+            else:
+                shift_info.append({'in':str_time_in, 'out':str_time_out, 'total':hours, 'display_flag':'False'}) 
 
-                if(time_in >= start and time_out <= end):
-                    shift_info.append({'in':str_time_in, 'out':str_time_out, 'total':time_dif, 'display_flag':'True'}) 
-                    adjusted_time += time_dif
-                else:
-                    shift_info.append({'in':str_time_in, 'out':str_time_out, 'total':time_dif, 'display_flag':'False'}) 
-
-                daily_total += time_dif
-                if daily_total > 86400:
-                    raise Exception('A daily total is greater than 24 hours on the date '+str(date.month)+"-"+str(date.day)+"-"+str(date.year))
+            daily_total += hours
+            if daily_total > Decimal(24.0):
+                raise Exception('A daily total is greater than 24 hours on the date '+str(date.month)+"-"+str(date.day)+"-"+str(date.year))
                 
         if(date >= start.date() and date <= end.date()):
             daily_info = {'date': date, 'shifts':shift_info, 'daily_total':daily_total, 'daily_adjusted':adjusted_time, 'display_flag':'True'}
@@ -195,7 +189,7 @@ def main_page(request):
                  
                 #Clocked out successfully
                 if(extra['error'] == "none"):
-                    #extra['total_time'] = ((3600 * 2) + (30 * 60))#DEBUG
+                    #extra['total_time'] = 13.35
                     #Go to summary page after clocking out
                     if(extra['total_time'] != 0):
                         return render_to_response('shift_summary.html', extra , context_instance=RequestContext(request))
@@ -249,10 +243,8 @@ def get_extra(username, status, error):
                 extra['time_stamp'] = which_clock['max_record'].time_out
                 extra['status'] = "out"
                 extra['shift_id'] = which_clock['max_record'].id
-                time_diff = which_clock['max_record'].time_out - which_clock['max_record'].time_in
-                total_time = round_seconds(time_diff.total_seconds())
-                if total_time < 60:
-                    total_time = 0
+
+                total_time = which_clock['max_record'].hours
                 extra['total_time'] = total_time
                 extra['jobs'] = list(Job.objects.filter(is_active = True))
 

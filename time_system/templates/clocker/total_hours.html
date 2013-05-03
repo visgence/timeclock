@@ -40,9 +40,9 @@
                             <td style="border: solid black 1px">{{day.date}}</td>
                             <td style="border: solid black 1px">{{shift.in}}</td>
                             <td style="border: solid black 1px">{{shift.out}}</td>
-                            <td style="border: solid black 1px" align="right">{{shift.total|to_hour}}</td>
+                            <td style="border: solid black 1px" align="right">{{shift.total}}</td>
                     	    {% if forloop.last %}
-			    <td style="bgcolor:yellow; border: solid black 1px;">{{day.daily_total|to_hour}}</td>
+			    <td style="bgcolor:yellow; border: solid black 1px;">{{day.daily_total}}</td>
 			    {% else %}
 			    <td></td>
                             {% endif %}
@@ -50,9 +50,9 @@
                             <td style="color:grey; border: solid black 1px;">{{day.date}}</td>
                             <td style="color:grey; border: solid black 1px;">{{shift.in}}</td>
                             <td style="color:grey; border: solid black 1px;">{{shift.out}}</td>
-                            <td style="color:grey; border: solid black 1px;" align="right">{{shift.total|to_hour}}</td>
+                            <td style="color:grey; border: solid black 1px;" align="right">{{shift.total}}</td>
 			    {% if forloop.last %}
-			    <td style="color:grey; border: solid black 1px;">{{day.daily_total|to_hour}}</td>
+			    <td style="color:grey; border: solid black 1px;">{{day.daily_total}}</td>
 			    {% else %}
 			    <td></td>
                             {% endif %}
@@ -68,9 +68,9 @@
                 <th style="border: solid black 1px">Weekly Overtime</th>
             </tr>
             <tr>
-                <td style="border: solid black 1px" align="right">{{week.weekly_total|to_hour}}</td>
-                <td style="border: solid black 1px" colspan="2" align="right">{{week.weekly_regular_hours|to_hour}}</td>
-                <td style="border: solid black 1px" align="right">{{week.weekly_overtime|to_hour}}</td>
+                <td style="border: solid black 1px" align="right">{{week.weekly_total}}</td>
+                <td style="border: solid black 1px" colspan="2" align="right">{{week.weekly_regular_hours}}</td>
+                <td style="border: solid black 1px" align="right">{{week.weekly_overtime}}</td>
             </tr>
         </tfoot>
         </table>
