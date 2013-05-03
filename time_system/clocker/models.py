@@ -1,6 +1,8 @@
 from django.db import models
 from django.contrib.auth import models as auth_models
 from datetime import datetime
+from decimal import Decimal
+
 
 class Employee(models.Model):
     user = models.ForeignKey(auth_models.User, unique=True)
@@ -92,12 +94,13 @@ class Employee(models.Model):
         if(dictionary['status'] == "in"):
             time_in = dictionary['max_record'].time_in
             time_now = datetime.now()
-        
+
 
 class Shift(models.Model):
     employee = models.ForeignKey('Employee')
     time_in = models.DateTimeField('clock in time')
     time_out = models.DateTimeField('clock out time', null = True, blank=True)
+    hours = models.DecimalField(null=True, blank=True, decimal_places=2, max_digits=4)
 
     class Meta:
         db_table = 'Shift'
@@ -111,6 +114,15 @@ class Shift(models.Model):
             data += " " + self.employee.user.first_name + " " + self.employee.user.last_name
 
         return data
+
+    def save(self, *args, **kwargs):
+
+        if self.time_out is not None:
+            diff = self.time_out - self.time_in
+            hours = Decimal(diff.total_seconds()/3600).quantize(Decimal('1.00'))
+            self.hours = hours
+        super(Shift, self).save(*args, **kwargs)
+
 
 
 class ShiftSummary(models.Model):
@@ -128,6 +140,7 @@ class ShiftSummary(models.Model):
     def __unicode__(self):
         data = self.shift.time_in.date().strftime("%Y-%m-%d") + "    EMPLOYEE: " + self.employee.user.first_name + "  " + self.employee.user.last_name + "    JOB: " + self.job.name
         return data
+
 
 class Job(models.Model):
     name = models.CharField('job name', max_length = 25)
