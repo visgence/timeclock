@@ -8,9 +8,12 @@
 
 # Editor backup files #
 #######################
-
 .*.swp
 *~
+
+# Collected static files # 
+##########################
+/static/
 
 # OS generated files #
 ######################
