@@ -1,0 +1,3 @@
+[submodule "time_system/chucho"]
+	path = time_system/chucho
+	url = git@github.com:visgence/django-chucho.git
