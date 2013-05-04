@@ -243,8 +243,12 @@ def get_extra(username, status, error):
                 extra['time_stamp'] = which_clock['max_record'].time_out
                 extra['status'] = "out"
                 extra['shift_id'] = which_clock['max_record'].id
+                
+                time_diff = which_clock['max_record'].time_out - which_clock['max_record'].time_in
+                total_time = round_seconds(time_diff.total_seconds())
+                if total_time < 60:
+                    total_time = 0 
 
-                total_time = which_clock['max_record'].hours
                 extra['total_time'] = total_time
                 extra['jobs'] = list(Job.objects.filter(is_active = True))
 
