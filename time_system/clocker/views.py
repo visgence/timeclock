@@ -80,9 +80,9 @@ def total_hours(request):
         pay_period['period_adjusted'] = pay_period['period_adjusted'] - pay_period['period_overtime'] 
 	overtime_pay = employee.hourly_rate + (employee.hourly_rate / Decimal(2.0))
 
-	pay_period['total_regular'] = pay_period['period_regular'] * employee.hourly_rate
-	pay_period['total_overtime'] = pay_period['period_overtime'] * overtime_pay
-	total = Decimal(pay_period['total_overtime'])+Decimal(pay_period['total_regular'])
+	pay_period['total_regular'] = (pay_period['period_regular'] * employee.hourly_rate).quantize(Decimal('1.00'))
+	pay_period['total_overtime'] = (pay_period['period_overtime'] * overtime_pay).quantize(Decimal('1.00'))
+	total = (Decimal(pay_period['total_overtime'])+Decimal(pay_period['total_regular'])).quantize(Decimal('1.00'))
 
         return render_to_response('total_hours.html', {'pay_period':pay_period, 'period_begin':start_time, 'period_end':end_time, 'employee':employee, 'overtime_pay': overtime_pay, 'total': total}
                 , context_instance=RequestContext(request))
