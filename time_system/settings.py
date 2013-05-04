@@ -13,16 +13,19 @@ ADMINS = (
 
 MANAGERS = ADMINS
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2', #, 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': 'time_clock',                      # Or path to database file if using sqlite3.
-        'USER': 'time_clock',                      # Not used with sqlite3.
-        'PASSWORD': 'changem3!now',                  # Not used with sqlite3.
-        'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
-        'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
+try:
+    from local_database_settings import DATABASES
+except:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3', #, 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
+            'NAME': 'time_clock.db',                      # Or path to database file if using sqlite3.
+            'USER': '',                      # Not used with sqlite3.
+            'PASSWORD': '',                  # Not used with sqlite3.
+            'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
+            'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
+        }
     }
-}
 
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
@@ -59,7 +62,7 @@ MEDIA_URL = ''
 # Don't put anything in this directory yourself; store your static files
 # in apps' "static/" subdirectories and in STATICFILES_DIRS.
 # Example: "/home/media/media.lawrence.com/static/"
-STATIC_ROOT = APP_PATH + '/static/'
+STATIC_ROOT = ''
 
 # URL prefix for static files.
 # Example: "http://media.lawrence.com/static/"
@@ -71,6 +74,7 @@ STATIC_URL = '/static/'
 #ADMIN_MEDIA_PREFIX = '/static/admin/' 
 # Additional locations of static files
 STATICFILES_DIRS = (
+    APP_PATH + '/static/',
     # Put strings here, like "/home/html/static" or "C:/www/django/static".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
@@ -81,6 +85,7 @@ STATICFILES_DIRS = (
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+    'dajaxice.finders.DajaxiceFinder'
 #    'django.contrib.staticfiles.finders.DefaultStorageFinder',
 )
 
@@ -122,7 +127,9 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     # Uncomment the next line to enable admin documentation:
     #'django.contrib.admindocs',
-    'clocker'
+    'clocker',
+    'dajaxice',
+    'chucho'
 )
 
 # A sample logging configuration. The only tangible logging

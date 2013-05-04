@@ -2,6 +2,7 @@ from django.conf.urls import patterns, include, url
 from django.views.generic import RedirectView
 # Uncomment the next two lines to enable the admin:
 from django.contrib import admin
+from dajaxice.core import dajaxice_config
 admin.autodiscover()
 
 #normal views
@@ -20,6 +21,8 @@ urlpatterns = patterns('clocker.views',
 
     # Uncomment the next line to enable the admin:
     url(r'^admin/', include(admin.site.urls)),
+    url(r'(?i)^utilities/', include('chucho.urls')),                                                                                                                                                
+    url(dajaxice_config.dajaxice_url, include('dajaxice.urls')),
 )
 
 #login views
