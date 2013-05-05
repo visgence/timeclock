@@ -95,3 +95,13 @@ input[type="text"], input[type="password"]
     border-width: 2;
 }
 
+.clickable
+{
+    cursor: pointer;
+    color: blue;
+}
+
+.clickable:hover
+{
+    color: red;
+}

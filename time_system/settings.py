@@ -11,7 +11,20 @@ ADMINS = (
     # ('Your Name', 'your_email@example.com'),
 )
 
+#Global time format for datetime objects
+DT_FORMAT = "%m/%d/%Y %H:%M:%S"
+D_FORMAT = "%m/%d/%Y"
+
 MANAGERS = ADMINS
+
+def get_permission_obj():
+    '''
+    ' This function should be modified to return the object that is used to verify permissions in the
+    ' object managers.  This is required for the chucho interface.
+    '''
+    from django.contrib.auth import get_user_model
+    return get_user_model()
+
 
 try:
     from local_database_settings import DATABASES
@@ -49,6 +62,8 @@ USE_I18N = True
 # calendars according to the current locale
 USE_L10N = True
 
+USE_TZ = True
+
 # Absolute filesystem path to the directory that will hold user-uploaded files.
 # Example: "/home/media/media.lawrence.com/media/"
 MEDIA_ROOT = ''
@@ -85,7 +100,7 @@ STATICFILES_DIRS = (
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
-    'dajaxice.finders.DajaxiceFinder'
+    'dajaxice.finders.DajaxiceFinder',
 #    'django.contrib.staticfiles.finders.DefaultStorageFinder',
 )
 
@@ -121,6 +136,7 @@ INSTALLED_APPS = (
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.sites',
+    'dajaxice',
     'django.contrib.messages',
     'django.contrib.staticfiles',
     # Uncomment the next line to enable the admin:
@@ -128,7 +144,6 @@ INSTALLED_APPS = (
     # Uncomment the next line to enable admin documentation:
     #'django.contrib.admindocs',
     'clocker',
-    'dajaxice',
     'chucho'
 )
 
