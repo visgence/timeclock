@@ -70,6 +70,7 @@ class Employee1(AbstractBaseUser):
     first_name = models.CharField(max_length=25)
     last_name = models.CharField(max_length=25)
     is_superuser = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=True)
     date_joined = models.DateTimeField(default=datetime.now())
 
     objects = EmployeeManager()
