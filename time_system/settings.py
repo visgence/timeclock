@@ -62,7 +62,7 @@ USE_I18N = True
 # calendars according to the current locale
 USE_L10N = True
 
-USE_TZ = True
+#USE_TZ = True
 
 # Absolute filesystem path to the directory that will hold user-uploaded files.
 # Example: "/home/media/media.lawrence.com/media/"
@@ -144,7 +144,8 @@ INSTALLED_APPS = (
     # Uncomment the next line to enable admin documentation:
     #'django.contrib.admindocs',
     'clocker',
-    'chucho'
+    'chucho',
+    'south'
 )
 
 # A sample logging configuration. The only tangible logging

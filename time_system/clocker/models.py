@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth import models as auth_models
+from django.contrib.auth.models import AbstractBaseUser
 from datetime import datetime
 from decimal import Decimal
 from django.contrib.auth import get_user_model
@@ -59,6 +60,21 @@ class EmployeeManager(models.Manager):
                 return self.all()
         return self.none()
 
+
+class Employee1(AbstractBaseUser):
+    hire_date = models.DateField('date employee was hired')
+    has_salary = models.BooleanField()
+    hourly_rate = models.DecimalField(max_digits = 5, decimal_places = 2, null = True, blank=True)
+    salary = models.DecimalField(max_digits = 8, decimal_places = 2, null = True, blank=True)
+    username = models.CharField(max_length=40, unique=True)
+    first_name = models.CharField(max_length=25)
+    last_name = models.CharField(max_length=25)
+    is_superuser = models.BooleanField(default=False)
+    date_joined = models.DateTimeField(default=datetime.now())
+
+    objects = EmployeeManager()
+
+    USERNAME_FIELD = "username"
 
 class Employee(models.Model):
     user = models.ForeignKey(auth_models.User, unique=True)
