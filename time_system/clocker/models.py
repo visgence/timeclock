@@ -1,12 +1,12 @@
 from django.db import models
 from django.contrib.auth import models as auth_models
-from django.contrib.auth.models import AbstractBaseUser
+from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 from datetime import datetime
 from decimal import Decimal
 from django.contrib.auth import get_user_model
 
 
-class EmployeeManager(models.Manager):
+class EmployeeManager(BaseUserManager):
     def can_edit(self, user):
         '''
         ' Checks if a User is allowed to edit or add instances of this model.
@@ -60,8 +60,7 @@ class EmployeeManager(models.Manager):
                 return self.all()
         return self.none()
 
-
-class Employee1(AbstractBaseUser):
+class Employee(AbstractBaseUser):
     hire_date = models.DateField('date employee was hired')
     has_salary = models.BooleanField()
     hourly_rate = models.DecimalField(max_digits = 5, decimal_places = 2, null = True, blank=True)
@@ -77,17 +76,6 @@ class Employee1(AbstractBaseUser):
 
     USERNAME_FIELD = "username"
 
-class Employee(models.Model):
-    user = models.ForeignKey(auth_models.User, unique=True)
-    hire_date = models.DateField('date employee was hired')
-    has_salary = models.BooleanField()
-    hourly_rate = models.DecimalField(max_digits = 5, decimal_places = 2, null = True, blank=True)
-    salary = models.DecimalField(max_digits = 8, decimal_places = 2, null = True, blank=True)
-
-    objects = EmployeeManager()
-
-    class Meta:
-        db_table = 'Employee'
 
     def __unicode__(self):
         return self.user.first_name + " " + self.user.last_name
@@ -187,7 +175,6 @@ class Employee(models.Model):
         if(dictionary['status'] == "in"):
             time_in = dictionary['max_record'].time_in
             time_now = datetime.now()
-
 
 class ShiftManager(models.Manager):
     def get_editable_by_pk(self, user, pk):

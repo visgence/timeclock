@@ -11,28 +11,25 @@ class Migration(DataMigration):
         # Note: Remember to use orm['appname.ModelName'] rather than "from appname.models..."
 
         # Do in a try, because the auth_table might never have existed.
-        try:
-            for user in orm.Employee.objects.all():
-                # Create a new user
-                username = user.user.username
-                nuser = orm.Employee1(
-                    id = user.id,
-                    username = username,
-                    first_name = user.user.first_name,
-                    last_name = user.user.last_name,
-                    last_login = user.user.last_login,
-                    date_joined = user.user.date_joined,
-                    hire_date = user.hire_date,
-                    is_superuser = user.user.is_superuser,
-                    is_active = user.user.is_active,
-                    password = user.user.password,
-                    has_salary = user.has_salary,
-                    hourly_rate = user.hourly_rate,
-                    salary = user.salary
-                    )   
-                nuser.save()
-        except DatabaseError:
-            pass
+        for user in orm.Employee.objects.all():
+            # Create a new user
+            username = user.user.username
+            nuser = orm.Employee1(
+                id = user.id,
+                username = username,
+                first_name = user.user.first_name,
+                last_name = user.user.last_name,
+                last_login = user.user.last_login,
+                hire_date = user.hire_date,
+                is_superuser = user.user.is_superuser,
+                is_active = user.user.is_active,
+                date_joined = user.user.date_joined,
+                password = user.user.password,
+                has_salary = user.has_salary,
+                hourly_rate = user.hourly_rate,
+                salary = user.salary
+                )   
+            nuser.save()
 
     def backwards(self, orm):
         "Write your backwards methods here."
@@ -86,7 +83,9 @@ class Migration(DataMigration):
             'is_superuser': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'last_login': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now'}),
             'last_name': ('django.db.models.fields.CharField', [], {'max_length': '25'}),
+            'is_active': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
             'password': ('django.db.models.fields.CharField', [], {'max_length': '128'}),
+            'date_joined': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2013, 3, 28, 0, 0)'}),
             'salary': ('django.db.models.fields.DecimalField', [], {'null': 'True', 'max_digits': '8', 'decimal_places': '2', 'blank': 'True'}),
             'username': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '40'})
         },

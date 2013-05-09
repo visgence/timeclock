@@ -15,6 +15,8 @@ ADMINS = (
 DT_FORMAT = "%m/%d/%Y %H:%M:%S"
 D_FORMAT = "%m/%d/%Y"
 
+AUTH_USER_MODEL = "clocker.Employee"
+
 MANAGERS = ADMINS
 
 def get_permission_obj():
