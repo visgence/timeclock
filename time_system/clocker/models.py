@@ -25,7 +25,6 @@ class EmployeeManager(BaseUserManager):
 
         return False
 
-
     def get_viewable(self, user, filter_args=None):
         '''
         ' Gets all Employees that can be viewed or assigned by a specific AuthUser.
@@ -37,7 +36,6 @@ class EmployeeManager(BaseUserManager):
         '''
         # TODO: Wrapper until we decide to differentiate this from editable.
         return self.get_editable(user, filter_args)
-
 
     def get_editable(self, user, filter_args=None):
         ''' 
@@ -58,6 +56,29 @@ class EmployeeManager(BaseUserManager):
             else:
                 return self.all()
         return self.none()
+
+    def get_editable_by_pk(self, user, pk):
+        '''
+        ' Get's an instance of Employee specified by a pk if the given user is allowed to edit it.
+        '
+        ' Keyword Arguments: 
+        '   user - User to check if the employee can be edited by them.
+        '   pk   - Primary key of Employee to get.
+        '
+        ' Return: Employee identified by pk if user can edit it, otherwise None.
+        '''
+        
+        if not isinstance(user, Employee):
+            raise TypeError('%s is not an Auth User' % str(user))
+
+        try:
+            u = self.get(id=pk)
+        except Employee.DoesNotExist:
+            raise Employee.DoesNotExist("An Employee does not exist for the primary key %s." % str(pk))
+
+        if user.is_superuser:
+            return u
+        return None
 
 class Employee(AbstractBaseUser):
     hire_date = models.DateField('date employee was hired')
@@ -174,6 +195,7 @@ class Employee(AbstractBaseUser):
         if(dictionary['status'] == "in"):
             time_in = dictionary['max_record'].time_in
             time_now = datetime.now()
+
 
 class ShiftManager(models.Manager):
     def get_editable_by_pk(self, user, pk):
