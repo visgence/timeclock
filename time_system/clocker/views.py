@@ -1,9 +1,7 @@
 from django.shortcuts import render_to_response 
 from django.template import RequestContext
-from django.contrib.auth.models import User
 from models import Employee, Shift, Job
 from datetime import timedelta, datetime, date
-from time import strftime
 from check_access import check_access
 from decimal import *
 import check_db
@@ -21,7 +19,7 @@ def total_hours(request):
         start_time = request.POST.get('from')
         end_time = request.POST.get('to')
         user_name = request.POST.get('user_name')
-       	employee = Employee.objects.get(user__username = user_name)
+       	employee = Employee.objects.get(username = user_name)
  
         #make sure we have actual date ranges coming in
         if(start_time == "" or end_time == ""):
@@ -118,7 +116,7 @@ def get_daily_hours(date, start, end, user_name):
     shift_info = []
  
     #find all clock in-outs for this day
-    shifts = Shift.objects.filter(employee__user__username = user_name).filter(time_in__year = date.year).filter(time_in__month = date.month).filter(time_in__day = date.day).exclude(time_in = None).exclude(time_out = None)
+    shifts = Shift.objects.filter(employee__username = user_name).filter(time_in__year = date.year).filter(time_in__month = date.month).filter(time_in__day = date.day).exclude(time_in = None).exclude(time_out = None)
 
     #No shifts for this day so 00 hours and minutes
     if not shifts:
@@ -178,7 +176,7 @@ def main_page(request):
 
     try:
         #Makes sure this person is an employee, otherwise we do something different
-        Employee.objects.get(user__username=user_name)
+        Employee.objects.get(username=user_name)
 
         if (request.method == 'POST'):
             status = request.POST.get('status')
@@ -224,80 +222,79 @@ def get_extra(username, status, error):
         A dictionary with all the stuff needed by the main page so that it can return.
     '''
 
-    try:
      
-        extra = {}
-        
-        #Employee is clocking out and there is no error thus far
-        if((status == "Out" or status == "out") and error == ""):
-            extra['employee'] = Employee.objects.all()
-            extra['this_employee'] = Employee.objects.get(user__username=username)
-            extra['is_admin'] = extra['this_employee'].user.is_staff
-            extra['error'] = extra['this_employee'].clock_out()
-            which_clock = extra['this_employee'].which_clock()
-            extra['user_status'] = which_clock['status']
-           
-            #If there's no error in clocking out package up some extra's needed for the summary page
-            if(extra['error'] == "none"):
-                extra['message'] = "You are clocked out.  You last clocked out at "
-                extra['time_stamp'] = which_clock['max_record'].time_out
-                extra['status'] = "out"
-                extra['shift_id'] = which_clock['max_record'].id
-                
-                time_diff = which_clock['max_record'].time_out - which_clock['max_record'].time_in
-                total_time = round_seconds(time_diff.total_seconds())
-                if total_time < 60:
-                    total_time = 0 
-
-                extra['total_time'] = total_time
-                extra['jobs'] = list(Job.objects.filter(is_active = True))
-
-        #Employee is clocking in and there is no error thus far
-        elif((status == "In" or status == "in") and error == ""):
-            extra['employee'] = Employee.objects.all()
-            extra['this_employee'] = Employee.objects.get(user__username=username)
-            extra['is_admin'] = extra['this_employee'].user.is_staff
-            extra['error'] = extra['this_employee'].clock_in()
-            which_clock = extra['this_employee'].which_clock()
-            extra['user_status'] = which_clock['status']
+    extra = {}
     
-            #User clocked in succesfully, package up more stuff
-            if(extra['error'] == "none"):
-                extra['time_stamp'] = which_clock['max_record'].time_in
-                extra['status'] = "in"
-                extra['message'] = "You have clocked in succesfully"
+    #Employee is clocking out and there is no error thus far
+    if((status == "Out" or status == "out") and error == ""):
+        extra['employee'] = Employee.objects.all()
+        extra['this_employee'] = Employee.objects.get(username=username)
+        extra['is_admin'] = extra['this_employee'].is_superuser
+        extra['error'] = extra['this_employee'].clock_out()
+        which_clock = extra['this_employee'].which_clock()
+        extra['user_status'] = which_clock['status']
+       
+        #If there's no error in clocking out package up some extra's needed for the summary page
+        if(extra['error'] == "none"):
+            extra['message'] = "You are clocked out.  You last clocked out at "
+            extra['time_stamp'] = which_clock['max_record'].time_out
+            extra['status'] = "out"
+            extra['shift_id'] = which_clock['max_record'].id
+            
+            time_diff = which_clock['max_record'].time_out - which_clock['max_record'].time_in
+            total_time = round_seconds(time_diff.total_seconds())
+            if total_time < 60:
+                total_time = 0 
 
-        #Technically this shouldn't ever happen here but just in case...
-        elif(status == "" and error == "employee_does_not_exist"):
-            extra['error'] = "exception"
-            extra['user_name'] = username
+            extra['total_time'] = total_time
+            extra['jobs'] = list(Job.objects.filter(is_active = True))
 
-        #If an employee is logged in and navigates to the main page.
-        elif(status == "" and error == ""):
-            extra['employee'] = Employee.objects.all()
-            extra['this_employee'] = Employee.objects.get(user__username=username)
-            extra['is_admin'] = extra['this_employee'].user.is_staff
-            extra['error'] = "none"
-            which_clock = extra['this_employee'].which_clock()
-            extra['user_status'] = which_clock['status']
-            extra['status'] = extra['user_status']
+    #Employee is clocking in and there is no error thus far
+    elif((status == "In" or status == "in") and error == ""):
+        extra['employee'] = Employee.objects.all()
+        extra['this_employee'] = Employee.objects.get(username=username)
+        extra['is_admin'] = extra['this_employee'].is_superuser
+        extra['error'] = extra['this_employee'].clock_in()
+        which_clock = extra['this_employee'].which_clock()
+        extra['user_status'] = which_clock['status']
 
-            if(extra['status'] == "out"):
-                extra['message'] = "You are clocked out.  You last clocked out at "
-                extra['time_stamp'] = which_clock['max_record'].time_out
-            elif(extra['status'] == "in"):
-                extra['message'] = "You are clocked in.  You clocked in at "
-                extra['time_stamp'] = which_clock['max_record'].time_in
+        #User clocked in succesfully, package up more stuff
+        if(extra['error'] == "none"):
+            extra['time_stamp'] = which_clock['max_record'].time_in
+            extra['status'] = "in"
+            extra['message'] = "You have clocked in succesfully"
+
+    #Technically this shouldn't ever happen here but just in case...
+    elif(status == "" and error == "employee_does_not_exist"):
+        extra['error'] = "exception"
+        extra['user_name'] = username
+
+    #If an employee is logged in and navigates to the main page.
+    elif(status == "" and error == ""):
+        extra['employee'] = Employee.objects.all()
+        extra['this_employee'] = Employee.objects.get(username=username)
+        extra['is_admin'] = extra['this_employee'].is_superuser
+        extra['error'] = "none"
+        which_clock = extra['this_employee'].which_clock()
+        extra['user_status'] = which_clock['status']
+        extra['status'] = extra['user_status']
+
+        if(extra['status'] == "out"):
+            extra['message'] = "You are clocked out.  You last clocked out at "
+            extra['time_stamp'] = which_clock['max_record'].time_out
+        elif(extra['status'] == "in"):
+            extra['message'] = "You are clocked in.  You clocked in at "
+            extra['time_stamp'] = which_clock['max_record'].time_in
 
 
-        return extra
-
-    except Exception, e:
+    return extra
+    '''
+    except Exception:
         #This takes care of admins who are not Employee's and don't have any shift records
-        user= User.objects.get(username=username)  
-        extra ={'is_admin':user.is_staff, 'employee':Employee.objects.all(),'user_status':'out', 'error':"none", 'status':"none"}
+        user= Employee.objects.get(username=username)  
+        extra ={'is_admin':user.is_superuser, 'employee':Employee.objects.all(),'user_status':'out', 'error':"none", 'status':"none"}
         return extra 
-
+    '''
 
 
 def round_seconds(seconds):

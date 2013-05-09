@@ -1,9 +1,8 @@
 from django.db import models
-from django.contrib.auth import models as auth_models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 from datetime import datetime
 from decimal import Decimal
-from django.contrib.auth import get_user_model
+from django.contrib.auth.models import User
 
 
 class EmployeeManager(BaseUserManager):
@@ -18,7 +17,7 @@ class EmployeeManager(BaseUserManager):
         '''
 
         #Validate user object
-        if not isinstance(user, auth_models.User):
+        if not isinstance(user, Employee):
             raise TypeError("%s is not an auth user" % str(user))
 
         if user.is_superuser:
@@ -51,7 +50,7 @@ class EmployeeManager(BaseUserManager):
         '
         ' Return: QuerySet of Employees that are viewable by the specified User.
         '''
-        if not isinstance(user, get_user_model()):
+        if not isinstance(user, Employee):
             raise TypeError("%s is not an Auth User" % str(user))
         if user.is_superuser:
             if filter_args is not None:
@@ -78,7 +77,7 @@ class Employee(AbstractBaseUser):
 
 
     def __unicode__(self):
-        return self.user.first_name + " " + self.user.last_name
+        return self.first_name + " " + self.last_name
 
     def can_view(self, user):
         '''
@@ -90,10 +89,10 @@ class Employee(AbstractBaseUser):
         ' Return: True if user is allowed to view and False otherwise.
         '''
 
-        if not isinstance(user, get_user_model()):
+        if not isinstance(user, Employee):
             raise TypeError('%s is not an auth user' % str(user))
 
-        if user.is_superuser or user == self.user:
+        if user.is_superuser or user == self:
             return True
 
         return False
@@ -187,8 +186,8 @@ class ShiftManager(models.Manager):
         '
         ' Return: ShiftSummery identified by pk if user can edit it, otherwise None.
         '''
-        AuthUser = get_user_model()
-        if not isinstance(user, AuthUser):
+        
+        if not isinstance(user, Employee):
             raise TypeError('%s is not an Auth User' % str(user))
 
         try:
@@ -211,7 +210,7 @@ class ShiftManager(models.Manager):
         '''
 
         #Validate user object
-        if not isinstance(user, auth_models.User):
+        if not isinstance(user, Employee):
             raise TypeError("%s is not an auth user" % str(user))
 
         if user.is_superuser:
@@ -244,7 +243,7 @@ class ShiftManager(models.Manager):
         '
         ' Return: QuerySet of ShiftSummerys that are viewable by the specified User.
         '''
-        if not isinstance(user, get_user_model()):
+        if not isinstance(user, Employee):
             raise TypeError("%s is not an Auth User" % str(user))
         if user.is_superuser:
             if filter_args is not None:
@@ -269,9 +268,9 @@ class Shift(models.Model):
     def __unicode__(self):
         data = "TIME_IN: " + self.time_in.strftime("%Y-%m-%d %H:%M") + " TIME_OUT: "
         if(self.time_out != None):
-            data += self.time_out.strftime("%Y-%m-%d %H:%M") + " " + self.employee.user.first_name + " " + self.employee.user.last_name
+            data += self.time_out.strftime("%Y-%m-%d %H:%M") + " " + self.employee.first_name + " " + self.employee.last_name
         else:
-            data += " " + self.employee.user.first_name + " " + self.employee.user.last_name
+            data += " " + self.employee.first_name + " " + self.employee.last_name
 
         return data
 
@@ -294,10 +293,10 @@ class Shift(models.Model):
         ' Return: True if user is allowed to view and False otherwise.
         '''
 
-        if not isinstance(user, get_user_model()):
+        if not isinstance(user, Employee):
             raise TypeError('%s is not an auth user' % str(user))
 
-        if user.is_superuser or user == self.employee.user:
+        if user.is_superuser or user == self.employee:
             return True
 
         return False
@@ -314,8 +313,8 @@ class ShiftSummeryManager(models.Manager):
         '
         ' Return: ShiftSummery identified by pk if user can edit it, otherwise None.
         '''
-        AuthUser = get_user_model()
-        if not isinstance(user, AuthUser):
+        
+        if not isinstance(user, Employee):
             raise TypeError('%s is not an Auth User' % str(user))
 
         try:
@@ -338,7 +337,7 @@ class ShiftSummeryManager(models.Manager):
         '''
 
         #Validate user object
-        if not isinstance(user, auth_models.User):
+        if not isinstance(user, Employee):
             raise TypeError("%s is not an auth user" % str(user))
 
         if user.is_superuser:
@@ -371,7 +370,7 @@ class ShiftSummeryManager(models.Manager):
         '
         ' Return: QuerySet of ShiftSummerys that are viewable by the specified User.
         '''
-        if not isinstance(user, get_user_model()):
+        if not isinstance(user, Employee):
             raise TypeError("%s is not an Auth User" % str(user))
         if user.is_superuser:
             if filter_args is not None:
@@ -396,7 +395,7 @@ class ShiftSummary(models.Model):
         ordering = ['shift', 'employee', 'job']
 
     def __unicode__(self):
-        data = self.shift.time_in.date().strftime("%Y-%m-%d") + "    EMPLOYEE: " + self.employee.user.first_name + "  " + self.employee.user.last_name + "    JOB: " + self.job.name
+        data = self.shift.time_in.date().strftime("%Y-%m-%d") + "    EMPLOYEE: " + self.employee.first_name + "  " + self.employee.last_name + "    JOB: " + self.job.name
         return data
 
 
@@ -411,8 +410,7 @@ class JobManager(models.Manager):
         '
         ' Return: Job identified by pk if user can edit it, otherwise None.
         '''
-        AuthUser = get_user_model()
-        if not isinstance(user, AuthUser):
+        if not isinstance(user, Employee):
             raise TypeError('%s is not an Auth User' % str(user))
 
         try:
@@ -435,7 +433,7 @@ class JobManager(models.Manager):
         '''
 
         #Validate user object
-        if not isinstance(user, auth_models.User):
+        if not isinstance(user, Employee):
             raise TypeError("%s is not an auth user" % str(user))
 
         if user.is_superuser:
@@ -468,7 +466,7 @@ class JobManager(models.Manager):
         '
         ' Return: QuerySet of Jobs that are viewable by the specified User.
         '''
-        if not isinstance(user, get_user_model()):
+        if not isinstance(user, Employee):
             raise TypeError("%s is not an Auth User" % str(user))
         if user.is_superuser:
             if filter_args is not None:
@@ -502,7 +500,7 @@ class Job(models.Model):
         ' Return: True if user is allowed to view and False otherwise.
         '''
 
-        if not isinstance(user, get_user_model()):
+        if not isinstance(user, Employee):
             raise TypeError('%s is not an auth user' % str(user))
 
         if user.is_superuser:

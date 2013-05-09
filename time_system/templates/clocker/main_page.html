@@ -90,8 +90,8 @@
                                 <select name="user_name">
                                     {% if is_admin %}
                                         {% for emp in employee %}
-                                            {% if emp.user.is_active %}
-                                                <option value="{{emp.user.username}}">{{emp}}</option>
+                                            {% if emp.is_active %}
+                                                <option value="{{emp.username}}">{{emp}}</option>
                                             {% endif %}
                                         {% endfor %}
                                     {% else %}

@@ -11,6 +11,8 @@ ADMINS = (
     # ('Your Name', 'your_email@example.com'),
 )
 
+#AUTH_USER_MODEL = "clocker.Employee"
+
 #Global time format for datetime objects
 DT_FORMAT = "%m/%d/%Y %H:%M:%S"
 D_FORMAT = "%m/%d/%Y"
@@ -79,7 +81,7 @@ MEDIA_URL = ''
 # Don't put anything in this directory yourself; store your static files
 # in apps' "static/" subdirectories and in STATICFILES_DIRS.
 # Example: "/home/media/media.lawrence.com/static/"
-STATIC_ROOT = ''
+STATIC_ROOT = APP_PATH + '/static/'
 
 # URL prefix for static files.
 # Example: "http://media.lawrence.com/static/"
@@ -91,7 +93,6 @@ STATIC_URL = '/static/'
 #ADMIN_MEDIA_PREFIX = '/static/admin/' 
 # Additional locations of static files
 STATICFILES_DIRS = (
-    APP_PATH + '/static/',
     # Put strings here, like "/home/html/static" or "C:/www/django/static".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
@@ -108,6 +109,17 @@ STATICFILES_FINDERS = (
 
 # Make this unique, and don't share it with anybody.
 SECRET_KEY = '1=_^^$ol#3vhymf5qt9#ecky6cnq48_@u&b-%_%!w(ou12y0o^'
+
+# Added for dajaxice context_processors.request might be the only needed...
+TEMPLATE_CONTEXT_PROCESSORS = ( 
+    'django.contrib.auth.context_processors.auth',
+    'django.core.context_processors.debug',
+    'django.core.context_processors.i18n',
+    'django.core.context_processors.media',
+    'django.core.context_processors.static',
+    'django.core.context_processors.request',
+    'django.contrib.messages.context_processors.messages'
+)
 
 # List of callables that know how to import templates from various sources.
 TEMPLATE_LOADERS = (
@@ -142,7 +154,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     # Uncomment the next line to enable the admin:
-    'django.contrib.admin',
+    #'django.contrib.admin',
     # Uncomment the next line to enable admin documentation:
     #'django.contrib.admindocs',
     'clocker',
