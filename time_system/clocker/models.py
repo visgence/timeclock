@@ -50,12 +50,15 @@ class EmployeeManager(BaseUserManager):
         '''
         if not isinstance(user, Employee):
             raise TypeError("%s is not an Auth User" % str(user))
+        print "inside editable" 
+        objs = self.all()
+
+        if filter_args is not None:
+            objs = objs.filter(**filter_args)
         if user.is_superuser:
-            if filter_args is not None:
-                return self.filter(**filter_args)
-            else:
-                return self.all()
-        return self.none()
+            return objs
+
+        return objs.filter(username=user.username)
 
     def get_editable_by_pk(self, user, pk):
         '''
@@ -200,13 +203,13 @@ class Employee(AbstractBaseUser):
 class ShiftManager(models.Manager):
     def get_editable_by_pk(self, user, pk):
         '''
-        ' Get's an instance of ShiftSummery specified by a pk if the given user is allowed to edit it.
+        ' Get's an instance of Shift specified by a pk if the given user is allowed to edit it.
         '
         ' Keyword Arguments: 
         '   user - User to check if the user can be edited by them.
-        '   pk   - Primary key of ShiftSummery to get.
+        '   pk   - Primary key of Shift to get.
         '
-        ' Return: ShiftSummery identified by pk if user can edit it, otherwise None.
+        ' Return: Shift identified by pk if user can edit it, otherwise None.
         '''
         
         if not isinstance(user, Employee):
@@ -217,7 +220,7 @@ class ShiftManager(models.Manager):
         except Shift.DoesNotExist:
             raise Shift.DoesNotExist("A Shift does not exist for the primary key %s." % str(pk))
 
-        if user.is_superuser:
+        if user.is_superuser or u.employee == user:
             return u
         return None
 
@@ -235,10 +238,7 @@ class ShiftManager(models.Manager):
         if not isinstance(user, Employee):
             raise TypeError("%s is not an auth user" % str(user))
 
-        if user.is_superuser:
-            return True
-
-        return False
+        return True
 
 
     def get_viewable(self, user, filter_args=None):
@@ -256,23 +256,27 @@ class ShiftManager(models.Manager):
 
     def get_editable(self, user, filter_args=None):
         ''' 
-        ' Gets all the users that can be edited by a specified user.
+        ' Gets all the shifts that can be edited by a specified user.
         '
         ' Right now only superusers can edit.
         '
         ' Keyword Arguments:
         '   user - User to filter editable employees by.
         '
-        ' Return: QuerySet of ShiftSummerys that are viewable by the specified User.
+        ' Return: QuerySet of Shifts that are viewable by the specified User.
         '''
         if not isinstance(user, Employee):
             raise TypeError("%s is not an Auth User" % str(user))
+
+        objs = self.all()
+
+        if filter_args is not None:
+            objs = objs.filter(**filter_args)
+
         if user.is_superuser:
-            if filter_args is not None:
-                return self.filter(**filter_args)
-            else:
-                return self.all()
-        return self.none()
+            return objs
+        
+        return objs.filter(employee = user)
 
 
 class Shift(models.Model):
@@ -344,7 +348,7 @@ class ShiftSummeryManager(models.Manager):
         except ShiftSummary.DoesNotExist:
             raise ShiftSummary.DoesNotExist("A ShiftSummary does not exist for the primary key %s." % str(pk))
 
-        if user.is_superuser:
+        if user.is_superuser or u.employee == user:
             return u
         return None
 
@@ -362,10 +366,7 @@ class ShiftSummeryManager(models.Manager):
         if not isinstance(user, Employee):
             raise TypeError("%s is not an auth user" % str(user))
 
-        if user.is_superuser:
-            return True
-
-        return False
+        return True
 
 
     def get_viewable(self, user, filter_args=None):
@@ -394,12 +395,16 @@ class ShiftSummeryManager(models.Manager):
         '''
         if not isinstance(user, Employee):
             raise TypeError("%s is not an Auth User" % str(user))
+        
+        objs = self.all()
+
+        if filter_args is not None:
+            objs = objs.filter(**filter_args)
+
         if user.is_superuser:
-            if filter_args is not None:
-                return self.filter(**filter_args)
-            else:
-                return self.all()
-        return self.none()
+            return objs
+        
+        return objs.filter(employee = user)
 
 
 class ShiftSummary(models.Model):
@@ -473,8 +478,16 @@ class JobManager(models.Manager):
         '
         ' Return: QuerySet of Jobs that can be viewed by specified user.
         '''
-        # TODO: Wrapper until we decide to differentiate this from editable.
-        return self.get_editable(user, filter_args)
+       
+        if not isinstance(user, Employee):
+            raise TypeError("%s is not an Auth User" % str(user))
+       
+        objs = self.all()
+
+        if filter_args is not None:
+            objs = objs.filter(**filter_args)
+
+        return objs.filter(is_active=True)
 
 
     def get_editable(self, user, filter_args=None):
@@ -525,7 +538,4 @@ class Job(models.Model):
         if not isinstance(user, Employee):
             raise TypeError('%s is not an auth user' % str(user))
 
-        if user.is_superuser:
-            return True
-
-        return False
+        return True

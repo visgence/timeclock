@@ -112,8 +112,8 @@
             </div>
 
 
-            {% if is_admin %}
             <div id="management">
+                {% if is_admin %}
                 <span class="clickable" id="manage_employees" onclick="load_model_grid('clocker', 'Employee');">
                     Manage Employees
                 </span>
@@ -121,6 +121,8 @@
                 <span class="clickable" id="manage_jobs" onclick="load_model_grid('clocker', 'Job');">
                     Manage Jobs
                 </span>
+
+                {% endif %}
                 <br/>
                 <span class="clickable" id="manage_shift_summaries" onclick="load_model_grid('clocker', 'ShiftSummary');">
                     Manage Shift Summaries
@@ -133,7 +135,6 @@
 
             <div id="management_content" style="position: absolute;"></div>
 
-            {% endif %}
 
             <div class="login">
                 <form name="main_page" method="post">
