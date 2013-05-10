@@ -1,20 +1,14 @@
-# Create your views here.
-from models import *
-from django.http import HttpResponse
-from django.core import serializers
-from django.template import Context, loader
 from django.http import HttpResponseRedirect
+from settings import SESSION_TIMEOUT
 
 def check_access(request):
+    request.session.set_expiry(SESSION_TIMEOUT)
+        
+    if request.user.is_authenticated():
+        if request.user.is_active:
+            return request.user
+        else:
+            return HttpResponseRedirect('/timeclock/login/')
+    else:
+        return HttpResponseRedirect('/timeclock/login/')
 
-    if(request.user.username == ''):
-        return HttpResponseRedirect("/login/")
-
-    t = loader.get_template('login.html');
-
-
-    if(not request.user.is_active):
-        c = Context({'user':request.user,'access_error':'User is not active'});
-        return HttpResponse(t.render(c))
-
-    return 0;

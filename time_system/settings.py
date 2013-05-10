@@ -21,6 +21,8 @@ AUTH_USER_MODEL = "clocker.Employee"
 
 MANAGERS = ADMINS
 
+SESSION_TIMEOUT = 7200
+
 def get_permission_obj():
     '''
     ' This function should be modified to return the object that is used to verify permissions in the

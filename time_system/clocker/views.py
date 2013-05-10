@@ -9,7 +9,7 @@ import check_db
 def total_hours(request):
     #make sure the employee is logged in
     response = check_access(request)
-    if(response):
+    if(not isinstance(response, Employee)):
         return response
 
     if(request.method == 'POST'):
@@ -169,7 +169,7 @@ def main_page(request):
     
     #Make sure we're logged in otherwise go log in
     response = check_access(request)
-    if(response):
+    if(not isinstance(response, Employee)):
         return response
 
     user_name = request.user.username
