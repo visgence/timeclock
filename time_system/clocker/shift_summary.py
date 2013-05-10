@@ -1,5 +1,4 @@
 from django.http import HttpResponseRedirect
-from django.template import RequestContext
 from check_access import check_access
 from models import ShiftSummary, Shift, Employee, Job
 from django.utils import simplejson
@@ -8,7 +7,7 @@ from django.utils import simplejson
 def summary(request):
 
     response = check_access(request)
-    if(response):
+    if(not isinstance(response, Employee)):
         return response
 
     if(request.method == 'POST'):

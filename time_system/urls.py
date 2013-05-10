@@ -26,7 +26,7 @@ urlpatterns = patterns('clocker.views',
 
 #login views
 urlpatterns += patterns('clocker.login',
-    url(r'^login/$', 'view'),
+    url(r'^timeclock/login/$', 'view'),
     url(r'^logout/$', 'logout'),
 )
 
