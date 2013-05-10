@@ -2,9 +2,10 @@ from django.conf.urls import patterns, include, url
 from django.views.generic import RedirectView
 # Uncomment the next two lines to enable the admin:
 from django.contrib import admin
-from dajaxice.core import dajaxice_config
+from dajaxice.core import dajaxice_config, dajaxice_autodiscover
 from settings import APP_PATH, DEBUG
 admin.autodiscover()
+dajaxice_autodiscover()
 
 #normal views
 urlpatterns = patterns('clocker.views',
