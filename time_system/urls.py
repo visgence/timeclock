@@ -3,6 +3,7 @@ from django.views.generic import RedirectView
 # Uncomment the next two lines to enable the admin:
 from django.contrib import admin
 from dajaxice.core import dajaxice_config
+from settings import APP_PATH, DEBUG
 admin.autodiscover()
 
 #normal views
