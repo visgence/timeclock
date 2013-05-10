@@ -24,6 +24,14 @@ urlpatterns = patterns('clocker.views',
     url(dajaxice_config.dajaxice_url, include('dajaxice.urls')),
 )
 
+
+if DEBUG:
+    urlpatterns += patterns(
+        '',
+        url(r'^images\/(?P<path>.+)$', 'django.views.static.serve', {
+            'document_root': APP_PATH + 'chucho/static/plugins/slickGrid/images'})
+    )
+
 #login views
 urlpatterns += patterns('clocker.login',
     url(r'^timeclock/login/$', 'view'),

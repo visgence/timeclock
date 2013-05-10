@@ -8,8 +8,10 @@ function load_model_grid(app, model)
             "href": "",
             "text": "Go Back"
         });
-
-        $('#content').prepend(back_link);
+        var title = $("<h2></h2>", {
+            "html": "Manage "+model+"s"
+        });
+        $('#content').prepend(title).prepend(back_link);
     });
 }
 
