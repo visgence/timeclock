@@ -301,11 +301,13 @@ class Shift(models.Model):
         return data
 
     def save(self, *args, **kwargs):
-
         if self.time_out is not None:
             diff = self.time_out - self.time_in
             hours = Decimal(diff.total_seconds()/3600).quantize(Decimal('1.00'))
             self.hours = hours
+        else:
+            self.hours = None
+
         super(Shift, self).save(*args, **kwargs)
 
 
