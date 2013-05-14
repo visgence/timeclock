@@ -4,8 +4,9 @@ from datetime import datetime
 from decimal import Decimal
 from django.contrib.auth.models import User
 
+from chucho.models import ChuchoUserManager, ChuchoManager
 
-class EmployeeManager(BaseUserManager):
+class EmployeeManager(BaseUserManager, ChuchoUserManager):
     def can_edit(self, user):
         '''
         ' Checks if a User is allowed to edit or add instances of this model.
@@ -25,7 +26,7 @@ class EmployeeManager(BaseUserManager):
 
         return False
 
-    def get_viewable(self, user, filter_args=None):
+    def get_viewable(self, user, filter_args=None, omni=None):
         '''
         ' Gets all Employees that can be viewed or assigned by a specific AuthUser.
         '
@@ -35,9 +36,9 @@ class EmployeeManager(BaseUserManager):
         ' Return: QuerySet of Employees that can be viewed by specified user.
         '''
         # TODO: Wrapper until we decide to differentiate this from editable.
-        return self.get_editable(user, filter_args)
+        return self.get_editable(user, filter_args, omni)
 
-    def get_editable(self, user, filter_args=None):
+    def get_editable(self, user, filter_args=None, omni=None):
         ''' 
         ' Gets all the users that can be edited by a specified user.
         '
@@ -50,11 +51,13 @@ class EmployeeManager(BaseUserManager):
         '''
         if not isinstance(user, Employee):
             raise TypeError("%s is not an Auth User" % str(user))
-        print "inside editable" 
-        objs = self.all()
 
-        if filter_args is not None:
+        if filter_args is not None and len(filter_args) > 0:
             objs = objs.filter(**filter_args)
+        elif omni is not None:
+            objs = self.search(omni)
+        else:
+            objs = self.all()
         if user.is_superuser:
             return objs
 
@@ -98,7 +101,7 @@ class Employee(AbstractBaseUser):
     objects = EmployeeManager()
 
     USERNAME_FIELD = "username"
-
+    ordering = ['username']
 
     def __unicode__(self):
         return self.first_name + " " + self.last_name
@@ -241,7 +244,7 @@ class ShiftManager(models.Manager):
         return True
 
 
-    def get_viewable(self, user, filter_args=None):
+    def get_viewable(self, user, filter_args=None, omni=None):
         '''
         ' Gets all ShiftSummerys that can be viewed or assigned by a specific AuthUser.
         '
@@ -251,10 +254,10 @@ class ShiftManager(models.Manager):
         ' Return: QuerySet of ShiftSummerys that can be viewed by specified user.
         '''
         # TODO: Wrapper until we decide to differentiate this from editable.
-        return self.get_editable(user, filter_args)
+        return self.get_editable(user, filter_args, omni)
 
 
-    def get_editable(self, user, filter_args=None):
+    def get_editable(self, user, filter_args=None, omni=None):
         ''' 
         ' Gets all the shifts that can be edited by a specified user.
         '
@@ -289,7 +292,7 @@ class Shift(models.Model):
     
     class Meta:
         db_table = 'Shift'
-        ordering = ['time_in', 'employee']
+        ordering = ['-time_in', 'employee']
 
     def __unicode__(self):
         data = "TIME_IN: " + self.time_in.strftime("%Y-%m-%d %H:%M") + " TIME_OUT: "
@@ -369,7 +372,7 @@ class ShiftSummeryManager(models.Manager):
         return True
 
 
-    def get_viewable(self, user, filter_args=None):
+    def get_viewable(self, user, filter_args=None, omni=None):
         '''
         ' Gets all ShiftSummerys that can be viewed or assigned by a specific AuthUser.
         '
@@ -379,10 +382,10 @@ class ShiftSummeryManager(models.Manager):
         ' Return: QuerySet of ShiftSummerys that can be viewed by specified user.
         '''
         # TODO: Wrapper until we decide to differentiate this from editable.
-        return self.get_editable(user, filter_args)
+        return self.get_editable(user, filter_args, omni)
 
 
-    def get_editable(self, user, filter_args=None):
+    def get_editable(self, user, filter_args=None, omni=None):
         ''' 
         ' Gets all the users that can be edited by a specified user.
         '
