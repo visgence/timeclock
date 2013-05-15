@@ -203,7 +203,7 @@ class Employee(AbstractBaseUser):
             time_now = datetime.now()
 
 
-class ShiftManager(models.Manager):
+class ShiftManager(ChuchoManager):
     def get_editable_by_pk(self, user, pk):
         '''
         ' Get's an instance of Shift specified by a pk if the given user is allowed to edit it.
@@ -271,10 +271,13 @@ class ShiftManager(models.Manager):
         if not isinstance(user, Employee):
             raise TypeError("%s is not an Auth User" % str(user))
 
-        objs = self.all()
-
-        if filter_args is not None:
-            objs = objs.filter(**filter_args)
+        print 'Getting_editable'
+        if filter_args is not None and len(filter_args) > 0:
+            objs = self.filter(**filter_args)
+        elif omni is not None:
+            objs = self.search(omni)
+        else:
+            objs = self.all()
 
         if user.is_superuser:
             return objs
@@ -333,7 +336,7 @@ class Shift(models.Model):
         return False
 
 
-class ShiftSummeryManager(models.Manager):
+class ShiftSummaryManager(models.Manager):
     def get_editable_by_pk(self, user, pk):
         '''
         ' Get's an instance of ShiftSummery specified by a pk if the given user is allowed to edit it.
@@ -420,7 +423,7 @@ class ShiftSummary(models.Model):
     miles = models.DecimalField(max_digits = 6, decimal_places = 2, null = True, blank=True)
     note = models.TextField('notes about job')
 
-    objects = ShiftSummeryManager()
+    objects = ShiftSummaryManager()
 
     class Meta:
         db_table = 'Shift Summary'
