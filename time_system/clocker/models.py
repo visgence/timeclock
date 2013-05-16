@@ -1,12 +1,13 @@
 from django.db import models
+from django.db.models import Q
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 from datetime import datetime
 from decimal import Decimal
-from django.contrib.auth.models import User
+import re
 
-from chucho.models import ChuchoUserManager, ChuchoManager
+from chucho.models import ChuchoManager
 
-class EmployeeManager(BaseUserManager, ChuchoUserManager):
+class EmployeeManager(BaseUserManager, ChuchoManager):
     def can_edit(self, user):
         '''
         ' Checks if a User is allowed to edit or add instances of this model.
@@ -53,7 +54,7 @@ class EmployeeManager(BaseUserManager, ChuchoUserManager):
             raise TypeError("%s is not an Auth User" % str(user))
 
         if filter_args is not None and len(filter_args) > 0:
-            objs = objs.filter(**filter_args)
+            objs = self.filter(**filter_args)
         elif omni is not None:
             objs = self.search(omni)
         else:
@@ -86,6 +87,41 @@ class EmployeeManager(BaseUserManager, ChuchoUserManager):
             return u
         return None
 
+    def search(self, search_str, operator=None, column=None):
+        '''Overwrite chucho default search for user.'''
+        # Regexes to trigger different kinds of searches.
+        pattern_name1 = r'^\s*(.+)\s+(.+)\s*$'
+        pattern_name2 = r'^\s*(.+),\s*(.+)\s*$'
+        pattern_username = r'^\s*(.+)\s*$'
+        
+        q_list = []
+        m = re.match(pattern_name1, search_str, re.I)
+        if m is not None:
+            q_list.append(Q(first_name__icontains=m.group(1), last_name__icontains=m.group(2)))
+
+        m = re.match(pattern_name2, search_str, re.I)
+        if m is not None:
+            q_list.append(Q(first_name__icontains=m.group(2), last_name__icontains=m.group(1)))
+
+        m = re.match(pattern_username, search_str, re.I)
+        if m is not None:
+            q_list.append(Q(username__icontains=m.group(1)))
+            q_list.append(Q(first_name__icontains=m.group(1)))
+            q_list.append(Q(last_name__icontains=m.group(1)))
+
+        q_all = None
+        for q in q_list:
+            if q_all is None:
+                q_all = q
+            else:
+                q_all |= q
+
+        if q_all is None:
+            return self.none()
+        else:
+            return self.filter(q_all)
+
+
 class Employee(AbstractBaseUser):
     hire_date = models.DateField('date employee was hired')
     has_salary = models.BooleanField()
@@ -101,7 +137,16 @@ class Employee(AbstractBaseUser):
     objects = EmployeeManager()
 
     USERNAME_FIELD = "username"
-    ordering = ['username']
+
+    column_options = {
+        'id': {'grid_column': False},
+        'password': {'_type': 'password', 'grid_column': False},
+        'date_joined': {'grid_column': False},
+        'last_login': {'grid_column': False, '_editable': False}
+        }
+
+    class Meta:
+        ordering = ['username']
 
     def __unicode__(self):
         return self.first_name + " " + self.last_name
@@ -271,7 +316,6 @@ class ShiftManager(ChuchoManager):
         if not isinstance(user, Employee):
             raise TypeError("%s is not an Auth User" % str(user))
 
-        print 'Getting_editable'
         if filter_args is not None and len(filter_args) > 0:
             objs = self.filter(**filter_args)
         elif omni is not None:
@@ -292,7 +336,14 @@ class Shift(models.Model):
     hours = models.DecimalField(null=True, blank=True, decimal_places=2, max_digits=4)
 
     objects = ShiftManager()
-    
+
+    column_options = {
+        'id': {'grid_column': False}
+        }
+
+    # chucho omni search fields
+    search_fields = ['employee', 'time_in', 'time_out']
+
     class Meta:
         db_table = 'Shift'
         ordering = ['-time_in', 'employee']
@@ -336,7 +387,7 @@ class Shift(models.Model):
         return False
 
 
-class ShiftSummaryManager(models.Manager):
+class ShiftSummaryManager(ChuchoManager):
     def get_editable_by_pk(self, user, pk):
         '''
         ' Get's an instance of ShiftSummery specified by a pk if the given user is allowed to edit it.
@@ -404,15 +455,17 @@ class ShiftSummaryManager(models.Manager):
         if not isinstance(user, Employee):
             raise TypeError("%s is not an Auth User" % str(user))
         
-        objs = self.all()
-
-        if filter_args is not None:
-            objs = objs.filter(**filter_args)
+        if filter_args is not None and len(filter_args) > 0:
+            objs = self.filter(**filter_args)
+        elif omni is not None:
+            objs = self.search(omni)
+        else:
+            objs = self.all()
 
         if user.is_superuser:
             return objs
         
-        return objs.filter(employee = user)
+        return objs.filter(employee=user)
 
 
 class ShiftSummary(models.Model):
@@ -425,16 +478,23 @@ class ShiftSummary(models.Model):
 
     objects = ShiftSummaryManager()
 
+    column_options = {
+        'id': {'grid_column': False}
+        }
+
+    # chucho omni search fields
+    search_fields = ['job', 'employee', 'shift']
+
     class Meta:
         db_table = 'Shift Summary'
-        ordering = ['shift', 'employee', 'job']
+        ordering = ['-shift', 'employee', 'job']
 
     def __unicode__(self):
         data = self.shift.time_in.date().strftime("%Y-%m-%d") + "    EMPLOYEE: " + self.employee.first_name + "  " + self.employee.last_name + "    JOB: " + self.job.name
         return data
 
 
-class JobManager(models.Manager):
+class JobManager(ChuchoManager):
     def get_editable_by_pk(self, user, pk):
         '''
         ' Get's an instance of Job specified by a pk if the given user is allowed to edit it.
@@ -477,7 +537,7 @@ class JobManager(models.Manager):
         return False
 
 
-    def get_viewable(self, user, filter_args=None):
+    def get_viewable(self, user, filter_args=None, omni=None):
         '''
         ' Gets all Jobs that can be viewed or assigned by a specific AuthUser.
         '
@@ -490,15 +550,17 @@ class JobManager(models.Manager):
         if not isinstance(user, Employee):
             raise TypeError("%s is not an Auth User" % str(user))
        
-        objs = self.all()
-
         if filter_args is not None:
-            objs = objs.filter(**filter_args)
+            objs = self.filter(**filter_args)
+        elif omni is not None:
+            objs = self.search(omni)
+        else:
+            objs = self.all()
 
         return objs.filter(is_active=True)
 
 
-    def get_editable(self, user, filter_args=None):
+    def get_editable(self, user, filter_args=None, omni=None):
         ''' 
         ' Gets all the users that can be edited by a specified user.
         '
@@ -511,9 +573,13 @@ class JobManager(models.Manager):
         '''
         if not isinstance(user, Employee):
             raise TypeError("%s is not an Auth User" % str(user))
+
         if user.is_superuser:
-            if filter_args is not None:
+            if filter_args is not None and len(filter_args) > 0:
                 return self.filter(**filter_args)
+            elif omni is not None:
+                print omni
+                return self.search(omni)
             else:
                 return self.all()
         return self.none()
@@ -525,6 +591,13 @@ class Job(models.Model):
     is_active = models.BooleanField() 
 
     objects = JobManager()
+
+    column_options = {
+        'id': {'grid_column': False}
+        }
+
+    # chucho omni search fields
+    search_fields = ['name', 'description']
 
     class Meta:
         db_table = 'Job'
