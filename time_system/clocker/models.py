@@ -487,7 +487,7 @@ class ShiftSummary(models.Model):
 
     class Meta:
         db_table = 'Shift Summary'
-        ordering = ['-shift', 'employee', 'job']
+        ordering = ['shift', 'employee', 'job']
 
     def __unicode__(self):
         data = self.shift.time_in.date().strftime("%Y-%m-%d") + "    EMPLOYEE: " + self.employee.first_name + "  " + self.employee.last_name + "    JOB: " + self.job.name
