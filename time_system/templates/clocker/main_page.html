@@ -56,144 +56,148 @@
     <body> 
 
         <div id="content">
+        	
+        	<div class="visgence_logo">
+        	<img src="/static/images/visgence.png" height="90px" width="150px" />
+        	</div>
+        	
+        	<div class="container">
+        		
+				<div class="login">
+					
+	                <form name="main_page" method="post">
+	                    {% csrf_token %}
+						<div>
+	                	{% if user.first_name %}
+	                    	Hello {{user.first_name}} {{user.last_name}} (<a href="/logout/">logout</a>)
+	                	{% endif %}
+	            		</div>
+	                    <div class="radio_buttons">
+	                        {% ifequal user_status "out" %}
+	                            <input id="status-in" type="radio" name="status" value="In" checked="checked">
+	                            <label for="status-in">Clock In</label>
+	                            <br>
+	                            <input id="status-out" type="radio" name="status" value="Out" disabled="disabled">
+	                            <label for="status-out">Clock Out</label>
+	                            <br>
+	                        {% else %}
+	                            <input id="status-in" type="radio" name="status" value="In" disabled="disabled">
+	                            <label for="status-in">Clock In</label>
+	                            <br>
+	                            <input id="status-out" type="radio" name="status" value="Out" checked="checked">
+	                            <label for="status-out">Clock Out</label>
+	                            <br>
+	                        {% endifequal %}
+	                    <input type="submit" value="Submit">
+	                    </div>
+	                </form>
+	
+	                <div class="message">
+	
+	                    {% ifequal error "none" %}
+	
+	                        {% ifequal status "out" %}  
+	                            {{ message }}
+	                            {{ time_stamp }}
+	                        {% endifequal %}
+	
+	                        {% ifequal status "in" %}
+	                            {{ message }}
+	                            {{ time_stamp }}
+	                        {% endifequal %}
+	                            
+	                    {% else %}
+	
+	                        {% ifequal error "exception" %}
+	                            An unexpected error occured.  Maybe try logging out and then back in.
+	                        {% endifequal %}
+	
+	                        {% ifequal error "out" %}
+	                            You are not able to clock out right now. Please clock in first.
+	                        {% endifequal %}
+	
+	                        {% ifequal error "in" %}
+	                            You are not able to clock in right now. Please clock out first.
+	                        {% endifequal %}
+	
+	                    {% endifequal %}
+	
+	                </div> <!--End message-->
+	
+	            </div> <!--End login-->        	 
+	
+	            <div align="left">
+	                <form name="admin" action="hours/" method="post">
+	                    {% csrf_token %}
+	
+	                    <table style="border-style: none;">
+	
+	                        <tr>
+	                            <th colspan="2">View Hours(Admin)</th>
+	                        </tr>
+	
+	                        <tr>
+	                            <td>From </td>
+	                            <td> <input type="text" id="from" name="from"/> </td>
+	                        </tr>
+	
+	                        <tr>
+	                            <td>To</td>
+	                            <td> <input type="text" id="to" name="to"/>  </td>
+	                        </tr>
+	
+	                        <tr>
+	                            <td>Employee</td>
+	                            <td> 
+	
+	                                <select name="user_name">
+	                                    {% if is_admin %}
+	                                        {% for emp in employee %}
+	                                            {% if emp.is_active %}
+	                                                <option value="{{emp.username}}">{{emp}}</option>
+	                                            {% endif %}
+	                                        {% endfor %}
+	                                    {% else %}
+	                                        <option value="{{user.username}}">{{user.username}}</option>
+	                                    {% endif %}
+	                                </select> 
+	                            </td>
+	                        </tr>
+	
+	                        <tr>
+	                            <td></td>
+	                            <td> <input type="submit" value="Submit" name="Submit"></td>
+	                        </tr>
+	
+	                    </table>
+	
+	                </form>
+	            </div>
+	
+	            <div id="management">
+	                {% if is_admin %}
+	                <span class="clickable" id="manage_employees" onclick="load_model_grid('clocker', 'Employee');">
+	                    Manage Employees
+	                </span>
+	                <br/>
+	                <span class="clickable" id="manage_jobs" onclick="load_model_grid('clocker', 'Job');">
+	                    Manage Jobs
+	                </span>
+	
+	                {% endif %}
+	                <br/>
+	                <span class="clickable" id="manage_shift_summaries" onclick="load_model_grid('clocker', 'ShiftSummary');">
+	                    Manage Shift Summaries
+	                </span>
+	                <br/>
+	                <span class="clickable" id="manage_shift_shifts" onclick="load_model_grid('clocker', 'Shift');">
+	                    Manage Shifts
+	                </span>
+	            </div>
+	
+	            <div id="management_content" style="position: absolute;"></div>
 
-            <div>
-                {% if user.first_name %}
-                    Hello {{user.first_name}} {{user.last_name}} (<a href="/logout/">logout</a>)
-                {% endif %}
-            </div>
-
-            <div align="left">
-                <form name="admin" action="hours/" method="post">
-                    {% csrf_token %}
-
-                    <table style="border-style: none;">
-
-                        <tr>
-                            <th colspan="2">View Hours(Admin)</th>
-                        </tr>
-
-                        <tr>
-                            <td>From </td>
-                            <td> <input type="text" id="from" name="from"/> </td>
-                        </tr>
-
-                        <tr>
-                            <td>To</td>
-                            <td> <input type="text" id="to" name="to"/>  </td>
-                        </tr>
-
-                        <tr>
-                            <td>Employee</td>
-                            <td> 
-
-                                <select name="user_name">
-                                    {% if is_admin %}
-                                        {% for emp in employee %}
-                                            {% if emp.is_active %}
-                                                <option value="{{emp.username}}">{{emp}}</option>
-                                            {% endif %}
-                                        {% endfor %}
-                                    {% else %}
-                                        <option value="{{user.username}}">{{user.username}}</option>
-                                    {% endif %}
-                                </select> 
-                            </td>
-                        </tr>
-
-                        <tr>
-                            <td></td>
-                            <td> <input type="submit" value="Submit" name="Submit"></td>
-                        </tr>
-
-                    </table>
-
-                </form>
-            </div>
-
-
-            <div id="management">
-                {% if is_admin %}
-                <span class="clickable" id="manage_employees" onclick="load_model_grid('clocker', 'Employee');">
-                    Manage Employees
-                </span>
-                <br/>
-                <span class="clickable" id="manage_jobs" onclick="load_model_grid('clocker', 'Job');">
-                    Manage Jobs
-                </span>
-
-                {% endif %}
-                <br/>
-                <span class="clickable" id="manage_shift_summaries" onclick="load_model_grid('clocker', 'ShiftSummary');">
-                    Manage Shift Summaries
-                </span>
-                <br/>
-                <span class="clickable" id="manage_shift_shifts" onclick="load_model_grid('clocker', 'Shift');">
-                    Manage Shifts
-                </span>
-            </div>
-
-            <div id="management_content" style="position: absolute;"></div>
-
-
-            <div class="login">
-                <form name="main_page" method="post">
-                    {% csrf_token %}
-
-                    <div class="radio_buttons">
-                        {% ifequal user_status "out" %}
-                            <input id="status-in" type="radio" name="status" value="In" checked="checked">
-                            <label for="status-in">Clock In</label>
-                            <br>
-                            <input id="status-out" type="radio" name="status" value="Out" disabled="disabled">
-                            <label for="status-out">Clock Out</label>
-                            <br>
-                        {% else %}
-                            <input id="status-in" type="radio" name="status" value="In" disabled="disabled">
-                            <label for="status-in">Clock In</label>
-                            <br>
-                            <input id="status-out" type="radio" name="status" value="Out" checked="checked">
-                            <label for="status-out">Clock Out</label>
-                            <br>
-                        {% endifequal %}
-                    <input type="submit" value="Submit">
-                    </div>
-                </form>
-
-                <div class="message">
-
-                    {% ifequal error "none" %}
-
-                        {% ifequal status "out" %}  
-                            {{ message }}
-                            {{ time_stamp }}
-                        {% endifequal %}
-
-                        {% ifequal status "in" %}
-                            {{ message }}
-                            {{ time_stamp }}
-                        {% endifequal %}
-                            
-                    {% else %}
-
-                        {% ifequal error "exception" %}
-                            An unexpected error occured.  Maybe try logging out and then back in.
-                        {% endifequal %}
-
-                        {% ifequal error "out" %}
-                            You are not able to clock out right now. Please clock in first.
-                        {% endifequal %}
-
-                        {% ifequal error "in" %}
-                            You are not able to clock in right now. Please clock out first.
-                        {% endifequal %}
-
-                    {% endifequal %}
-
-                </div> <!--End message-->
-
-            </div> <!--End login-->
-
+			</div><!--end container-->
         </div> <!--End content-->
 
     </body>

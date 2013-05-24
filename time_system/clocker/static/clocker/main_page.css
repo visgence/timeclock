@@ -8,28 +8,34 @@ body
 {
     width:100%;
     height:100%;
-    background-image:url(background.png);
-    background-repeat:no-repeat;
-    background-size:cover;
-    font-size: 12pt;
+    background-image:url(../images/seamlesstexture29.jpg);
+    background-repeat:repeat;
+    font-size: 12pt;   
 }
 
 
 #content
 {
-    width:100%;
-    height:100%;
+    width: 700px;
+    height: 600px;
+    margin: auto;
+    margin-top: 100px;
+    background-color: white;
+    padding: 10px;
+    border: 1px solid #aaaaaa;
+    box-shadow: 0px 0px 15px #888888;
+}
+.visgence_logo
+{
+	margin-bottom: 15px;
 }
 
 .login
 {
     width:350px;
-    height:400px;
-    position:fixed;
+    height:200px;
     top: 20%;
     left: 40%;
-    background-image:url(visgence.png);
-    background-repeat:no-repeat;
 }
 
 .user_name
@@ -59,7 +65,7 @@ body
     top:205px;
     left:130px;
     float:left;
-    position:relative;
+    margin-top: 15px;
 }
 
 .from
