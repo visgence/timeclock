@@ -187,7 +187,7 @@ def main_page(request):
                  
                 #Clocked out successfully
                 if(extra['error'] == "none"):
-                    extra['total_time'] = 13.35 #DEBUG
+                    #extra['total_time'] = 13.35 #DEBUG
                     #Go to summary page after clocking out
                     if(extra['total_time'] != 0):
                         return render_to_response('shift_summary.html', extra , context_instance=RequestContext(request))
