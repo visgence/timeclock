@@ -20,15 +20,22 @@ body
     height: 600px;
     margin: auto;
     margin-top: 100px;
-    background-color: white;
-    padding: 10px;
+    background-image:url(../images/dark_fish_skin.png);
     border: 1px solid #aaaaaa;
     box-shadow: 0px 0px 15px #888888;
 }
 
+div.container
+{
+	width: 699px;
+	height:490px;
+	background-color: white;
+	border: 1px solid #aaaaaa;
+}
+
 .visgence_logo
 {
-	margin-bottom: 15px;
+	margin: 15px;
 }
 
 .login
@@ -37,28 +44,15 @@ body
     height:200px;
     top: 20%;
     left: 40%;
+ 	padding-left: 15px;
+ 	padding-top: 15px; 
 }
 
-.user_name
+div#management
 {
-    width:130px;
-    height:50px;
-    position:relative;
-    top:200px;
-    left:50px;
-    float:left;
+	float: right;
+	padding-right: 15px;
 }
-
-.password
-{
-    width:130px;
-    height:50px;
-    position:relative;
-    top:200px;
-    left:50px;
-    float:left;
-}
-
 .radio_buttons
 {
     width: 8em;
@@ -74,13 +68,6 @@ body
     position:relative:
     top:50%;
     left:100px;
-}
-
-.submit_login
-{
-    position:relative;
-    top:300px;
-    right:85px;
 }
 
 .message
@@ -111,4 +98,15 @@ input[type="text"], input[type="password"]
 .clickable:hover
 {
     color: red;
+}
+
+div.submit_login
+{
+	margin-top: 5px;
+}
+div.login-submit
+{
+	position: relative;
+	top: 150px;
+	left:190px;
 }
