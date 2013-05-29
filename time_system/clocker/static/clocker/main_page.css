@@ -28,7 +28,6 @@ body
 div#content
 {
 	background-color: white;
-	border: 1px solid #aaaaaa;
 	padding: 1em;
 }
 
@@ -51,6 +50,24 @@ div#management
 	padding-left: 1.5em;
 	font-weight: bold;
 	padding-top: 1.5em;
+	height: 100px;
+}
+
+div.click
+{
+	margin-bottom: 5px;
+	
+}
+
+.clickable
+{
+    cursor: pointer;
+    color: #3399ff;
+}
+
+.clickable:hover
+{
+    color: #009900;
 }
 
 div#hour_management
@@ -63,9 +80,11 @@ div#hour_management
 
 .radio_buttons
 {
-    left:130px;
-    margin-top: 35px;
-    padding-left: 270px;
+    margin-left: auto;
+    margin-right: auto;
+    width: 100px;
+    margin-top: 1em;
+    margin-bottom: 1em;
 }
 
 .from
@@ -75,11 +94,9 @@ div#hour_management
     left:100px;
 }
 
-.message
+div.message
 {
-    width:500px;
-    position:relative;
-    top:70%;
+   margin-top: 1.5em;
 }
 
 .error
@@ -92,17 +109,6 @@ div#hour_management
 input[type="text"], input[type="password"]
 {
     border-width: 2;
-}
-
-.clickable
-{
-    cursor: pointer;
-    color: #666666;
-}
-
-.clickable:hover
-{
-    color: #cfcfcf;
 }
 
 div.submit_login
@@ -125,8 +131,11 @@ div#slider
 
 div.job_name
 {
-	padding: 1em;
+	
+	font-weight: bold;
+	
 }
+
 
 div.miles_text
 {
@@ -140,5 +149,13 @@ div.notes_text
 
 div.job_slider
 {
-	margin-top: 1em;
+	
+	width: 400px;
+	
+}
+
+td
+{
+	padding-left: 5px;
+	padding-right: 5px;
 }

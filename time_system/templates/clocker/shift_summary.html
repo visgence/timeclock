@@ -1,23 +1,28 @@
 {%extends "base.html"%}
 {%block content%}
-<div align="center">
+<div >
 
 	<div class="total_time_text">
-		<p>Total Time Worked</p><br /><input type="text" class="total_time" id="total_time" value="{{total_time}}" readonly="readonly" /><br />
+		Total Time Worked<input type="text" class="total_time" id="total_time" value="{{total_time}}" readonly="readonly" /><br />
 	</div>
 
 	{% for job in jobs %}
 	<div  id="slider" >
-		<div class="job_name">{{job.name}}</div>
-			<input type="text" class="job_time" id ="hours_{{job.id}}" readonly="readonly" />
-			<div id="{{job.id}}" class="job_slider"></div>
-
+		<table border="0">
+			<tr>
+				<td><div class="job_name">{{job.name}}</div></td>
+				<td><input type="text" class="job_time" id ="hours_{{job.id}}" readonly="readonly" /></td>
+				<td><div id="{{job.id}}" class="job_slider"></div></td>
+			</tr>
+		</table>	
+		
+		<div>
 			<div class="miles_text">Miles:</div>
 			<input type="number" class="miles" value="0" id ="miles_{{job.id}}" />
-
+		
 			<div class="notes_text">Notes:</div>
 			<textarea  class="text_area" rows="5" cols="50" id="notes_{{job.id}}"></textarea>
-
+		</div>
 	</div> <!--End Slider-->
 	{% endfor %} 
 

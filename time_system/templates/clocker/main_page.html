@@ -105,23 +105,30 @@
 		
 	<div id="management">
 		{% if is_admin %}
-		<span class="clickable" id="manage_employees" onclick="load_model_grid('clocker', 'Employee');">
-			Manage Employees
-		</span>
-		<br/>
-		<span class="clickable" id="manage_jobs" onclick="load_model_grid('clocker', 'Job');">
-			Manage Jobs
-		</span>
-		
+			<div class="click">
+				<span class="clickable" id="manage_employees" onclick="load_model_grid('clocker', 'Employee');">
+					Manage Employees
+				</span>
+			</div>
+			
+			<div class="click">
+				<span class="clickable" id="manage_jobs" onclick="load_model_grid('clocker', 'Job');">
+					Manage Jobs
+				</span>
+			</div>
 		{% endif %}
-		<br/>
-		<span class="clickable" id="manage_shift_summaries" onclick="load_model_grid('clocker', 'ShiftSummary');">
-			Manage Shift Summaries
-		</span>
-		<br/>
-		<span class="clickable" id="manage_shift_shifts" onclick="load_model_grid('clocker', 'Shift');">
-			Manage Shifts
-		</span>
+		
+		<div class="click">
+			<span class="clickable" id="manage_shift_summaries" onclick="load_model_grid('clocker', 'ShiftSummary');">
+				Manage Shift Summaries
+			</span>
+		</div>
+		
+		<div class="click">
+			<span class="clickable" id="manage_shift_shifts" onclick="load_model_grid('clocker', 'Shift');">
+				Manage Shifts
+			</span>
+		</div>
 	</div>
 </div>	
 <div id="management_content" style="position: absolute;"></div>
