@@ -240,3 +240,14 @@ $(document).ajaxSend(function(event, xhr, settings) {
 });
 
 
+function toggle_section(id, e) {
+    $('#'+id).toggle('blind');
+    if ($(e).hasClass('ui-icon-circle-triangle-s')) {
+        $(e).removeClass('ui-icon-circle-triangle-s');
+        $(e).addClass('ui-icon-circle-triangle-e');
+    }
+    else if ( $(e).hasClass('ui-icon-circle-triangle-e') ) {
+        $(e).removeClass('ui-icon-circle-triangle-e');
+        $(e).addClass('ui-icon-circle-triangle-s');
+    }
+}
