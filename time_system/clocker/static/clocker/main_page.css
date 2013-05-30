@@ -154,8 +154,15 @@ div.job_slider
 	
 }
 
+div.visweb_link
+{
+ 	margin-left: 70px;
+ 	margin-top: 0.5em;	
+}
+
 td
 {
 	padding-left: 5px;
 	padding-right: 5px;
 }
+
