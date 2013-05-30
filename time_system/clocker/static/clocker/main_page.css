@@ -31,9 +31,14 @@ div#content
 	padding: 1em;
 }
 
-.visgence_logo
+div.visgence_logo
 {
-	margin: 15px;
+	margin: 0.9em;
+}
+
+div.timeclock_logo
+{
+	float: right;
 }
 
 .login
@@ -107,6 +112,12 @@ div.message
     	margin-bottom: 5px;
 }
 
+.submit
+{
+	margin-top: 1em;
+	margin-left: 2.8em;
+}
+
 input[type="text"], input[type="password"]
 {
     border-width: 2;
@@ -136,10 +147,9 @@ div.job_name
 	font-weight: bold;
 }
 
-div.total_time_text
+.total_time_text
 {
-	margin-top: 1em;
-	margin-left: 1.5em;
+	height: 80px;
 }
 
 div.miles_text
