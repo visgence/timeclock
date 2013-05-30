@@ -241,12 +241,14 @@ $(document).ajaxSend(function(event, xhr, settings) {
 
 
 function toggle_section(id, e) {
-    $('#'+id).toggle('blind');
+	console.log("foo");
     if ($(e).hasClass('ui-icon-circle-triangle-s')) {
+    	$('#'+id).hide({duration:0});
         $(e).removeClass('ui-icon-circle-triangle-s');
         $(e).addClass('ui-icon-circle-triangle-e');
     }
     else if ( $(e).hasClass('ui-icon-circle-triangle-e') ) {
+        $('#'+id).show({duration:0});
         $(e).removeClass('ui-icon-circle-triangle-e');
         $(e).addClass('ui-icon-circle-triangle-s');
     }

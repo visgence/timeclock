@@ -101,9 +101,10 @@ div.message
 
 .error
 {
-    position:relative;
-    top:40px;
-    left:170px;
+    	margin-left: auto;
+    	margin-right: auto;
+    	width: 200px;
+    	margin-bottom: 5px;
 }
 
 input[type="text"], input[type="password"]
@@ -133,9 +134,13 @@ div.job_name
 {
 	
 	font-weight: bold;
-	
 }
 
+div.total_time_text
+{
+	margin-top: 1em;
+	margin-left: 1.5em;
+}
 
 div.miles_text
 {
@@ -149,14 +154,14 @@ div.notes_text
 
 div.job_slider
 {
-	
-	width: 400px;
-	
+	width: 300px;	
 }
 
 div.visweb_link
 {
- 	margin-left: 70px;
+ 	margin-left: auto;
+ 	margin-right: auto;
+ 	width: 800px;
  	margin-top: 0.5em;	
 }
 

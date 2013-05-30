@@ -8,12 +8,15 @@
     <div >
 
         <div class="total_time_text">
-            Total Time Worked<input type="text" class="total_time" id="total_time" value="{{total_time}}" readonly="readonly"><br>
+        	<table border="0">
+        		<tr>
+                    <td><b>Total Time Worked</b></td>
+                    <td><input type="text" class="total_time" id="total_time" value="{{total_time}}" readonly="readonly"></td>
+               </tr>
+           </table>
         </div>
-
+    <table border="0">
         {% for job in jobs %}
-            <div  id="slider" >
-                <table border="0">
                     <tr>
                         <td>
                             <span class="ui-icon ui-icon-circle-triangle-e toggle-button"
@@ -26,18 +29,19 @@
                         <td><input type="text" class="job_time" id ="hours_{{job.id}}" readonly="readonly" /></td>
                         <td><div id="{{job.id}}" class="job_slider"></div></td>
                     </tr>
-                </table>        
+                       
                 
-                <div class="collapsible" id="sub-{{job.name|slugify}}" style="display:none;">
+                <tr class="collapsible" id="sub-{{job.name|slugify}}" style="display:none;">
+                    <td colspan="4">
                     <div class="miles_text">Miles:</div>
                     <input type="number" class="miles" value="0" id="miles_{{job.id}}">
                     
                     <div class="notes_text">Notes:</div>
                     <textarea  class="text_area" rows="5" cols="50" id="notes_{{job.id}}"></textarea>
-                </div>
-            </div> <!--End Slider-->
+                    </td>
+                </tr>
         {% endfor %} 
-
+    </table> 
         <input type="button" class="submit" value="Submit" onClick="submit_form()">
         <input type="hidden" id="emp_id" value="{{this_employee.id}}" onClick="submit_form()">
         <input type="hidden" id="shift_id" value="{{shift_id}}" onClick="submit_form()">
