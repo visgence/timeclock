@@ -1,19 +1,88 @@
+{% load dajaxice_templatetags %}
 <html>
     <head>
+    	{% dajaxice_js_import %}
+    	<script src="{{STATIC_URL}}clocker/js/js/jquery-1.8.3.min.js" type="text/javascript"></script>
+        <script src="{{STATIC_URL}}clocker/js/jquery-ui-1.10.3.custom.min.js" type="text/javascript"></script>
+        <script src="{{STATIC_URL}}clocker/js/js/jquery-ui-timepicker-addon.js" type="text/javascript"></script>
+        <script src="{{STATIC_URL}}clocker/js/js/management.js" type="text/javascript"></script>
+        <link rel="stylesheet" type="text/css" href="{{STATIC_URL}}clocker/css/jquery-ui-1.10.3.custom.min.css"/>
+        <link rel="stylesheet" type="text/css" href="{{STATIC_URL}}clocker/main_page.css"/>
+        
+        <script src="{{STATIC_URL}}js/chucho.js" type="text/javascript"></script>
+        <script type="text/javascript" src="{{STATIC_URL}}js/spin.min.js"></script>
+
+        <script type="text/javascript" src="{{STATIC_URL}}plugins/slickGrid/lib/jquery.event.drag-2.2.js"></script>    
+        <script type="text/javascript" src="{{STATIC_URL}}plugins/slickGrid/slick.core.js"></script>
+        <script type="text/javascript" src="{{STATIC_URL}}plugins/slickGrid/plugins/slick.rowselectionmodel.js"></script>
+        <script type="text/javascript" src="{{STATIC_URL}}plugins/slickGrid/slick.formatters.js"></script>
+        <script type="text/javascript" src="{{STATIC_URL}}plugins/slickGrid/slick.editors.js"></script>
+        <script type="text/javascript" src="{{STATIC_URL}}plugins/slickGrid/slick.grid.js"></script>
+
+        <link rel="stylesheet" type="text/css" href="{{STATIC_URL}}plugins/slickGrid/slick.grid.css">
+        <link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/grid.css">
+
+
+        <style>
+            #ui-datepicker-div { font-size: 12px; }
+        </style>
+        
+        <script>
+            $(document).ready(function() 
+            {
+                var dates = $( "#from, #to" ).datepicker(
+                {
+                    changeMonth: true,
+                    numberOfMonths: 1,
+                    dateFormat: 'yy-mm-dd',
+                    onSelect: function( selectedDate ) 
+                    {
+                        var option = this.id == "from" ? "minDate" : "maxDate",
+                        instance = $( this ).data( "datepicker" ),
+                        date = $.datepicker.parseDate(
+                        instance.settings.dateFormat ||
+                        $.datepicker._defaults.dateFormat,
+                        selectedDate, instance.settings );
+                        dates.not( this ).datepicker( "option", option, date );
+                    }
+                });
+            });
+        </script>	
         <!--aplication stylesheets-->
         <link rel="stylesheet" type="text/css" href="/static/clocker/main_page.css" />
+        <link rel="stylesheet" type="text/css" href="/static/clocker/micro_clearfix.css" />
+
+        {% block additional-headers %} {% endblock %}
     </head>
     <body>
-        <div id="content">
-            <div>
-                {% if user.first_name %}
-                    Hello {{user.first_name}} {{user.last_name}} (<a href="/logout">logout</a>)
-                {% endif %}
-            </div><!--end greeting-->
-    
-            <div class="login">
-                {% block content %} {%endblock%}
-            </div>
+    	<div id="container">
+			<div class="visgence_logo">
+				<a href="/timeclock"><img src="/static/images/Visgence_incwhite.png" height="80px" width="150px" /></a>
+
+			    <div class="timeclock_logo">
+			        <img src="/static/images/timeclock2.png" height="90px" width="320px" />
+			    </div>
+			</div>
+			
+			
+			
+	        <div id="content">
+	            
+	            {% if user.first_name %}
+					<div>	             
+		                Hello {{user.first_name}} {{user.last_name}} (<a href="/logout">logout</a>)
+		            </div><!--end greeting-->
+	            {% endif %}
+	            
+	            {% block content %} {%endblock%}
+	            
+			</div> 
+		</div>
+		
+		<div class="visweb_link"> 
+			<a href="http://www.visgence.com/" target="_blank"><img src="/static/images/Visgence_grey.png" height="50px" width="110px" /></a>
+		</div>
+		
     </body>
 </html>
 
