@@ -15,7 +15,8 @@ body
     background-image:url(../images/dark_fish_skin.png);
     border: 1px solid #aaaaaa;
     box-shadow: 0px 0px 15px #888888;
-    max-width: 800px;
+    min-width: 700px;
+    max-width: 90%;
 }
 
 div#content
@@ -164,7 +165,8 @@ div.visweb_link
 {
  	margin-left: auto;
  	margin-right: auto;
- 	width: 800px;
+ 	min-width: 700px;
+ 	max-width: 90%;
  	margin-top: 0.5em;	
 }
 
