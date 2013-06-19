@@ -21,7 +21,7 @@ AUTH_USER_MODEL = "clocker.Employee"
 
 MANAGERS = ADMINS
 
-SESSION_TIMEOUT = 7200
+SESSION_TIMEOUT = 28800
 
 def get_permission_obj():
     '''
