@@ -7,17 +7,17 @@
 			<div class="radio_buttons">
 				{% ifequal user_status "out" %}
 					 <input id="status-in" type="radio" name="status" value="In" checked="checked">
-					 <label for="status-in">Clock In</label>
+					 <label>Clock In</label>
 	                 <br>
 	                 <input id="status-out" type="radio" name="status" value="Out" disabled="disabled">
-	                 <label for="status-out">Clock Out</label>
+	                 <label>Clock Out</label>
 	                 <br>
 				{% else %}
 	                 <input id="status-in" type="radio" name="status" value="In" disabled="disabled">
-	                 <label for="status-in">Clock In</label>
+	                 <label>Clock In</label>
 	                 <br>
 	                 <input id="status-out" type="radio" name="status" value="Out" checked="checked">
-	                 <label for="status-out">Clock Out</label>
+	                 <label>Clock Out</label>
 	                 <br>
 	            {% endifequal %}
 	           		 <input type="submit" value="Submit">
