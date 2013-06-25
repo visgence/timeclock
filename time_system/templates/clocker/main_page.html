@@ -6,18 +6,24 @@
 		{% csrf_token %}
 			<div class="radio_buttons">
 				{% ifequal user_status "out" %}
-					 <input id="status-in" type="radio" name="status" value="In" checked="checked">
-					 <label>Clock In</label>
-	                 <br>
-	                 <input id="status-out" type="radio" name="status" value="Out" disabled="disabled">
-	                 <label>Clock Out</label>
+					 <label>
+                        <input id="status-in" type="radio" name="status" value="In" checked="checked">
+                         Clock In
+                     </label>
+	                 <label>
+                         <input id="status-out" type="radio" name="status" value="Out" disabled="disabled">
+                         Clock Out
+                     </label>
 	                 <br>
 				{% else %}
-	                 <input id="status-in" type="radio" name="status" value="In" disabled="disabled">
-	                 <label>Clock In</label>
-	                 <br>
-	                 <input id="status-out" type="radio" name="status" value="Out" checked="checked">
-	                 <label>Clock Out</label>
+	                 <label>
+                         <input id="status-in" type="radio" name="status" value="In" disabled="disabled">
+                         Clock In
+                     </label>
+	                 <label>
+                         <input id="status-out" type="radio" name="status" value="Out" checked="checked">
+                         Clock Out
+                     </label>
 	                 <br>
 	            {% endifequal %}
 	           		 <input type="submit" value="Submit">
