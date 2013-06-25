@@ -86,11 +86,6 @@ div#hour_management
     margin-bottom: 1em;
 }
 
-.radio_buttons label
-{
-    display: inline-block;
-}
-
 .from
 {
     position:relative:
