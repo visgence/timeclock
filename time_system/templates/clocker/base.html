@@ -8,6 +8,7 @@
         <script src="{{STATIC_URL}}clocker/js/jquery-ui-1.10.3.custom.min.js" type="text/javascript"></script>
         <script src="{{STATIC_URL}}clocker/js/js/jquery-ui-timepicker-addon.js" type="text/javascript"></script>
         <script src="{{STATIC_URL}}clocker/js/js/management.js" type="text/javascript"></script>
+        <script src="{{STATIC_URL}}clocker/js/js/utils.js" type="text/javascript"></script>
     	 
         <script src="{{STATIC_URL}}clocker/js/js/jquery.tmpl.js" type="text/javascript"></script>
         <script src="{{STATIC_URL}}clocker/js/js/knockout-2.2.1.js" type="text/javascript"></script>
@@ -74,6 +75,8 @@
 	            {% if user.first_name %}
 					<div>	             
 		                Hello {{user.first_name}} {{user.last_name}} (<a href="/logout">logout</a>)
+                        <br/>
+                        <span style="font-size: 8pt;">[<a href="#" onclick="changePassDialog();">Change password</a>]</span>
 		            </div><!--end greeting-->
 	            {% endif %}
 	            

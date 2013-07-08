@@ -26,6 +26,12 @@ urlpatterns = patterns('clocker.views',
     url(dajaxice_config.dajaxice_url, include('dajaxice.urls')),
 )
 
+urlpatterns += patterns('clocker.password',
+
+    url(r'^passwordForm/$', 'renderForm'),
+    url(r'^changePassword/$', 'changePassword'),
+
+)
 
 if DEBUG:
     urlpatterns += patterns(
