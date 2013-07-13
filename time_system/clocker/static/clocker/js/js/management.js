@@ -2,7 +2,7 @@
 function load_model_grid(app, model)
 {
     console.log("foo");
-    var url = "/utilities/model_editor/"+app+"/"+model+"/";
+    var url = "/chucho/model_editor/"+app+"/"+model+"/";
     $.get(url, {}, function(data) {
         $('#content').html(data);
         var back_link = $("<a></a>", {

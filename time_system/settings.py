@@ -105,14 +105,12 @@ STATICFILES_DIRS = (
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
-    'dajaxice.finders.DajaxiceFinder',
 #    'django.contrib.staticfiles.finders.DefaultStorageFinder',
 )
 
 # Make this unique, and don't share it with anybody.
 SECRET_KEY = '1=_^^$ol#3vhymf5qt9#ecky6cnq48_@u&b-%_%!w(ou12y0o^'
 
-# Added for dajaxice context_processors.request might be the only needed...
 TEMPLATE_CONTEXT_PROCESSORS = ( 
     'django.contrib.auth.context_processors.auth',
     'django.core.context_processors.debug',
@@ -152,7 +150,6 @@ INSTALLED_APPS = (
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.sites',
-    'dajaxice',
     'django.contrib.messages',
     'django.contrib.staticfiles',
     # Uncomment the next line to enable the admin:
