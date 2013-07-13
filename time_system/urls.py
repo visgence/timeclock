@@ -2,10 +2,7 @@ from django.conf.urls import patterns, include, url
 from django.views.generic import RedirectView
 # Uncomment the next two lines to enable the admin:
 from django.contrib import admin
-from dajaxice.core import dajaxice_config, dajaxice_autodiscover
-from settings import APP_PATH, DEBUG
 admin.autodiscover()
-dajaxice_autodiscover()
 
 #normal views
 urlpatterns = patterns('clocker.views',
@@ -22,8 +19,7 @@ urlpatterns = patterns('clocker.views',
 
 
     # Uncomment the next line to enable the admin:
-    url(r'(?i)^utilities/', include('chucho.urls')),                                                                                                                                                
-    url(dajaxice_config.dajaxice_url, include('dajaxice.urls')),
+    url(r'chucho/', include('chucho.urls')),                                                                                                                                                
 )
 
 urlpatterns += patterns('clocker.password',
@@ -32,13 +28,6 @@ urlpatterns += patterns('clocker.password',
     url(r'^changePassword/$', 'changePassword'),
 
 )
-
-if DEBUG:
-    urlpatterns += patterns(
-        '',
-        url(r'^images\/(?P<path>.+)$', 'django.views.static.serve', {
-            'document_root': APP_PATH + 'chucho/static/plugins/slickGrid/images'})
-    )
 
 #login views
 urlpatterns += patterns('clocker.login',
