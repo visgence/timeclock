@@ -54,7 +54,7 @@ class EmployeeManager(BaseUserManager, ChuchoManager):
             raise TypeError("%s is not an Auth User" % str(user))
 
         if filter_args is not None and len(filter_args) > 0:
-            objs = self.filter(**filter_args)
+            objs = self.advanced_search(**filter_args)
         elif omni is not None:
             objs = self.search(omni)
         else:
@@ -144,6 +144,8 @@ class Employee(AbstractBaseUser):
         'date_joined': {'grid_column': False},
         'last_login': {'grid_column': False, '_editable': False}
         }
+
+    search_fields = ['username', 'first_name', 'last_name']
 
     class Meta:
         ordering = ['username']
@@ -317,7 +319,7 @@ class ShiftManager(ChuchoManager):
             raise TypeError("%s is not an Auth User" % str(user))
 
         if filter_args is not None and len(filter_args) > 0:
-            objs = self.filter(**filter_args)
+            objs = self.advanced_search(**filter_args)
         elif omni is not None:
             objs = self.search(omni)
         else:
@@ -456,7 +458,7 @@ class ShiftSummaryManager(ChuchoManager):
             raise TypeError("%s is not an Auth User" % str(user))
         
         if filter_args is not None and len(filter_args) > 0:
-            objs = self.filter(**filter_args)
+            objs = self.advanced_search(**filter_args)
         elif omni is not None:
             objs = self.search(omni)
         else:
@@ -551,7 +553,7 @@ class JobManager(ChuchoManager):
             raise TypeError("%s is not an Auth User" % str(user))
        
         if filter_args is not None:
-            objs = self.filter(**filter_args)
+            objs = self.advanced_search(**filter_args)
         elif omni is not None:
             objs = self.search(omni)
         else:
@@ -576,7 +578,7 @@ class JobManager(ChuchoManager):
 
         if user.is_superuser:
             if filter_args is not None and len(filter_args) > 0:
-                return self.filter(**filter_args)
+                return self.advanced_search(**filter_args)
             elif omni is not None:
                 print omni
                 return self.search(omni)
