@@ -153,6 +153,12 @@ class Employee(AbstractBaseUser):
     def __unicode__(self):
         return self.first_name + " " + self.last_name
 
+    def save(self, *args, **kwargs):
+        self.first_name = self.first_name.strip()
+        self.last_name = self.last_name.strip()
+        self.username = self.username.strip()
+        super(Employee, self).save(*args, **kwargs)
+
     def can_view(self, user):
         '''
         ' Checks if a User instance is allowed to view this object instance or not.
