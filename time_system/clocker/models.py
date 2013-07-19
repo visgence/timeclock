@@ -227,24 +227,23 @@ class Employee(AbstractBaseUser):
         TODO: It is possible for an admin to never be clocked into our time system. 
         """
 
-        max_id = Shift.objects.filter(employee=self).aggregate(employee=models.Max('id'))
+        shift = Shift.objects.filter(employee=self, time_out=None)
+        if(shift.count() > 1):
+            raise Exception("Error, you are clocked in more than once!")
+        
+        #if(shift.employee == None):
+        #    stuff = {'status':"out", 'max_record':None}
+        #    return stuff
 
-        #print "max: %s" %  max_id #DEBUG
-
-        if(max_id['employee'] == None):
-            stuff = {'status':"out", 'max_record':None}
-            return stuff
-
-        record = Shift.objects.get(id=max_id['employee'])
-        stuff = {
-                    'max_record':record
-                }
-
-        if(record == None or record.time_out != None):
+        stuff = {}
+        if(shift.count() == 0):
             stuff['status'] = "out"
+            max_record = Shift.objects.all().aggregate(models.Max('id'))
+            stuff['max_record'] = Shift.objects.get(id=max_record['id__max'])
             return stuff 
        
         stuff['status'] = "in"
+        stuff['max_record'] = shift[0]
         return stuff 
 
     def get_current_time(self):
