@@ -160,6 +160,7 @@ class Employee(AbstractBaseUser):
         self.username = self.username.strip()
         super(Employee, self).save(*args, **kwargs)
 
+
     def can_view(self, user):
         '''
         ' Checks if a User instance is allowed to view this object instance or not.
@@ -177,6 +178,7 @@ class Employee(AbstractBaseUser):
             return True
 
         return False
+
 
     def clock_in(self):
         '''
@@ -207,8 +209,10 @@ class Employee(AbstractBaseUser):
         """
       
         shift = self.getCurrentShift()
+        now = datetime.now()
         assert self.isClockedIn(), "Error clocking Employee out. Employee is already clocked out"
         assert shift is not None, "Error clocking Employee out. Employee has never clocked in before."
+        assert now >= shift.time_in, "Error clocking Employee out. It appears you are clocked in into the future."
         
         shift.time_out = datetime.now()
         try:

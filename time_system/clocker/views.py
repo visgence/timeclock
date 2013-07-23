@@ -184,6 +184,7 @@ def main_page(request):
             #Clocking out
             if(status == "Out" or status == "out"):
                 extra = get_extra(user_name, "out", "")
+                print extra
                 #Go to summary page after clocking out
                 if(extra['total_time'] != 0):
                     return render_to_response('shift_summary.html', extra , context_instance=RequestContext(request))
@@ -198,8 +199,7 @@ def main_page(request):
     except Employee.DoesNotExist:
         extra = get_extra(user_name, "", "employee_does_not_exists")
         return render_to_response('main_page.html', extra, context_instance=RequestContext(request))
-   
-    print "getting extra"
+    
     extra = get_extra(user_name, "", "")
     return render_to_response('main_page.html', extra, context_instance=RequestContext(request))
 
@@ -216,71 +216,66 @@ def get_extra(username, status, error):
     Returns:
         A dictionary with all the stuff needed by the main page so that it can return.
     '''
-
-    try: 
-        extra = {}
         
-        #Employee is clocking out and there is no error thus far
-        if((status == "Out" or status == "out") and error == ""):
-            extra['employee'] = Employee.objects.all()
-            extra['this_employee'] = Employee.objects.get(username=username)
-            extra['is_admin'] = extra['this_employee'].is_superuser
-            shiftOut = extra['this_employee'].clock_out()
-            extra['status'] = extra['this_employee'].isClockedIn()
-            extra['time_stamp'] = shiftOut.time_out
-            extra['message'] = "You are clocked out.  You last clocked out at "
-            extra['shift_id'] = shiftOut.id
-                
-            time_diff = shiftOut.time_out - shiftOut.time_in
-            total_time = round_seconds(time_diff.total_seconds())
-            if total_time < 60:
-                total_time = 0 
-
-            extra['total_time'] = total_time
-            extra['jobs'] = list(Job.objects.filter(is_active = True))
-
-        #Employee is clocking in and there is no error thus far
-        elif((status == "In" or status == "in") and error == ""):
-            extra['employee'] = Employee.objects.all()
-            extra['this_employee'] = Employee.objects.get(username=username)
-            extra['is_admin'] = extra['this_employee'].is_superuser
-            shiftIn = extra['this_employee'].clock_in()
-            extra['status'] = extra['this_employee'].isClockedIn()
-            extra['time_stamp'] = shiftIn.time_in
-            extra['message'] = "You have clocked in succesfully"
+    extra = {}
+    
+    #Employee is clocking out and there is no error thus far
+    if((status == "Out" or status == "out") and error == ""):
+        extra['employee'] = Employee.objects.all()
+        extra['this_employee'] = Employee.objects.get(username=username)
+        extra['is_admin'] = extra['this_employee'].is_superuser
+        shiftOut = extra['this_employee'].clock_out()
+        extra['status'] = extra['this_employee'].isClockedIn()
+        extra['time_stamp'] = shiftOut.time_out
+        extra['message'] = "You are clocked out.  You last clocked out at "
+        extra['shift_id'] = shiftOut.id
             
+        time_diff = shiftOut.time_out - shiftOut.time_in
+        total_time = round_seconds(time_diff.total_seconds())
+        if total_time < 60:
+            total_time = 0 
 
-        #Technically this shouldn't ever happen here but just in case...
-        elif(status == "" and error == "employee_does_not_exist"):
-            extra['error'] = "exception"
-            extra['user_name'] = username
+        extra['total_time'] = total_time
+        extra['jobs'] = list(Job.objects.filter(is_active = True))
 
-        #If an employee is logged in and navigates to the main page.
-        elif(status == "" and error == ""):
-            extra['employee'] = Employee.objects.all()
-            extra['this_employee'] = Employee.objects.get(username=username)
-            extra['is_admin'] = extra['this_employee'].is_superuser
-            shift = extra['this_employee'].getCurrentShift()
-            extra['status'] = extra['this_employee'].isClockedIn()
-           
-            if(not extra['status']):
-                extra['message'] = "You are clocked out.  You last clocked out at "
+    #Employee is clocking in and there is no error thus far
+    elif((status == "In" or status == "in") and error == ""):
+        extra['employee'] = Employee.objects.all()
+        extra['this_employee'] = Employee.objects.get(username=username)
+        extra['is_admin'] = extra['this_employee'].is_superuser
+        shiftIn = extra['this_employee'].clock_in()
+        extra['status'] = extra['this_employee'].isClockedIn()
+        extra['time_stamp'] = shiftIn.time_in
+        extra['message'] = "You have clocked in succesfully"
+        
 
-                if shift is None:
-                    extra['message'] = "You've never clocked in before. Please clock in to get started!"
-                else:
-                    extra['time_stamp'] = shift.time_out
-            elif(extra['status']):
-                extra['message'] = "You are clocked in.  You clocked in at "
-                extra['time_stamp'] = shift.time_in
+    #Technically this shouldn't ever happen here but just in case...
+    elif(status == "" and error == "employee_does_not_exist"):
+        extra['error'] = "exception"
+        extra['user_name'] = username
 
-        return extra
-    except Exception as e:
-        print e
-        #This takes care of admins who are not Employee's and don't have any shift records
-        user= Employee.objects.get(username=username)  
-        extra ={'is_admin':user.is_superuser, 'employee':Employee.objects.all(),'user_status':'out', 'error':"none", 'status':"none"}
-        return extra 
+    #If an employee is logged in and navigates to the main page.
+    elif(status == "" and error == ""):
+        extra['employee'] = Employee.objects.all()
+        extra['this_employee'] = Employee.objects.get(username=username)
+        extra['is_admin'] = extra['this_employee'].is_superuser
+        shift = extra['this_employee'].getCurrentShift()
+        extra['status'] = extra['this_employee'].isClockedIn()
+       
+        if(not extra['status']):
+            extra['message'] = "You are clocked out.  You last clocked out at "
+
+            if shift is None:
+                extra['message'] = "You've never clocked in before. Please clock in to get started!"
+            else:
+                extra['time_stamp'] = shift.time_out
+        elif(extra['status']):
+            extra['message'] = "You are clocked in.  You clocked in at "
+            if shift.time_in >= datetime.now():
+                extra['message'] = "WARNING! It appears you are clocked in into the future. Please fix this using the Manage Shift tool."
+            extra['time_stamp'] = shift.time_in
+
+    return extra
 
 
 def round_seconds(seconds):
