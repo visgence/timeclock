@@ -201,12 +201,11 @@ class Employee(AbstractBaseUser):
         
 
     def clock_out(self):
-        """
-        Clocks an employee out.  
-        
-        Returns: 
-            The error message "none" if the user clocked out and "out" if the user was not able to clock out.
-        """
+        '''
+        ' Clocks an employee out.  
+        ' 
+        ' Returns: The shift used to clock the employee out with.
+        '''
       
         shift = self.getCurrentShift()
         now = datetime.now()
