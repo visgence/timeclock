@@ -2,7 +2,7 @@
 {%block content%}
 	<div class="login-submit">
 		<div style="color:red" class="error">{{error}}</div>
-		<form action="../login/" method="post">
+		<form action="/login/" method="post">
 		    {% csrf_token %}
 			<div class="user_name"> 
 				<label for="id_username">Username:</label> <input type="text" name="username" maxlength="30" /> 

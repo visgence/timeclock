@@ -88,6 +88,24 @@
 		</div>
 		
     </body>
+
+    <script>
+        $(function() {
+            $(document).ajaxComplete(function(event, xhr, settings) {
+                
+                if(xhr.responseText !== '') {
+                    try {
+                        jsonData = JSON.parse(xhr.responseText);
+                        if(jsonData.hasOwnProperty('status') && jsonData['status'] == 302) {
+                            window.location = jsonData['location'];
+                        }
+                    } catch(e) {console.log(e)}
+                }
+
+            }); 
+        });
+    </script>
+
 </html>
 
 
