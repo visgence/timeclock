@@ -1,6 +1,7 @@
 from django.db import models
 from django.db.models import Q
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
+from django.core.exceptions import ValidationError
 from datetime import datetime
 from decimal import Decimal
 import re
@@ -178,23 +179,24 @@ class Employee(AbstractBaseUser):
         return False
 
     def clock_in(self):
-        """
-        Clocks an employee in.  
+        '''
+        ' Clocks an employee in.  
+        ' 
+        ' Returns: The newly saved shift if clocked in successfully.
+        '''
+      
+        assert not self.isClockedIn(), "Error clocking Employee in. Employee is already clocked in."
+
+        shift = Shift(employee=self, time_in=datetime.now())
+        try:
+            shift.full_clean()
+            shift.save()
+        except ValidationError as e:
+            msg = "An error occured while clocking you in. %s" % str(e)
+            raise ValidationError(msg)
         
-        Returns: 
-            The error message "none" if the user clocked in and "in" if the user was not able to clock in
-        """
-
-        dictionary = self.which_clock()
-
-        #Employee has never clocked in before or has previously clocked out
-        if(dictionary['status'] == "in"):
-            return "in"
-        else:
-            time = Shift(employee=self,
-                        time_in=datetime.now())
-            time.save()
-            return "none"
+        return shift
+        
 
     def clock_out(self):
         """
@@ -203,19 +205,59 @@ class Employee(AbstractBaseUser):
         Returns: 
             The error message "none" if the user clocked out and "out" if the user was not able to clock out.
         """
+      
+        shift = self.getCurrentShift()
+        assert self.isClockedIn(), "Error clocking Employee out. Employee is already clocked out"
+        assert shift is not None, "Error clocking Employee out. Employee has never clocked in before."
         
-        dictionary = self.which_clock()
+        shift.time_out = datetime.now()
+        try:
+            shift.full_clean()
+            shift.save()
+        except ValidationError as e:
+            msg = "An error occured while clocking you out. %s" % str(e)
+            raise ValidationError(msg)
+        
+        return shift
+       
 
-        #Employee has never clocked out before or has not clocked in yet.
-        if(dictionary['status'] == "out"):
-            return "out"
-        else:
-            time = Shift(id=dictionary['max_record'].id,
-                        employee=dictionary['max_record'].employee,
-                        time_in=dictionary['max_record'].time_in,
-                        time_out=datetime.now())
-            time.save()
-            return "none"
+    def getCurrentShift(self):
+        '''
+        ' Gets the most recent Shift record for an employee clocked in or out.
+        '
+        ' Returns: Shift object or None if Employee does not have any Shift records
+        '''
+
+        try:
+            return Shift.objects.get(employee=self, time_out=None)
+        except Shift.DoesNotExist:
+            pass
+        except Shift.MultipleObjectsReturned:
+            msg = "It appears you have multiple shifts that say your clocked in.  Please use the Manage Shifts tool to fix this."
+            raise Shift.MultipleObjectsReturned(msg)
+
+        try:
+            return Shift.objects.filter(employee=self).latest('time_out')
+        except Shift.DoesNotExist:
+            return None
+
+ 
+    def isClockedIn(self):
+        '''
+        ' Check if a user is clocked in or out.
+        ' 
+        ' Returns: True if clocked in and False otherwise
+        '''
+        
+        try:
+            Shift.objects.get(employee=self, time_out=None)
+            return True
+        except Shift.DoesNotExist:
+            return False
+        except Shift.MultipleObjectsReturned:
+            msg = "It appears you have multiple shifts that say your clocked in.  Please use the Manage Shifts tool to fix this."
+            raise Shift.MultipleObjectsReturned(msg)
+        
 
     def which_clock(self):
         """
@@ -245,6 +287,7 @@ class Employee(AbstractBaseUser):
         stuff['status'] = "in"
         stuff['max_record'] = shift[0]
         return stuff 
+
 
     def get_current_time(self):
 

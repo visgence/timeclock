@@ -5,7 +5,7 @@
 	<form name="main_page" method="post">
 		{% csrf_token %}
 			<div class="radio_buttons">
-				{% ifequal user_status "out" %}
+				{% if not status %}
 					 <label>
                         <input id="status-in" type="radio" name="status" value="In" checked="checked">
                          Clock In
@@ -25,26 +25,19 @@
                          Clock Out
                      </label>
 	                 <br>
-	            {% endifequal %}
+	            {% endif %}
 	           		 <input type="submit" value="Submit">
 			</div>
 	</form>
 	
 	<div class="message">
 	
-		{% ifequal error "none" %}
+        {{ message }}
+        {{ time_stamp }}
+		
+        {% ifequal error "none" %}
 	
-			{% ifequal status "out" %}  
-	        	{{ message }}
-	            {{ time_stamp }}
-	        {% endifequal %}
-	
-	        {% ifequal status "in" %}
-	        	{{ message }}
-	            {{ time_stamp }}
-	        {% endifequal %}
-	                            
-			{% else %}
+		{% else %}
 		
 		    {% ifequal error "exception" %}
 		    	An unexpected error occured.  Maybe try logging out and then back in.
