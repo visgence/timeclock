@@ -2,15 +2,10 @@ from django.shortcuts import render_to_response
 from django.template import RequestContext
 from clocker.models import Employee, Shift, Job
 from datetime import timedelta, datetime, date
-from clocker.check_access import check_access
 from decimal import *
 import check_db
 
 def total_hours(request):
-    #make sure the employee is logged in
-    response = check_access(request)
-    if(not isinstance(response, Employee)):
-        return response
 
     if(request.method == 'POST'):
         check_db.main()
@@ -165,11 +160,6 @@ def get_seconds(date):
 
 def main_page(request):
     
-    #Make sure we're logged in otherwise go log in
-    response = check_access(request)
-    if(not isinstance(response, Employee)):
-        return response
-
     user_name = request.user.username
 
     try:

@@ -6,12 +6,6 @@ admin.autodiscover()
 
 #normal views
 urlpatterns = patterns('clocker.views.views',
-    # Examples:
-    # url(r'^$', 'time_system.views.home', name='home'),
-    # url(r'^time_system/', include('time_system.foo.urls')),
-
-    # Uncomment the admin/doc line below to enable admin documentation:
-    # url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
 
     url(r'^timeclock/$', 'main_page'),
     url(r'^timeclock/hours/$', 'total_hours'),
@@ -31,8 +25,9 @@ urlpatterns += patterns('clocker.views.password',
 
 #login views
 urlpatterns += patterns('clocker.views.login',
-    url(r'^timeclock/login/$', 'view'),
-    url(r'^logout/$', 'logout'),
+    url(r'^timeclock/login/$', 'renderLogin', name="render-login"),
+    url(r'^login/$', 'loginUser', name="login"),
+    url(r'^logout/$', 'logoutUser', name="logout"),
 )
 
 #shift_summary stuff

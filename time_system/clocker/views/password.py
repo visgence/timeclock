@@ -7,18 +7,10 @@ try:
 except ImportError:
     import json
 
-from clocker.check_access import check_access
-from clocker.models import Employee
-
 
 
 def renderForm(request):
-
-    response = check_access(request)
-    if(not isinstance(response, Employee)):
-        error = "Sorry but you do not have permission to access this part of the site"
-        return HttpResponse(json.dumps({'accessError': error}), mimetype="application/json")
-
+    
     t = loader.get_template('passwordForm.html')
     c = RequestContext(request, {})
     return HttpResponse(json.dumps({'html': t.render(c)}), mimetype="application/json")
@@ -34,12 +26,8 @@ def changePassword(request):
     '              oldPassword - string containing user's current password.
     '              newPassword - string containing password to change to.
     '''
-
-    employee = check_access(request)
-    if(not isinstance(employee, Employee)):
-        error = "Sorry but you do not have permission to access this part of the site"
-        return HttpResponse(json.dumps({'accessError': error}), mimetype="application/json")
-
+    
+    employee = request.user
     jsonData = request.REQUEST.get('jsonData', None)
 
     try:

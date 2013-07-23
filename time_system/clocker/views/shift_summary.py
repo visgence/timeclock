@@ -1,14 +1,9 @@
 from django.http import HttpResponseRedirect
-from clocker.check_access import check_access
 from clocker.models import ShiftSummary, Shift, Employee, Job
 from django.utils import simplejson
 
 
 def summary(request):
-
-    response = check_access(request)
-    if(not isinstance(response, Employee)):
-        return response
 
     if(request.method == 'POST'):
         json = simplejson.loads(request.POST['json'])
