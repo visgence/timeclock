@@ -263,45 +263,6 @@ class Employee(AbstractBaseUser):
             raise Shift.MultipleObjectsReturned(msg)
         
 
-    def which_clock(self):
-        """
-        Checks to see whether an employee is clocked in or out. 
-
-        Returns:
-            A dictionary with the status of the employee and the maximum time record that was used to determine this.
-            Keys: 'status' 'max_record'
-        TODO: It is possible for an admin to never be clocked into our time system. 
-        """
-
-        shift = Shift.objects.filter(employee=self, time_out=None)
-        if(shift.count() > 1):
-            raise Exception("Error, you are clocked in more than once!")
-        
-        #if(shift.employee == None):
-        #    stuff = {'status':"out", 'max_record':None}
-        #    return stuff
-
-        stuff = {}
-        if(shift.count() == 0):
-            stuff['status'] = "out"
-            max_record = Shift.objects.all().aggregate(models.Max('id'))
-            stuff['max_record'] = Shift.objects.get(id=max_record['id__max'])
-            return stuff 
-       
-        stuff['status'] = "in"
-        stuff['max_record'] = shift[0]
-        return stuff 
-
-
-    def get_current_time(self):
-
-        dictionary = self.which_clock()
-
-        if(dictionary['status'] == "in"):
-            time_in = dictionary['max_record'].time_in
-            time_now = datetime.now()
-
-
 class ShiftManager(ChuchoManager):
     def get_editable_by_pk(self, user, pk):
         '''
