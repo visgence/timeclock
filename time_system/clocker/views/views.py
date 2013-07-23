@@ -1,8 +1,8 @@
 from django.shortcuts import render_to_response 
 from django.template import RequestContext
-from models import Employee, Shift, Job
+from clocker.models import Employee, Shift, Job
 from datetime import timedelta, datetime, date
-from check_access import check_access
+from clocker.check_access import check_access
 from decimal import *
 import check_db
 
@@ -35,8 +35,6 @@ def total_hours(request):
         period_end = period_range['end']
         week_begin = date(period_begin.year, period_begin.month, period_begin.day)
         week_end = week_begin + timedelta(days = 6)
-        #print "beginning period %s" % period_begin #DEBUG 
-        #print "ending period %s" % period_end 
 
 
         week = {'weekly_total':Decimal(0.0), 'weekly_adjusted': Decimal(0.0), 'weekly_overtime': Decimal(0.0), 'days':[]}
@@ -184,7 +182,7 @@ def main_page(request):
             #Clocking out
             if(status == "Out" or status == "out"):
                 extra = get_extra(user_name, "out", "")
-                print extra
+                
                 #Go to summary page after clocking out
                 if(extra['total_time'] != 0):
                     return render_to_response('shift_summary.html', extra , context_instance=RequestContext(request))

@@ -4,7 +4,7 @@ from django.template.context import RequestContext
 from django.core.context_processors import csrf
 from django.contrib.auth import authenticate, login
 from django.contrib.auth import logout as auth_logout
-from check_access import check_access
+from clocker.check_access import check_access
 from clocker.models import Employee
 
 def view(request):

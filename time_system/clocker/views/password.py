@@ -7,7 +7,7 @@ try:
 except ImportError:
     import json
 
-from check_access import check_access
+from clocker.check_access import check_access
 from clocker.models import Employee
 
 

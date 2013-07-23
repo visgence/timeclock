@@ -1,6 +1,6 @@
 from django.http import HttpResponseRedirect
-from check_access import check_access
-from models import ShiftSummary, Shift, Employee, Job
+from clocker.check_access import check_access
+from clocker.models import ShiftSummary, Shift, Employee, Job
 from django.utils import simplejson
 
 
