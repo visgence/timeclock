@@ -5,7 +5,7 @@ from django.contrib import admin
 admin.autodiscover()
 
 #normal views
-urlpatterns = patterns('clocker.views',
+urlpatterns = patterns('clocker.views.views',
     # Examples:
     # url(r'^$', 'time_system.views.home', name='home'),
     # url(r'^time_system/', include('time_system.foo.urls')),
@@ -22,7 +22,7 @@ urlpatterns = patterns('clocker.views',
     url(r'chucho/', include('chucho.urls')),                                                                                                                                                
 )
 
-urlpatterns += patterns('clocker.password',
+urlpatterns += patterns('clocker.views.password',
 
     url(r'^passwordForm/$', 'renderForm'),
     url(r'^changePassword/$', 'changePassword'),
@@ -30,12 +30,12 @@ urlpatterns += patterns('clocker.password',
 )
 
 #login views
-urlpatterns += patterns('clocker.login',
+urlpatterns += patterns('clocker.views.login',
     url(r'^timeclock/login/$', 'view'),
     url(r'^logout/$', 'logout'),
 )
 
 #shift_summary stuff
-urlpatterns += patterns('clocker.shift_summary',
+urlpatterns += patterns('clocker.views.shift_summary',
     url(r'^timeclock/shift_summary/$', 'summary'),
 )
