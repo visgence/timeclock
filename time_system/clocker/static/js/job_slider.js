@@ -148,7 +148,6 @@ function time_to_sec(time)
 
 function submit_form()
 {
-
     //If the total time has not been spent, alert
     if($("#total_time").val() != "00:00")
     {
@@ -184,18 +183,20 @@ function submit_form()
     });
     
     json.shift_summary = job_array;
-        
-    $.ajax
-    ({
-      type: 'POST',
-      url: '/timeclock/shift_summary/',
-      data:'json=' +JSON.stringify(json),
-      success: function(){window.location = "/timeclock"},
-      dataType: 'html'
-    });
-
-    //$('#debug').html(JSON.stringify(json));
+    jsonData = JSON.stringify(json);
     
+    $.post('/timeclock/shift_summary/', {'jsonData': jsonData}, function(resp) {
+        console.log(resp);
+        if(resp.hasOwnProperty('error')) {
+            var btn = [{
+                text: "Ok",
+                click: function(){ $(this).dialog('close'); }
+            }];
+            makeDialog(resp.error, 'Error', btn);
+        }
+        else
+            console.log('yay saved jsut fine');
+    });
 }
 
 /*The following is needed in order for django's csrf token protection to play
