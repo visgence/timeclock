@@ -185,17 +185,13 @@ function submit_form()
     json.shift_summary = job_array;
     jsonData = JSON.stringify(json);
     
-    $.post('/timeclock/shift_summary/', {'jsonData': jsonData}, function(resp) {
-        console.log(resp);
-        if(resp.hasOwnProperty('error')) {
-            var btn = [{
-                text: "Ok",
-                click: function(){ $(this).dialog('close'); }
-            }];
-            makeDialog(resp.error, 'Error', btn);
-        }
-        else
-            console.log('yay saved jsut fine');
+    $.post('/timeclock/shift_summary/', {'jsonData': jsonData})
+    .fail(function(resp) {
+        var btn = [{
+            text: "Ok",
+            click: function(){ $(this).dialog('close'); }
+        }];
+        makeDialog(resp.responseText, 'Error', btn);
     });
 }
 

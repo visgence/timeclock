@@ -1,4 +1,4 @@
-from django.http import HttpResponseRedirect, HttpResponse
+from django.http import HttpResponseRedirect, HttpResponse, HttpResponseServerError
 from django.views.decorators.http import require_POST
 from django.core.exceptions import ValidationError
 from clocker.models import ShiftSummary, Shift, Employee, Job
@@ -15,20 +15,17 @@ def summary(request):
     try:
         jsonData = json.loads(request.POST['jsonData'])
     except Exception:
-        msg = "Error getting json data for shift summary"
-        return HttpResponse(json.dumps({'error': msg}), content_type="application/json")
+        return HttpResponseServerError("Error getting json data for shift summary")
     
     try:
         employee = Employee.objects.get(id = jsonData['emp_id'])
     except Employee.DoesNotExist:
-        msg = "Error getting employee while creating shift summary"
-        return HttpResponse(json.dumps({'error': msg}), content_type="application/json")
+        return HttpResponseServerError("Error getting employee while creating shift summary")
     
     try:
         shift = Shift.objects.get(id = jsonData['shift_id'], employee=employee)
     except Shift.DoesNotExist:
-        msg = "Error getting shift while creating shift summary for employee %s" % str(employee)
-        return HttpResponse(json.dumps({'error': msg}), content_type="application/json")
+        return HttpResponseServerError("Error getting shift while creating shift summary for employee %s" % str(employee))
     
     for summary in jsonData['shift_summary']:
         kwargs = {'employee': employee, 'shift': shift}
@@ -37,16 +34,15 @@ def summary(request):
         kwargs['note'] = summary['notes']
         try:
             kwargs['job'] = Job.objects.get(id = summary['job_id'])
-        except Job.DoesNotExist:
-            msg = "Error getting job while creating shift summary for employee %s" % str(employee)
-            return HttpResponse(json.dumps({'error': msg}), content_type="application/json")
+        except Job.DoesNotExist: 
+            return HttpResponseServerError("Error getting job while creating shift summary for employee %s" % str(employee))
 
         shift_summary = ShiftSummary(**kwargs)
         try:
             shift_summary.full_clean(exclude="note")
-        except ValidationError as e:
+        except ValidationError as e: 
             msg = "New shift summary didn't pass validation for employee %s: %s" % (str(employee), str(e))
-            return HttpResponse(json.dumps({'error': msg}), content_type="application/json")
+            return HttpResponseServerError(msg)
 
         shift_summary.save()
     
