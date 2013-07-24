@@ -7,13 +7,19 @@ admin.autodiscover()
 #normal views
 urlpatterns = patterns('clocker.views.views',
 
-    url(r'^timeclock/$', 'main_page'),
-    url(r'^timeclock/hours/$', 'total_hours'),
     url(r'^$', RedirectView.as_view(url='/timeclock/')),
+    url(r'^timeclock/hours/$', 'total_hours', name="get-total-hours"),
+    url(r'chucho/', include('chucho.urls')),
+)
 
 
-    # Uncomment the next line to enable the admin:
-    url(r'chucho/', include('chucho.urls')),                                                                                                                                                
+urlpatterns += patterns('clocker.views.clockEmployee',
+    url(r'^timeclock/clocker/$', 'clockEmployee', name="clock-employee"),
+)
+
+
+urlpatterns += patterns('clocker.views.mainPage',
+    url(r'^timeclock/$', 'mainPage', name="render-main-page"),
 )
 
 urlpatterns += patterns('clocker.views.password',
@@ -25,6 +31,7 @@ urlpatterns += patterns('clocker.views.password',
 
 #login views
 urlpatterns += patterns('clocker.views.login',
+
     url(r'^timeclock/login/$', 'renderLogin', name="render-login"),
     url(r'^login/$', 'loginUser', name="login"),
     url(r'^logout/$', 'logoutUser', name="logout"),
