@@ -38,6 +38,7 @@ urlpatterns += patterns('clocker.views.login',
 )
 
 #shift_summary stuff
-urlpatterns += patterns('clocker.views.shift_summary',
-    url(r'^timeclock/shift_summary/$', 'summary'),
+urlpatterns += patterns('clocker.views.shiftSummary',
+    url(r'^timeclock/saveSummaries/$', 'summary', name="save-summaries"),
+    url(r'^timeclock/summary/(?P<id>\d+)/$', 'renderSummary', name="render-summary"),
 )

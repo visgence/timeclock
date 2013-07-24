@@ -18,8 +18,8 @@ def clockEmployee(request):
 
     employee = request.user
     if status.lower() == "out" and employee.isClockedIn():
-        clockOutEmployee(employee)
-        return HttpResponseRedirect('/timeclock/')
+        shift = clockOutEmployee(employee)
+        return HttpResponseRedirect('/timeclock/summary/%s/' % shift.id)
     elif status.lower() == "in" and not employee.isClockedIn():
         clockInEmployee(employee)
         return HttpResponseRedirect('/timeclock/')

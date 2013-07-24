@@ -146,7 +146,7 @@ function time_to_sec(time)
 
 
 
-function submit_form()
+function submit_form(url)
 {
     //If the total time has not been spent, alert
     if($("#total_time").val() != "00:00")
@@ -185,7 +185,7 @@ function submit_form()
     json.shift_summary = job_array;
     jsonData = JSON.stringify(json);
     
-    $.post('/timeclock/shift_summary/', {'jsonData': jsonData})
+    $.post(url, {'jsonData': jsonData})
     .fail(function(resp) {
         var btn = [{
             text: "Ok",

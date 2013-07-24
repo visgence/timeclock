@@ -18,7 +18,7 @@ def mainPage(request):
         message = "You are clocked out. You last clocked out at "
         timeStamp = recentShift.time_out
     
-    t = loader.get_template('main_page.html')
+    t = loader.get_template('mainPage.html')
     c = RequestContext(request, {
         'employee': employee,
         'employees': employees,

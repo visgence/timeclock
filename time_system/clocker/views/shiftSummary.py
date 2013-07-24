@@ -1,4 +1,5 @@
-from django.http import HttpResponseRedirect, HttpResponse, HttpResponseServerError
+from django.http import HttpResponseRedirect, HttpResponseServerError, HttpResponse
+from django.template import RequestContext, loader
 from django.views.decorators.http import require_POST
 from django.core.exceptions import ValidationError
 from clocker.models import ShiftSummary, Shift, Employee, Job
@@ -47,4 +48,52 @@ def summary(request):
         shift_summary.save()
     
     return HttpResponseRedirect('/timeclock/')
+   
+
+def renderSummary(request, id):
+
+    employee = request.user
+
+    try:
+        shift = Shift.objects.get(id=id, employee=employee)
+    except Shift.DoesNotExist:
+        return HttpResponseServerError('Shift does not exist for id %s' % str(id))
     
+    #Only complete shifts can have summaries
+    if shift.time_out == None:
+        return HttpResponseServerError('You cannot complete any summaries for a shift where you are not clocked out yet.')
+
+    #We only care about tracking time that's at least one minute
+    timeDiff = shift.time_out - shift.time_in
+    totalTime = roundSeconds(timeDiff.total_seconds())
+    if totalTime < 60:
+        totalTime = 0
+
+    jobs = Job.objects.filter(is_active=True)
+
+    t = loader.get_template('shiftSummary.html')
+    c = RequestContext(request, {
+        'totalTime': totalTime,
+        'jobs': jobs,
+        'shift': shift
+    })
+    return HttpResponse(t.render(c), content_type="text/html")
+
+
+def roundSeconds(seconds):
+    '''
+    ' Utility method to round a number of seconds given.
+    '
+    ' Returns: Seconds rounded to the nearest minute by 30 seconds
+    '''
+
+    minutes = seconds / 60
+    remainder = seconds % 60 
+
+    if(remainder >= 30):
+        minutes += 1
+
+    return minutes * 60
+
+
+
