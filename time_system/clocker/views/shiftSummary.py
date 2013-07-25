@@ -76,6 +76,9 @@ def renderSummary(request, id):
     if totalTime < 60:
         totalTime = 0
 
+    if totalTime <= 0:
+        return HttpResponseRedirect('/timeclock/')
+
     jobs = Job.objects.filter(is_active=True)
 
     t = loader.get_template('shiftSummary.html')
