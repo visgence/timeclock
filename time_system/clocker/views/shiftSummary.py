@@ -14,6 +14,10 @@ except ImportError:
 @require_POST
 @transaction.commit_manually
 def summary(request):
+    '''
+    ' Creates new Shift Summaries from the summary page for a shift. If any old summaries exist for that shift
+    ' they are deleted first.
+    '''
 
     employee = request.user
 
@@ -59,10 +63,10 @@ def summary(request):
 
 def renderSummary(request, id):
     '''
-    ' Renders the shift summary page.
+    ' Renders the shift summary page. Makes sure to check if the shift for the given id has any
+    ' past complete summaries and if so packages them up so the page can pre-fill using their data.
     '
-    ' Keyword Args:
-    '   id - Id of the shift the summary page is rendering for
+    ' Keyword Args: Id of the Shift we are rendering the summary page for.
     '''
 
     employee = request.user
@@ -94,7 +98,7 @@ def renderSummary(request, id):
         except ShiftSummary.DoesNotExist:
             jobData.append(job)
             continue
-        
+
         job['hours'] = summary.hours
         job['miles'] = summary.miles
         job['note'] = summary.note

@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div id="managementContent"></div>
+
+<script>
+    $(function() {
+        var url = "/chucho/model_editor/{{app}}/{{model}}/";
+        $.get(url, {}, function(data) {
+            $('#managementContent').html(data);
+            var title = $("<h2></h2>", {
+                "html": "Manage {{model}}s"
+            });
+
+            $('#managementContent').prepend(title);
+        });
+    });
+</script>
+
+{% endblock content %}
