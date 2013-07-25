@@ -15,7 +15,7 @@ def main():
             s.full_clean()
         except ValidationError as e:
             print "*******************   ERROR  *********************"
-            print ('; '.join(e.messages))
+            print '; '.join(e.messages) + ' for owner %s' % str(s.employee)
             print "Id = %s;  Job Id = %s;  Shift Id = %s" % (s.id, s.job.id, s.shift.id)
             print
             print
