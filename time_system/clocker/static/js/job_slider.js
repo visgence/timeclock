@@ -71,7 +71,6 @@ $("document").ready(function ()
     total_time = $("#total_time").val();
     $("#total_time").val(sec_to_time(total_time));
 
-    time_to_sec($("#total_time").val());//DEBUG
     //Find all job slider divs
     job_ids = $(".job_slider");
 
@@ -79,9 +78,15 @@ $("document").ready(function ()
     for (var i = 0; i < job_ids.length; i++) 
     {   
         create_slider_handler(job_ids[i].id, total_time);
+        var hours = $('#hours_' + job_ids[i].id).val();
+        console.log(hours);
+        if(hours !== '')
+            hours = sec_to_time(hours);
+        else
+            hours = '00:00';
 
         //initialize time to zero
-        $('#hours_' + job_ids[i].id).val('00:00'); 
+        $('#hours_' + job_ids[i].id).val(hours); 
     }
 
 })
@@ -238,7 +243,6 @@ $(document).ajaxSend(function(event, xhr, settings) {
 
 
 function toggle_section(id, e) {
-	console.log("foo");
     if ($(e).hasClass('ui-icon-circle-triangle-s')) {
     	$('#'+id).hide({duration:0});
         $(e).removeClass('ui-icon-circle-triangle-s');

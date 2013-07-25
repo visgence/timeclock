@@ -3,7 +3,7 @@ from django.template import RequestContext, loader
 from django.views.decorators.http import require_POST
 from django.core.exceptions import ValidationError
 from django.db import transaction
-from clocker.models import ShiftSummary, Shift, Employee, Job
+from clocker.models import ShiftSummary, Shift, Job
 
 try:
     import simplejson as json
@@ -58,6 +58,12 @@ def summary(request):
    
 
 def renderSummary(request, id):
+    '''
+    ' Renders the shift summary page.
+    '
+    ' Keyword Args:
+    '   id - Id of the shift the summary page is rendering for
+    '''
 
     employee = request.user
 
@@ -75,17 +81,31 @@ def renderSummary(request, id):
     totalTime = roundSeconds(timeDiff.total_seconds())
     if totalTime < 60:
         totalTime = 0
-
-    if totalTime <= 0:
         return HttpResponseRedirect('/timeclock/')
 
     jobs = Job.objects.filter(is_active=True)
+    summaries = ShiftSummary.objects.filter(shift=shift, job__in=jobs)
+
+    jobData = []
+    for j in jobs:
+        job = {'job': j}
+        try:
+            summary = ShiftSummary.objects.get(shift=shift, job=j)
+        except ShiftSummary.DoesNotExist:
+            jobData.append(job)
+            continue
+        
+        job['hours'] = summary.hours
+        job['miles'] = summary.miles
+        job['note'] = summary.note
+        jobData.append(job)
 
     t = loader.get_template('shiftSummary.html')
     c = RequestContext(request, {
         'totalTime': totalTime,
-        'jobs': jobs,
-        'shift': shift
+        'jobData': jobData,
+        'shift': shift,
+        'summaries': summaries
     })
     return HttpResponse(t.render(c), content_type="text/html")
 

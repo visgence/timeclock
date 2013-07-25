@@ -16,27 +16,37 @@
             <td><b>Total Time Worked</b></td>
             <td><input type="text" class="total_time" id="total_time" value="{{totalTime}}" readonly="readonly"></td>
         </tr>
-        {% for job in jobs %}
+        {% for data in jobData %}
         <tr>            
              <td>
                  <span class="ui-icon ui-icon-circle-triangle-e toggle-button"
-                 onclick="toggle_section('sub-{{job.name|slugify}}', this);">
+                 onclick="toggle_section('sub-{{data.job.name|slugify}}', this);">
                  </span>
              </td>
              <td>
-                 <div class="job_name">{{job.name}}</div>
+                 <div class="job_name">{{data.job.name}}</div>
              </td>
-             <td><input type="text" class="job_time" id ="hours_{{job.id}}" readonly="readonly" /></td>
-             <td><div id="{{job.id}}" class="job_slider"></div></td>
+             <td>
+                 {% if data.hours %}
+                     <input type="text" class="job_time" id ="hours_{{data.job.id}}" value="{{data.hours}}" readonly="readonly" />
+                {% else %}
+                    <input type="text" class="job_time" id ="hours_{{data.job.id}}" readonly="readonly" />
+                {% endif %}
+             </td>
+             <td><div id="{{data.job.id}}" class="job_slider"></div></td>
         </tr>
              
-        <tr class="collapsible" id="sub-{{job.name|slugify}}" style="display:none;">
+        <tr class="collapsible" id="sub-{{data.job.name|slugify}}" style="display:none;">
             <td colspan="4">
                 <div class="miles_text">Miles:</div>
-                <input type="number" class="miles" value="0" id="miles_{{job.id}}">
-                    
+                {% if data.miles %}
+                    <input type="number" class="miles" value="{{data.miles}}" id="miles_{{data.job.id}}">
+                {% else %}
+                    <input type="number" class="miles" value="0" id="miles_{{data.job.id}}">
+                {% endif %}
+
                 <div class="notes_text">Notes:</div>
-                <textarea  class="text_area" rows="5" cols="50" id="notes_{{job.id}}"></textarea>
+                <textarea  class="text_area" rows="5" COLS="50" id="notes_{{data.job.id}}">{{data.note}}</textarea>
             </td>
         </tr>
         {% endfor %} 
