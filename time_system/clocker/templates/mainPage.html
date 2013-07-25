@@ -82,28 +82,20 @@
 	<div id="management">
 		{% if employee.is_superuser %}
 			<div class="click">
-				<span class="clickable" id="manage_employees" onclick="load_model_grid('clocker', 'Employee');">
-					Manage Employees
-				</span>
+                <a class="clickable" href="{% url 'manage-employees' %}">Manage Employees</a>
 			</div>
 			
 			<div class="click">
-				<span class="clickable" id="manage_jobs" onclick="load_model_grid('clocker', 'Job');">
-					Manage Jobs
-				</span>
+                <a class="clickable" href="{% url 'manage-jobs' %}">Manage Jobs</a>
 			</div>
 		{% endif %}
 		
 		<div class="click">
-			<span class="clickable" id="manage_shift_summaries" onclick="load_model_grid('clocker', 'ShiftSummary');">
-				Manage Shift Summaries
-			</span>
+            <a class="clickable" href="{% url 'manage-summaries' %}">Manage Shift Summaries</a>
 		</div>
 		
 		<div class="click">
-			<span class="clickable" id="manage_shift_shifts" onclick="load_model_grid('clocker', 'Shift');">
-				Manage Shifts
-			</span>
+            <a class="clickable" href="{% url 'manage-shifts' %}">Manage Shifts</a>
 		</div>
 	</div>
 </div>	
