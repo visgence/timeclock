@@ -356,7 +356,7 @@ class Shift(models.Model):
         }
 
     # chucho omni search fields
-    search_fields = ['employee', 'time_in', 'time_out']
+    search_fields = ['id', 'employee', 'time_in', 'time_out']
 
     class Meta:
         db_table = 'Shift'
@@ -488,7 +488,7 @@ class ShiftSummary(models.Model):
     shift = models.ForeignKey('Shift')
     hours = models.IntegerField('total hours')
     miles = models.DecimalField(max_digits = 6, decimal_places = 2, null = True, blank=True)
-    note = models.TextField('notes about job')
+    note = models.TextField('notes about job', blank=True)
 
     objects = ShiftSummaryManager()
 
@@ -497,11 +497,12 @@ class ShiftSummary(models.Model):
         }
 
     # chucho omni search fields
-    search_fields = ['job', 'employee', 'shift']
+    search_fields = ['id', 'job', 'employee', 'shift']
 
     class Meta:
         db_table = 'Shift Summary'
         ordering = ['shift', 'employee', 'job']
+        unique_together = ('job', 'shift')
 
     def __unicode__(self):
         data = self.shift.time_in.date().strftime("%Y-%m-%d") + "    EMPLOYEE: " + self.employee.first_name + "  " + self.employee.last_name + "    JOB: " + self.job.name
@@ -611,7 +612,7 @@ class Job(models.Model):
         }
 
     # chucho omni search fields
-    search_fields = ['name', 'description']
+    search_fields = ['id', 'name', 'description']
 
     class Meta:
         db_table = 'Job'
