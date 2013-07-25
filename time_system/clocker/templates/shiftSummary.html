@@ -14,7 +14,13 @@
         <tr class="total_time_text">
         	<td></td>
             <td><b>Total Time Worked</b></td>
-            <td><input type="text" class="total_time" id="total_time" value="{{totalTime}}" readonly="readonly"></td>
+            <td>
+                <script>
+                    console.log('testing');
+                    console.log({{totalTime}});
+                </script>
+                <input type="text" class="total_time" id="total_time" value="{{totalTime}}" readonly="readonly">
+            </td>
         </tr>
         {% for data in jobData %}
         <tr>            
@@ -27,8 +33,8 @@
                  <div class="job_name">{{data.job.name}}</div>
              </td>
              <td>
-                 {% if data.hours %}
-                     <input type="text" class="job_time" id ="hours_{{data.job.id}}" value="{{data.hours}}" readonly="readonly" />
+                {% if data.hours %}
+                    <input type="text" class="job_time" id ="hours_{{data.job.id}}" value="{{data.hours}}" readonly="readonly" />
                 {% else %}
                     <input type="text" class="job_time" id ="hours_{{data.job.id}}" readonly="readonly" />
                 {% endif %}

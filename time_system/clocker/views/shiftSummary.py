@@ -107,6 +107,7 @@ def renderSummary(request, id):
         'shift': shift,
         'summaries': summaries
     })
+    print totalTime
     return HttpResponse(t.render(c), content_type="text/html")
 
 
