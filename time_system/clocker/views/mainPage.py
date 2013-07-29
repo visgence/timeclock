@@ -12,9 +12,15 @@ def mainPage(request):
 
     status = employee.isClockedIn()
     recentShift = employee.getCurrentShift()
-    timeStamp = recentShift.time_in
-    message = "You are clock in. You clocked in at " 
-    if not status:
+   
+    timeStamp = ''
+    message = "It appears that you have never clocked in before.\
+                Please clock in to start using Timeclock!"
+
+    if recentShift is not None:
+        timeStamp = recentShift.time_in
+        message = "You are clock in. You clocked in at " 
+    if recentShift is not None and not status:
         message = "You are clocked out. You last clocked out at "
         timeStamp = recentShift.time_out
     
