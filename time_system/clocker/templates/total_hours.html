@@ -19,7 +19,7 @@
             
                 {% for week in pay_period.weekly_info%}
                 {% if not forloop.counter|divisibleby:"2" %} 
-                    <table class="hours-table" style="border: solid black 1px; border-collapse:collapse;">
+                    <table class="hours-table table-striped" style="border: solid black 1px; border-collapse:collapse;">
                     <thead >
                         <tr >
                             <th align="center" colspan="5">Work Week: {{week.week_start}} - {{week.week_end}}</th>
@@ -81,7 +81,7 @@
             <div id="even-wrapper"> 
                 {% for week in pay_period.weekly_info%}
                 {% if forloop.counter|divisibleby:"2" %} 
-                    <table  class="hours-table" style="border: solid black 1px; border-collapse:collapse;">
+                    <table  class="hours-table table-striped" style="border: solid black 1px; border-collapse:collapse;">
                     <thead >
                         <tr >
                             <th align="center" colspan="5">Work Week: {{week.week_start}} - {{week.week_end}}</th>
