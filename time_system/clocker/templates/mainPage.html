@@ -1,33 +1,22 @@
 {%extends "base.html"%}
 
+{%block additional-headers%}
+    <script src="{{STATIC_URL}}js/main_page.js" type="text/javascript"></script>
+{%endblock additional-headers%}
+
 {%block content%}
 <div class="login">
 					
-    <form name="main_page" method="post" action="{% url 'clock-employee' %}">
+    <form name="clocker" class="clocker-form" method="post" action="{% url 'clock-employee' %}">
 		{% csrf_token %}
-			<div class="radio_buttons">
+			<div class="clocker-container">
 				{% if not status %}
-					 <label>
-                        <input id="status-in" type="radio" name="status" value="In" checked="checked">
-                         Clock In
-                     </label>
-	                 <label>
-                         <input id="status-out" type="radio" name="status" value="Out" disabled="disabled">
-                         Clock Out
-                     </label>
-	                 <br>
+                    <span id="statusBtn" class="clock-in">Clock In</span>
+                    <input type="hidden" name="status" value="In">
 				{% elif status %}
-	                 <label>
-                         <input id="status-in" type="radio" name="status" value="In" disabled="disabled">
-                         Clock In
-                     </label>
-	                 <label>
-                         <input id="status-out" type="radio" name="status" value="Out" checked="checked">
-                         Clock Out
-                     </label>
-	                 <br>
+                    <span id="statusBtn" class="clock-out">Clock Out</span>
+                    <input type="hidden" name="status" value="Out">
 	            {% endif %}
-	           		 <input type="submit" value="Submit">
 			</div>
 	</form>
 	

@@ -77,13 +77,37 @@ div#hour_management
 	padding-top: 1.5em;
 }
 
-.radio_buttons
+div.clocker-container
 {
     margin-left: auto;
     margin-right: auto;
-    width: 6em;
+    width: 8em;
     margin-top: 1em;
     margin-bottom: 1em;
+}
+
+div.clocker-container span.clock-out
+{
+    color: #CF3C23;
+    border: solid #CF3C23;
+}
+
+div.clocker-container span.clock-out:hover
+{
+    color: #EA8E7F;
+    border: solid #EA8E7F;
+}
+
+div.clocker-container span.clock-in
+{
+    color: #00A651;
+    border: solid #00A651;
+}
+
+div.clocker-container span.clock-in:hover
+{
+    color: #8BD5B0;
+    border: solid #8BD5B0;
 }
 
 .from
