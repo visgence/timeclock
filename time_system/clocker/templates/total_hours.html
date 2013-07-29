@@ -1,81 +1,145 @@
 <html>
 
     <head>
-	<style>
-		table#total_hours td, th, b
-		{
-			font-size: 10pt;	
-		}	
-	</style>
+        <link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/total_hours.css"/>
+        <link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/bootstrap-responsive.css">
+        <link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/bootstrap.css">
     </head>
 
 <body> 
-   
     <div>
         <span><b>{{employee.first_name}} {{employee.last_name}}:</b> Selected pay period: {{period_begin}} to {{period_end}}</br></br></span> 
     </div>
-    <div align="left" sytle="clear: both;">
+    <div>
 
         {% load math_helper %}
-
-        {% for week in pay_period.weekly_info%}
-        <table id="total_hours" style="border: solid black 1px; border-collapse:collapse;">
-        <thead >
-            <tr >
-                <th align="center" colspan="5">Work Week: {{week.week_start}} - {{week.week_end}}</th>
-            </tr>
-            <tr>
-                <th style="border: solid black 1px">Date</th>
-                <th style="border: solid black 1px">Time In</th>
-                <th style="border: solid black 1px">Time Out</th>
-                <th style="border: solid black 1px">Shift Total</th>
-                <th style="border: solid black 1px">Daily Totals</th>
-            </tr>
-        </thead>
-        <tbody>
-                {% for day in week.days%}
-                    {% for shift in day.shifts%}
-                    <tr>
-                        {%ifequal shift.display_flag 'True'%}
-                            <td style="border: solid black 1px">{{day.date}}</td>
-                            <td style="border: solid black 1px">{{shift.in}}</td>
-                            <td style="border: solid black 1px">{{shift.out}}</td>
-                            <td style="border: solid black 1px" align="right">{{shift.total}}</td>
-                    	    {% if forloop.last %}
-			    <td style="bgcolor:yellow; border: solid black 1px;">{{day.daily_total}}</td>
-			    {% else %}
-			    <td></td>
-                            {% endif %}
-                        {%else%}
-                            <td style="color:grey; border: solid black 1px;">{{day.date}}</td>
-                            <td style="color:grey; border: solid black 1px;">{{shift.in}}</td>
-                            <td style="color:grey; border: solid black 1px;">{{shift.out}}</td>
-                            <td style="color:grey; border: solid black 1px;" align="right">{{shift.total}}</td>
-			    {% if forloop.last %}
-			    <td style="color:grey; border: solid black 1px;">{{day.daily_total}}</td>
-			    {% else %}
-			    <td></td>
-                            {% endif %}
-                        {% endifequal %}
-                    </tr>
+        
+        <div id="hours-wrapper" class="clearfix">
+            <div id="odd-wrapper">
+            
+                {% for week in pay_period.weekly_info%}
+                {% if not forloop.counter|divisibleby:"2" %} 
+                    <table class="hours-table" style="border: solid black 1px; border-collapse:collapse;">
+                    <thead >
+                        <tr >
+                            <th align="center" colspan="5">Work Week: {{week.week_start}} - {{week.week_end}}</th>
+                        </tr>
+                        <tr>
+                            <th style="border: solid black 1px">Date</th>
+                            <th style="border: solid black 1px">Time In</th>
+                            <th style="border: solid black 1px">Time Out</th>
+                            <th style="border: solid black 1px">Shift Total</th>
+                            <th style="border: solid black 1px">Daily Totals</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                            {% for day in week.days%}
+                                {% for shift in day.shifts%}
+                                <tr>
+                                    {%ifequal shift.display_flag 'True'%}
+                                        <td style="border: solid black 1px">{{day.date}}</td>
+                                        <td style="border: solid black 1px">{{shift.in}}</td>
+                                        <td style="border: solid black 1px">{{shift.out}}</td>
+                                        <td style="border: solid black 1px" align="right">{{shift.total}}</td>
+                                        {% if forloop.last %}
+                            <td style="bgcolor:yellow; border: solid black 1px;">{{day.daily_total}}</td>
+                            {% else %}
+                            <td></td>
+                                        {% endif %}
+                                    {%else%}
+                                        <td style="color:grey; border: solid black 1px;">{{day.date}}</td>
+                                        <td style="color:grey; border: solid black 1px;">{{shift.in}}</td>
+                                        <td style="color:grey; border: solid black 1px;">{{shift.out}}</td>
+                                        <td style="color:grey; border: solid black 1px;" align="right">{{shift.total}}</td>
+                            {% if forloop.last %}
+                            <td style="color:grey; border: solid black 1px;">{{day.daily_total}}</td>
+                            {% else %}
+                            <td></td>
+                                        {% endif %}
+                                    {% endifequal %}
+                                </tr>
+                            {% endfor %}
+                         {% endfor %}
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <th style="border: solid black 1px">Weekly Total</th>
+                            <th style="border: solid black 1px" colspan="2">Weekly Regular</th>
+                            <th style="border: solid black 1px">Weekly Overtime</th>
+                        </tr>
+                        <tr>
+                            <td style="border: solid black 1px" align="right">{{week.weekly_total}}</td>
+                            <td style="border: solid black 1px" colspan="2" align="right">{{week.weekly_regular_hours}}</td>
+                            <td style="border: solid black 1px" align="right">{{week.weekly_overtime}}</td>
+                        </tr>
+                    </tfoot>
+                    </table>
+                {% endif %}
                 {% endfor %}
-             {% endfor %}
-        </tbody>
-        <tfoot>
-            <tr>
-                <th style="border: solid black 1px">Weekly Total</th>
-                <th style="border: solid black 1px" colspan="2">Weekly Regular</th>
-                <th style="border: solid black 1px">Weekly Overtime</th>
-            </tr>
-            <tr>
-                <td style="border: solid black 1px" align="right">{{week.weekly_total}}</td>
-                <td style="border: solid black 1px" colspan="2" align="right">{{week.weekly_regular_hours}}</td>
-                <td style="border: solid black 1px" align="right">{{week.weekly_overtime}}</td>
-            </tr>
-        </tfoot>
-        </table>
-        <br/>
-        {% endfor %}
+            </div> <!-- End odd wrapper -->
+            
+            <div id="even-wrapper"> 
+                {% for week in pay_period.weekly_info%}
+                {% if forloop.counter|divisibleby:"2" %} 
+                    <table  class="hours-table" style="border: solid black 1px; border-collapse:collapse;">
+                    <thead >
+                        <tr >
+                            <th align="center" colspan="5">Work Week: {{week.week_start}} - {{week.week_end}}</th>
+                        </tr>
+                        <tr>
+                            <th style="border: solid black 1px">Date</th>
+                            <th style="border: solid black 1px">Time In</th>
+                            <th style="border: solid black 1px">Time Out</th>
+                            <th style="border: solid black 1px">Shift Total</th>
+                            <th style="border: solid black 1px">Daily Totals</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                            {% for day in week.days%}
+                                {% for shift in day.shifts%}
+                                <tr>
+                                    {%ifequal shift.display_flag 'True'%}
+                                        <td style="border: solid black 1px">{{day.date}}</td>
+                                        <td style="border: solid black 1px">{{shift.in}}</td>
+                                        <td style="border: solid black 1px">{{shift.out}}</td>
+                                        <td style="border: solid black 1px" align="right">{{shift.total}}</td>
+                                        {% if forloop.last %}
+                            <td style="bgcolor:yellow; border: solid black 1px;">{{day.daily_total}}</td>
+                            {% else %}
+                            <td></td>
+                                        {% endif %}
+                                    {%else%}
+                                        <td style="color:grey; border: solid black 1px;">{{day.date}}</td>
+                                        <td style="color:grey; border: solid black 1px;">{{shift.in}}</td>
+                                        <td style="color:grey; border: solid black 1px;">{{shift.out}}</td>
+                                        <td style="color:grey; border: solid black 1px;" align="right">{{shift.total}}</td>
+                            {% if forloop.last %}
+                            <td style="color:grey; border: solid black 1px;">{{day.daily_total}}</td>
+                            {% else %}
+                            <td></td>
+                                        {% endif %}
+                                    {% endifequal %}
+                                </tr>
+                            {% endfor %}
+                         {% endfor %}
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <th style="border: solid black 1px">Weekly Total</th>
+                            <th style="border: solid black 1px" colspan="2">Weekly Regular</th>
+                            <th style="border: solid black 1px">Weekly Overtime</th>
+                        </tr>
+                        <tr>
+                            <td style="border: solid black 1px" align="right">{{week.weekly_total}}</td>
+                            <td style="border: solid black 1px" colspan="2" align="right">{{week.weekly_regular_hours}}</td>
+                            <td style="border: solid black 1px" align="right">{{week.weekly_overtime}}</td>
+                        </tr>
+                    </tfoot>
+                    </table>
+                {% endif %}
+                {% endfor %}
+            </div> <!-- End even wrapper -->
+        </div><!-- End hours wrapper -->
 
         <b>Total Regular Hours for Pay Period: {{pay_period.period_regular}} @ ${{employee.hourly_rate}}/hr = ${{pay_period.total_regular}}</b>
 	<br/>
