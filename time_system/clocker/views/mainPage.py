@@ -19,7 +19,7 @@ def mainPage(request):
 
     if recentShift is not None:
         timeStamp = recentShift.time_in
-        message = "You are clock in. You clocked in at " 
+        message = "You are clocked in. You clocked in at " 
     if recentShift is not None and not status:
         message = "You are clocked out. You last clocked out at "
         timeStamp = recentShift.time_out
