@@ -3,11 +3,14 @@ from django.views.generic import RedirectView
 from clocker.views.management import ManageView
 
 
-urlpatterns = patterns('clocker.views.views',
-
+urlpatterns = patterns('',
     url(r'^$', RedirectView.as_view(url='/timeclock/')),
-    url(r'^timeclock/hours/$', 'total_hours', name="get-total-hours"),
     url(r'chucho/', include('chucho.urls')),
+)
+
+#Timesheet
+urlpatterns += patterns('clocker.views.timesheet',
+    url(r'^timeclock/hours/$', 'total_hours', name="get-total-hours"),
 )
 
 #Management
