@@ -128,9 +128,9 @@ class Employee(AbstractBaseUser):
     has_salary = models.BooleanField()
     hourly_rate = models.DecimalField(max_digits = 5, decimal_places = 2, null = True, blank=True)
     salary = models.DecimalField(max_digits = 8, decimal_places = 2, null = True, blank=True)
-    username = models.CharField(max_length=40, unique=True)
-    first_name = models.CharField(max_length=25)
-    last_name = models.CharField(max_length=25)
+    username = models.TextField(unique=True)
+    first_name = models.TextField()
+    last_name = models.TextField()
     is_superuser = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
     date_joined = models.DateTimeField(default=datetime.now())
@@ -601,7 +601,7 @@ class JobManager(ChuchoManager):
 
 
 class Job(models.Model):
-    name = models.CharField('job name', max_length = 25)
+    name = models.TextField('job name')
     description = models.TextField('job description')
     is_active = models.BooleanField() 
 
