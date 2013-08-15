@@ -18,3 +18,8 @@ table.hours-table
 {
     margin-bottom: 0.2in;  
 }
+
+.numeric-column
+{
+    text-align: right;
+}
