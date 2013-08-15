@@ -1,22 +1,20 @@
-table td, th, b
+@media print
 {
-    font-size: 5pt;	
+    table td, th, b
+    {
+	font-size: 5pt;	
+    }
+}
+
+@media screen
+{
+    table td, th, b
+    {
+	font-size: 11pt;
+    }
 }
 
 table.hours-table
 {
     margin-bottom: 0.2in;  
-}
-
-div#odd-wrapper
-{
-    float: left;
-    width: 3.5in;
-    padding-right: 0.125in;
-}
-
-div#even-wrapper
-{
-    float: left;
-    width: 3.5in;
 }
