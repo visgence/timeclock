@@ -33,13 +33,13 @@
                         {% for day in week.days%}
                             {% for shift in day.shifts%}
                                 <tr>
-                                    {%ifequal shift.display_flag 'True'%}
-                                        <td>{{day.date}}</td>
+                                {%ifequal shift.display_flag 'True'%}
+                                    <td>{{day.date}}</td>
                                     <td>{{shift.in}}</td>
                                     <td>{{shift.out}}</td>
-                                    <td align="right">{{shift.total}}</td>
+                                    <td class="numeric-column">{{shift.total}}</td>
                                     {% if forloop.last %}
-                                        <td style="bgcolor:yellow;">{{day.daily_total}}</td>
+                                        <td style="bgcolor:yellow;" class="numeric-column">{{day.daily_total}}</td>
                                     {% else %}
                                         <td></td>
                                     {% endif %}
@@ -47,9 +47,9 @@
                                     <td style="color:grey;">{{day.date}}</td>
                                     <td style="color:grey;">{{shift.in}}</td>
                                     <td style="color:grey;">{{shift.out}}</td>
-                                    <td style="color:grey;" align="right">{{shift.total}}</td>
+                                    <td style="color:grey;" class="numeric-column">{{shift.total}}</td>
                                     {% if forloop.last %}
-                                        <td style="color:grey;">{{day.daily_total}}</td>
+                                        <td style="color:grey;" class="numeric-column">{{day.daily_total}}</td>
                                     {% else %}
                                         <td></td>
                                     {% endif %}
