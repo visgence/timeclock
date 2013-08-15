@@ -15,11 +15,8 @@
         {% load math_helper %}
         
         <div id="hours-wrapper" class="clearfix">
-            <div id="odd-wrapper">
-            
-                {% for week in pay_period.weekly_info%}
-                {% if not forloop.counter|divisibleby:"2" %} 
-                    <table class="hours-table table-striped">
+            {% for week in pay_period.weekly_info%}
+                <table class="hours-table table-striped">
                     <thead >
                         <tr >
                             <th align="center" colspan="5">Work Week: {{week.week_start}} - {{week.week_end}}</th>
@@ -33,33 +30,33 @@
                         </tr>
                     </thead>
                     <tbody>
-                            {% for day in week.days%}
-                                {% for shift in day.shifts%}
+                        {% for day in week.days%}
+                            {% for shift in day.shifts%}
                                 <tr>
                                     {%ifequal shift.display_flag 'True'%}
                                         <td>{{day.date}}</td>
-                                        <td>{{shift.in}}</td>
-                                        <td>{{shift.out}}</td>
-                                        <td align="right">{{shift.total}}</td>
-                                        {% if forloop.last %}
-                            <td style="bgcolor:yellow;">{{day.daily_total}}</td>
-                            {% else %}
-                            <td></td>
-                                        {% endif %}
-                                    {%else%}
-                                        <td style="color:grey;">{{day.date}}</td>
-                                        <td style="color:grey;">{{shift.in}}</td>
-                                        <td style="color:grey;">{{shift.out}}</td>
-                                        <td style="color:grey;" align="right">{{shift.total}}</td>
-                            {% if forloop.last %}
-                            <td style="color:grey;">{{day.daily_total}}</td>
-                            {% else %}
-                            <td></td>
-                                        {% endif %}
-                                    {% endifequal %}
+                                    <td>{{shift.in}}</td>
+                                    <td>{{shift.out}}</td>
+                                    <td align="right">{{shift.total}}</td>
+                                    {% if forloop.last %}
+                                        <td style="bgcolor:yellow;">{{day.daily_total}}</td>
+                                    {% else %}
+                                        <td></td>
+                                    {% endif %}
+                                {%else%}
+                                    <td style="color:grey;">{{day.date}}</td>
+                                    <td style="color:grey;">{{shift.in}}</td>
+                                    <td style="color:grey;">{{shift.out}}</td>
+                                    <td style="color:grey;" align="right">{{shift.total}}</td>
+                                    {% if forloop.last %}
+                                        <td style="color:grey;">{{day.daily_total}}</td>
+                                    {% else %}
+                                        <td></td>
+                                    {% endif %}
+                                {% endifequal %}
                                 </tr>
                             {% endfor %}
-                         {% endfor %}
+                        {% endfor %}
                     </tbody>
                     <tfoot>
                         <tr>
@@ -73,11 +70,11 @@
                             <td align="right">{{week.weekly_overtime}}</td>
                         </tr>
                     </tfoot>
-                    </table>
-                {% endif %}
-                {% endfor %}
-            </div> <!-- End odd wrapper -->
-            
+                </table>
+            {% endfor %}
+
+            {% comment %}
+Remove this even-wrapper section and put everything into same section.
             <div id="even-wrapper"> 
                 {% for week in pay_period.weekly_info%}
                 {% if forloop.counter|divisibleby:"2" %} 
@@ -140,6 +137,8 @@
                 {% endfor %}
             </div> <!-- End even wrapper -->
         </div><!-- End hours wrapper -->
+_________________________________
+        {% endcomment %}
 
         <b>Total Regular Hours for Pay Period: {{pay_period.period_regular}} @ ${{employee.hourly_rate}}/hr = ${{pay_period.total_regular}}</b>
 	<br/>
