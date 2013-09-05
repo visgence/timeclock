@@ -59,11 +59,6 @@ def getPayPeriod(start_time, end_time, user_name):
         pay_period['period_adjusted'] += daily_info['daily_adjusted']
 
         if(single_date >= week_end or single_date >= end_date.date()):
-            print "single_date"
-            print single_date
-            print "week_end: %s" % week_end
-            print "end_date: %s" % end_date.date()
-            print
             if(week['weekly_adjusted'] > Decimal(40.0)):
                 week['weekly_regular_hours'] = Decimal(40.0)
             else:
@@ -79,14 +74,8 @@ def getPayPeriod(start_time, end_time, user_name):
             pay_period['weekly_info'].append(week)
             week_begin = week_end + timedelta(days = 1)
             week_end = week_begin + timedelta(days = 6)
-            print week_begin
-            print week_end
             week = {'weekly_total': Decimal(0.0), 'weekly_adjusted':Decimal(0.0),'weekly_regular_hours': Decimal(0.0), 'weekly_overtime': Decimal(0.0), 'week_start':week_begin, 'week_end':week_end, 'days':[]}
-            print "WEEK"
-            print week
-            print
     
-    print pay_period
     pay_period['period_adjusted'] = pay_period['period_adjusted'] - pay_period['period_overtime'] 
     overtime_pay = employee.hourly_rate + (employee.hourly_rate / Decimal(2.0))
 

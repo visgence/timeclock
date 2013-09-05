@@ -1,6 +1,6 @@
 from django.views.decorators.http import require_POST
 from django.http import HttpResponseNotFound, HttpResponseRedirect
-from clocker.models import Employee
+from clocker.models import Employee, Shift
 
 
 @require_POST
@@ -19,6 +19,9 @@ def clockEmployee(request):
     employee = request.user
     if status.lower() == "out" and employee.isClockedIn():
         shift = clockOutEmployee(employee)
+        if not isinstance(shift, Shift):
+            return shift
+
         return HttpResponseRedirect('/timeclock/summary/%s/' % shift.id)
     elif status.lower() == "in" and not employee.isClockedIn():
         clockInEmployee(employee)

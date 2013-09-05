@@ -5,6 +5,13 @@
 {%endblock additional-headers%}
 
 {%block content%}
+
+    <div style="float: right;">
+    <b>Regular Hours: {{weekly_regular}}</b>
+    <br/>
+    <b>Overtime: {{weekly_overtime}}</b>
+</div>
+
 <div class="login">
 					
     <form name="clocker" class="clocker-form" method="post" action="{% url 'clock-employee' %}">
