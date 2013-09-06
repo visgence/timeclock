@@ -71,14 +71,18 @@
 	        <div id="content">
 	            
 	            {% if user.first_name %}
-                <div style="position: absolute">	             
+                <div style="position: absolute;">	             
 		                Hello {{user.first_name}} {{user.last_name}} (<a href="/logout">logout</a>)
                         <br/>
                         <span style="font-size: 8pt;">[<a href="#" onclick="changePassDialog();">Change password</a>]</span>
-		            </div><!--end greeting-->
+                </div><!--end greeting-->    
+
+                    {% block additional-greeting %}{% endblock %}
 	            {% endif %}
-	            
-	            {% block content %} {%endblock%}
+	           
+                <div style="margin-top: 3em;">
+                    {% block content %} {%endblock%}
+                </div>
 	            
 			</div> 
 		</div>
