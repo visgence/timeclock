@@ -616,7 +616,7 @@ class Job(models.Model):
 
     class Meta:
         db_table = 'Job'
-        ordering = ['-is_active']
+        ordering = ['-is_active', 'name']
 
     def __unicode__(self):
         return self.name
