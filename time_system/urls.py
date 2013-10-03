@@ -31,6 +31,11 @@ urlpatterns += patterns('clocker.views.mainPage',
     url(r'^timeclock/$', 'mainPage', name="render-main-page"),
 )
 
+#Jobs
+urlpatterns += patterns('clocker.views.job',
+    url(r'^timeclock/jobBreakdown/$', 'jobBreakdown', name="job-breakdown"),
+)
+
 #Password views
 urlpatterns += patterns('clocker.views.password',
     url(r'^passwordForm/$', 'renderForm'),

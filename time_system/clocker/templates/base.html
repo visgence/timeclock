@@ -31,28 +31,6 @@
             #ui-datepicker-div { font-size: 12px; }
         </style>
         
-        <script>
-            $(document).ready(function() 
-            {
-                var dates = $( "#from, #to" ).datepicker(
-                {
-                    changeMonth: true,
-                    numberOfMonths: 1,
-                    dateFormat: 'yy-mm-dd',
-                    onSelect: function( selectedDate ) 
-                    {
-                        var option = this.id == "from" ? "minDate" : "maxDate",
-                        instance = $( this ).data( "datepicker" ),
-                        date = $.datepicker.parseDate(
-                        instance.settings.dateFormat ||
-                        $.datepicker._defaults.dateFormat,
-                        selectedDate, instance.settings );
-                        dates.not( this ).datepicker( "option", option, date );
-                    }
-                });
-            });
-        </script>	
-
         {% block additional-headers %} {% endblock %}
     </head>
     <body>
@@ -95,8 +73,7 @@
     <script>
         $(function() {
             $(document).ajaxComplete(function(event, xhr, settings) {
-                
-                if(xhr.responseText !== '') {
+                if(xhr.responseText && xhr.responseText.trim() !== '') {
                     try {
                         jsonData = JSON.parse(xhr.responseText);
                         if(jsonData.hasOwnProperty('status') && jsonData['status'] == 302) {

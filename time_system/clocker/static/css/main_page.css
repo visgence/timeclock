@@ -80,6 +80,26 @@ div#hour_management
 	border-right: 1px solid #cfcfcf;
 }
 
+div#job-hours
+{
+    border-top: 1px solid #cfcfcf;
+}
+
+div#job-controls
+{
+    width: 30%;
+    padding-right: 2em;
+    float: left;
+}
+
+div#jobs
+{
+    float: left;
+    padding-left: 2em;
+    width: 70%;
+    border-left: 1px solid;
+}
+
 div.clocker-container
 {
     margin-left: auto;

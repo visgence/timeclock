@@ -1,0 +1,10 @@
+{% for job, data in jobsBreakdown.jobs.items %} 
+    <div class="job-breakdown" data-active="{{data.active}}" {% if not data.active %}style="display:none;"{% endif %}>
+        <label>{{job}} - {{data.hours}}</label>
+        <div class="progress"> 
+            <div class="progress-bar" role="progressbar" aria-valuenow="{{data.percentage}}" aria-valuemin="0.0" 
+                    aria-valuemax="{{jobsBreakdown.total_hours}}" style="width: {{data.percentage}}%">
+            </div>
+        </div>
+    </div>
+{% endfor %}
