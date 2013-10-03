@@ -112,7 +112,7 @@ function makeDialog(msg, title, buttons)
         hide: 'fade',
         show: 'fade',
         modal: true,
-        minWidth: 350,
+        minWidth: 475,
         maxWidth: 1000,
         minHeight: 300,
         maxHeight: 1000,

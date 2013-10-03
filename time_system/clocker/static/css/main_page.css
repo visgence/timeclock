@@ -48,8 +48,12 @@ div#management
 	float: left;
 	padding-left: 1.5em;
 	font-weight: bold;
-	padding-top: 1.5em;
 	height: 100px;
+}
+
+div#management h4, div#hour_management h4
+{
+    padding-bottom: 1em;
 }
 
 div.click
@@ -74,7 +78,6 @@ div#hour_management
 	width: 50%;
 	float: left;
 	border-right: 1px solid #cfcfcf;
-	padding-top: 1.5em;
 }
 
 div.clocker-container
@@ -108,13 +111,6 @@ div.clocker-container span.clock-in:hover
 {
     color: #8BD5B0;
     border: solid #8BD5B0;
-}
-
-.from
-{
-    position:relative:
-    top:50%;
-    left:100px;
 }
 
 div.message
