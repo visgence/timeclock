@@ -4,8 +4,6 @@ from clocker.models import Employee
 from clocker.views.timesheet import getPayPeriod
 from datetime import date, timedelta
 
-
-
 def mainPage(request):
     
     employee = request.user
@@ -29,7 +27,7 @@ def mainPage(request):
 
     today = date.today()
     start_week = today - timedelta(today.weekday())
-    end_week = start_week + timedelta(6)   
+    end_week = start_week + timedelta(7)   
     periodData = getPayPeriod(start_week.strftime('%Y-%m-%d'), end_week.strftime('%Y-%m-%d'), employee.username)
 
     t = loader.get_template('mainPage.html')

@@ -260,7 +260,29 @@ class Employee(AbstractBaseUser):
         except Shift.MultipleObjectsReturned:
             msg = "It appears you have multiple shifts that say your clocked in.  Please use the Manage Shifts tool to fix this."
             raise Shift.MultipleObjectsReturned(msg)
+
+    
+    def getJobHours(self, start, end, job):
+        '''
+        ' Calculates and returns the total hours worked by the employee for the given job in the timerange
+        '
+        ' Keyword Args:
+        '   start - Datetime object specifying start of time range
+        '   end   - Datetime object specifying end of time range
+        '   job   - Job to total up hours worked for.
+        '
+        ' Returns: total hours worked on the job for the time range as a float.
+        '''
         
+        assert isinstance(job, Job), "%s is not a Job instance"%str(job)
+
+        summaries = ShiftSummary.objects.filter(employee=self, job=job, shift__time_in__lte=end, shift__time_out__gte=start)
+        hours = 0.0
+        for summary in summaries:
+            hours += summary.hours/3600.0
+
+        return hours
+
 
 class ShiftManager(ChuchoManager):
     def get_editable_by_pk(self, user, pk):
