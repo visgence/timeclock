@@ -20,10 +20,10 @@
 		{% csrf_token %}
 			<div class="clocker-container">
 				{% if not status %}
-                    <span id="statusBtn" class="clock-in">Clock In</span>
+                    <button class="btn btn-success btn-lg">Clock In</button>
                     <input type="hidden" name="status" value="In">
 				{% elif status %}
-                    <span id="statusBtn" class="clock-out">Clock Out</span>
+                    <button class="btn btn-danger btn-lg">Clock Out</button>
                     <input type="hidden" name="status" value="Out">
 	            {% endif %}
 			</div>
@@ -40,44 +40,46 @@
       	
 <div class="cf">
 	<div id="hour_management">
-        <form name="admin" action="{% url 'get-total-hours' %}" method="post">
+
+        <h4 class="text-muted">View Hours{% if employee.is_superuser %}(Admin){% endif %}</h4>	
+        <form name="admin" action="{% url 'get-total-hours' %}" method="post" class="form-horizontal" role="form">
 			{% csrf_token %}
-		
-		    	<table style="border-style: none;">
-					<tr>
-		            	<th colspan="2" style="text-align: left;">View Hours(Admin)</th>
-		            </tr>
-		
-		            <tr>
-		            	<td>From </td>
-		                <td> <input type="text" id="from" name="from"/> </td>
-		            </tr>
-		
-		            <tr>
-		            	<td>To</td>
-		                <td> <input type="text" id="to" name="to"/>  </td>
-		            </tr>
-		
-		            <tr>
-		            	<td>Employee</td>
-		                <td> 
-		                	<select name="user_name">
-		                        {% for emp in employees %}
-                                    <option value="{{emp.username}}">{{emp}}</option>
-		                        {% endfor %}
-		                    </select> 
-		                </td>
-		            </tr>
-		
-		            <tr>
-		            	<td></td>
-		                <td> <input type="submit" value="Submit" name="Submit"></td>
-		            </tr>
-				</table>
+                 
+                <div class="form-group">
+                    <label for="from" class="control-label col-lg-3 col-sm-3">From</label>
+                    <div class="col-lg-6 col-sm-6">
+                        <input type="text" id="from" name="from" class="form-control" placeholder="From"/>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="to" class="control-label col-lg-3 col-sm-3">To</label>
+                    <div class="col-lg-6 col-sm-6">
+                        <input type="text" id="to" name="to" class="form-control" placeholder="To"/>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-lg-3 col-sm-3 control-label">Employee</label>
+                    <div class="col-lg-6 col-sm-6">
+                        <select name="user_name" class="form-control">
+                            {% for emp in employees %}
+                                <option value="{{emp.username}}">{{emp}}</option>
+                            {% endfor %}
+                        </select> 
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-lg-offset-3 col-sm-offset-3 col-lg-6 col-sm-6">
+                        <button type="submit" name="Submit" class="btn btn-default">Submit</button>
+                    </div>
+                </div>
 		</form>
 	</div>
 		
 	<div id="management">
+        <h4 class="text-muted">Management</h4>	
 		{% if employee.is_superuser %}
 			<div class="click">
                 <a class="clickable" href="{% url 'manage-employees' %}">Manage Employees</a>
