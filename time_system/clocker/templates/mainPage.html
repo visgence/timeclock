@@ -179,7 +179,7 @@
         var toJob = $('#to-job');
         if($(fromJob).val() == '' && $(toJob).val() == '') {
             $(fromJob).val('{{start_week}}');
-            $(toJob).val('{{end_week}}');
+            $(toJob).val('{{today}}');
         }
 
         $('#job-controls form').trigger('submit');

@@ -4,43 +4,46 @@ $(function() {
         console.log($(this).parent('form.clocker-form'));
         $(this).closest('form.clocker-form').submit();
     });
-    
-    $( "#from" ).datepicker({
-        defaultDate: "+1w",
-        changeMonth: true,
-        numberOfMonths: 1,
-        dateFormat: 'yy-mm-dd',
-        onClose: function( selectedDate ) {
-            $( "#to" ).datepicker( "option", "minDate", selectedDate );
-        }
+
+
+    $("#from").datepicker({
+        'autoclose': true
+        ,'orientation': 'top'
+        ,'endDate': new Date()
+        ,'format': 'yyyy-mm-dd'
+    })
+    .on('changeDate', function(ev) {
+        $('#to').datepicker('setStartDate', ev.date);    
     });
-    $( "#to" ).datepicker({
-        efaultDate: "+1w",
-        hangeMonth: true,
-        numberOfMonths: 1,
-        dateFormat: 'yy-mm-dd',
-        onClose: function( selectedDate ) {
-            $( "#from" ).datepicker( "option", "maxDate", selectedDate );
-        }
+
+    $("#to").datepicker({
+        'autoclose': true
+        ,'orientation': 'top'
+        ,'endDate': new Date()
+        ,'format': 'yyyy-mm-dd'
+    })
+    .on('changeDate', function(ev) {
+        $('#from').datepicker('setEndDate', ev.date);    
     });
 
 
-    $( "#from-job" ).datepicker({
-        defaultDate: "+1w",
-        changeMonth: true,
-        numberOfMonths: 1,
-        dateFormat: 'yy-mm-dd',
-        onClose: function( selectedDate ) {
-            $( "#to-job" ).datepicker( "option", "minDate", selectedDate );
-        }
+    $("#from-job").datepicker({
+        'autoclose': true
+        ,'orientation': 'top'
+        ,'endDate': new Date()
+        ,'format': 'yyyy-mm-dd'
+    })
+    .on('changeDate', function(ev) {
+        $('#to-job').datepicker('setStartDate', ev.date);    
     });
-    $( "#to-job" ).datepicker({
-        efaultDate: "+1w",
-        hangeMonth: true,
-        numberOfMonths: 1,
-        dateFormat: 'yy-mm-dd',
-        onClose: function( selectedDate ) {
-            $( "#from-job" ).datepicker( "option", "maxDate", selectedDate );
-        }
+
+    $("#to-job").datepicker({
+        'autoclose': true
+        ,'orientation': 'top'
+        ,'endDate': new Date()
+        ,'format': 'yyyy-mm-dd'
+    })
+    .on('changeDate', function(ev) {
+        $('#from-job').datepicker('setEndDate', ev.date);    
     });
 });

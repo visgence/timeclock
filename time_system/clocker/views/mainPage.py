@@ -38,7 +38,7 @@ def mainPage(request):
         'message': message,
         'timeStamp': timeStamp,
         'start_week': date.strftime(start_week, '%Y-%m-%d'),
-        'end_week': date.strftime(end_week, '%Y-%m-%d'),
+        'today': date.strftime(today, '%Y-%m-%d'),
         'weekly_regular': periodData['pay_period']['period_regular'],
         'weekly_overtime': periodData['pay_period']['period_overtime']
     })
