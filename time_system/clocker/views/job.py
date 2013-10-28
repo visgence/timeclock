@@ -2,6 +2,7 @@
 # System Imports
 from datetime import datetime, timedelta
 from decimal import Decimal
+from collections import OrderedDict
 
 # Django Imports
 from django.template import RequestContext, loader
@@ -122,12 +123,12 @@ def getJobsBreakdown(employees=None, start=None, end=None):
             return "No employee with username %s" % str(e)
 
     jobData = {
-        'jobs': {}
+        'jobs': OrderedDict()
         ,'total_hours': 0
         ,'employees': []
     }
     
-    jobs = Job.objects.all()
+    jobs = Job.objects.all().order_by('name')
     for employee in employees:
         jobData['employees'].append(employee.username)
        
