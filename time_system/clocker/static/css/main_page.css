@@ -65,12 +65,16 @@ div.click
 .clickable
 {
     cursor: pointer;
-    color: #3399ff;
 }
 
-.clickable:hover
+.link_color:hover, a.link_color:hover
 {
     color: #009900;
+}
+
+.link_color, a.link_color
+{
+    color: #3399ff;
 }
 
 div#hour_management

@@ -1,12 +1,20 @@
+
+# Django imports
 from django.db import models
 from django.db.models import Q
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 from django.core.exceptions import ValidationError
+
+# System Imports
 from datetime import datetime
 from decimal import Decimal
 import re
 
+# Local imports
 from chucho.models import ChuchoManager
+from settings import DT_FORMAT
+
+
 
 class EmployeeManager(BaseUserManager, ChuchoManager):
     def can_edit(self, user):
@@ -392,6 +400,18 @@ class Shift(models.Model):
             data += " " + self.employee.first_name + " " + self.employee.last_name
 
         return data
+
+
+    def toDict(self):
+        
+        return {
+            "id": self.id
+            ,"employee": self.employee.id
+            ,"time_in":  self.time_in.strftime(DT_FORMAT)
+            ,"time_out": self.time_out.strftime(DT_FORMAT) if self.time_out is not None else self.time_out
+            ,"hours":    str(self.hours) if self.hours is not None else self.hours
+        }
+
 
     def save(self, *args, **kwargs):
         if self.time_out is not None:

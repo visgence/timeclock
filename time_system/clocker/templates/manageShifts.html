@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2>Manage Shifts</h2>	
+
+<div id="manage-shifts-container">
+
+	<div data-bind="with: shiftList">
+	    <ul class="pager">
+	        <li data-bind="ifnot: currentPage()==1, click: firstPage" class="previous clickable"><a>&lt;&lt; First</a></li>
+	        <li data-bind="ifnot: currentPage()==1, click: prevPage" class="previous clickable"><a>&lt; Prev</a></li>
+
+	        <li data-bind="text: pageNum"></li>
+
+	        <li data-bind="ifnot: currentPage()==totalPages(), click: lastPage" class="next clickable"><a>Last &gt;&gt;</a></li>
+	        <li data-bind="ifnot: currentPage()==totalPages(), click: nextPage" class="next clickable"><a>Next &gt;</a></li>
+	    </ul>
+
+		<table class="table">
+			<thead>
+				<th></th>
+				<th>In</th>
+				<th>Out</th>
+				<th>Hours</th>
+			</thead>
+			<tbody data-bind="foreach: shifts">
+				<tr>
+					<td>
+						<span title="Edit Summary" class="glyphicon glyphicon-list clickable" data-bind="click: summary"></span>
+						<span title="Shift editing coming soon" class="glyphicon glyphicon-pencil clickable"></span>
+					</td>
+					<td data-bind="text: time_in"></td>
+					<td data-bind="text: time_out"></td>
+					<td data-bind="text: hours"></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</div>
+
+{% endblock content %}
+
+{% block additional-scripts %}
+	<script type="text/javascript" src="{{STATIC_URL}}js/shift.js"></script>
+	<script type="text/javascript" src="{{STATIC_URL}}js/shiftList.js"></script>
+	<script type="text/javascript" src="{{STATIC_URL}}js/manageShifts.js"></script>
+	
+	<script>
+		$(function() {
+			var manageShifts = new $.fn.ManageShifts();
+			ko.applyBindings(manageShifts, $('#manage-shifts-container').get(0));
+		});
+	</script>
+{% endblock additional-scripts %}

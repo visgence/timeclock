@@ -2,6 +2,9 @@ from django.conf.urls import patterns, include, url
 from django.views.generic import RedirectView
 from clocker.views.management import ManageView
 
+from clocker.views.shift import ShiftsView
+from clocker.views.shift import ShiftView
+
 
 urlpatterns = patterns('',
     url(r'^$', RedirectView.as_view(url='/timeclock/')),
@@ -18,7 +21,7 @@ urlpatterns += patterns('clocker.views.clockEmployee',
     url(r'^timeclock/manage/employees/$', ManageView.as_view(app="clocker", model="Employee"), name="manage-employees"),
     url(r'^timeclock/manage/jobs/$', ManageView.as_view(app="clocker", model="Job"), name="manage-jobs"),
     url(r'^timeclock/manage/summaries/$', ManageView.as_view(app="clocker", model="ShiftSummary"), name="manage-summaries"),
-    url(r'^timeclock/manage/shifts/$', ManageView.as_view(app="clocker", model="Shift"), name="manage-shifts"),
+    url(r'^timeclock/manage/shifts/$', ManageView.as_view(template_name="manageShifts.html"), name="manage-shifts"),
 )
 
 #Employee clock in/out 
@@ -54,4 +57,10 @@ urlpatterns += patterns('clocker.views.login',
 urlpatterns += patterns('clocker.views.shiftSummary',
     url(r'^timeclock/saveSummaries/$', 'summary', name="save-summaries"),
     url(r'^timeclock/summary/(?P<id>\d+)/$', 'renderSummary', name="render-summary"),
+)
+
+#shifts
+urlpatterns += patterns('clocker.views.shift',
+    url(r'^timeclock/shifts/$', ShiftsView.as_view(), name="shift-list"),
+    url(r'^timeclock/shifts/(?P<id>\d+)/$', ShiftView.as_view(), name="shift-detail"),
 )
