@@ -4,3 +4,6 @@
 local_settings.py
 local_database_settings.py
 
+.DS_Store
+timeclock.sublime-project
+timeclock.sublime-workspace
