@@ -5,17 +5,35 @@ $(function() {
 		var Shift = $.fn.Shift;
 		var shiftUrl = "/timeclock/shifts/"
 
+		var per_page = 25;
+
 		this.shifts = ko.observableArray();
+
+        this.currentPage = ko.observable();
+        this.totalPages = ko.observable();
+        this.pageNum = ko.computed(function() {
+            return this.currentPage() +" of "+ this.totalPages() +" pages";
+        }.bind(this));
+
 
 
 		this.init = function(vars) {
 			vars = vars || {};
+
+			if (vars.hasOwnProperty('per_page'))
+				per_page = vars.per_page;
 
 			this.rebuild(vars);
 		}.bind(this);
 
 		this.rebuild = function(vars) {
 			vars = vars || {};
+
+			if (vars.hasOwnProperty('page'))
+				this.currentPage(vars.page);
+
+			if (vars.hasOwnProperty('totalPages'))
+				this.totalPages(vars.totalPages);
 
 			if (vars.hasOwnProperty('shifts')) {
 				var newShifts = [];
@@ -27,10 +45,31 @@ $(function() {
 			}
 		}.bind(this);
 
-		this.reload = function() {
+        this.nextPage = function() {
+            this.reload(this.currentPage()+1);
+        }.bind(this);
+
+        this.prevPage = function() {
+            this.reload(this.currentPage()-1);
+        }.bind(this);
+
+        this.firstPage = function() {
+            this.reload(1);
+        }.bind(this);
+
+        this.lastPage = function() {
+            this.reload(this.totalPages());
+        }.bind(this);
+
+		this.reload = function(page) {
 			var __this = this;
 
-			var promise = $.get(shiftUrl)
+			var args = {
+				 'page': page
+				,'per_page': per_page	
+			}
+
+			var promise = $.get(shiftUrl, args)
 			.done(function(resp) {
 				if(resp.hasOwnProperty("errors") && resp.errors.length > 0)
 					console.error(resp.errors);	
