@@ -1,5 +1,9 @@
 {% extends "base.html" %}
 
+{% block additional-headers %}
+<link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/manageShifts.css">
+{% endblock additional-headers %}
+
 {% block content %}
 
 <h2>Manage Shifts</h2>	
@@ -24,7 +28,30 @@
 				<th>Out</th>
 				<th>Hours</th>
 			</thead>
-			<tbody data-bind="foreach: shifts">
+			<tbody>
+				<tr>
+					<td>
+						<button type="button" class="btn btn-success">Create</button>
+					</td>
+					<td>
+						<ul class="list-inline">
+							<li>
+								<input class="form-control date-input icon-input" type="text" placeholder="Date">
+							</li>
+							<li>
+								<input class="form-control time-input icon-input" type="text" placeholder="Time">
+							</li>
+						</ul>
+					</td>
+					<td>
+						<ul class="list-inline">
+							<li><input class="form-control date-input icon-input" type="text" placeholder="Date"></li>
+							<li><input class="form-control time-input icon-input" type="text" placeholder="Time"></li>
+						</ul>
+					</td>
+					<td></td>
+				</tr>
+				<!-- ko foreach: shifts -->
 				<tr>
 					<td>
 						<span title="Edit Summary" class="glyphicon glyphicon-list clickable" data-bind="click: summary"></span>
@@ -33,6 +60,7 @@
 					<td data-bind="text: time_out"></td>
 					<td data-bind="text: hours"></td>
 				</tr>
+				<!-- /ko -->
 			</tbody>
 		</table>
 	</div>
@@ -47,6 +75,16 @@
 	
 	<script>
 		$(function() {
+			$('input.icon-input').on('input', function() {
+				var currentVal = $(this).val();
+				if (currentVal === "")
+					$(this).removeClass('icon-input-hide');	
+				else
+					$(this).addClass('icon-input-hide');	
+			}).trigger('input');
+
+
+
 			var manageShifts = new $.fn.ManageShifts();
 			ko.applyBindings(manageShifts, $('#manage-shifts-container').get(0));
 		});
