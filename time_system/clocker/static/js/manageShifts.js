@@ -14,6 +14,23 @@ $(function() {
 
 			this.shiftList(new ShiftList(shiftListData));
 			this.shiftList().reload(startingPage);
+
+			setInputBindings();
+		}
+
+		function setInputBindings() {
+			$('input.icon-input').on('input', function() {
+				var currentVal = $(this).val();
+				if (currentVal === "" && !$(this).is(':focus'))
+					$(this).removeClass('icon-input-hide');	
+				else
+					$(this).addClass('icon-input-hide');	
+			})
+			.focus(function() { $(this).addClass('icon-input-hide'); })
+			.focusout(function() { 
+				if ($(this).val() === "")
+					$(this).removeClass('icon-input-hide'); 
+			}).trigger('input');
 		}
 
 		this.init();

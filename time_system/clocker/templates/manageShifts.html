@@ -75,16 +75,6 @@
 	
 	<script>
 		$(function() {
-			$('input.icon-input').on('input', function() {
-				var currentVal = $(this).val();
-				if (currentVal === "")
-					$(this).removeClass('icon-input-hide');	
-				else
-					$(this).addClass('icon-input-hide');	
-			}).trigger('input');
-
-
-
 			var manageShifts = new $.fn.ManageShifts();
 			ko.applyBindings(manageShifts, $('#manage-shifts-container').get(0));
 		});
