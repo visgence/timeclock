@@ -1,5 +1,5 @@
 """
-" portcullis/management/commands/clean.py
+" clocker/management/commands/clean.py
 " Contributing Authors:
 " Jeremiah Davis (Visgence, Inc.)
 "

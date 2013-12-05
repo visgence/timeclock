@@ -1,5 +1,5 @@
 '''
-' portcullis/management/commands.setup.py
+' clocker/management/commands.setup.py
 ' Contributing Authors:
 '    Jeremiah Davis (Visgence, Inc)
 '
@@ -11,6 +11,7 @@ from django.core.management import call_command
 from django.core.management.base import BaseCommand
 from settings import APP_PATH
 from shutil import copyfile
+
 #import git
 import sys
 
@@ -22,20 +23,12 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
 
-        # Make sure we have the current submodules
-        #sys.stdout.write('Updating git-submodules...')
-        #sys.stdout.flush()
-        #repo = git.Repo(APP_PATH)
-        #repo.submodule_update(to_latest_revision=False)
-        #print "Done"
-
         call_command('syncdb', migrate_all=True, interactive=False)
         call_command('migrate', fake=True)
 
         print "Loading fixtures..."
         fixtures = [
             [
-                'portcullis/fixtures/portcullisUsers.json'
             ]
         ]
 
@@ -48,11 +41,7 @@ class Command(BaseCommand):
             user_resp = raw_input('(y/n) ')
 
         if user_resp in ['y', 'Y']:
-            fixtures.append([
-                    'graphs/fixtures/scalingFunctions.json',
-                    'graphs/fixtures/sensors.json',
-                    'graphs/fixtures/dataStreams.json'
-            ])
+            fixtures.append([])
 
         # Load fixtures
         for apps in fixtures:
