@@ -40,8 +40,11 @@ class ShiftView(View):
             if field in ['id', 'pk']:
                 continue
 
-            if field in ['time_in', 'time_out']:
-                value = datetime.strptime(value, DT_FORMAT)
+            if field in ['time_in', 'time_out'] and value is not None:
+                if value == u'':
+                    value = None
+                else:
+                    value = datetime.strptime(value, DT_FORMAT)
 
             setattr(shift, field, value)
 
