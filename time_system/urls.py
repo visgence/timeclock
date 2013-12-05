@@ -62,5 +62,5 @@ urlpatterns += patterns('clocker.views.shiftSummary',
 #shifts
 urlpatterns += patterns('clocker.views.shift',
     url(r'^timeclock/shifts/$', ShiftsView.as_view(), name="shift-list"),
-    url(r'^timeclock/shifts/(?P<id>\d+)/$', ShiftView.as_view(), name="shift-detail"),
+    url(r'^timeclock/shifts/(?P<shift_id>\d+)/$', ShiftView.as_view(), name="shift-detail"),
 )

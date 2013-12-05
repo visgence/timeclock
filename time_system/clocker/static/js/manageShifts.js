@@ -15,7 +15,7 @@ $(function() {
 			this.shiftList(new ShiftList(shiftListData));
 			this.shiftList().reload(startingPage);
 
-			setInputBindings();
+			//setInputBindings();
 		}
 
 		function setInputBindings() {
@@ -31,6 +31,30 @@ $(function() {
 				if ($(this).val() === "")
 					$(this).removeClass('icon-input-hide'); 
 			}).trigger('input');
+
+			$('.date-input').bootstrapDP({
+		         'autoclose': true
+		        ,'orientation': 'top'
+		        ,'format': 'yyyy-mm-dd'
+			}).on('hide', function(e) {
+				$(e.target).trigger('input');
+			});
+
+			$('.time-input').timepicker({
+				 'showMeridian': false	
+				,'showSeconds': true
+				,'defaultTime': false
+				,'minuteStep': 1
+			})
+			.on("show.timepicker", function(e){
+				$(e.target).val(e.time.value);
+			})
+			.on("changeTime.timepicker", function(e) {
+				if (e.time.value === "")
+					$(e.target).val("0:00:00");
+				else
+					$(e.target).val(e.time.value);
+			}).val("");
 		}
 
 		this.init();

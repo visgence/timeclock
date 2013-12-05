@@ -20,8 +20,15 @@ $(function() {
 		this.init = function(vars) {
 			vars = vars || {};
 
+			var __this = this;
+
 			if (vars.hasOwnProperty('per_page'))
 				per_page = vars.per_page;
+
+			//TODO: this will change once I get more time to do something more proper
+			$(window).on('shift-updated', function() {
+				__this.reload(__this.currentPage());
+			});
 
 			this.rebuild(vars);
 		}.bind(this);
