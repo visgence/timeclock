@@ -2,6 +2,10 @@
 #############
 *.sublime-*
 
+# Local dev files #
+###################
+local_database_settings.py
+
 # Compiled Source #
 ###################
 *.pyc
