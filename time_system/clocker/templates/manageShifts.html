@@ -1,6 +1,44 @@
 {% extends "base.html" %}
 
+{% block additional-headers %}
+<!--
+<link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/bootstrap-timepicker.min.css">
+-->
+<link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/manageShifts.css">
+{% endblock additional-headers %}
+
 {% block content %}
+
+{% csrf_token %}
+
+<script id="edit-shift-template" type="text/html">
+	<tr>
+		<td>
+			<button type="button" class="btn btn-success" data-bind="click: update">Save</button>
+			<button type="button" class="btn btn-default" data-bind="click: cancelEdit">Cancel</button>
+		</td>
+		<td>
+			<input class="form-control  time-in-input" type="text" data-bind="value: shiftToEdit().time_in">
+			<!--
+			<ul class="list-inline">
+				<li><input class="form-control date-input icon-input" type="text" placeholder="Date"></li>
+				<li><input class="form-control time-input icon-input" type="text" placeholder="Time"></li>
+			</ul>
+			-->
+		</td>
+		<td>
+			<input class="form-control time-out-input" type="text" data-bind="value: shiftToEdit().time_out">
+			<!--
+			<ul class="list-inline">
+				<li><input class="form-control date-input icon-input" type="text" placeholder="Date"></li>
+				<li><input class="form-control time-input icon-input" type="text" placeholder="Time"></li>
+			</ul>
+			-->
+		</td>
+		<td></td>
+	</tr>
+</script>
+
 
 <h2>Manage Shifts</h2>	
 
@@ -24,15 +62,19 @@
 				<th>Out</th>
 				<th>Hours</th>
 			</thead>
-			<tbody data-bind="foreach: shifts">
-				<tr>
+			<tbody>
+				<!-- ko foreach: shifts -->
+				<tr data-bind="ifnot: updating">
 					<td>
 						<span title="Edit Summary" class="glyphicon glyphicon-list clickable" data-bind="click: summary"></span>
+						<span title="Edit Shift" class="glyphicon glyphicon-pencil clickable" data-bind="click: editShift"></span>
 					</td>
 					<td data-bind="text: time_in"></td>
 					<td data-bind="text: time_out"></td>
 					<td data-bind="text: hours"></td>
 				</tr>
+				<!-- ko template: {name: "edit-shift-template", if: updating, afterRender: bindInputs} --><!-- /ko -->
+				<!-- /ko -->
 			</tbody>
 		</table>
 	</div>
@@ -41,6 +83,9 @@
 {% endblock content %}
 
 {% block additional-scripts %}
+	<!--
+    <script type="text/javascript" src="{{STATIC_URL}}js/bootstrap-timepicker.min.js"></script>
+    -->
 	<script type="text/javascript" src="{{STATIC_URL}}js/shift.js"></script>
 	<script type="text/javascript" src="{{STATIC_URL}}js/shiftList.js"></script>
 	<script type="text/javascript" src="{{STATIC_URL}}js/manageShifts.js"></script>

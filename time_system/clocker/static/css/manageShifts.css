@@ -1,0 +1,23 @@
+input.date-input {
+	background-image: url("/static/images/calendar-icon.png");
+}
+
+input.time-input {
+	background-image: url("/static/images/time-icon.png");
+}
+
+input.icon-input {
+	width: 8em;
+	background-position: 10px center;
+	background-repeat: no-repeat;
+	text-indent: 20px;
+
+	-webkit-transition: all 0.2s;
+    -moz-transition: all 2s;
+    transition: all 0.2s;	
+}
+
+input.icon-input-hide {
+	background-position: -20px center;
+	text-indent: 0;
+}

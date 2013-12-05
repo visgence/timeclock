@@ -1,0 +1,15 @@
+[
+{
+	"model": "clocker.Employee",
+	"pk": 1,
+	"fields": {
+		"username": "admin",
+		"first_name": "Admin",
+		"last_name": "Developer",
+		"is_superuser": true,
+		"hourly_rate": 12.00,
+		"hire_date": "2012-09-01",
+		"password": "pbkdf2_sha256$10000$I6zR96PdknAc$zSs1w5Hg8hOssIMZUMaNbWuKWPOnx6LsCxifuAdYmmA="
+	}	
+}
+]

@@ -1,13 +1,24 @@
 $(function() {
 
 	var Shift = function(vars) {
-		
+	
+		var shiftUrl = "/timeclock/shifts/";
+
 		this.id = ko.observable();
 		this.time_in = ko.observable();
 		this.time_out = ko.observable();
 		this.hours = ko.observable();
 
+		this.updating = ko.observable(false);
+		this.shiftToEdit = ko.observable();	
+
 		this.init = function(vars) {
+			vars = vars || {};
+
+			this.rebuild(vars);
+		}.bind(this);
+
+		this.rebuild = function(vars) {
 			vars = vars || {};
 
 			if (vars.hasOwnProperty('id'))
@@ -23,6 +34,69 @@ $(function() {
 
 		this.summary = function() {
 			window.location = "/timeclock/summary/" + this.id();
+		}.bind(this);
+
+		this.editShift = function() {
+			var data = this.toDict();
+			var editShift = new Shift(data);
+			this.shiftToEdit(editShift);		
+
+			this.updating(true);
+		}.bind(this);
+
+		this.cancelEdit = function() {
+			this.updating(false);
+		}.bind(this);
+
+		this.bindInputs = function(e) {
+			$(e).find('.time-in-input').datetimepicker({
+                 showSecond: true
+                ,dateFormat: 'mm/dd/yy'
+                ,timeFormat: 'hh:mm:ss'
+			})
+			$(e).find('.time-out-input').datetimepicker({
+                 showSecond: true
+                ,dateFormat: 'mm/dd/yy'
+                ,timeFormat: 'hh:mm:ss'
+			})
+		}.bind(this)
+
+		this.update = function() {
+			var url = shiftUrl;
+			var requestType = "POST";
+			var data = this.shiftToEdit().toDict();
+			var csrf = $('input[name="csrfmiddlewaretoken"]').val();
+
+			console.log(data);
+			if(data.id) {
+				url += data.id + "/";
+				requestType = "PUT";
+			}
+
+			return $.ajax({
+				 url: url
+                ,dataType: 'json'
+                ,type: requestType
+                ,beforeSend: function(xhr) {
+                    xhr.setRequestHeader('X-CSRFToken', csrf);
+                }
+                ,data: JSON.stringify(data)
+			})
+			.done(function() {
+				$(window).trigger('shift-updated');
+			})
+			.fail(function(resp) {
+		        alert(resp.responseText);
+			});
+		}.bind(this);
+
+		this.toDict = function() {
+			return {
+				 'id':       this.id()
+				,'time_in':  this.time_in()
+				,'time_out': this.time_out()
+				,'hours':    this.hours()	
+			}
 		}.bind(this);
 
 		this.init(vars);

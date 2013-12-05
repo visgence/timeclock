@@ -1,5 +1,5 @@
 '''
-' time_system/management/commands/rebuild.py
+' clocker/management/commands/rebuild.py
 ' Contributing Authors:
 '    Jeremiah Davis (Visgnece, Inc.)
 '    Bretton Murphy (Visgence, Inc.)
