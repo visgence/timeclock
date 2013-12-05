@@ -29,6 +29,7 @@ class Command(BaseCommand):
         print "Loading fixtures..."
         fixtures = [
             [
+                "clocker/fixtures/employees.json"
             ]
         ]
 
