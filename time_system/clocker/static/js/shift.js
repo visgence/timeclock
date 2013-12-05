@@ -84,6 +84,9 @@ $(function() {
 			})
 			.done(function() {
 				$(window).trigger('shift-updated');
+			})
+			.fail(function(resp) {
+		        alert(resp.responseText);
 			});
 		}.bind(this);
 
