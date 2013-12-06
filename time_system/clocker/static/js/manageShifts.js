@@ -49,17 +49,15 @@ $(function() {
 		}
 
 		//Checks if the shift table should add a blank row to seperate groups of shifts by day
-		this.shouldAddSeperator = function(prevIndex, index) {
-			if (index == 0)
-				return true;
+		this.shouldAddSeperator = function(index, nextIndex) {
 
-			if (prevIndex >= this.shiftList().shifts().length || index >= this.shiftList().shifts().length)
+			if (index >= this.shiftList().shifts().length || nextIndex >= this.shiftList().shifts().length)
 				return false;
 			
-			var prevDate = new Date(this.shiftList().shifts()[prevIndex].time_in());
-			var curerntDate = new Date(this.shiftList().shifts()[index].time_in());
+			var currentDate = new Date(this.shiftList().shifts()[index].time_in());
+			var nextDate = new Date(this.shiftList().shifts()[nextIndex].time_in());
 
-			if (prevDate.getDate() !== curerntDate.getDate()) {
+			if (currentDate.getDate() !== nextDate.getDate()) {
 				console.log('true');
 				return true;
 			}
