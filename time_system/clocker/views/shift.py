@@ -6,7 +6,7 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.core.exceptions import ValidationError
 
 # Local imports
-from clocker.models import Shift
+from clocker.models import Shift, Employee
 from settings import DT_FORMAT
 
 # System imports
@@ -83,15 +83,20 @@ class ShiftsView(View):
 
     def get(self, request):
 
-        employee = request.user.id
+        employee = request.user
         if 'employee' in request.GET:
+            emp_id = request.GET['employee']
             try:
-                employee = int(request.GET['employee'])
-            except ValueError:
-                self.returnData['errors'].append('argument employee must be an integer value.')
-                return HttpResponseBadRequest(json.dumps(self.returnData, indent=4), content_type="application/json")
+                employee = Employee.objects.get(id=emp_id)
+            except Employee.DoesNotExist:
+                self.returnData['errors'].append('Employee with id %s does not exist' % str(emp_id))
+                return HttpResponseNotFound(json.dumps(self.returnData, indent=4), content_type="application/json")
 
-        shifts = Shift.objects.filter(employee__id=employee).order_by( '-time_in', 'id')
+        if not request.user.is_superuser and request.user != employee:
+            self.returnData['errors'].append('Invalid permissions')
+            return HttpResponseForbidden(json.dumps(self.returnData, indent=4), content_type="application/json")
+
+        shifts = Shift.objects.filter(employee=employee).order_by( '-time_in', 'id')
 
         # break the data into pages 
         if 'page' in request.GET and 'per_page' in request.GET:
