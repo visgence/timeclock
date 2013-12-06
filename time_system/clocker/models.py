@@ -169,6 +169,16 @@ class Employee(AbstractBaseUser):
         super(Employee, self).save(*args, **kwargs)
 
 
+    def toDict(self):
+        return {
+             "id":           self.id
+            ,"username":     self.username
+            ,"first_name":   self.first_name
+            ,"last_name":    self.last_name
+            ,"is_superuser": self.is_superuser
+            ,"is_active":    self.is_active
+        }
+
     def can_view(self, user):
         '''
         ' Checks if a User instance is allowed to view this object instance or not.
@@ -406,7 +416,7 @@ class Shift(models.Model):
         
         return {
             "id": self.id
-            ,"employee": self.employee.id
+            ,"employee": self.employee.toDict()
             ,"time_in":  self.time_in.strftime(DT_FORMAT)
             ,"time_out": self.time_out.strftime(DT_FORMAT) if self.time_out is not None else self.time_out
             ,"hours":    str(self.hours) if self.hours is not None else self.hours
