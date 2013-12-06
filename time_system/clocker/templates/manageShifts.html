@@ -100,11 +100,11 @@
 					<td data-bind="text: hours"></td>
 				</tr>
 
+				<!-- ko template: {name: "edit-shift-template", if: updating, afterRender: bindInputs} --><!-- /ko -->
+
 				<tr data-bind="if: $root.shouldAddSeperator($index(), $index()+1)">
 					<td colspan="5"></td>
 				</tr>
-
-				<!-- ko template: {name: "edit-shift-template", if: updating, afterRender: bindInputs} --><!-- /ko -->
 				<!-- /ko -->
 			</tbody>
 		</table>
