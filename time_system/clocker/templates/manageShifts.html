@@ -86,10 +86,6 @@
 			</thead>
 			<tbody>
 				<!-- ko foreach: shifts -->
-
-				<tr data-bind="if: $root.shouldAddSeperator($index()-1, $index())">
-					<td colspan="5"><center><i data-bind="text: getTimeInDate()"></i></center></td>
-				</tr>
 			
 				<tr data-bind="ifnot: updating">
 					<td>
@@ -102,6 +98,10 @@
 					<td data-bind="text: time_in"></td>
 					<td data-bind="text: time_out"></td>
 					<td data-bind="text: hours"></td>
+				</tr>
+
+				<tr data-bind="if: $root.shouldAddSeperator($index(), $index()+1)">
+					<td colspan="5"></td>
 				</tr>
 
 				<!-- ko template: {name: "edit-shift-template", if: updating, afterRender: bindInputs} --><!-- /ko -->
