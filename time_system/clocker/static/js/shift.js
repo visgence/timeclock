@@ -35,6 +35,17 @@ $(function() {
 
 		}.bind(this);
 
+		this.getTimeInDate = function() {
+			if (!this.time_in())
+				return '';
+
+			var d = new Date(this.time_in());
+			var dateStr = (d.getMonth() + 1) + "/" +
+						  (d.getDate().length == 1 ? "0"+d.getDate() : d.getDate()) + "/" +
+						   d.getFullYear();
+			return dateStr;
+		}.bind(this);
+
 		this.summary = function() {
 			window.location = "/timeclock/summary/" + this.id();
 		}.bind(this);
