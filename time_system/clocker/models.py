@@ -453,6 +453,24 @@ class Shift(models.Model):
         return False
 
 
+    def can_edit(self, user):
+        '''
+        ' Checks if a User instance is allowed to edit this object instance or not.
+        '
+        ' Keyword Arguments:
+        '   user - AuthUser to check if they have permissions.
+        '
+        ' Return: True if user is allowed to edit and False otherwise.
+        '''
+
+        if not isinstance(user, Employee):
+            raise TypeError('%s is not an Employee' % str(user))
+
+        if user.is_superuser or user == self.employee:
+            return True
+
+        return False
+
 class ShiftSummaryManager(ChuchoManager):
     def get_editable_by_pk(self, user, pk):
         '''
