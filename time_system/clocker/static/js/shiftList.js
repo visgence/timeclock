@@ -25,11 +25,6 @@ $(function() {
 			if (vars.hasOwnProperty('per_page'))
 				per_page = vars.per_page;
 
-			//TODO: this will change once I get more time to do something more proper
-			$(window).on('shift-updated', function() {
-				__this.reload(__this.currentPage());
-			});
-
 			this.rebuild(vars);
 		}.bind(this);
 
@@ -68,12 +63,13 @@ $(function() {
             this.reload(this.totalPages());
         }.bind(this);
 
-		this.reload = function(page) {
+		this.reload = function(page, employee) {
 			var __this = this;
 
 			var args = {
 				 'page': page
-				,'per_page': per_page	
+				,'per_page': per_page
+				,'employee': employee
 			}
 
 			var promise = $.get(shiftUrl, args)

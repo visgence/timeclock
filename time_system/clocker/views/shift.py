@@ -1,7 +1,7 @@
 
 # Django imports
 from django.views.generic.base import View
-from django.http import HttpResponse, HttpResponseBadRequest
+from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseForbidden
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.core.exceptions import ValidationError
 
@@ -37,7 +37,7 @@ class ShiftView(View):
 
         #Set fields for shift
         for field, value in params.iteritems():
-            if field in ['id', 'pk']:
+            if field in ['id', 'pk', 'employee']:
                 continue
 
             if field in ['time_in', 'time_out'] and value is not None:
@@ -62,10 +62,14 @@ class ShiftView(View):
     def put(self, request, shift_id):
 
         try:
-            shift = Shift.objects.get(id=shift_id, employee=request.user)
+            shift = Shift.objects.get(id=shift_id)
         except Shift.DoesNotExist:
             error = 'Shift does not exist for id %s'%str(shift_id)
             return HttpResponseNotFound(json.dumps(error), content_type="application/json")
+        else:
+            if not shift.can_edit(request.user):
+                error = 'You do not have permission to edit this Shift'
+                return HttpResponseForbidden(json.dumps(error), content_type="application/json")
 
         return ShiftView.updateClient(shift, request.read(), request.user)
 
@@ -79,7 +83,15 @@ class ShiftsView(View):
 
     def get(self, request):
 
-        shifts = Shift.objects.filter(employee=request.user).order_by( '-time_in', 'id')
+        employee = request.user.id
+        if 'employee' in request.GET:
+            try:
+                employee = int(request.GET['employee'])
+            except ValueError:
+                self.returnData['errors'].append('argument employee must be an integer value.')
+                return HttpResponseBadRequest(json.dumps(self.returnData, indent=4), content_type="application/json")
+
+        shifts = Shift.objects.filter(employee__id=employee).order_by( '-time_in', 'id')
 
         # break the data into pages 
         if 'page' in request.GET and 'per_page' in request.GET:

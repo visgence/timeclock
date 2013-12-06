@@ -1,4 +1,8 @@
 from django.views.generic.base import TemplateView
+try:
+    import simplejson as json
+except ImportError:
+    import json
 
 
 class ManageView(TemplateView):
@@ -14,5 +18,6 @@ class ManageView(TemplateView):
         context = super(ManageView, self).get_context_data(**kwargs)
         context['app'] = self.app
         context['model'] = self.model
+        context['employee'] = json.dumps(self.request.user.toDict())
         return context
 
