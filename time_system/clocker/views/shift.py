@@ -73,7 +73,31 @@ class ShiftView(View):
 
         return ShiftView.updateClient(shift, request.read(), request.user)
 
-    
+
+    def delete(self, request, shift_id):
+
+        try:
+            shift = Shift.objects.get(id=shift_id)
+        except Shift.DoesNotExist:
+            error = 'Shift does not exist for id %s'%str(shift_id)
+            return HttpResponseNotFound(json.dumps(error), content_type="application/json")
+        else:
+            if not shift.can_edit(request.user):
+                error = 'You do not have permission to delete this Shift'
+                return HttpResponseForbidden(json.dumps(error), content_type="application/json")
+
+        shift.deleted = True
+
+        try:
+            shift.full_clean()
+        except ValidationError as e:
+            errors = [{x: y} for x, y in e.message_dict.iteritems()]
+            return HttpResponseBadRequest(json.dumps(errors), content_type='application/json')
+
+        shift.save()
+        self.returnData['success'] = "Shift %s successfully deleted." % str(shift_id)
+        return HttpResponse(json.dumps(self.returnData, indent=4), content_type="application/json")
+
 
 class ShiftsView(View):
 	
