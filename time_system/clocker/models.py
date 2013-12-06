@@ -388,6 +388,8 @@ class Shift(models.Model):
     time_in = models.DateTimeField('clock in time')
     time_out = models.DateTimeField('clock out time', null = True, blank=True)
     hours = models.DecimalField(null=True, blank=True, decimal_places=2, max_digits=4)
+    deleted = models.BooleanField(default=False)
+
 
     objects = ShiftManager()
 
@@ -420,6 +422,7 @@ class Shift(models.Model):
             ,"time_in":  self.time_in.strftime(DT_FORMAT)
             ,"time_out": self.time_out.strftime(DT_FORMAT) if self.time_out is not None else self.time_out
             ,"hours":    str(self.hours) if self.hours is not None else self.hours
+            ,"deleted":  self.deleted
         }
 
 
