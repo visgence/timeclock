@@ -1,11 +1,32 @@
 $(function() {
+	"use strict";
 
-	var ManageShifts = function() {
+	var ManageShifts = function(vars) {
+		var __this = this;
 		var ShiftList = $.fn.ShiftList;
+		var employeeUrl = "/timeclock/employees/";
 
 		this.shiftList = ko.observable();
+		this.employees = ko.observableArray();
+		this.selectedEmployee = ko.observable();
+		this.managingEmployee = ko.observable();
 
-		this.init = function() {
+		this.managingSelf = ko.computed(function() {
+			var selectedEmp = this.selectedEmployee();
+			var managingEmp = this.managingEmployee();
+			var managing = false;
+
+			if (selectedEmp && managingEmp && selectedEmp.id == managingEmp.id)		
+				managing = true;
+
+			return managing;
+		}.bind(this));
+
+		this.init = function(vars) {
+			vars = vars || {};
+
+			if (vars.hasOwnProperty('managingEmployee'))
+				this.managingEmployee(vars.managingEmployee);
 
 			var startingPage = 1;
 			var shiftListData = {
@@ -13,10 +34,30 @@ $(function() {
 			};
 
 			this.shiftList(new ShiftList(shiftListData));
-			this.shiftList().reload(startingPage);
+			this.selectedEmployee.subscribe(function(employee) {
+				__this.shiftList().reload(startingPage, employee.id);
+			})
+
+			loadEmployees();
+
+			//TODO: this will change once I get more time to do something more proper
+			$(window).on('shift-updated', function() {
+				__this.shiftList().reload(__this.shiftList().currentPage(), __this.selectedEmployee().id);
+			});
 
 			//setInputBindings();
 		}
+
+
+		function loadEmployees() {
+			$.get(employeeUrl, function(resp) {
+				$.each(resp.employees, function(i, emp) {
+					__this.employees.push(emp);	
+					if (emp.id === __this.managingEmployee().id)
+						__this.selectedEmployee(emp);
+				});
+			});
+		};
 
 		function setInputBindings() {
 			$('input.icon-input').on('input', function() {
@@ -57,7 +98,7 @@ $(function() {
 			}).val("");
 		}
 
-		this.init();
+		this.init(vars);
 	}	
 
 	$.fn.ManageShifts = ManageShifts;

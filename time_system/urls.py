@@ -5,6 +5,9 @@ from clocker.views.management import ManageView
 from clocker.views.shift import ShiftsView
 from clocker.views.shift import ShiftView
 
+from clocker.views.employee import EmployeesView
+from clocker.views.employee import EmployeeView
+
 
 urlpatterns = patterns('',
     url(r'^$', RedirectView.as_view(url='/timeclock/')),
@@ -53,7 +56,7 @@ urlpatterns += patterns('clocker.views.login',
     url(r'^logout/$', 'logoutUser', name="logout"),
 )
 
-#shift summary stuff
+#Employee summary stuff
 urlpatterns += patterns('clocker.views.shiftSummary',
     url(r'^timeclock/saveSummaries/$', 'summary', name="save-summaries"),
     url(r'^timeclock/summary/(?P<id>\d+)/$', 'renderSummary', name="render-summary"),
@@ -63,4 +66,10 @@ urlpatterns += patterns('clocker.views.shiftSummary',
 urlpatterns += patterns('clocker.views.shift',
     url(r'^timeclock/shifts/$', ShiftsView.as_view(), name="shift-list"),
     url(r'^timeclock/shifts/(?P<shift_id>\d+)/$', ShiftView.as_view(), name="shift-detail"),
+)
+
+#employees
+urlpatterns += patterns('clocker.views.employee',
+    url(r'^timeclock/employees/$', EmployeesView.as_view(), name="employee-list"),
+    url(r'^timeclock/employees/(?P<employee_id>\d+)/$', EmployeeView.as_view(), name="employee-detail"),
 )

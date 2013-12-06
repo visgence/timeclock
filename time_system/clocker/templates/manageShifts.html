@@ -17,6 +17,7 @@
 			<button type="button" class="btn btn-success" data-bind="click: update">Save</button>
 			<button type="button" class="btn btn-default" data-bind="click: cancelEdit">Cancel</button>
 		</td>
+		<td data-bind="text: shiftToEdit().employee().username"></td>
 		<td>
 			<input class="form-control  time-in-input" type="text" data-bind="value: shiftToEdit().time_in">
 			<!--
@@ -44,20 +45,41 @@
 
 <div id="manage-shifts-container">
 
+	<ul class="list-inline">
+		<li>
+			<label class="control-label">Employee</label>
+		</li>
+		<li>
+			<select class="form-control" data-bind="options: employees, 
+			                                        optionsText: 'username', 
+			                                        value: selectedEmployee">
+			</select>
+		</li>
+	</ul>
+
 	<div data-bind="with: shiftList">
 	    <ul class="pager">
-	        <li data-bind="ifnot: currentPage()==1, click: firstPage" class="previous clickable"><a>&lt;&lt; First</a></li>
-	        <li data-bind="ifnot: currentPage()==1, click: prevPage" class="previous clickable"><a>&lt; Prev</a></li>
+	        <li data-bind="ifnot: currentPage()==1, click: firstPage" class="previous clickable">
+	        	<a>&lt;&lt; First</a>
+	        </li>
+	        <li data-bind="ifnot: currentPage()==1, click: prevPage" class="previous clickable">
+	        	<a>&lt; Prev</a>
+	        </li>
 
 	        <li data-bind="text: pageNum"></li>
 
-	        <li data-bind="ifnot: currentPage()==totalPages(), click: lastPage" class="next clickable"><a>Last &gt;&gt;</a></li>
-	        <li data-bind="ifnot: currentPage()==totalPages(), click: nextPage" class="next clickable"><a>Next &gt;</a></li>
+	        <li data-bind="ifnot: currentPage()==totalPages(), click: lastPage" class="next clickable">
+	        	<a>Last &gt;&gt;</a>
+	        </li>
+	        <li data-bind="ifnot: currentPage()==totalPages(), click: nextPage" class="next clickable">
+	        	<a>Next &gt;</a>
+        	</li>
 	    </ul>
 
 		<table class="table">
 			<thead>
 				<th></th>
+				<th>Employee</th>
 				<th>In</th>
 				<th>Out</th>
 				<th>Hours</th>
@@ -66,9 +88,12 @@
 				<!-- ko foreach: shifts -->
 				<tr data-bind="ifnot: updating">
 					<td>
-						<span title="Edit Summary" class="glyphicon glyphicon-list clickable" data-bind="click: summary"></span>
+						<span title="Edit Summary" class="glyphicon glyphicon-list clickable" 
+							data-bind="click: summary, visible: $root.managingSelf">
+						</span>
 						<span title="Edit Shift" class="glyphicon glyphicon-pencil clickable" data-bind="click: editShift"></span>
 					</td>
+					<td data-bind="text: employee().username"></td>
 					<td data-bind="text: time_in"></td>
 					<td data-bind="text: time_out"></td>
 					<td data-bind="text: hours"></td>
@@ -92,7 +117,8 @@
 	
 	<script>
 		$(function() {
-			var manageShifts = new $.fn.ManageShifts();
+			var data = {'managingEmployee': {{employee|safe}} };
+			var manageShifts = new $.fn.ManageShifts(data);
 			ko.applyBindings(manageShifts, $('#manage-shifts-container').get(0));
 		});
 	</script>

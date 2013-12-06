@@ -8,6 +8,7 @@ $(function() {
 		this.time_in = ko.observable();
 		this.time_out = ko.observable();
 		this.hours = ko.observable();
+		this.employee = ko.observable();
 
 		this.updating = ko.observable(false);
 		this.shiftToEdit = ko.observable();	
@@ -29,6 +30,8 @@ $(function() {
 				this.time_out(vars.time_out);
 			if (vars.hasOwnProperty('hours'))
 				this.hours(vars.hours);
+			if (vars.hasOwnProperty('employee'))
+				this.employee(vars.employee);
 
 		}.bind(this);
 
@@ -95,7 +98,8 @@ $(function() {
 				 'id':       this.id()
 				,'time_in':  this.time_in()
 				,'time_out': this.time_out()
-				,'hours':    this.hours()	
+				,'hours':    this.hours()
+				,'employee': this.employee()
 			}
 		}.bind(this);
 
