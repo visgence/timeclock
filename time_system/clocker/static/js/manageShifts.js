@@ -48,6 +48,26 @@ $(function() {
 			//setInputBindings();
 		}
 
+		//Checks if the shift table should add a blank row to seperate groups of shifts by day
+		this.shouldAddSeperator = function(prevIndex, index) {
+			if (index == 0)
+				return true;
+
+			if (prevIndex >= this.shiftList().shifts().length || index >= this.shiftList().shifts().length)
+				return false;
+			
+			var prevDate = new Date(this.shiftList().shifts()[prevIndex].time_in());
+			var curerntDate = new Date(this.shiftList().shifts()[index].time_in());
+
+			if (prevDate.getDate() !== curerntDate.getDate()) {
+				console.log('true');
+				return true;
+			}
+
+			return false;
+		}.bind(this)
+
+
 
 		function loadEmployees() {
 			$.get(employeeUrl, function(resp) {
