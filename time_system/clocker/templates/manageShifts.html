@@ -93,6 +93,7 @@
 							data-bind="click: summary, visible: $root.managingSelf">
 						</span>
 						<span title="Edit Shift" class="glyphicon glyphicon-pencil clickable" data-bind="click: editShift"></span>
+						<span title="Delete Shift" class="glyphicon glyphicon-trash clickable" data-bind="click: deleteWarning"></span>
 					</td>
 					<td data-bind="text: employee().username"></td>
 					<td data-bind="text: time_in"></td>
@@ -102,13 +103,30 @@
 
 				<!-- ko template: {name: "edit-shift-template", if: updating, afterRender: bindInputs} --><!-- /ko -->
 
-				<tr data-bind="if: $root.shouldAddSeperator($index(), $index()+1)">
-					<td colspan="5"></td>
-				</tr>
+				<tr data-bind="if: $root.shouldAddSeperator($index(), $index()+1)"><td colspan="5"></td></tr>
 				<!-- /ko -->
 			</tbody>
 		</table>
 	</div>
+
+	<div class="modal fade" id="delete-warning">
+	 	<div class="modal-dialog">
+		    <div class="modal-content">
+		     	<div class="modal-header">
+			        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+			        <h4 class="modal-title">Warning</h4>
+		      	</div>
+			    <div class="modal-body">
+			    	Are you sure you want to delete that shift?
+			    </div>
+		      	<div class="modal-footer">
+			        <button type="button" id="delete-shift-btn" class="btn btn-primary">Delete</button>
+			        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+		      	</div>
+		    </div><!-- /.modal-content -->
+		</div><!-- /.modal-dialog -->
+	</div><!-- /.modal -->
+
 </div>
 
 {% endblock content %}

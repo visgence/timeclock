@@ -1,7 +1,8 @@
 $(function() {
+	"use strict";
 
 	var Shift = function(vars) {
-	
+		var __this = this;	
 		var shiftUrl = "/timeclock/shifts/";
 
 		this.id = ko.observable();
@@ -81,7 +82,6 @@ $(function() {
 			var data = this.shiftToEdit().toDict();
 			var csrf = $('input[name="csrfmiddlewaretoken"]').val();
 
-			console.log(data);
 			if(data.id) {
 				url += data.id + "/";
 				requestType = "PUT";
@@ -95,6 +95,38 @@ $(function() {
                     xhr.setRequestHeader('X-CSRFToken', csrf);
                 }
                 ,data: JSON.stringify(data)
+			})
+			.done(function() {
+				$(window).trigger('shift-updated');
+			})
+			.fail(function(resp) {
+		        alert(resp.responseText);
+			});
+		}.bind(this);
+
+		this.deleteWarning = function() {
+			$('#delete-warning #delete-shift-btn').off('click').on('click', function() {
+				__this.deleteShift();
+				$('#delete-warning').modal('hide');
+			});
+			$('#delete-warning').modal()
+		}.bind(this);
+
+		this.deleteShift = function() {
+			if (!this.id())
+				return $.Deferred().reject().promise();
+
+			var url = shiftUrl + this.id() + "/";
+			var requestType = "DELETE";
+			var csrf = $('input[name="csrfmiddlewaretoken"]').val();
+
+			return $.ajax({
+				 url: url
+                ,dataType: 'json'
+                ,type: requestType
+                ,beforeSend: function(xhr) {
+                    xhr.setRequestHeader('X-CSRFToken', csrf);
+                }
 			})
 			.done(function() {
 				$(window).trigger('shift-updated');
