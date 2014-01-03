@@ -47,17 +47,16 @@ def correct_record(record):
             i += 1
 
         #Insert the last day and make sure to keep the employee clocked in if they were when this started.
-	    year = end_time.year
-        month = end_time.month
-        day = end_time.day
-
+        end_year = end_time.year
+        end_month = end_time.month
+        end_day = end_time.day
         if(record.time_out == None):
             date_time = Shift(employee = record.employee,
-                             time_in = datetime(year, month, day, 00, 00),
+                             time_in = datetime(end_year, end_month, end_day, 00, 00),
                              time_out = None)
         else:
             date_time = Shift(employee = record.employee,
-                             time_in = datetime(year, month, day, 00, 00),
+                             time_in = datetime(end_year, end_month, end_day, 00, 00),
                              time_out = end_time)
         date_time.save()
 
