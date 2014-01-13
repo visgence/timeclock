@@ -33,18 +33,20 @@ $(function() {
 				'per_page': 25
 			};
 
+
 			this.shiftList(new ShiftList(shiftListData));
 			this.selectedEmployee.subscribe(function(employee) {
+				console.log('sub');
 				__this.shiftList().reload(startingPage, employee.id);
 			})
 
-			loadEmployees();
 
 			//TODO: this will change once I get more time to do something more proper
 			$(window).on('shift-updated', function() {
 				__this.shiftList().reload(__this.shiftList().currentPage(), __this.selectedEmployee().id);
 			});
 
+			return loadEmployees();
 			//setInputBindings();
 		}
 
@@ -68,7 +70,7 @@ $(function() {
 
 
 		function loadEmployees() {
-			$.get(employeeUrl, function(resp) {
+			return $.get(employeeUrl, function(resp) {
 				$.each(resp.employees, function(i, emp) {
 					__this.employees.push(emp);	
 					if (emp.id === __this.managingEmployee().id)
@@ -115,8 +117,6 @@ $(function() {
 					$(e.target).val(e.time.value);
 			}).val("");
 		}
-
-		this.init(vars);
 	}	
 
 	$.fn.ManageShifts = ManageShifts;

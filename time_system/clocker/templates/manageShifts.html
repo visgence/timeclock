@@ -142,8 +142,10 @@
 	<script>
 		$(function() {
 			var data = {'managingEmployee': {{employee|safe}} };
-			var manageShifts = new $.fn.ManageShifts(data);
-			ko.applyBindings(manageShifts, $('#manage-shifts-container').get(0));
+			var manageShifts = new $.fn.ManageShifts();
+			manageShifts.init(data).then(function() {
+				ko.applyBindings(manageShifts, $('#manage-shifts-container').get(0));
+			});
 		});
 	</script>
 {% endblock additional-scripts %}
