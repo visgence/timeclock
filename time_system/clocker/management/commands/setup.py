@@ -42,7 +42,11 @@ class Command(BaseCommand):
             user_resp = raw_input('(y/n) ')
 
         if user_resp in ['y', 'Y']:
-            fixtures.append([])
+            fixtures.append([
+                [
+                    "clocker/fixtures/jobs.json"
+                ]
+            ])
 
         # Load fixtures
         for apps in fixtures:
