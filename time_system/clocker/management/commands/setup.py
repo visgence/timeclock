@@ -43,9 +43,7 @@ class Command(BaseCommand):
 
         if user_resp in ['y', 'Y']:
             fixtures.append([
-                [
-                    "clocker/fixtures/jobs.json"
-                ]
+                "clocker/fixtures/jobs.json"
             ])
 
         # Load fixtures
