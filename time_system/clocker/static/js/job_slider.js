@@ -56,9 +56,7 @@ function create_slider_handler(job_id, total_time)
 
 $(function ()
 {
-    var total_time = $("#total_time").val();
-    console.log(total_time);
-    console.log($("#total_time"));
+    var total_time = $("#total_time").prop('defaultValue');
     var maxTime = total_time;
     
     var job_ids = $(".job_slider");
@@ -66,7 +64,7 @@ $(function ()
     //create a handler for each slider
     for (var i = 0; i < job_ids.length; i++) 
     {   
-        var hours = $('#hours_' + job_ids[i].id).val();
+        var hours = $('#hours_' + job_ids[i].id).prop('defaultValue');
         var hourStr = '00:00';
         if(hours !== '') {
             total_time -= hours
