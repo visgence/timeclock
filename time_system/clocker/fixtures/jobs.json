@@ -1,0 +1,38 @@
+[
+{
+    "model": "clocker.Job",
+    "pk": 1,
+    "fields": {
+        "name": "Web Project",
+        "description": "",
+        "is_active": true
+    }   
+},
+{
+    "model": "clocker.Job",
+    "pk": 2,
+    "fields": {
+        "name": "Book Keeping",
+        "description": "",
+        "is_active": true
+    }   
+},
+{
+    "model": "clocker.Job",
+    "pk": 3,
+    "fields": {
+        "name": "Technician",
+        "description": "",
+        "is_active": false
+    }   
+},
+{
+    "model": "clocker.Job",
+    "pk": 4,
+    "fields": {
+        "name": "Consulting",
+        "description": "",
+        "is_active": true
+    }   
+}
+]

@@ -61,9 +61,11 @@
         </tr>
         {% endfor %} 
     </table> 
-    <input type="button" class="submit btn btn-primary" value="Submit" onClick="submit_form('{% url 'save-summaries'  %}')">
+    {% if owner %}
+        <input type="button" class="submit btn btn-primary" value="Submit" onClick="submit_form('{% url 'save-summaries'  %}')">
         <input type="hidden" id="emp_id" value="{{user.id}}">
         <input type="hidden" id="shift_id" value="{{shift.id}}">
+    {% endif %}
 
         <div id ="debug"> </div>
 

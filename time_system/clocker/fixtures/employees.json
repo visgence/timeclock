@@ -11,5 +11,18 @@
 		"hire_date": "2012-09-01",
 		"password": "pbkdf2_sha256$10000$I6zR96PdknAc$zSs1w5Hg8hOssIMZUMaNbWuKWPOnx6LsCxifuAdYmmA="
 	}	
+},
+{
+	"model": "clocker.Employee",
+	"pk": 2,
+	"fields": {
+		"username": "employee",
+		"first_name": "Employee",
+		"last_name": "User",
+		"is_superuser": false,
+		"hourly_rate": 12.00,
+		"hire_date": "2012-09-01",
+		"password": "pbkdf2_sha256$10000$I6zR96PdknAc$zSs1w5Hg8hOssIMZUMaNbWuKWPOnx6LsCxifuAdYmmA="
+	}	
 }
 ]

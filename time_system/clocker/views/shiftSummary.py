@@ -1,4 +1,4 @@
-from django.http import HttpResponseRedirect, HttpResponseServerError, HttpResponse
+from django.http import HttpResponseRedirect, HttpResponseServerError, HttpResponse, HttpResponseForbidden
 from django.template import RequestContext, loader
 from django.views.decorators.http import require_POST
 from django.core.exceptions import ValidationError
@@ -72,10 +72,16 @@ def renderSummary(request, id):
     employee = request.user
 
     try:
-        shift = Shift.objects.get(id=id, employee=employee)
+        shift = Shift.objects.get(id=id)
     except Shift.DoesNotExist:
         return HttpResponseServerError('Shift does not exist for id %s' % str(id))
-    
+  
+    owner = True
+    if not request.user.is_superuser and request.user != shift.employee:
+        return HttpResponseForbidden('Permission denied')
+    elif request.user != shift.employee:
+        owner = False
+
     #Only complete shifts can have summaries
     if shift.time_out == None:
         return HttpResponseServerError('You cannot complete any summaries for a shift where you are not clocked out yet.')
@@ -109,7 +115,8 @@ def renderSummary(request, id):
         'totalTime': totalTime,
         'jobData': jobData,
         'shift': shift,
-        'summaries': summaries
+        'summaries': summaries,
+        'owner': owner
     })
     print totalTime
     return HttpResponse(t.render(c), content_type="text/html")
