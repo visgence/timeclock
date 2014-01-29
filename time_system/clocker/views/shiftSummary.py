@@ -70,9 +70,9 @@ def renderSummary(request, id):
     '''
 
     employee = request.user
-
     try:
         shift = Shift.objects.get(id=id)
+        shiftEmployee = shift.employee
     except Shift.DoesNotExist:
         return HttpResponseServerError('Shift does not exist for id %s' % str(id))
   
@@ -104,7 +104,7 @@ def renderSummary(request, id):
         except ShiftSummary.DoesNotExist:
             jobData.append(job)
             continue
-
+        
         job['hours'] = summary.hours
         job['miles'] = summary.miles
         job['note'] = summary.note
@@ -116,6 +116,7 @@ def renderSummary(request, id):
         'jobData': jobData,
         'shift': shift,
         'summaries': summaries,
+        'shiftEmployee': shiftEmployee,
         'owner': owner
     })
     print totalTime

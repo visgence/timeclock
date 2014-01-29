@@ -8,7 +8,7 @@
 {%block content%}
 <div >
 
-    <span class="shiftInOut">{{shift.time_in}} - {{shift.time_out}}</span>
+    <span class="shiftInOut">{{shiftEmployee}}: {{shift.time_in}} - {{shift.time_out}}</span>
 
     <table border="0">
         <tr class="total_time_text">
@@ -21,9 +21,15 @@
         {% for data in jobData %}
         <tr>            
              <td>
+                {% if data.hours %} 
+                 <span class="ui-icon ui-icon-circle-triangle-s toggle-button"
+                 onclick="toggle_section('sub-{{data.job.name|slugify}}', this);">
+                 </span>
+                {% else %}
                  <span class="ui-icon ui-icon-circle-triangle-e toggle-button"
                  onclick="toggle_section('sub-{{data.job.name|slugify}}', this);">
                  </span>
+                {% endif %}
              </td>
              <td>
                  <div class="job_name">{{data.job.name}}</div>
@@ -37,8 +43,12 @@
              </td>
              <td><div id="{{data.job.id}}" class="job_slider"></div></td>
         </tr>
-             
+            
+        {% if data.hours %} 
+        <tr class="collapsible" id="sub-{{data.job.name|slugify}}">
+        {% else %}
         <tr class="collapsible" id="sub-{{data.job.name|slugify}}" style="display:none;">
+        {% endif %}
             <td colspan="4">
                 <div class="miles_text">Miles:</div>
                 <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
