@@ -1,9 +1,7 @@
 #!/usr/bin/python
 
-from django.core.management import setup_environ
 from clocker.models import *
 import settings
-setup_environ(settings)
 from datetime import datetime, timedelta
 
 

@@ -294,7 +294,7 @@ class Employee(AbstractBaseUser):
         
         assert isinstance(job, Job), "%s is not a Job instance"%str(job)
 
-        summaries = ShiftSummary.objects.filter(employee=self, job=job, shift__time_in__lte=end, shift__time_out__gte=start)
+        summaries = ShiftSummary.objects.filter(shift__deleted=False, employee=self, job=job, shift__time_in__lte=end, shift__time_out__gte=start)
         hours = 0.0
         for summary in summaries:
             hours += summary.hours/3600.0
