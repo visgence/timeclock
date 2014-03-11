@@ -58,6 +58,8 @@ def getPayPeriod(start_time, end_time, user_name):
     #iterate through our date-range
     day_count = (period_end - period_begin).days + 1
     week = deepcopy(weekDefaults)
+    week['week_start'] = week_begin
+    week['week_end'] = week_end
     for single_date in [d for d in (period_begin + timedelta(n) for n in range(day_count)) if d <= end_date]:
         
         single_date = date(single_date.year, single_date.month, single_date.day) 
