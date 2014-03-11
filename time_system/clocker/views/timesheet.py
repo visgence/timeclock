@@ -3,6 +3,7 @@ from django.template import RequestContext
 from clocker.models import Employee, Shift
 from datetime import timedelta, datetime, date
 from decimal import Decimal
+from copy import deepcopy
 import check_db
 
 def total_hours(request):
@@ -23,7 +24,6 @@ def total_hours(request):
 def getPayPeriod(start_time, end_time, user_name):
 
     employee = Employee.objects.get(username = user_name)
-    pay_period = {'weekly_info':[], 'period_total':0, 'period_adjusted':0, 'period_overtime':0,'period_regular':0} 
     #make sure we have actual date ranges coming in
     if(start_time == "" or end_time == ""):
         start_time = datetime.strftime(datetime.now(), '%Y-%m-%d')
@@ -39,42 +39,60 @@ def getPayPeriod(start_time, end_time, user_name):
     week_begin = date(period_begin.year, period_begin.month, period_begin.day)
     week_end = week_begin + timedelta(days = 6)
 
-
-    week = {'weekly_total':Decimal(0.0), 'weekly_adjusted': Decimal(0.0), 'weekly_overtime': Decimal(0.0), 'days':[]}
+    pay_period = {
+        'weekly_info': [],
+        'period_total': Decimal(0.0),
+        'period_adjusted': Decimal(0.0), 
+        'period_overtime': Decimal(0.0),
+        'period_regular': Decimal(0.0)
+    } 
+        
+    weekDefaults = {
+        'weekly_total': Decimal(0.0), 
+        'weekly_adjusted': Decimal(0.0), 
+        'weekly_regular_hours': Decimal(0.0), 
+        'weekly_overtime': Decimal(0.0),
+        'days': []
+    }
 
     #iterate through our date-range
     day_count = (period_end - period_begin).days + 1
-
+    week = deepcopy(weekDefaults)
+    week['week_start'] = week_begin
+    week['week_end'] = week_end
     for single_date in [d for d in (period_begin + timedelta(n) for n in range(day_count)) if d <= end_date]:
         
         single_date = date(single_date.year, single_date.month, single_date.day) 
-
         daily_info = get_daily_hours(single_date, start_date, end_date, user_name)
-        week['weekly_adjusted'] += daily_info['daily_adjusted']
+
+        #If we just now will breach 40 hours seperate the hours leading up to 40 and the hours past 40 accordingly
+        if week['weekly_total'] < Decimal(40.0) and week['weekly_total']+daily_info['daily_adjusted'] >= Decimal(40.0):
+            adjusted = Decimal(40.0) - week['weekly_total']
+            week['weekly_regular_hours'] += adjusted
+            pay_period['period_regular'] += adjusted
+           
+            overtime =  (week['weekly_total']+daily_info['daily_adjusted']) - Decimal(40.0)
+            week['weekly_overtime'] += overtime
+            pay_period['period_overtime'] += overtime
+        #If we're already in overtime just store it.
+        elif week['weekly_total'] >= Decimal(40.0):
+            week['weekly_overtime'] += daily_info['daily_adjusted']
+            pay_period['period_overtime'] += daily_info['daily_adjusted']
+        else:
+            week['weekly_regular_hours'] += daily_info['daily_adjusted']
+            pay_period['period_regular'] += daily_info['daily_adjusted']
+
         week['weekly_total'] += daily_info['daily_total']
         week['days'].append(daily_info)
-        week['week_start'] = week_begin
-        week['week_end'] = week_end
         pay_period['period_total'] += daily_info['daily_total']
-        pay_period['period_adjusted'] += daily_info['daily_adjusted']
 
         if(single_date >= week_end or single_date >= end_date.date()):
-            if(week['weekly_adjusted'] > Decimal(40.0)):
-                week['weekly_regular_hours'] = Decimal(40.0)
-            else:
-                week['weekly_regular_hours'] = week['weekly_adjusted']
-
-            if(week['weekly_total'] > Decimal(40.0)):
-                weekly_overtime = week['weekly_total'] - Decimal(40.0)
-               
-                week['weekly_overtime'] = weekly_overtime
-                pay_period['period_overtime'] += weekly_overtime
-            
-            pay_period['period_regular'] += week['weekly_regular_hours']
             pay_period['weekly_info'].append(week)
             week_begin = week_end + timedelta(days = 1)
             week_end = week_begin + timedelta(days = 6)
-            week = {'weekly_total': Decimal(0.0), 'weekly_adjusted':Decimal(0.0),'weekly_regular_hours': Decimal(0.0), 'weekly_overtime': Decimal(0.0), 'week_start':week_begin, 'week_end':week_end, 'days':[]}
+            week = deepcopy(weekDefaults)
+            week['week_start'] = week_begin
+            week['week_end'] = week_end
     
     pay_period['period_adjusted'] = pay_period['period_adjusted'] - pay_period['period_overtime'] 
     overtime_pay = employee.hourly_rate + (employee.hourly_rate / Decimal(2.0))
