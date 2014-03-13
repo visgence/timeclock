@@ -36,8 +36,8 @@ $(function() {
 
 			this.shiftList(new ShiftList(shiftListData));
 			this.selectedEmployee.subscribe(function(employee) {
-				console.log('sub');
 				__this.shiftList().reload(startingPage, employee.id);
+				$.bbq.pushState({'emp': employee.id}, '', 0);
 			})
 
 
@@ -46,9 +46,26 @@ $(function() {
 				__this.shiftList().reload(__this.shiftList().currentPage(), __this.selectedEmployee().id);
 			});
 
-			return loadEmployees();
+			$(window).on('hashchange', hashchangeHandler);
+			return loadEmployees().then(function() {
+				$(window).trigger('hashchange');
+			});
 			//setInputBindings();
 		}
+
+		var hashchangeHandler = function(e) {
+			var frags = $.deparam(e.fragment, true);
+			console.log(frags);
+			if (frags.hasOwnProperty('emp')) {
+				var empId = frags.emp;
+				$.each(__this.employees(), function(i, emp) {
+					if (empId === emp.id) {
+						__this.selectedEmployee(emp);
+						return false;
+					}
+				})
+			}
+		}.bind(this);
 
 		//Checks if the shift table should add a blank row to seperate groups of shifts by day
 		this.shouldAddSeperator = function(index, nextIndex) {
@@ -59,10 +76,8 @@ $(function() {
 			var currentDate = new Date(this.shiftList().shifts()[index].time_in());
 			var nextDate = new Date(this.shiftList().shifts()[nextIndex].time_in());
 
-			if (currentDate.getDate() !== nextDate.getDate()) {
-				console.log('true');
+			if (currentDate.getDate() !== nextDate.getDate())
 				return true;
-			}
 
 			return false;
 		}.bind(this)
@@ -73,8 +88,8 @@ $(function() {
 			return $.get(employeeUrl, function(resp) {
 				$.each(resp.employees, function(i, emp) {
 					__this.employees.push(emp);	
-					if (emp.id === __this.managingEmployee().id)
-						__this.selectedEmployee(emp);
+					// if (emp.id === __this.managingEmployee().id)
+					// 	__this.selectedEmployee(emp);
 				});
 			});
 		};
