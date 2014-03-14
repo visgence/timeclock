@@ -6,10 +6,20 @@ $(function() {
 		var ShiftList = $.fn.ShiftList;
 		var employeeUrl = "/timeclock/employees/";
 
+		var startingPage = 1;
+		var shiftListData = {
+			'per_page': 25
+		};
+
 		this.shiftList = ko.observable();
 		this.employees = ko.observableArray();
-		this.selectedEmployee = ko.observable();
 		this.managingEmployee = ko.observable();
+
+		this.employee = ko.observable();
+		this.selectedEmployee = ko.computed({
+			read: function() { return this.employee(); },
+			write: function(emp) { $.bbq.pushState({'emp': emp.id}, 0); }
+		}, this);
 
 		this.managingSelf = ko.computed(function() {
 			var selectedEmp = this.selectedEmployee();
@@ -28,18 +38,7 @@ $(function() {
 			if (vars.hasOwnProperty('managingEmployee'))
 				this.managingEmployee(vars.managingEmployee);
 
-			var startingPage = 1;
-			var shiftListData = {
-				'per_page': 25
-			};
-
-
 			this.shiftList(new ShiftList(shiftListData));
-			this.selectedEmployee.subscribe(function(employee) {
-				__this.shiftList().reload(startingPage, employee.id);
-				$.bbq.pushState({'emp': employee.id}, '', 0);
-			})
-
 
 			//TODO: this will change once I get more time to do something more proper
 			$(window).on('shift-updated', function() {
@@ -55,12 +54,12 @@ $(function() {
 
 		var hashchangeHandler = function(e) {
 			var frags = $.deparam(e.fragment, true);
-			console.log(frags);
 			if (frags.hasOwnProperty('emp')) {
 				var empId = frags.emp;
 				$.each(__this.employees(), function(i, emp) {
 					if (empId === emp.id) {
-						__this.selectedEmployee(emp);
+						__this.employee(emp);
+						__this.shiftList().reload(startingPage, emp.id);
 						return false;
 					}
 				})
@@ -85,11 +84,17 @@ $(function() {
 
 
 		function loadEmployees() {
+			//If we see that there is no preset employee hash we will default to the current user.
+			var frags = $.deparam.fragment(undefined, true);
+			var setUser = false;
+			if (!frags.hasOwnProperty('emp'))
+				setUser = true;
+
 			return $.get(employeeUrl, function(resp) {
 				$.each(resp.employees, function(i, emp) {
 					__this.employees.push(emp);	
-					// if (emp.id === __this.managingEmployee().id)
-					// 	__this.selectedEmployee(emp);
+					if (setUser && emp.id === __this.managingEmployee().id)
+						__this.selectedEmployee(emp);
 				});
 			});
 		};
