@@ -138,10 +138,12 @@ def getJobsBreakdown(employees=None, start=None, end=None):
             hours = employee.getJobHours(start, end, job)
             jobData['total_hours'] += hours
             jobData['jobs'][job.name]['summaries'].extend(job.get_summaries(employee, start, end))
-            print jobData['jobs'][job.name]['summaries']
             jobData['jobs'][job.name]['hours'] += hours
 
-        
+
+    for job, data in jobData['jobs'].iteritems():
+        data['summaries'] = sorted(data['summaries'], key=lambda summary: summary.shift.time_in, reverse=True)
+
     #Calculate percentages as a Decimal
     for jobN, jobD in jobData['jobs'].iteritems():
         
