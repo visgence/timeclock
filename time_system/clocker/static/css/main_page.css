@@ -91,12 +91,14 @@ div#job-hours
 
 div#job-controls
 {
-    width: 30%;
+/*    width: 30%;
     padding-right: 2em;
     float: left;
+*/
+    margin-bottom: 1em;
 }
 
-div#jobs
+/*div#jobs
 {
     float: left;
     padding-left: 2em;
@@ -104,6 +106,7 @@ div#jobs
     border-left: 1px solid;
 }
 
+*/
 div.clocker-container
 {
     margin-left: auto;

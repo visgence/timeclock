@@ -20,9 +20,9 @@
         <table class="table table-condensed summary-data" style="display: none">
             <thead>
                 <tr>
-                    <td>Date</td>
+                    <td style="width: 8em">Date</td>
                     <td>Hours</td>
-                    <td>Employee</td>
+                    <td style="width: 8em">Employee</td>
                     <td>Notes</td>
                 </tr>
             </thead>
@@ -41,7 +41,7 @@
     </div>
 {% endfor %}
 
-<label>Total Hours - {{jobsBreakdown.total_hours}}</label>
+<label><u>Total Hours - {{jobsBreakdown.total_hours}}</u></label>
 
 <script>
     $(function() {
