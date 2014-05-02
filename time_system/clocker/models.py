@@ -713,3 +713,15 @@ class Job(models.Model):
             raise TypeError('%s is not an auth user' % str(user))
 
         return True
+
+    def get_summaries(self, employee, start=None, end=None):
+
+        summaries = self.shiftsummary_set.filter(employee=employee, shift__deleted=False)
+        if start is not None:
+            summaries = summaries.filter(shift__time_out__gte=start)
+        elif end is not None:
+            summaries = summaries.filter(shift__time_in__lte=end)
+
+        return summaries
+
+        
