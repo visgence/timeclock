@@ -100,21 +100,18 @@
     <h4 class="text-muted">Jobs Breakdown</h4>	
 
     <div id="job-controls">
-        <form action="#" class="form">
+        <form action="#" class="form form-inline">
             {% csrf_token %}
                  
                 <div class="form-group">
-                    <label for="from-job">From</label>
                     <input type="text" id="from-job" name="from" class="form-control" placeholder="From"/>
                 </div>
                 
                 <div class="form-group">
-                    <label for="to-job">To</label>
                     <input type="text" id="to-job" name="to" class="form-control" placeholder="To"/>
                 </div>
 
                 <div class="form-group">
-                    <label>Employee</label>
                     <select name="user_name" id="employees-job" class="form-control">
                         {% if employee.is_superuser %}
                             <option value="all">All Active Employes</options>
@@ -125,14 +122,12 @@
                     </select> 
                 </div>
                 
+                <button type="submit" name="Submit" class="btn btn-default">Submit</button>
+                
                 <div class="checkbox">
                     <label>
                         <input id="toggle-active-jobs" type="checkbox"> Show Inactive Jobs
                     </label>
-                </div>
-
-                <div class="form-group">
-                    <button type="submit" name="Submit" class="btn btn-default">Submit</button>
                 </div>
         </form>
     </div>

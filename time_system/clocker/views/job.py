@@ -111,8 +111,6 @@ def getJobsBreakdown(employees=None, start=None, end=None):
     '''
 
     start, end = getWeekdayRange(start, end)
-    print start
-    print end
     if employees is None or len(employees) <= 0:
         employees = Employee.objects.filter(is_active=True)
     else:
@@ -135,12 +133,17 @@ def getJobsBreakdown(employees=None, start=None, end=None):
         for job in jobs:
             #initialize data if not in there yet.
             if job.name not in jobData['jobs']:
-                jobData['jobs'][job.name] = {'hours': 0.0, 'percentage': 0.0, 'active': job.is_active}
+                jobData['jobs'][job.name] = {'hours': 0.0, 'percentage': 0.0, 'active': job.is_active, 'summaries': []}
 
             hours = employee.getJobHours(start, end, job)
             jobData['total_hours'] += hours
+            jobData['jobs'][job.name]['summaries'].extend(job.get_summaries(employee, start, end))
             jobData['jobs'][job.name]['hours'] += hours
-        
+
+
+    for job, data in jobData['jobs'].iteritems():
+        data['summaries'] = sorted(data['summaries'], key=lambda summary: summary.shift.time_in, reverse=True)
+
     #Calculate percentages as a Decimal
     for jobN, jobD in jobData['jobs'].iteritems():
         
