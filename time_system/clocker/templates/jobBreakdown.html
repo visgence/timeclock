@@ -1,12 +1,53 @@
+{% load math_helper %}
+
 {% for job, data in jobsBreakdown.jobs.items %} 
     <div class="job-breakdown" data-active="{{data.active}}" {% if not data.active %}style="display:none;"{% endif %}>
-        <label>{{job}} - {{data.hours}}</label>
+        <label>
+            {% if data.hours != "0.00" %}
+            <span class="job-title clickable"><a style="text-decoration: none">{{job}}</a></span>
+            {% else %}
+            <span>{{job}}</span>
+            {% endif %}
+             - {{data.hours}}
+        </label>
         <div class="progress"> 
             <div class="progress-bar" role="progressbar" aria-valuenow="{{data.percentage}}" aria-valuemin="0.0" 
                     aria-valuemax="{{jobsBreakdown.total_hours}}" style="width: {{data.percentage}}%">
             </div>
         </div>
+
+        {% if data.hours != "0.00" %}
+        <table class="table table-condensed summary-data" style="display: none">
+            <thead>
+                <tr>
+                    <td>Date</td>
+                    <td>Hours</td>
+                    <td>Employee</td>
+                    <td>Notes</td>
+                </tr>
+            </thead>
+            <tbody>
+                {% for summary in data.summaries %} 
+                    <tr>
+                        <td>{{summary.shift.time_in.date}}</td>
+                        <td>{{summary.hours|to_hour}}</td>
+                        <td>{{summary.employee}}</td>
+                        <td>{{summary.note}}</td>
+                    </tr> 
+                {% endfor %}
+            </tbody>
+        </table>
+        {% endif %}
     </div>
 {% endfor %}
 
 <label>Total Hours - {{jobsBreakdown.total_hours}}</label>
+
+<script>
+    $(function() {
+        $('.job-title').on('click', function(e) {
+            console.log(e.target);
+            $(e.target).closest('label').siblings('table.summary-data').toggle();
+        });
+    });
+</script>
