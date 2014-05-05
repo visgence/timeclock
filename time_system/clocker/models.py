@@ -724,4 +724,23 @@ class Job(models.Model):
 
         return summaries
 
+
+class Timesheet(models.Model):
+
+    shifts = models.ManyToManyField('shift')
+    start = models.BigIntegerField()
+    end = models.BigIntegerField()
+    employee = models.ForeignKey('Employee', related_name="timesheet_set")
+    signature = models.TextField(blank=True)
+
+
+    class Meta:
+        ordering = ['-end']
+
+
+
+
+
+
+
         
