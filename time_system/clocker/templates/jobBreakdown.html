@@ -11,9 +11,11 @@
              - {{data.hours}}
         </label>
         <div class="progress"> 
-            <div class="progress-bar" role="progressbar" aria-valuenow="{{data.percentage}}" aria-valuemin="0.0" 
-                    aria-valuemax="{{jobsBreakdown.total_hours}}" style="width: {{data.percentage}}%">
-            </div>
+            {% for username, percentD in data.percentages.items %}
+                <div class="progress-bar" role="progressbar" aria-valuenow="{{percentD.percentage}}" aria-valuemin="0.0" 
+                     aria-valuemax="{{jobsBreakdown.total_hours}}" 
+                     style="width: {{percentD.percentage}}%; background-color: {{percentD.employee.color}};"></div>
+            {% endfor %}
         </div>
 
         {% if data.hours != "0.00" %}
@@ -31,7 +33,7 @@
                     <tr>
                         <td>{{summary.shift.time_in.date}}</td>
                         <td>{{summary.hours|to_hour}}</td>
-                        <td>{{summary.employee}}</td>
+                        <td style="color: {{summary.employee.color}}">{{summary.employee}}</td>
                         <td>{{summary.note}}</td>
                     </tr> 
                 {% endfor %}
