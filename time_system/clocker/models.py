@@ -151,8 +151,7 @@ class Employee(AbstractBaseUser):
         'id': {'grid_column': False},
         'password': {'_type': 'password', 'grid_column': False},
         'date_joined': {'grid_column': False},
-        'last_login': {'grid_column': False, '_editable': False},
-        'color': {'grid_column': False, '_editable': False}
+        'last_login': {'grid_column': False, '_editable': False}
         }
 
     search_fields = ['username', 'first_name', 'last_name']
