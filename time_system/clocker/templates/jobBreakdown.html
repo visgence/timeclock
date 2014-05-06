@@ -33,7 +33,11 @@
                     <tr>
                         <td>{{summary.shift.time_in.date}}</td>
                         <td>{{summary.hours|to_hour}}</td>
-                        <td style="color: {{summary.employee.color}}">{{summary.employee}}</td>
+                        <td>
+                            <span class="label label-default" style="color: {{summary.employee.color}}">
+                                {{summary.employee}}
+                            </span>
+                        </td>
                         <td>{{summary.note}}</td>
                     </tr> 
                 {% endfor %}
