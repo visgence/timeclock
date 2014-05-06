@@ -22,22 +22,22 @@
         <table class="table table-condensed summary-data" style="display: none">
             <thead>
                 <tr>
+                    <th></th>
                     <th style="width: 8em">Date</th>
                     <th>Hours</th>
                     <th style="width: 8em">Employee</th>
+                    <th>Miles</th>
                     <th>Notes</th>
                 </tr>
             </thead>
             <tbody>
                 {% for summary in data.summaries %} 
                     <tr>
+                        <td><span class="badge" style="background-color: {{summary.employee.color}}">&nbsp;</span></td>
                         <td>{{summary.shift.time_in.date}}</td>
                         <td>{{summary.hours|to_hour}}</td>
-                        <td>
-                            <span class="label label-default" style="color: {{summary.employee.color}}">
-                                {{summary.employee}}
-                            </span>
-                        </td>
+                        <td>{{summary.employee}}</td>
+                        <td>{{summary.miles}}</td>
                         <td>{{summary.note}}</td>
                     </tr> 
                 {% endfor %}
