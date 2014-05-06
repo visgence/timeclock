@@ -1,10 +1,46 @@
+
+
+# Django imports
 from django.shortcuts import render_to_response 
 from django.template import RequestContext
-from clocker.models import Employee, Shift
+from django.views.generic.base import View
+from django.http import HttpResponse
+from django.template import RequestContext, loader
+
+# Local imports
+from clocker.models import Employee, Shift, Timesheet
+import check_db
+
+# System imports
 from datetime import timedelta, datetime, date
 from decimal import Decimal
 from copy import deepcopy
-import check_db
+try:
+    import simplejson as json
+except ImportError:
+    import json
+
+
+class TimesheetView(View):
+
+    pass
+
+
+class TimesheetsView(View):
+
+    def get(self, request):
+
+        accept = request.META['HTTP_ACCEPT']
+        user = request.user
+
+        if 'application/json' in accept:
+            timesheets = [t.toDict() for t in Timesheet.objects.get_viewable(user)]
+            return HttpResponse(json.dumps({'timesheetList': timesheets}), content_type="application/json")
+
+        t = loader.get_template('manageTimesheets.html')
+        c = RequestContext(request, {})
+        return HttpResponse(t.render(c), content_type="text/html")
+
 
 def total_hours(request):
 

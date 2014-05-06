@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div id="manage-timesheets" style="margin-top: 1em;">
+
+    <div style="float: left; margin-right: 2em;">
+        <input type="text">
+        <button type="button" class="btn btn-default">Create</button>
+    </div>
+    
+    <div>
+        <button type="button" class="btn btn-default">Create</button>
+    </div>
+
+</div>
+
+
+{% endblock content %}
+
+{% block additional-scripts %}
+    <script type="text/javascript" src="{{STATIC_URL}}js/timesheet.js"></script>
+    <script type="text/javascript" src="{{STATIC_URL}}js/timesheets.js"></script>
+    <script type="text/javascript" src="{{STATIC_URL}}js/manageTimesheets.js"></script>
+
+    <script>
+        $(function() {
+            var manageTimesheets = new $.fn.ManageTimesheets();
+            ko.applyBindings(manageTimesheets, $('#manage-timesheets').get(0));
+        });
+    </script>
+{% endblock additional-scripts %}

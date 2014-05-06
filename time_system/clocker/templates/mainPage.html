@@ -82,16 +82,20 @@
         <h4 class="text-muted">Management</h4>	
 		{% if employee.is_superuser %}
 			<div class="click">
-                <a class="link_color" href="{% url 'manage-employees' %}">Manage Employees</a>
+                <a class="link_color" href="{% url 'manage-employees' %}">Employees</a>
 			</div>
 			
 			<div class="click">
-                <a class="link_color" href="{% url 'manage-jobs' %}">Manage Jobs</a>
+                <a class="link_color" href="{% url 'manage-jobs' %}">Jobs</a>
 			</div>
+            
+            <div class="click">
+                <a class="link_color" href="{% url 'timesheet-list' %}">Timesheets</a>
+            </div>
 		{% endif %}
 
         <div class="click">
-            <a class="link_color" href="{% url 'manage-shifts' %}">Manage Shifts</a>
+            <a class="link_color" href="{% url 'manage-shifts' %}">Shifts</a>
 		</div>
 	</div>
 </div>	

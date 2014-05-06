@@ -725,6 +725,19 @@ class Job(models.Model):
         return summaries
 
 
+class TimesheetManager(models.Manager):
+
+    def get_viewable(self, user):
+        
+        if not isinstance(user, Employee):
+            raise TypeError("%s is not an Auth User" % str(user))
+
+        if user.is_superuser:
+            return self.all() 
+
+        return self.filter(employee=user)
+
+
 class Timesheet(models.Model):
 
     shifts = models.ManyToManyField('shift')
@@ -733,11 +746,20 @@ class Timesheet(models.Model):
     employee = models.ForeignKey('Employee', related_name="timesheet_set")
     signature = models.TextField(blank=True)
 
+    objects = TimesheetManager()
 
     class Meta:
         ordering = ['-end']
 
 
+    def toDict(self):
+        return {
+            "shifts": [s.toDict() for s in self.shifts.all()],
+            "start": self.start,
+            "end": self.end,
+            "employee": self.employee.toDict(),
+            "signature": self.signature
+        }
 
 
 
