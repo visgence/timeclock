@@ -133,9 +133,25 @@ def getJobsBreakdown(employees=None, start=None, end=None):
         for job in jobs:
             #initialize data if not in there yet.
             if job.name not in jobData['jobs']:
-                jobData['jobs'][job.name] = {'hours': 0.0, 'percentage': 0.0, 'active': job.is_active, 'summaries': []}
+                jobData['jobs'][job.name] = {
+                    'hours': 0.0,
+                    'percentage': 0.0,
+                    'active': job.is_active,
+                    'summaries': [],
+                    'percentages': {}
+                }
+
+
 
             hours = employee.getJobHours(start, end, job)
+            if hours > 0 and employee not in jobData['jobs'][job.name]['percentages']:
+                jobData['jobs'][job.name]['percentages'][employee.username] = {
+                    "employee": employee,
+                    "hours": hours,
+                }
+            elif hours > 0:
+                jobData['jobs'][job.name]['percentages'][employee.username]['hours'] += hours
+
             jobData['total_hours'] += hours
             jobData['jobs'][job.name]['summaries'].extend(job.get_summaries(employee, start, end))
             jobData['jobs'][job.name]['hours'] += hours
@@ -146,14 +162,24 @@ def getJobsBreakdown(employees=None, start=None, end=None):
 
     #Calculate percentages as a Decimal
     for jobN, jobD in jobData['jobs'].iteritems():
-        
         if jobData['total_hours'] > 0:
-            jobD['percentage'] = str(Decimal((jobD['hours']*100) / jobData['total_hours']).quantize(Decimal('1.00')))
+            jobPercentage = Decimal((jobD['hours']*100) / jobData['total_hours']).quantize(Decimal('1.00'))
+            jobD['percentage'] = str(jobPercentage)
+
+        for username, percentageD in jobD['percentages'].iteritems():
+            if percentageD['hours'] > 0:
+                percentage = str((Decimal((percentageD['hours']*100) / jobData['total_hours'])).quantize(Decimal('1.00')))
+                percentageD['percentage'] = percentage
 
         jobD['hours'] = str(Decimal(jobD['hours']).quantize(Decimal('1.00')))
+    
 
     jobData['total_hours'] = str(Decimal(jobData['total_hours']).quantize(Decimal('1.00')))
+    import json
 
+    for jobN, jobD in jobData['jobs'].iteritems():
+        for username, percentageD in jobD['percentages'].iteritems():
+            print percentageD    
     return jobData
 
 
