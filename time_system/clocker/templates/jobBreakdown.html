@@ -11,27 +11,33 @@
              - {{data.hours}}
         </label>
         <div class="progress"> 
-            <div class="progress-bar" role="progressbar" aria-valuenow="{{data.percentage}}" aria-valuemin="0.0" 
-                    aria-valuemax="{{jobsBreakdown.total_hours}}" style="width: {{data.percentage}}%">
-            </div>
+            {% for username, percentD in data.percentages.items %}
+                <div class="progress-bar" role="progressbar" aria-valuenow="{{percentD.percentage}}" aria-valuemin="0.0" 
+                     aria-valuemax="{{jobsBreakdown.total_hours}}" 
+                     style="width: {{percentD.percentage}}%; background-color: {{percentD.employee.color}};"></div>
+            {% endfor %}
         </div>
 
         {% if data.hours != "0.00" %}
         <table class="table table-condensed summary-data" style="display: none">
             <thead>
                 <tr>
+                    <th></th>
                     <th style="width: 8em">Date</th>
                     <th>Hours</th>
                     <th style="width: 8em">Employee</th>
+                    <th>Miles</th>
                     <th>Notes</th>
                 </tr>
             </thead>
             <tbody>
                 {% for summary in data.summaries %} 
                     <tr>
+                        <td><span class="badge" style="background-color: {{summary.employee.color}}">&nbsp;</span></td>
                         <td>{{summary.shift.time_in.date}}</td>
                         <td>{{summary.hours|to_hour}}</td>
                         <td>{{summary.employee}}</td>
+                        <td>{{summary.miles}}</td>
                         <td>{{summary.note}}</td>
                     </tr> 
                 {% endfor %}
