@@ -9,6 +9,7 @@
             <span>{{job}}</span>
             {% endif %}
              - {{data.hours}}
+             <img class="job-spinners" src="{{STATIC_URL}}images/spinner.gif" style="height: 20px; display:none;">
         </label>
         <div class="progress"> 
             {% for username, percentD in data.percentages.items %}
