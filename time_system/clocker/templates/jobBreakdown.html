@@ -9,12 +9,14 @@
             <span>{{job}}</span>
             {% endif %}
              - {{data.hours}}
+             <img class="job-spinners" src="{{STATIC_URL}}images/spinner.gif" style="height: 20px; display:none;">
         </label>
         <div class="progress"> 
             {% for username, percentD in data.percentages.items %}
                 <div class="progress-bar" role="progressbar" aria-valuenow="{{percentD.percentage}}" aria-valuemin="0.0" 
                      aria-valuemax="{{jobsBreakdown.total_hours}}" 
-                     style="width: {{percentD.percentage}}%; background-color: {{percentD.employee.color}};"></div>
+                     style="width: {{percentD.percentage}}%; background-color: {{percentD.employee.color}};"
+                     data-toggle="tooltip" title="{{percentD.employee}}"></div>
             {% endfor %}
         </div>
 
@@ -51,6 +53,7 @@
 
 <script>
     $(function() {
+        $('.progress-bar').tooltip({});
         $('.job-title').on('click', function(e) {
             console.log(e.target);
             $(e.target).closest('label').siblings('table.summary-data').toggle();
