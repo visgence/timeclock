@@ -6,20 +6,28 @@ from collections import OrderedDict
 
 # Django Imports
 from django.template import RequestContext, loader
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseBadRequest
 
 # Local Imports
 from clocker.models import Employee, Job, ShiftSummary
 
 def jobBreakdown(request):
 
+    user = request.user
     employees = []
     if not request.user.is_superuser:
-        employees.append(request.user.username)
+        employees = Employee.objects.filter(username=user.username)
     else:
         employee = request.POST['employee']
-        if employee != 'all':
-            employees.append(employee)
+        employees = Employee.objects.all()
+        
+        if employee == 'all-active':
+            employees = employees.filter(is_active=True)
+        elif employee != 'all':
+            try:
+                employees = employees.filter(username=employee, is_active=True)
+            except Employee.DoesNotExist:
+                return HttpResponseBadRequest("No employee with username %s" % str(e))
 
     start = str(request.POST.get('start', None))
     end = str(request.POST.get('end', None))
@@ -111,14 +119,6 @@ def getJobsBreakdown(employees=None, start=None, end=None):
     '''
 
     start, end = getWeekdayRange(start, end)
-    if employees is None or len(employees) <= 0:
-        employees = Employee.objects.filter(is_active=True)
-    else:
-        try:
-            e = ''
-            employees = [Employee.objects.get(username=e, is_active=True) for e in employees]
-        except Employee.DoesNotExist:
-            return "No employee with username %s" % str(e)
 
     jobData = {
         'jobs': OrderedDict()
@@ -175,11 +175,6 @@ def getJobsBreakdown(employees=None, start=None, end=None):
     
 
     jobData['total_hours'] = str(Decimal(jobData['total_hours']).quantize(Decimal('1.00')))
-    import json
-
-    for jobN, jobD in jobData['jobs'].iteritems():
-        for username, percentageD in jobD['percentages'].iteritems():
-            print percentageD    
     return jobData
 
 

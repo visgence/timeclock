@@ -114,7 +114,8 @@
                 <div class="form-group">
                     <select name="user_name" id="employees-job" class="form-control">
                         {% if employee.is_superuser %}
-                            <option value="all">All Active Employes</options>
+                            <option value="all-active">All Active Employees</options>
+                            <option value="all">All Employees</options>
                         {% endif %}
                         {% for emp in employees %}
                             <option value="{{emp.username}}">{{emp}}</option>
@@ -152,6 +153,8 @@
                 ,'employee': $('#employees-job').val()
             };
 
+            $('#job-controls form button[type="submit"]').attr('disabled', "");
+            $('.job-spinners').show();
             $.post("{% url 'job-breakdown' %}", data, function(resp) {
                 $('#jobs').html(resp);
                 var jobCheck = $('#toggle-active-jobs');
@@ -161,6 +164,10 @@
             .fail(function(resp) {
                 $('#jobs').html("Something unexpected occured while loading the jobs breakdown.");
                 console.error(resp);
+            })
+            .always(function() {
+                $('#job-controls form button[type="submit"]').removeAttr('disabled');
+                $('.job-spinners').hide();
             });
 
             return false;
