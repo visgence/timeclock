@@ -175,11 +175,6 @@ def getJobsBreakdown(employees=None, start=None, end=None):
     
 
     jobData['total_hours'] = str(Decimal(jobData['total_hours']).quantize(Decimal('1.00')))
-    import json
-
-    for jobN, jobD in jobData['jobs'].iteritems():
-        for username, percentageD in jobD['percentages'].iteritems():
-            print percentageD    
     return jobData
 
 
