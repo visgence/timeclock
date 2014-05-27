@@ -4,13 +4,55 @@
 
 <div id="manage-timesheets" style="margin-top: 1em;">
 
-    <div style="float: left; margin-right: 2em;">
-        <input type="text">
-        <button type="button" class="btn btn-default">Create</button>
-    </div>
-    
-    <div>
-        <button type="button" class="btn btn-default">Create</button>
+    <div class="row">
+        <div class="col-xs-4">
+            <input type="text">
+            <button type="button" class="btn btn-default">Create</button>
+        </div>
+        
+        <div class="col-xs-8">
+            <div class="panel-group" id="accordion">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h4 class="panel-title">
+                            <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
+                                2014/05/01 - 2014/05/15
+                            </a>
+                        </h4>
+                    </div>
+                    <div id="collapseOne" class="panel-collapse collapse">
+                        <div class="panel-body">
+                        </div>
+                    </div>
+                </div>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h4 class="panel-title">
+                            <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">
+                                2014/04/15 - 2014/04/31 <i>Signed</i>
+                            </a>
+                        </h4>
+                    </div>
+                    <div id="collapseTwo" class="panel-collapse collapse">
+                        <div class="panel-body">
+                        </div>
+                    </div>
+                </div>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h4 class="panel-title">
+                            <a data-toggle="collapse" data-parent="#accordion" href="#collapseThree">
+                                2014/04/01 - 2014/04/15 <i>Signed</i>
+                            </a>
+                        </h4>
+                    </div>
+                    <div id="collapseThree" class="panel-collapse collapse">
+                        <div class="panel-body">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
 </div>
