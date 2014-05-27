@@ -114,7 +114,8 @@
                 <div class="form-group">
                     <select name="user_name" id="employees-job" class="form-control">
                         {% if employee.is_superuser %}
-                            <option value="all">All Active Employes</options>
+                            <option value="all-active">All Active Employees</options>
+                            <option value="all">All Employees</options>
                         {% endif %}
                         {% for emp in employees %}
                             <option value="{{emp.username}}">{{emp}}</option>
