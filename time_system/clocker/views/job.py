@@ -170,6 +170,7 @@ def getJobsBreakdown(employees=None, start=None, end=None):
             if percentageD['hours'] > 0:
                 percentage = str((Decimal((percentageD['hours']*100) / jobData['total_hours'])).quantize(Decimal('1.00')))
                 percentageD['percentage'] = percentage
+                percentageD['hours'] = str(Decimal(percentageD['hours']).quantize(Decimal('1.00')))
 
         jobD['hours'] = str(Decimal(jobD['hours']).quantize(Decimal('1.00')))
     
