@@ -11,10 +11,17 @@ $(function() {
             return timesheets.timesheetList() ? timesheets.timesheetList : [];
         }, this);
 
+
+        var setupPickers = function() {
+            $('.input-daterange').datepicker();
+        };
+
         var init = function(vars) {
             vars = vars || {};
 
             timesheets.refresh();
+
+            setupPickers();
         }.bind(this);
 
         init(vars);

@@ -1,12 +1,28 @@
 {% extends 'base.html' %}
 
+{%block additional-headers%}
+<link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/datepicker.css">
+{%endblock additional-headers%}
+
+
 {% block content %}
 
 <div id="manage-timesheets" style="margin-top: 1em;">
 
     <div class="row">
         <div class="col-xs-4">
-            <input type="text">
+            <p>Create timesheet for</p>
+            <select class="form-control">
+                {% for employee in employees %} 
+                <option value="{{employee.id}}">{{employee}}</option>
+                {% endfor %}
+            </select>
+            <p>with pay period</p>
+            <div class="input-daterange input-group">
+                <input type="text" class="input-sm form-control" name="start"/>
+                <span class="input-group-addon">to</span>
+                <input type="text" class="input-sm form-control" name="end"/>
+            </div>
             <button type="button" class="btn btn-default">Create</button>
         </div>
         
@@ -61,7 +77,7 @@
 {% endblock content %}
 
 {% block additional-scripts %}
-    <script type="text/javascript" src="{{STATIC_URL}}js/timesheet.js"></script>
+    <script type="text/javascript" src="{{STATIC_URL}}js/bootstrap-datepicker.js"></script>
     <script type="text/javascript" src="{{STATIC_URL}}js/timesheets.js"></script>
     <script type="text/javascript" src="{{STATIC_URL}}js/manageTimesheets.js"></script>
 

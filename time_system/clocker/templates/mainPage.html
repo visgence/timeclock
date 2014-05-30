@@ -1,7 +1,7 @@
 {%extends "base.html"%}
 
 {%block additional-headers%}
-    <script src="{{STATIC_URL}}js/main_page.js" type="text/javascript"></script>
+<link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/datepicker.css">
 {%endblock additional-headers%}
 
 {% block additional-greeting %}
@@ -139,6 +139,14 @@
 
     <div id="jobs"></div>
 </div>
+{%endblock%}
+
+
+{% block additional-scripts %}
+    
+<script type="text/javascript" src="{{STATIC_URL}}js/bootstrap-datepicker.js"></script>
+<script src="{{STATIC_URL}}js/main_page.js" type="text/javascript"></script>
+
 
 <script>
     $(function() {
@@ -187,5 +195,4 @@
         $('#job-controls form').trigger('submit');
     });
 </script>
-{%endblock%}
-
+{% endblock %}
