@@ -49,7 +49,7 @@ function create_slider_handler(job_id, total_time)
                 $("#total_time").val(sec_to_time(time - value*60));
             }
         }
-    });
+    }).draggable();
 }//end create_slider_handler 
 
 
