@@ -1,83 +1,65 @@
 {% extends 'base.html' %}
 
 {%block additional-headers%}
+    <script type="text/javascript" src="{{STATIC_URL}}js/messageCenter.js"></script>
 <link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/datepicker.css">
 {%endblock additional-headers%}
 
 
 {% block content %}
 
-<div id="manage-timesheets" style="margin-top: 1em;">
+{% include 'messageCenter.html' %}
+
+<div id="manage-timesheets">
+    {% csrf_token %}
+    <!-- ko template: {name: 'error-template', data: messageCenter} --><!-- /ko -->
 
     <div class="row">
         <div class="col-xs-4">
-            <p>Create timesheet for</p>
-            <select class="form-control">
-                {% for employee in employees %} 
-                <option value="{{employee.id}}">{{employee}}</option>
-                {% endfor %}
-            </select>
-            <p>with pay period</p>
-            <div class="input-daterange input-group">
-                <input type="text" class="input-sm form-control" name="start"/>
-                <span class="input-group-addon">to</span>
-                <input type="text" class="input-sm form-control" name="end"/>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h4 class="panel-title">Create New Timesheet</h4>
+                </div>
+
+                <div class="panel-body">
+                    <form class="form">
+                        <div class="form-group">
+                            <label class="control-label">Employee</label>
+                            <select class="form-control" data-bind="value: createEmployee">
+                                {% for employee in employees %} 
+                                <option value="{{employee.id}}">{{employee}}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">Pay Period</label>
+                            <div class="input-daterange input-group">
+                                <input type="text" class="form-control" data-bind="value: createFrom">
+                                <span class="input-group-addon">to</span>
+                                <input type="text" class="form-control" data-bind="value: createTo">
+                            </div>
+                        </div>
+                        <button type="button" class="btn btn-default" data-bind="click: createTimesheet">Create</button>
+                    </form>
+                </div>
             </div>
-            <button type="button" class="btn btn-default">Create</button>
         </div>
         
-        <div class="col-xs-8">
-            <div class="panel-group" id="accordion">
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <h4 class="panel-title">
-                            <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
-                                2014/05/01 - 2014/05/15
-                            </a>
-                        </h4>
-                    </div>
-                    <div id="collapseOne" class="panel-collapse collapse">
-                        <div class="panel-body">
-                        </div>
-                    </div>
-                </div>
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <h4 class="panel-title">
-                            <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">
-                                2014/04/15 - 2014/04/31 <i>Signed</i>
-                            </a>
-                        </h4>
-                    </div>
-                    <div id="collapseTwo" class="panel-collapse collapse">
-                        <div class="panel-body">
-                        </div>
-                    </div>
-                </div>
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <h4 class="panel-title">
-                            <a data-toggle="collapse" data-parent="#accordion" href="#collapseThree">
-                                2014/04/01 - 2014/04/15 <i>Signed</i>
-                            </a>
-                        </h4>
-                    </div>
-                    <div id="collapseThree" class="panel-collapse collapse">
-                        <div class="panel-body">
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <div class="col-xs-8" data-bind="template: {name: 'timesheet-template', data: timesheetList}"></div>
     </div>
 
 </div>
+
+<script type="text/html" id="timesheet-template">
+    {% include 'timesheet.html' %}
+</script>
 
 
 {% endblock content %}
 
 {% block additional-scripts %}
     <script type="text/javascript" src="{{STATIC_URL}}js/bootstrap-datepicker.js"></script>
+    <script type="text/javascript" src="{{STATIC_URL}}js/timesheet.js"></script>
     <script type="text/javascript" src="{{STATIC_URL}}js/timesheets.js"></script>
     <script type="text/javascript" src="{{STATIC_URL}}js/manageTimesheets.js"></script>
 

@@ -20,7 +20,7 @@ urlpatterns = patterns('',
 urlpatterns += patterns('clocker.views.timesheet',
     url(r'^timeclock/hours/$', 'total_hours', name="get-total-hours"),
     url(r'^timeclock/timesheets/$', TimesheetsView.as_view(), name="timesheet-list"),
-    url(r'^timeclock/timesheets/(?P<timesheet_id>)/$', TimesheetView.as_view(), name="timesheet-detail"),
+    url(r'^timeclock/timesheets/(?P<timesheet_id>\d+)/$', TimesheetView.as_view(), name="timesheet-detail"),
 )
 
 #Management
