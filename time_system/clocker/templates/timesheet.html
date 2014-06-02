@@ -12,6 +12,7 @@
             </h4>
         </div>
         <div class="panel-collapse collapse" data-bind="attr: {id: 'timesheet-'+id}">
+            <!-- ko if: shifts().length > 0 -->
             <table class="table table-condensed">
                 <thead>
                     <tr>
@@ -28,6 +29,13 @@
                     </tr>
                 </tbody>
             </table>
+            <!-- /ko -->
+
+            <!-- ko if: shifts().length <= 0 -->
+            <p class="text-info text-center" style="margin-top: 0.5em;">
+                This timesheet contains no shifts.            
+            </p>
+            <!-- /ko -->
 
             <!-- ko if: belongsToUser("{{user.username}}") && !signature() -->
             <div class="panel-body">
