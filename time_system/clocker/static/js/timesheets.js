@@ -46,13 +46,6 @@ $(function() {
         return $.getJSON(url).then(__this.rebuild.bind(__this), failcallback);
     };
 
-    Timesheets.prototype.createTimesheet = function(data) {
-        var __this = this;
-        data['messageCenter'] = this.messageCenter();
-        var newTimesheet = new Timesheet(data);
-        newTimesheet.create().then(__this.refresh.bind(__this)); 
-    };
-
     Timesheets.prototype.createTimesheets = function(data) {
         if (!$.isArray(data))
             return;

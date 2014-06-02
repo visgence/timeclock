@@ -2,31 +2,28 @@ $(function() {
     "use strict";
 
     var Timesheets = $.fn.Timesheets;
+    var Timesheet = $.fn.Timesheet;
     var MessageCenter = $.fn.MessageCenter;
 
 
     var ManageTimesheets = function(vars) {
+        
         this.messageCenter = ko.observable(new MessageCenter());
-
-        this.createFrom = ko.observable();
-        this.createTo = ko.observable();
-        this.createEmployee = ko.observable();
+        this.newTimesheet = ko.observable();
 
         var timesheets = new Timesheets({"messageCenter": this.messageCenter()});
         this.timesheetList = ko.computed(function() {
-
             return timesheets.timesheetList() ? timesheets.timesheetList() : [];
         }, this);
 
 
         this.createTimesheet = function() {
-            var newTsData = {
-                start: (new Date(this.createFrom())).getTime()/1000,
-                end: (new Date(this.createTo())).getTime()/1000,
-                employee: this.createEmployee()
-            };
-
-            timesheets.createTimesheet(newTsData);
+            var __this = this;
+            this.newTimesheet().create().done(function() {
+                var newTs = {"messageCenter": __this.messageCenter()};
+                __this.newTimesheet(new Timesheet(newTs));
+                timesheets().refresh();
+            });
         }.bind(this);
 
         var setupPickers = function() {
@@ -37,8 +34,11 @@ $(function() {
             vars = vars || {};
 
             timesheets.refresh();
-
             setupPickers();
+
+
+            var newTs = {"messageCenter": this.messageCenter()};
+            this.newTimesheet(new Timesheet(newTs));
         }.bind(this);
 
         init(vars);

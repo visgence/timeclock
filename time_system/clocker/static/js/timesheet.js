@@ -7,9 +7,37 @@ $(function() {
     var Timesheet = function(vars) {
 
         this.id = null;
-        this.start = ko.observable();
-        this.end = ko.observable();
-        this.employee = ko.observable();
+        
+        this.start = ko.observable().extend({required: "Please specify a pay period."});
+        this.startTimestamp = ko.computed({
+            read: function() {
+                return this.start() ? (new Date(this.start())).getTime()/1000 : NaN;
+            },
+            write: function(ts) {
+                if (!$.isNumeric(ts))
+                    return;
+
+                var d = new Date(ts*1000);
+                this.start(d.toLocaleDateString());
+            }
+        }, this);
+        
+        this.end = ko.observable().extend({required: "Please specify a pay period."});;
+        this.endTimestamp = ko.computed({
+            read: function() {
+                return this.end() ? (new Date(this.end())).getTime()/1000 : NaN;
+            },
+            write: function(ts) {
+                if (!$.isNumeric(ts))
+                    return;
+
+                var d = new Date(ts*1000);
+                this.end(d.toLocaleDateString());
+            }
+        }, this);
+        
+
+        this.employee = ko.observable().extend({required: "Please select an employee."});
         this.signature = ko.observable();
         this.shifts = ko.observableArray();
 
@@ -65,10 +93,14 @@ $(function() {
         this.validateCreation = function() {
             var noErrors = true;
 
-            if (this.id !== null) noErrors = false;
-            if (!this.start() || isNaN(new Date(this.start()*1000))) noErrors = false;
-            if (!this.end() || isNaN(new Date(this.end()*1000))) noErrors = false;
-            if (!this.employee()) noErrors = false;
+            if (this.id !== null) {
+                this.messageCenter().setErrors("This timesheet appears to already be created! This should not have happened...");
+                noErrors = false;
+            }
+            
+            if (!this.start.validate()) noErrors = false;
+            if (!this.end.validate()) noErrors = false;
+            if (!this.employee.validate()) noErrors = false;
 
             return noErrors;
         }.bind(this);
@@ -83,16 +115,14 @@ $(function() {
         }.bind(this);
 
         this.create = function() {
-            if (!this.validateCreation()) {
-                this.messageCenter().setErrors('Could not create!');
+            if (!this.validateCreation())
                 return $.Deferred().reject().promise();
-            }
 
             var url = timesheetUrl;
             var requestType = "POST";
             var payload = {
-                start: this.start(),
-                end: this.end(),
+                start: this.startTimestamp(),
+                end: this.endTimestamp(),
                 employee: this.employee()
             };
 
