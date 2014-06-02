@@ -803,7 +803,6 @@ class Timesheet(models.Model):
     def sign(self, user):
         assert self.employee_id == user.id, "You may only sign your own timesheets."
         assert self.signature == "", "Timesheet is already signed."
-        assert self.shifts.all().count() > 0, "There are no shifts belonging to this timesheet."
 
         strToHash = str(self.start) + str(self.end)
         strToHash += self.employee.username
