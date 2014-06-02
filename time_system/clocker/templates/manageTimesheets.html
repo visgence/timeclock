@@ -16,6 +16,7 @@
 
     <div class="row">
         <div class="col-xs-4">
+            {% if user.is_superuser %}
             <div class="panel panel-default" data-bind="with: newTimesheet">
                 <div class="panel-heading">
                     <h4 class="panel-title">Create New Timesheet</h4>
@@ -30,7 +31,7 @@
                             <select class="form-control" data-bind="options: $parent.employeeOptions,
                                                                     optionsText: function(emp) {
                                                                         if (emp.id === -1) return emp.display;
-                                                                        
+
                                                                         return emp.first_name+' '+emp.last_name
                                                                     },
                                                                     optionsValue: 'id',
@@ -51,6 +52,7 @@
                     </form>
                 </div>
             </div>
+            {% endif %}
         </div>
         
         <div class="col-xs-8" data-bind="template: {name: 'timesheet-template', data: timesheetList}"></div>

@@ -4,7 +4,7 @@
 from django.shortcuts import render_to_response 
 from django.template import RequestContext
 from django.views.generic.base import View
-from django.http import HttpResponse, HttpResponseBadRequest
+from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseForbidden
 from django.template import RequestContext, loader
 from django.core.exceptions import ValidationError
 
@@ -43,6 +43,9 @@ class TimesheetsView(View):
 
     def post(self, request):
         user = request.user
+
+        if not user.is_superuser:
+            return HttpResponseForbidden(json.dumps("Permissions Denied."), content_type="application/json");
 
         try:
             params = json.loads(request.read())
