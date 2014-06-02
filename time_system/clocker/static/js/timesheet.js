@@ -38,7 +38,10 @@ $(function() {
         
 
         this.employee = ko.observable().extend({required: "Please select an employee."});
+        
         this.signature = ko.observable();
+        this.signAgreement = ko.observable(false).extend({required: "Please Accept the timesheet."});
+
         this.shifts = ko.observableArray();
 
         this.timeperiod = ko.computed(function() {
@@ -77,10 +80,7 @@ $(function() {
 
             if (vars.hasOwnProperty('employee'))
                 this.employee(vars.employee);
-           
-            if (vars.hasOwnProperty('signature'))
-                this.signature(vars.signature);
-            
+                       
             if (vars.hasOwnProperty('shifts'))
                 this.shifts(vars.shifts);
             
@@ -88,6 +88,15 @@ $(function() {
                 this.messageCenter(vars.messageCenter);
             else
                 this.messageCenter(new MessageCenter());
+
+            this.rebuild(vars);
+        }.bind(this);
+
+        this.rebuild = function(vars) {
+            vars = vars || {};
+
+            if (vars.hasOwnProperty('signature'))
+                this.signature(vars.signature);
         }.bind(this);
 
         this.validateCreation = function() {
@@ -106,12 +115,17 @@ $(function() {
         }.bind(this);
 
         this.signTimesheet = function() {
+            if (!this.signAgreement.validate())
+                return $.Deferred().reject().promise();
+
+            var __this = this;
             var url = timesheetUrl+this.id+"/";
             var requestType = "PUT";
             var payload = {
                 action: "sign"
             };
-            return this.update(url, requestType, payload);
+            
+            return this.update(url, requestType, payload).done(__this.rebuild);
         }.bind(this);
 
         this.create = function() {

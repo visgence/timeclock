@@ -22,7 +22,8 @@ $(function() {
             this.newTimesheet().create().done(function() {
                 var newTs = {"messageCenter": __this.messageCenter()};
                 __this.newTimesheet(new Timesheet(newTs));
-                timesheets().refresh();
+                setupPickers();
+                timesheets.refresh();
             });
         }.bind(this);
 

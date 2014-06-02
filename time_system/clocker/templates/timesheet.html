@@ -31,9 +31,10 @@
 
             <!-- ko if: belongsToUser("{{user.username}}") && !signature() -->
             <div class="panel-body">
+                <p class="text-danger" data-bind="visible: signAgreement.hasError(), text: signAgreement.validationMessage()"></p>
                 <div class="checkbox">
                     <label>
-                        <input type="checkbox"> Accept Timesheet
+                        <input type="checkbox" data-bind="checked: signAgreement"> Accept Timesheet
                     </label>
                 </div>
                 
