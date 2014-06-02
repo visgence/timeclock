@@ -164,8 +164,11 @@ $(function() {
         }.bind(this);
 
         var failUpdateCallback = function(resp) {
+            console.log(resp);
             if (resp.hasOwnProperty('responseJSON'))
                 this.messageCenter().setErrors(resp.responseJSON);
+            else if (resp.hasOwnProperty('responseText'))
+                this.messageCenter().setErrors(resp.responseText);
             else {
                 this.messageCenter().setErrors("something unexpected occured.");
                 console.error(resp);

@@ -69,7 +69,9 @@ class TimesheetsView(View):
             except ValidationError as e:
                 errors = [{x: y} for x, y in e.message_dict.iteritems()]
                 return HttpResponseBadRequest(json.dumps(errors), content_type='application/json')
-            
+            except AssertionError as e:
+                return HttpResponseBadRequest(str(e), content_type='application/json')
+
             return HttpResponse(json.dumps([ts.toDict() for ts in timesheets], indent=4), content_type="application/json")            
         else:
             try:
@@ -83,6 +85,8 @@ class TimesheetsView(View):
             except ValidationError as e:
                 errors = [{x: y} for x, y in e.message_dict.iteritems()]
                 return HttpResponseBadRequest(json.dumps(errors), content_type='application/json')
+            except AssertionError as e:
+                return HttpResponseBadRequest(str(e), content_type='application/json')
 
             return HttpResponse(json.dumps(timesheet.toDict(), indent=4), content_type="application/json")            
 
