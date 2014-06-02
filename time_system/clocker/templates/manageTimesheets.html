@@ -15,8 +15,8 @@
     <!-- ko template: {name: 'error-template', data: messageCenter} --><!-- /ko -->
 
     <div class="row">
+        {% if user.is_superuser %}
         <div class="col-xs-4">
-            {% if user.is_superuser %}
             <div class="panel panel-default" data-bind="with: newTimesheet">
                 <div class="panel-heading">
                     <h4 class="panel-title">Create New Timesheet</h4>
@@ -52,10 +52,14 @@
                     </form>
                 </div>
             </div>
-            {% endif %}
         </div>
+        {% endif %}
         
+        {% if user.is_superuser %}
         <div class="col-xs-8" data-bind="template: {name: 'timesheet-template', data: timesheetList}"></div>
+        {% else %}
+        <div class="col-xs-12" data-bind="template: {name: 'timesheet-template', data: timesheetList}"></div>
+        {% endif %}
     </div>
 
 </div>
