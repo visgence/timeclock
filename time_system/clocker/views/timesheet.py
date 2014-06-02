@@ -33,7 +33,8 @@ class TimesheetsView(View):
             timesheets = [t.toDict() for t in Timesheet.objects.get_viewable(user)]
             return HttpResponse(json.dumps({'timesheetList': timesheets}), content_type="application/json")
 
-        employees = Employee.objects.filter(is_active=True)
+        employees = Employee.objects.get_viewable(user)
+        employees = employees.filter(is_active=True)
         t = loader.get_template('manageTimesheets.html')
         c = RequestContext(request, {
             "employees": json.dumps([e.toDict() for e in employees])
