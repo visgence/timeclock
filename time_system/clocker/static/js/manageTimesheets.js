@@ -16,9 +16,11 @@ $(function() {
             return timesheets.timesheetList() ? timesheets.timesheetList() : [];
         }, this);
 
+        this.employeeOptions = ko.observableArray();
 
         this.createTimesheet = function() {
             var __this = this;
+
             this.newTimesheet().create().done(function() {
                 var newTs = {"messageCenter": __this.messageCenter()};
                 __this.newTimesheet(new Timesheet(newTs));
@@ -34,9 +36,13 @@ $(function() {
         var init = function(vars) {
             vars = vars || {};
 
+            if (vars.hasOwnProperty('employeeOptions')) {
+                vars.employeeOptions.unshift({"id": -1, display: "All"});
+                this.employeeOptions(vars.employeeOptions);            
+            }
+
             timesheets.refresh();
             setupPickers();
-
 
             var newTs = {"messageCenter": this.messageCenter()};
             this.newTimesheet(new Timesheet(newTs));

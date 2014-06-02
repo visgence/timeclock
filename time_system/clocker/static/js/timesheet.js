@@ -134,11 +134,7 @@ $(function() {
 
             var url = timesheetUrl;
             var requestType = "POST";
-            var payload = {
-                start: this.startTimestamp(),
-                end: this.endTimestamp(),
-                employee: this.employee()
-            };
+            var payload = this.creationData();
 
             return this.update(url, requestType, payload);
         }.bind(this);
@@ -157,6 +153,14 @@ $(function() {
             })
             .fail(failUpdateCallback.bind(this));
 
+        }.bind(this);
+
+        this.creationData = function() {
+            return {
+                start: this.startTimestamp(),
+                end: this.endTimestamp(),
+                employee: this.employee()
+            };
         }.bind(this);
 
         var failUpdateCallback = function(resp) {

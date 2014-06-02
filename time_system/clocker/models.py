@@ -742,6 +742,14 @@ class TimesheetManager(models.Manager):
 
 
     @transaction.atomic
+    def create_timesheets(self, data, user):
+        newTimesheets = []
+        for ts in data:
+            newTimesheets.append(self.create_timesheet(ts, user))
+
+        return newTimesheets
+        
+    @transaction.atomic
     def create_timesheet(self, data, user):
 
         ts = Timesheet(**data)

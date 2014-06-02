@@ -36,7 +36,7 @@ class TimesheetsView(View):
         employees = Employee.objects.filter(is_active=True)
         t = loader.get_template('manageTimesheets.html')
         c = RequestContext(request, {
-            "employees": employees
+            "employees": json.dumps([e.toDict() for e in employees])
         })
         return HttpResponse(t.render(c), content_type="text/html")
 
@@ -50,19 +50,37 @@ class TimesheetsView(View):
             error = 'Invalid data: ' + str(e)
             return HttpResponseBadRequest(json.dumps(error), content_type='application/json')
 
-        try:
-            employee = Employee.objects.get(id=params['employee'])
-            params['employee'] = employee
-        except Employee.DoesNotExist:
-            return HttpResponseBadRequest(json.dumps("Employee %s does not exist" % str(params['employee'])), content_type='application/json')
+        empId = params['employee']
+        if empId == -1:
+            paramsList = []
+            for emp in Employee.objects.filter(is_active=True):
+                paramsList.append({
+                    "start": params.get('start', None),
+                    "end": params.get('end', None),
+                    "employee": emp
+                })
+            
+            try:
+                timesheets = Timesheet.objects.create_timesheets(paramsList, user)
+            except ValidationError as e:
+                errors = [{x: y} for x, y in e.message_dict.iteritems()]
+                return HttpResponseBadRequest(json.dumps(errors), content_type='application/json')
+            
+            return HttpResponse(json.dumps([ts.toDict() for ts in timesheets], indent=4), content_type="application/json")            
+        else:
+            try:
+                employee = Employee.objects.get(id=empId)
+                params['employee'] = employee
+            except Employee.DoesNotExist:
+                return HttpResponseBadRequest(json.dumps("Employee %s does not exist" % str(params['employee'])), content_type='application/json')
 
-        try:
-            timesheet = Timesheet.objects.create_timesheet(params, user)
-        except ValidationError as e:
-            errors = [{x: y} for x, y in e.message_dict.iteritems()]
-            return HttpResponseBadRequest(json.dumps(errors), content_type='application/json')
+            try:
+                timesheet = Timesheet.objects.create_timesheet(params, user)
+            except ValidationError as e:
+                errors = [{x: y} for x, y in e.message_dict.iteritems()]
+                return HttpResponseBadRequest(json.dumps(errors), content_type='application/json')
 
-        return HttpResponse(json.dumps(timesheet.toDict(), indent=4), content_type="application/json")            
+            return HttpResponse(json.dumps(timesheet.toDict(), indent=4), content_type="application/json")            
 
 
 class TimesheetView(View):
