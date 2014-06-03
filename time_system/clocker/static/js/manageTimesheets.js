@@ -25,12 +25,31 @@ $(function() {
                 var newTs = {"messageCenter": __this.messageCenter()};
                 __this.newTimesheet(new Timesheet(newTs));
                 setupPickers();
-                timesheets.refresh();
+                timesheets.refresh().done(prepareCollapses);
             });
         }.bind(this);
 
         var setupPickers = function() {
             $('.input-daterange').datepicker();
+        };
+
+        this.shouldSeperate = function(curTsIndex, nextTsIndex) {
+            if (curTsIndex == 0 || this.timesheetList().length <= 1 || nextTsIndex >= this.timesheetList().length)
+                return false;
+            
+            var curTs = this.timesheetList()[curTsIndex];
+            var nextTs = this.timesheetList()[nextTsIndex];
+            if (curTs.startTimestamp() == nextTs.startTimestamp())
+                return false;
+
+            return true;
+        }.bind(this);
+
+        var prepareCollapses = function() {
+            $("#timesheet-accordion").on("show.bs.collapse", function(e) {
+                var targetTs = ko.dataFor(e.target);
+                targetTs.loadPayData();
+            })
         };
 
         var init = function(vars) {
@@ -41,7 +60,7 @@ $(function() {
                 this.employeeOptions(vars.employeeOptions);            
             }
 
-            timesheets.refresh();
+            timesheets.refresh().done(prepareCollapses);
             setupPickers();
 
             var newTs = {"messageCenter": this.messageCenter()};

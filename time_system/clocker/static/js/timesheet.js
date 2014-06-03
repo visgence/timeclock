@@ -43,10 +43,11 @@ $(function() {
         this.signAgreement = ko.observable(false).extend({required: "Please Accept the timesheet."});
 
         this.shifts = ko.observableArray();
+        this.isBusy = ko.observable(false);
 
         this.timeperiod = ko.computed(function() {
-            var start = new Date(this.start()*1000);
-            var end = new Date(this.end()*1000);
+            var start = new Date(this.startTimestamp()*1000);
+            var end = new Date(this.endTimestamp()*1000);
 
             return start.localeDateFormat()+" - "+end.localeDateFormat();
         }, this);
@@ -73,10 +74,10 @@ $(function() {
                 this.id = vars.id;
 
             if (vars.hasOwnProperty('start'))
-                this.start(vars.start);
+                this.startTimestamp(vars.start);
 
             if (vars.hasOwnProperty('end'))
-                this.end(vars.end);
+                this.endTimestamp(vars.end);
 
             if (vars.hasOwnProperty('employee'))
                 this.employee(vars.employee);
@@ -128,6 +129,26 @@ $(function() {
             return this.update(url, requestType, payload).done(__this.rebuild);
         }.bind(this);
 
+        this.payData = ko.observable();
+        this.loadPayData = function() {
+            if (this.payData())
+                return;
+
+            var __this = this;
+            var payload = {
+                "start": this.startTimestamp(),
+                "end": this.endTimestamp(),
+                "employee": this.employee().username
+            }            
+
+            var url = timesheetUrl+this.id+"/";
+            this.isBusy(true);
+            $.get(url, payload, function(resp) {
+                __this.payData(resp);
+            })
+            .always(function() { __this.isBusy(false); });
+        }.bind(this);
+
         this.create = function() {
             if (!this.validateCreation())
                 return $.Deferred().reject().promise();
@@ -140,7 +161,8 @@ $(function() {
         }.bind(this);
 
         this.update = function(url, requestType, payload) {
-
+            this.messageCenter().dismissErrors();
+            
             return $.ajax({
                  url: url
                 ,dataType: 'json'

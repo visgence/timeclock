@@ -1,0 +1,65 @@
+{% load math_helper %}
+    
+{% for week in pay_period.weekly_info%}
+<table class="table table-striped">
+    <thead >
+        <tr >
+            <th align="center" colspan="5">Work Week: {{week.week_start}} - {{week.week_end}}</th>
+        </tr>
+        <tr>
+            <th>Date</th>
+            <th>Time In</th>
+            <th>Time Out</th>
+            <th>Shift Total</th>
+            <th>Daily Totals</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for day in week.days%}
+            {% for shift in day.shifts%}
+                <tr>
+                {%ifequal shift.display_flag 'True'%}
+                    <td>{{day.date}}</td>
+                    <td>{{shift.in}}</td>
+                    <td>{{shift.out}}</td>
+                    <td class="numeric-column">{{shift.total}}</td>
+                    {% if forloop.last %}
+                        <td style="bgcolor:yellow;" class="numeric-column">{{day.daily_total}}</td>
+                    {% else %}
+                        <td></td>
+                    {% endif %}
+                {%else%}
+                    <td style="color:grey;">{{day.date}}</td>
+                    <td style="color:grey;">{{shift.in}}</td>
+                    <td style="color:grey;">{{shift.out}}</td>
+                    <td style="color:grey;" class="numeric-column">{{shift.total}}</td>
+                    {% if forloop.last %}
+                        <td style="color:grey;" class="numeric-column">{{day.daily_total}}</td>
+                    {% else %}
+                        <td></td>
+                    {% endif %}
+                {% endifequal %}
+                </tr>
+            {% endfor %}
+        {% endfor %}
+    </tbody>
+    <tfoot>
+        <tr>
+            <th colspan="2">Weekly Total</th>
+            <th colspan="2">Weekly Regular</th>
+            <th>Weekly Overtime</th>
+        </tr>
+        <tr>
+            <td colspan="2">{{week.weekly_total}}</td>
+            <td colspan="2">{{week.weekly_regular_hours}}</td>
+            <td>{{week.weekly_overtime}}</td>
+        </tr>
+    </tfoot>
+</table>
+{% endfor %}
+
+<b>Total Regular Hours for Pay Period: {{pay_period.period_regular}} @ ${{employee.hourly_rate}}/hr = ${{pay_period.total_regular}}</b>
+<br/>
+<b>Total Overtime Hours for Pay Period: {{pay_period.period_overtime}} @ ${{overtime_pay}}/hr = ${{pay_period.total_overtime}}</b>
+<br/>
+<b>Total for Pay Period: ${{total}}</b>

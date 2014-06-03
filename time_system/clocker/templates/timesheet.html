@@ -1,5 +1,6 @@
 <div class="panel-group" id="timesheet-accordion" data-bind="foreach: $data">
-    <div class="panel panel-default">
+
+    <div class="panel panel-default" data-bind="style: {marginBottom: $root.shouldSeperate($index(), $index()+1) ? '1em':''}">
         <div class="panel-heading">
             <h4 class="panel-title">
                 <a data-toggle="collapse" data-parent="#timesheet-accordion" 
@@ -7,31 +8,16 @@
                     <!-- ko text: timeperiod --><!-- /ko -->
                     <!-- ko text: employeeName --><!-- /ko -->
                 </a>
-    
+                
+                <img class="job-spinners" src="{{STATIC_URL}}images/spinner.gif" style="height: 20px; display:none;"
+                        data-bind="visible: isBusy">   
                 <i class="pull-right" data-bind="if: signature">Signed</i>
             </h4>
         </div>
         <div class="panel-collapse collapse" data-bind="attr: {id: 'timesheet-'+id}">
-            <!-- ko if: shifts().length > 0 -->
-            <table class="table table-condensed">
-                <thead>
-                    <tr>
-                        <th>Time In</th>
-                        <th>Time Out</th>
-                        <th>Total Hours</th>
-                    </tr>
-                </thead>
-                <tbody data-bind="foreach: shifts">
-                    <tr>
-                        <td data-bind="text: time_in"></td>
-                        <td data-bind="text: time_out"></td>
-                        <td data-bind="text: hours"></td>
-                    </tr>
-                </tbody>
-            </table>
-            <!-- /ko -->
+            <div data-bind="html: payData"></div>
 
-            <!-- ko if: shifts().length <= 0 -->
+            <!-- ko if: !isBusy() && !payData() -->
             <p class="text-info text-center" style="margin-top: 0.5em;">
                 This timesheet contains no shifts.            
             </p>

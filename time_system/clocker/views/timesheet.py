@@ -93,9 +93,28 @@ class TimesheetsView(View):
 
 class TimesheetView(View):
 
-    @staticmethod
-    def updateTimesheet(timesheet, data, user):
-        pass
+
+    def get(self, request, timesheet_id):
+
+        accept = request.META['HTTP_ACCEPT']
+        user = request.user
+
+        if 'application/json' in accept:
+            try:
+                timesheet = Timesheet.objects.get(id=timesheet_id)
+            except Timesheet.DoesNotExist:
+                return HttpResponseBadRequest(json.dumps("Timesheet %s does not exist" % str(timesheet_id)), content_type="application/json")
+
+            return HttpResponse(json.dumps({'timesheetList': timesheets}), content_type="application/json")
+
+
+        check_db.main()
+        start = date.fromtimestamp(int(request.GET['start']))
+        end = date.fromtimestamp(int(request.GET['end']))
+        empUsername = request.GET['employee']
+        
+        pay_data = getPayPeriod(str(start), str(end), empUsername)
+        return render_to_response('timesheetPayData.html', pay_data, context_instance=RequestContext(request))
 
 
     def put(self, request, timesheet_id):
