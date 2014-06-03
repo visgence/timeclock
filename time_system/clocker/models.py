@@ -753,6 +753,10 @@ class TimesheetManager(models.Manager):
     def create_timesheet(self, data, user):
 
         ts = Timesheet(**data)
+        
+        timesheets = self.filter(start__lte=ts.end, end__gte=ts.start, employee=ts.employee)
+        assert timesheets.count() <= 0, "There is already a timesheet for employee %s for this pay period." % str(ts.employee)
+
         ts.full_clean()
         ts.save()
 
@@ -766,9 +770,6 @@ class TimesheetManager(models.Manager):
         end = end.replace(hour=23)
         end = end.replace(minute=59)
         end = end.replace(second=59)
-
-        timesheets = Timesheet.objects.filter(start__lte=ts.end, end__gte=ts.start)
-        assert timesheets.count() <= 0, "There is already a timesheet for employee %s for this pay period." % str(ts.employee)
 
         shifts = Shift.objects.filter(time_in__gte=start, time_out__lte=end, deleted=False, employee=ts.employee)
         ts.shifts = shifts
