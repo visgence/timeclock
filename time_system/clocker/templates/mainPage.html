@@ -1,7 +1,7 @@
 {%extends "base.html"%}
 
 {%block additional-headers%}
-    <script src="{{STATIC_URL}}js/main_page.js" type="text/javascript"></script>
+<link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/datepicker.css">
 {%endblock additional-headers%}
 
 {% block additional-greeting %}
@@ -82,16 +82,20 @@
         <h4 class="text-muted">Management</h4>	
 		{% if employee.is_superuser %}
 			<div class="click">
-                <a class="link_color" href="{% url 'manage-employees' %}">Manage Employees</a>
+                <a class="link_color" href="{% url 'manage-employees' %}">Employees</a>
 			</div>
 			
 			<div class="click">
-                <a class="link_color" href="{% url 'manage-jobs' %}">Manage Jobs</a>
+                <a class="link_color" href="{% url 'manage-jobs' %}">Jobs</a>
 			</div>
+            
 		{% endif %}
+        <div class="click">
+            <a class="link_color" href="{% url 'timesheet-list' %}">Timesheets</a>
+        </div>
 
         <div class="click">
-            <a class="link_color" href="{% url 'manage-shifts' %}">Manage Shifts</a>
+            <a class="link_color" href="{% url 'manage-shifts' %}">Shifts</a>
 		</div>
 	</div>
 </div>	
@@ -135,6 +139,14 @@
 
     <div id="jobs"></div>
 </div>
+{%endblock%}
+
+
+{% block additional-scripts %}
+    
+<script type="text/javascript" src="{{STATIC_URL}}js/bootstrap-datepicker.js"></script>
+<script src="{{STATIC_URL}}js/main_page.js" type="text/javascript"></script>
+
 
 <script>
     $(function() {
@@ -183,5 +195,4 @@
         $('#job-controls form').trigger('submit');
     });
 </script>
-{%endblock%}
-
+{% endblock %}

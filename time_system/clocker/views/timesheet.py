@@ -1,10 +1,143 @@
+
+
+# Django imports
 from django.shortcuts import render_to_response 
 from django.template import RequestContext
-from clocker.models import Employee, Shift
+from django.views.generic.base import View
+from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseForbidden
+from django.template import RequestContext, loader
+from django.core.exceptions import ValidationError
+
+# Local imports
+from clocker.models import Employee, Shift, Timesheet
+import check_db
+
+# System imports
 from datetime import timedelta, datetime, date
 from decimal import Decimal
 from copy import deepcopy
-import check_db
+try:
+    import simplejson as json
+except ImportError:
+    import json
+
+
+class TimesheetsView(View):
+
+    def get(self, request):
+
+        accept = request.META['HTTP_ACCEPT']
+        user = request.user
+
+        if 'application/json' in accept:
+            timesheets = [t.toDict() for t in Timesheet.objects.get_viewable(user)]
+            return HttpResponse(json.dumps({'timesheetList': timesheets}), content_type="application/json")
+
+        employees = Employee.objects.get_viewable(user)
+        employees = employees.filter(is_active=True)
+        t = loader.get_template('manageTimesheets.html')
+        c = RequestContext(request, {
+            "employees": json.dumps([e.toDict() for e in employees])
+        })
+        return HttpResponse(t.render(c), content_type="text/html")
+
+
+    def post(self, request):
+        user = request.user
+
+        if not user.is_superuser:
+            return HttpResponseForbidden(json.dumps("Permissions Denied."), content_type="application/json");
+
+        try:
+            params = json.loads(request.read())
+        except (ValueError, AssertionError) as e:
+            error = 'Invalid data: ' + str(e)
+            return HttpResponseBadRequest(json.dumps(error), content_type='application/json')
+
+        empId = params['employee']
+        if empId == -1:
+            paramsList = []
+            for emp in Employee.objects.filter(is_active=True):
+                paramsList.append({
+                    "start": params.get('start', None),
+                    "end": params.get('end', None),
+                    "employee": emp
+                })
+            
+            try:
+                timesheets = Timesheet.objects.create_timesheets(paramsList, user)
+            except ValidationError as e:
+                errors = [{x: y} for x, y in e.message_dict.iteritems()]
+                return HttpResponseBadRequest(json.dumps(errors), content_type='application/json')
+            except AssertionError as e:
+                return HttpResponseBadRequest(str(e), content_type='application/json')
+
+            return HttpResponse(json.dumps([ts.toDict() for ts in timesheets], indent=4), content_type="application/json")            
+        else:
+            try:
+                employee = Employee.objects.get(id=empId)
+                params['employee'] = employee
+            except Employee.DoesNotExist:
+                return HttpResponseBadRequest(json.dumps("Employee %s does not exist" % str(params['employee'])), content_type='application/json')
+
+            try:
+                timesheet = Timesheet.objects.create_timesheet(params, user)
+            except ValidationError as e:
+                errors = [{x: y} for x, y in e.message_dict.iteritems()]
+                return HttpResponseBadRequest(json.dumps(errors), content_type='application/json')
+            except AssertionError as e:
+                return HttpResponseBadRequest(str(e), content_type='application/json')
+
+            return HttpResponse(json.dumps(timesheet.toDict(), indent=4), content_type="application/json")            
+
+
+class TimesheetView(View):
+
+
+    def get(self, request, timesheet_id):
+
+        accept = request.META['HTTP_ACCEPT']
+        user = request.user
+
+        if 'application/json' in accept:
+            try:
+                timesheet = Timesheet.objects.get(id=timesheet_id)
+            except Timesheet.DoesNotExist:
+                return HttpResponseBadRequest(json.dumps("Timesheet %s does not exist" % str(timesheet_id)), content_type="application/json")
+
+            return HttpResponse(json.dumps({'timesheetList': timesheets}), content_type="application/json")
+
+
+        check_db.main()
+        start = date.fromtimestamp(int(request.GET['start']))
+        end = date.fromtimestamp(int(request.GET['end']))
+        empUsername = request.GET['employee']
+        
+        pay_data = getPayPeriod(str(start), str(end), empUsername)
+        return render_to_response('timesheetPayData.html', pay_data, context_instance=RequestContext(request))
+
+
+    def put(self, request, timesheet_id):
+        user = request.user
+
+        try:
+            params = json.loads(request.read())
+        except (ValueError, AssertionError) as e:
+            error = 'Invalid data: ' + str(e)
+            return HttpResponseBadRequest(json.dumps(error), content_type='application/json')
+
+        try:
+            timesheet = Timesheet.objects.get(id=timesheet_id)
+        except Timesheet.DoesNotExist:
+            return HttpResponseBadRequest(json.dumps("Timesheet %s does not exist" % str(params['employee'])), content_type='application/json')
+
+        try:
+            timesheet.sign(user)
+        except AssertionError as e:
+            return HttpResponseBadRequest(json.dumps("Problem signing timesheet: %s" % str(e)), content_type='application/json')
+
+        return HttpResponse(json.dumps(timesheet.toDict(), indent=4), content_type="application/json")            
+
 
 def total_hours(request):
 

@@ -1,0 +1,40 @@
+<div class="panel-group" id="timesheet-accordion" data-bind="foreach: $data">
+
+    <div class="panel panel-default" data-bind="style: {marginBottom: $root.shouldSeperate($index(), $index()+1) ? '1em':''}">
+        <div class="panel-heading">
+            <h4 class="panel-title">
+                <a data-toggle="collapse" data-parent="#timesheet-accordion" 
+                    data-bind="attr: {href: '#timesheet-'+id}">
+                    <!-- ko text: timeperiod --><!-- /ko -->
+                    <!-- ko text: employeeName --><!-- /ko -->
+                </a>
+                
+                <img class="job-spinners" src="{{STATIC_URL}}images/spinner.gif" style="height: 20px; display:none;"
+                        data-bind="visible: isBusy">   
+                <i class="pull-right" data-bind="if: signature">Signed</i>
+            </h4>
+        </div>
+        <div class="panel-collapse collapse" data-bind="attr: {id: 'timesheet-'+id}">
+            <div data-bind="html: payData"></div>
+
+            <!-- ko if: !isBusy() && !payData() -->
+            <p class="text-info text-center" style="margin-top: 0.5em;">
+                This timesheet contains no shifts.            
+            </p>
+            <!-- /ko -->
+
+            <!-- ko if: belongsToUser("{{user.username}}") && !signature() && !isBusy() && payData() -->
+            <div class="panel-body">
+                <p class="text-danger" data-bind="visible: signAgreement.hasError(), text: signAgreement.validationMessage()"></p>
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox" data-bind="checked: signAgreement"> Accept Timesheet
+                    </label>
+                </div>
+                
+                <button type="button" class="btn btn-default" data-bind="click: signTimesheet.bind($data)">Sign</button>
+            </div>
+            <!-- /ko -->
+        </div>
+    </div>
+</div>

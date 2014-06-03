@@ -90,3 +90,17 @@ function sysDialog(msg, title, type) {
     $('#sys-modal .modal-title').html(title);
     $('#sys-modal').modal('show');
 }
+
+
+function localeDateFormat() {
+    var str = "";
+    str += this.getFullYear()+"/";
+    str += (this.getMonth()+1 < 10 ? "0"+(this.getMonth()+1) : this.getMonth()+1)+"/";
+    str += this.getDate() < 10 ? "0"+this.getDate() : this.getDate();
+    str += " "
+
+    return str;
+}
+
+Date.prototype.localeDateFormat = localeDateFormat;
+

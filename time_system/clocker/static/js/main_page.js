@@ -6,44 +6,44 @@ $(function() {
     });
 
 
-    $("#from").bootstrapDP({
+    $("#from").datepicker({
         'autoclose': true
         ,'orientation': 'top'
         ,'endDate': new Date()
         ,'format': 'yyyy-mm-dd'
     })
     .on('changeDate', function(ev) {
-        $('#to').bootstrapDP('setStartDate', ev.date);    
+        $('#to').datepicker('setStartDate', ev.date);    
     });
 
-    $("#to").bootstrapDP({
+    $("#to").datepicker({
         'autoclose': true
         ,'orientation': 'top'
         ,'endDate': new Date()
         ,'format': 'yyyy-mm-dd'
     })
     .on('changeDate', function(ev) {
-        $('#from').bootstrapDP('setEndDate', ev.date);    
+        $('#from').datepicker('setEndDate', ev.date);    
     });
 
 
-    $("#from-job").bootstrapDP({
+    $("#from-job").datepicker({
         'autoclose': true
         ,'orientation': 'top'
         ,'endDate': new Date()
         ,'format': 'yyyy-mm-dd'
     })
     .on('changeDate', function(ev) {
-        $('#to-job').bootstrapDP('setStartDate', ev.date);    
+        $('#to-job').datepicker('setStartDate', ev.date);    
     });
 
-    $("#to-job").bootstrapDP({
+    $("#to-job").datepicker({
         'autoclose': true
         ,'orientation': 'top'
         ,'endDate': new Date()
         ,'format': 'yyyy-mm-dd'
     })
     .on('changeDate', function(ev) {
-        $('#from-job').bootstrapDP('setEndDate', ev.date);    
+        $('#from-job').datepicker('setEndDate', ev.date);    
     });
 });

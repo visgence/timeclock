@@ -1,6 +1,7 @@
 
 # Django imports
 from django.db import models
+from django.db import transaction         
 from django.db.models import Q
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 from django.core.exceptions import ValidationError
@@ -12,6 +13,7 @@ import re
 
 # Local imports
 from chucho.models import ChuchoManager
+from hashMethods import hash64
 from settings import DT_FORMAT
 
 
@@ -724,5 +726,92 @@ class Job(models.Model):
             summaries = summaries.filter(shift__time_in__lte=end)
 
         return summaries
+
+
+class TimesheetManager(models.Manager):
+
+    def get_viewable(self, user):
+        
+        if not isinstance(user, Employee):
+            raise TypeError("%s is not an Auth User" % str(user))
+
+        if user.is_superuser:
+            return self.all() 
+
+        return self.filter(employee=user)
+
+
+    @transaction.atomic
+    def create_timesheets(self, data, user):
+        newTimesheets = []
+        for ts in data:
+            newTimesheets.append(self.create_timesheet(ts, user))
+
+        return newTimesheets
+
+    @transaction.atomic
+    def create_timesheet(self, data, user):
+
+        ts = Timesheet(**data)
+        
+        timesheets = self.filter(start__lte=ts.end, end__gte=ts.start, employee=ts.employee)
+        assert timesheets.count() <= 0, "There is already a timesheet for employee %s for this pay period." % str(ts.employee)
+
+        ts.full_clean()
+        ts.save()
+
+        #Need to make sure to encompass the entire day.
+        start = datetime.fromtimestamp(ts.start)
+        start = start.replace(hour=00)
+        start = start.replace(minute=00)
+        start = start.replace(second=00)
+        
+        end = datetime.fromtimestamp(ts.end)
+        end = end.replace(hour=23)
+        end = end.replace(minute=59)
+        end = end.replace(second=59)
+
+        shifts = Shift.objects.filter(time_in__gte=start, time_out__lte=end, deleted=False, employee=ts.employee)
+        ts.shifts = shifts
+
+        return ts
+
+
+class Timesheet(models.Model):
+
+    shifts = models.ManyToManyField('shift')
+    start = models.BigIntegerField()
+    end = models.BigIntegerField()
+    employee = models.ForeignKey('Employee', related_name="timesheet_set")
+    signature = models.TextField(blank=True)
+
+    objects = TimesheetManager()
+
+    class Meta:
+        ordering = ['-end']
+
+
+    def toDict(self):
+        return {
+            "id": self.id,
+            "shifts": [s.toDict() for s in self.shifts.all()],
+            "start": self.start,
+            "end": self.end,
+            "employee": self.employee.toDict(),
+            "signature": self.signature
+        }
+
+    def sign(self, user):
+        assert self.employee_id == user.id, "You may only sign your own timesheets."
+        assert self.signature == "", "Timesheet is already signed."
+
+        strToHash = str(self.start) + str(self.end)
+        strToHash += self.employee.username
+        strToHash += "".join([s.time_in.strftime('%s')+s.time_out.strftime('%s')+s.employee.username for s in self.shifts.all()]) 
+        self.signature = hash64(strToHash);
+        self.save()
+         
+
+
 
         

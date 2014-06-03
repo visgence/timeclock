@@ -1,0 +1,37 @@
+<script type="text/html" id="error-template">
+    <div class="alert alert-danger alert-dismissable" data-bind="visible: hasErrors" style="display: none;">
+        <button type="button" class="close" data-bind="click: dismissErrors" aria-hidden="true">
+            &times;
+        </button>
+        <h4>Error</h4>
+        <p data-bind="text: error"></p>
+        <ul data-bind="foreach: errors">
+            <li data-bind="text: $data"></li> 
+        </ul>
+    </div>
+</script>
+
+<script type="text/html" id="success-template">
+    <div class="alert alert-success alert-dismissable" data-bind="visible: hasSuccess" style="display: none;">
+        <button type="button" class="close" data-bind="click: dismissSuccess" aria-hidden="true">
+            &times;
+        </button>
+        <h4>Success</h4>
+        <p data-bind="html: success"></p>
+    </div>
+</script>
+
+<script type="text/html" id="warning-template">
+    <div class="alert alert-warning alert-dismissable" data-bind="visible: hasWarnings" style="display: none;">
+        <button type="button" class="close" data-bind="click: dismissWarnings" aria-hidden="true">
+            &times;
+        </button>
+        <h4>Warning</h4>
+        <p data-bind="html: warning"></p>
+        <p style="margin-top: 1em;" data-bind="foreach: warningButtons, visible: warningButtons().length > 0">
+        <button type="button" class="btn" data-bind="text: text, 
+                                                     css: $parent.buttonStyle($data), 
+                                                     click: function() {$parent.buttonAction($data);}"></button>
+        <p>
+    </div>
+</script>

@@ -8,6 +8,8 @@ from clocker.views.shift import ShiftView
 from clocker.views.employee import EmployeesView
 from clocker.views.employee import EmployeeView
 
+from clocker.views.timesheet import TimesheetsView
+from clocker.views.timesheet import TimesheetView
 
 urlpatterns = patterns('',
     url(r'^$', RedirectView.as_view(url='/timeclock/')),
@@ -17,6 +19,8 @@ urlpatterns = patterns('',
 #Timesheet
 urlpatterns += patterns('clocker.views.timesheet',
     url(r'^timeclock/hours/$', 'total_hours', name="get-total-hours"),
+    url(r'^timeclock/timesheets/$', TimesheetsView.as_view(), name="timesheet-list"),
+    url(r'^timeclock/timesheets/(?P<timesheet_id>\d+)/$', TimesheetView.as_view(), name="timesheet-detail"),
 )
 
 #Management
