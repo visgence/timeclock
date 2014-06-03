@@ -23,7 +23,7 @@
             </p>
             <!-- /ko -->
 
-            <!-- ko if: belongsToUser("{{user.username}}") && !signature() -->
+            <!-- ko if: belongsToUser("{{user.username}}") && !signature() && !isBusy() && payData() -->
             <div class="panel-body">
                 <p class="text-danger" data-bind="visible: signAgreement.hasError(), text: signAgreement.validationMessage()"></p>
                 <div class="checkbox">
