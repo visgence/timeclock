@@ -113,11 +113,10 @@ class TimesheetView(View):
         start = date.fromtimestamp(timesheet.start)
         end = date.fromtimestamp(timesheet.end)
         empUsername = timesheet.employee.username
-        overtime_pay = timesheet.hourly_rate + (timesheet.hourly_rate / Decimal(2.0))
         
-        pay_data = getPayPeriod(str(start), str(end), empUsername)
+        pay_data = getPayPeriod(str(start), str(end), empUsername, timesheet.hourly_rate)
         t = loader.get_template('timesheetPayData.html')
-        c = RequestContext(request, {"tsData": pay_data, "timesheet": timesheet, "overtime_pay": overtime_pay})
+        c = RequestContext(request, pay_data)
         return HttpResponse(t.render(c), content_type="text/html")
 
 
@@ -158,9 +157,14 @@ def total_hours(request):
     return render_to_response('login.html', context_instance=RequestContext(request))
 
 
-def getPayPeriod(start_time, end_time, user_name):
+def getPayPeriod(start_time, end_time, user_name, hourly_rate=None):
 
     employee = Employee.objects.get(username = user_name)
+    if not isinstance(hourly_rate, Decimal):
+        hourly_rate = employee.hourly_rate
+    
+    overtime_rate = hourly_rate + (hourly_rate / Decimal(2.0))
+    print overtime_rate
     #make sure we have actual date ranges coming in
     if(start_time == "" or end_time == ""):
         start_time = datetime.strftime(datetime.now(), '%Y-%m-%d')
@@ -232,13 +236,21 @@ def getPayPeriod(start_time, end_time, user_name):
             week['week_end'] = week_end
     
     pay_period['period_adjusted'] = pay_period['period_adjusted'] - pay_period['period_overtime'] 
-    overtime_pay = employee.hourly_rate + (employee.hourly_rate / Decimal(2.0))
 
-    pay_period['total_regular'] = (pay_period['period_regular'] * employee.hourly_rate).quantize(Decimal('1.00'))
-    pay_period['total_overtime'] = (pay_period['period_overtime'] * overtime_pay).quantize(Decimal('1.00'))
+    pay_period['total_regular'] = (pay_period['period_regular'] * hourly_rate).quantize(Decimal('1.00'))
+    pay_period['total_overtime'] = (pay_period['period_overtime'] * overtime_rate).quantize(Decimal('1.00'))
     total = (Decimal(pay_period['total_overtime'])+Decimal(pay_period['total_regular'])).quantize(Decimal('1.00'))
 
-    return {'pay_period':pay_period, 'period_begin':start_time, 'period_end':end_time, 'employee':employee, 'overtime_pay': overtime_pay, 'total': total, 'employee': employee}
+    return {
+        'pay_period':pay_period,
+        'period_begin':start_time,
+        'period_end':end_time,
+        'employee':employee,
+        'overtime_rate': overtime_rate,
+        'hourly_rate': hourly_rate,
+        'total': total,
+        'employee': employee
+    }
 
 
 
