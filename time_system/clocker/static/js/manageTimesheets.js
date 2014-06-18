@@ -34,7 +34,7 @@ $(function() {
         };
 
         this.shouldSeperate = function(curTsIndex, nextTsIndex) {
-            if (curTsIndex == 0 || this.timesheetList().length <= 1 || nextTsIndex >= this.timesheetList().length)
+            if (this.timesheetList().length <= 1 || nextTsIndex >= this.timesheetList().length)
                 return false;
             
             var curTs = this.timesheetList()[curTsIndex];
