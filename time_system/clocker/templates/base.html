@@ -151,6 +151,11 @@
                 $('#sys-modal .modal-title').html('');
                 $('#sys-modal .modal-body').removeClass(classes).children('span').html('');
             });
+            
+            setInterval(function() {
+                console.log("checking login");
+                $.get('/login/check/');
+            }, ({{SESSION_TIMEOUT}}+3600)*1000);
         });
     </script>
 

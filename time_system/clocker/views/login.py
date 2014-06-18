@@ -54,3 +54,10 @@ def logoutUser(request):
     return HttpResponseRedirect("/timeclock/login/")
 
 
+def isLoggedIn(request):
+    '''
+    ' Simply returns the text 'yes' if the user is still logged in.  Checkaccess will catch the request before this
+    ' they are not.
+    '''
+
+    return HttpResponse("yes", content_type="text/html")
