@@ -1,6 +1,6 @@
 {% load math_helper %}
     
-{% for week in tsData.pay_period.weekly_info%}
+{% for week in pay_period.weekly_info%}
 <table class="table table-striped">
     <thead >
         <tr >
@@ -58,8 +58,8 @@
 </table>
 {% endfor %}
 
-<b>Total Regular Hours for Pay Period: {{tsData.pay_period.period_regular}} @ ${{timesheet.hourly_rate}}/hr = ${{tsData.pay_period.total_regular}}</b>
+<b>Total Regular Hours for Pay Period: {{pay_period.period_regular}} @ ${{hourly_rate}}/hr = ${{pay_period.total_regular}}</b>
 <br/>
-<b>Total Overtime Hours for Pay Period: {{tsData.pay_period.period_overtime}} @ ${{overtime_pay}}/hr = ${{tsData.pay_period.total_overtime}}</b>
+<b>Total Overtime Hours for Pay Period: {{pay_period.period_overtime}} @ ${{overtime_rate}}/hr = ${{pay_period.total_overtime}}</b>
 <br/>
-<b>Total for Pay Period: ${{tsData.total}}</b>
+<b>Total for Pay Period: ${{total}}</b>
