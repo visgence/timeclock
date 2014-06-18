@@ -783,6 +783,7 @@ class Timesheet(models.Model):
     start = models.BigIntegerField()
     end = models.BigIntegerField()
     employee = models.ForeignKey('Employee', related_name="timesheet_set")
+    hourly_rate = models.DecimalField(max_digits = 5, decimal_places = 2)
     signature = models.TextField(blank=True)
 
     objects = TimesheetManager()
@@ -798,7 +799,8 @@ class Timesheet(models.Model):
             "start": self.start,
             "end": self.end,
             "employee": self.employee.toDict(),
-            "signature": self.signature
+            "signature": self.signature,
+            "hourly_rate": str(self.hourly_rate)
         }
 
     def sign(self, user):

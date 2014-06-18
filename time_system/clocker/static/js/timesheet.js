@@ -135,15 +135,10 @@ $(function() {
                 return;
 
             var __this = this;
-            var payload = {
-                "start": this.startTimestamp(),
-                "end": this.endTimestamp(),
-                "employee": this.employee().username
-            }            
-
             var url = timesheetUrl+this.id+"/";
             this.isBusy(true);
-            $.get(url, payload, function(resp) {
+            
+            $.get(url, function(resp) {
                 __this.payData(resp);
             })
             .always(function() { __this.isBusy(false); });
