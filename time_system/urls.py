@@ -58,6 +58,7 @@ urlpatterns += patterns('clocker.views.login',
     url(r'^timeclock/login/$', 'renderLogin', name="render-login"),
     url(r'^login/$', 'loginUser', name="login"),
     url(r'^logout/$', 'logoutUser', name="logout"),
+    url(r'^login/check/$', 'isLoggedIn', name="check-login"),
 )
 
 #Employee summary stuff

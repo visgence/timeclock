@@ -132,13 +132,13 @@ $(function() {
         this.payData = ko.observable();
         this.loadPayData = function() {
             if (this.payData())
-                return;
+                return $.Deferred().resolve().promise();
 
             var __this = this;
             var url = timesheetUrl+this.id+"/";
             this.isBusy(true);
             
-            $.get(url, function(resp) {
+            return $.get(url, function(resp) {
                 __this.payData(resp);
             })
             .always(function() { __this.isBusy(false); });
