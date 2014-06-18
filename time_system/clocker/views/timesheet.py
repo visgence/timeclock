@@ -61,7 +61,8 @@ class TimesheetsView(View):
                 paramsList.append({
                     "start": params.get('start', None),
                     "end": params.get('end', None),
-                    "employee": emp
+                    "employee": emp,
+                    "hourly_rate": emp.hourly_rate
                 })
             
             try:
@@ -77,6 +78,7 @@ class TimesheetsView(View):
             try:
                 employee = Employee.objects.get(id=empId)
                 params['employee'] = employee
+                params['hourly_rate'] = employee.hourly_rate
             except Employee.DoesNotExist:
                 return HttpResponseBadRequest(json.dumps("Employee %s does not exist" % str(params['employee'])), content_type='application/json')
 
@@ -99,22 +101,24 @@ class TimesheetView(View):
         accept = request.META['HTTP_ACCEPT']
         user = request.user
 
-        if 'application/json' in accept:
-            try:
-                timesheet = Timesheet.objects.get(id=timesheet_id)
-            except Timesheet.DoesNotExist:
-                return HttpResponseBadRequest(json.dumps("Timesheet %s does not exist" % str(timesheet_id)), content_type="application/json")
+        try:
+            timesheet = Timesheet.objects.get(id=timesheet_id)
+        except Timesheet.DoesNotExist:
+            return HttpResponseBadRequest(json.dumps("Timesheet %s does not exist" % str(timesheet_id)), content_type="application/json")
 
+        if 'application/json' in accept:
             return HttpResponse(json.dumps({'timesheetList': timesheets}), content_type="application/json")
 
-
         check_db.main()
-        start = date.fromtimestamp(int(request.GET['start']))
-        end = date.fromtimestamp(int(request.GET['end']))
-        empUsername = request.GET['employee']
+        start = date.fromtimestamp(timesheet.start)
+        end = date.fromtimestamp(timesheet.end)
+        empUsername = timesheet.employee.username
+        overtime_pay = timesheet.hourly_rate + (timesheet.hourly_rate / Decimal(2.0))
         
         pay_data = getPayPeriod(str(start), str(end), empUsername)
-        return render_to_response('timesheetPayData.html', pay_data, context_instance=RequestContext(request))
+        t = loader.get_template('timesheetPayData.html')
+        c = RequestContext(request, {"tsData": pay_data, "timesheet": timesheet, "overtime_pay": overtime_pay})
+        return HttpResponse(t.render(c), content_type="text/html")
 
 
     def put(self, request, timesheet_id):
