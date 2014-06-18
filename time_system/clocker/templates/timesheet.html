@@ -3,8 +3,7 @@
     <div class="panel panel-default" data-bind="style: {marginBottom: $root.shouldSeperate($index(), $index()+1) ? '1em':''}">
         <div class="panel-heading">
             <h4 class="panel-title">
-                <a data-toggle="collapse" data-parent="#timesheet-accordion" 
-                    data-bind="attr: {href: '#timesheet-'+id}">
+                <a class="collapse-toggle clickable" data-bind="attr: {'data-target': id}">
                     <!-- ko text: timeperiod --><!-- /ko -->
                     <!-- ko text: employeeName --><!-- /ko -->
                 </a>
