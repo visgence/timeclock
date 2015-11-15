@@ -45,6 +45,10 @@ urlpatterns += patterns('clocker.views.mainPage',
 urlpatterns += patterns('clocker.views.job',
     url(r'^timeclock/jobBreakdown/$', 'jobBreakdown', name="job-breakdown"),
 )
+#Shift Export
+urlpatterns += patterns('clocker.views.shiftExport',
+    url(r'^timeclock/shiftExport/$', 'shiftExport', name="shift-export"),
+)
 
 #Password views
 urlpatterns += patterns('clocker.views.password',

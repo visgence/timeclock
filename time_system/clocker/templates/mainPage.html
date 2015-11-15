@@ -128,6 +128,7 @@
                 </div>
                 
                 <button type="submit" name="Submit" class="btn btn-default">Submit</button>
+                <button id="csvbutton" type="button" name="CSV" class="btn btn-default">CSV</button>
                 
                 <div class="checkbox">
                     <label>
@@ -187,6 +188,11 @@
 
         var fromJob = $('#from-job');
         var toJob = $('#to-job');
+        
+        $('#csvbutton').click(function(){
+            window.location.href = "shiftExport?start=" + fromJob.val() + "&end=" + toJob.val();
+        });
+
         if($(fromJob).val() == '' && $(toJob).val() == '') {
             $(fromJob).val('{{start_week}}');
             $(toJob).val('{{today}}');
