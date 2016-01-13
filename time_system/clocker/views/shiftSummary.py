@@ -12,7 +12,7 @@ except ImportError:
 
 
 @require_POST
-@transaction.commit_manually
+#@transaction.commit_manually
 def summary(request):
     '''
     ' Creates new Shift Summaries from the summary page for a shift. If any old summaries exist for that shift

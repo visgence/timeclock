@@ -13,7 +13,7 @@ def renderForm(request):
     
     t = loader.get_template('passwordForm.html')
     c = RequestContext(request, {})
-    return HttpResponse(json.dumps({'html': t.render(c)}), mimetype="application/json")
+    return HttpResponse(json.dumps({'html': t.render(c)}), content_type="application/json")
 
 
 @require_POST
@@ -33,26 +33,26 @@ def changePassword(request):
     try:
         jsonData = json.loads(jsonData)
     except Exception as e:
-        return HttpResponse(json.dumps({'errors': 'JSON Exception: %s: %s' % (type(e), e.message)}), mimetype="application/json")
+        return HttpResponse(json.dumps({'errors': 'JSON Exception: %s: %s' % (type(e), e.message)}), content_type="application/json")
 
     try:
         oldPassword = jsonData['oldPassword']
         newPassword = jsonData['newPassword']
     except KeyError as e:
-        return HttpResponse(json.dumps({'errors': 'KeyError: %s' % e.message}), mimetype="application/json")
+        return HttpResponse(json.dumps({'errors': 'KeyError: %s' % e.message}), content_type="application/json")
 
     # Make sure old password is valid
     user = authenticate(username=employee.get_username(), password=oldPassword)
     if user is None or user != employee:
-        return HttpResponse(json.dumps({'errors': 'Authentication Error: Username and password are not correct'}), mimetype="application/json")
+        return HttpResponse(json.dumps({'errors': 'Authentication Error: Username and password are not correct'}), content_type="application/json")
     elif not user.is_active:
         error = 'Authentication Error: User is not active.  You must be active to change password.'
-        return HttpResponse(json.dumps({'errors': error}), mimetype="application/json")
+        return HttpResponse(json.dumps({'errors': error}), content_type="application/json")
 
     # Change the password
     employee.set_password(newPassword)
     employee.save()
-    return HttpResponse(json.dumps({'success': 'Password successfully changed!'}), mimetype="application/json")
+    return HttpResponse(json.dumps({'success': 'Password successfully changed!'}), content_type="application/json")
 
 
 

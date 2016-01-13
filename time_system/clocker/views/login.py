@@ -18,7 +18,7 @@ def renderLogin(request, context={}):
 
     t = loader.get_template('login.html')
     c = RequestContext(request, context)
-    return HttpResponse(t.render(c), mimetype="text/html")
+    return HttpResponse(t.render(c), content_type="text/html")
 
 
 @login_exempt

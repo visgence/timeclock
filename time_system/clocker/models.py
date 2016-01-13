@@ -135,7 +135,7 @@ class EmployeeManager(BaseUserManager, ChuchoManager):
 
 class Employee(AbstractBaseUser):
     hire_date = models.DateField('date employee was hired')
-    has_salary = models.BooleanField()
+    has_salary = models.BooleanField(default=False)
     hourly_rate = models.DecimalField(max_digits = 5, decimal_places = 2, null = True, blank=True)
     salary = models.DecimalField(max_digits = 8, decimal_places = 2, null = True, blank=True)
     username = models.TextField(unique=True)
