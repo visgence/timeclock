@@ -306,8 +306,8 @@ class Employee(AbstractBaseUser):
 
 class ShiftManager(ChuchoManager):
 
-    def get_query_set(self):
-        return super(ShiftManager, self).get_query_set().filter(deleted=False)
+    def get_queryset(self):
+        return super(ShiftManager, self).get_queryset().filter(deleted=False)
 
 
     def get_editable_by_pk(self, user, pk):
