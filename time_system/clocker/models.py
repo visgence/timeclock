@@ -683,7 +683,9 @@ class JobManager(ChuchoManager):
 class Job(models.Model):
     name = models.TextField('job name')
     description = models.TextField('job description')
-    is_active = models.BooleanField() 
+    billable_rate = models.DecimalField(max_digits = 5, decimal_places = 2, null = True, blank=True)
+    budget = models.DecimalField(max_digits = 7, decimal_places = 2, null = True, blank=True)
+    is_active = models.BooleanField()
 
     objects = JobManager()
 
