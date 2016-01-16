@@ -8,7 +8,17 @@
             {% else %}
             <span>{{job}}</span>
             {% endif %}
-             - {{data.hours}}
+             - {{data.hours}} <span style="font-size: 75%">Billed: <span style="color:green">${{data.billed}}</span> Worked: <span style="color:red">${{data.worked}}</span> Net:  
+             {% if data.net  < 0 %}
+                 <span style="color:red">
+             {% elif data.net == 0%}
+                 <span style="color:black">
+             {% else %}
+                 <span style="color:green">
+             {% endif %}
+             ${{data.net}}
+             </span>
+             </span>
              <img class="job-spinners" src="{{STATIC_URL}}images/spinner.gif" style="height: 20px; display:none;">
         </label>
         <div class="progress"> 
@@ -49,8 +59,19 @@
     </div>
 {% endfor %}
 
-<label><u>Total Hours - {{jobsBreakdown.total_hours}}</u></label>
-
+<label><u>Total Hours - {{jobsBreakdown.total_hours}}</u>
+    Billed: <span style="color:green">${{jobsBreakdown.total_billed}}</span> Worked: <span style="color:red">${{jobsBreakdown.total_worked}}</span> Net:  
+     {% if jobsBreakdown.total_net  < 0 %}
+         <span style="color:red">
+     {% elif jobsBreakdown.total_net == 0%}
+         <span style="color:black">
+     {% else %}
+         <span style="color:green">
+     {% endif %}
+     ${{jobsBreakdown.total_net}}
+     </span>
+     </span>
+</label>
 <script>
     $(function() {
         $('.progress-bar').tooltip({});
