@@ -143,7 +143,7 @@ class Employee(AbstractBaseUser):
     last_name = models.TextField()
     is_superuser = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
-    date_joined = models.DateTimeField(default=datetime.now())
+    date_joined = models.DateTimeField(default=datetime.now)
     color = models.CharField(max_length=32, blank=True)
     objects = EmployeeManager()
 
