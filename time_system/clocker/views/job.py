@@ -163,11 +163,11 @@ def getJobsBreakdown(employees=None, start=None, end=None):
             jobData['jobs'][job.name]['hours'] += hours
             if job.billable_rate > 0:
                 jobData['jobs'][job.name]['billed'] += Decimal(hours * float(job.billable_rate)).quantize(Decimal('1.00'))
+                jobData['total_billed'] += Decimal(hours * float(job.billable_rate)).quantize(Decimal('1.00'))
             jobData['jobs'][job.name]['worked'] += Decimal(hours * float(employee.hourly_rate)).quantize(Decimal('1.00'))
             jobData['jobs'][job.name]['net'] = jobData['jobs'][job.name]['billed'] - jobData['jobs'][job.name]['worked']
 
-            jobData['total_billed'] += jobData['jobs'][job.name]['billed']
-            jobData['total_worked'] += jobData['jobs'][job.name]['worked']
+            jobData['total_worked'] += Decimal(hours * float(employee.hourly_rate)).quantize(Decimal('1.00'))
             jobData['total_net'] = jobData['total_billed'] - jobData['total_worked']
 
 
