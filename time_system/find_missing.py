@@ -6,7 +6,9 @@ program_path = os.path.realpath(__file__)
 APP_PATH = re.sub('settings.py[c]*$','',program_path);
 sys.path.append(os.path.join(APP_PATH,'time_system'))
 os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
+import django
 from django.conf import settings
+django.setup()
 #local imports 
 from clocker.models import Shift,ShiftSummary
 from clocker.views.job import getWeekdayRange
