@@ -2,8 +2,9 @@
 
 {% block additional-headers %}
 {% load static %}
-<link rel="stylesheet" type="text/css" href="{% static "css/shiftSummary.css" %}"/>
-<link rel="stylesheet" type="text/css" href="{% static "css/jquery-ui-1.10.3.custom.min.css" %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static "css/shiftSummary.css" %}"/>
+    <script src="{% static "js/job_slider.js" %}"></script>
+    <script src="{% static "js/jquery-ui-touch.min.js" %}"></script>
 {% endblock %}
 
 {%block content%}
@@ -83,11 +84,4 @@
             $('.toggle-button').button();
         });
     </script>
-{%endblock%}
-
-
-{% block additional-scripts %}
-<script src="{% static "js/jquery-ui-1.10.3.custom.min.js" %}"></script>
-<script src="{% static "js/job_slider.js" %}"></script>
-<script src="{% static "js/jquery-ui-touch.min.js" %}"></script>
 {%endblock%}

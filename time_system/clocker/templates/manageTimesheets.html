@@ -1,9 +1,16 @@
 {% extends 'base.html' %}
-
-{%block additional-headers%}
 {% load static %}
-    <script type="text/javascript" src="{% static "js/messageCenter.js" %}"></script>
-<link rel="stylesheet" type="text/css" href="{% static "css/datepicker.css" %}">
+{%block additional-headers%}
+
+    <script src="{% static "js/jquery-bbq.min.js" %}"></script>
+    <script src="{% static "js/bootstrap-datepicker.js" %}"></script>
+    <script src="{% static "js/knockout-custom-extensions.js" %}"></script>
+
+    <script src="{% static "js/messageCenter.js" %}"></script>
+    <script src="{% static "js/timesheet.js" %}"></script>
+    <script src="{% static "js/timesheets.js" %}"></script>
+    <script src="{% static "js/manageTimesheets.js" %}"></script>
+    <link rel="stylesheet" type="text/css" href="{% static "css/datepicker.css" %}">
 {%endblock additional-headers%}
 
 
@@ -73,12 +80,7 @@
 {% endblock content %}
 
 {% block additional-scripts %}
-    <script type="text/javascript" src="{% static "js/knockout-custom-extensions.js" %}"></script>
-    <script type="text/javascript" src="{% static "js/bootstrap-datepicker.js" %}"></script>
-    <script type="text/javascript" src="{% static "js/timesheet.js" %}"></script>
-    <script type="text/javascript" src="{% static "js/timesheets.js" %}"></script>
-    <script type="text/javascript" src="{% static "js/jquery-bbq.min.js" %}"></script>
-    <script type="text/javascript" src="{% static "js/manageTimesheets.js" %}"></script>
+
 
     <script>
         $(function() {

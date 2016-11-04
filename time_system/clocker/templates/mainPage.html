@@ -2,7 +2,9 @@
 
 {%block additional-headers%}
 {% load static %}
-<link rel="stylesheet" type="text/css" href="{% static "css/datepicker.css" %}">
+    <link rel="stylesheet" type="text/css" href="{% static "css/datepicker.css" %}">
+    <script src="{% static "js/bootstrap-datepicker.js" %}"></script>
+    <script src="{% static "js/main_page.js" %}"></script>
 {%endblock additional-headers%}
 
 {% block additional-greeting %}
@@ -146,8 +148,7 @@
 
 {% block additional-scripts %}
 
-<script src="{% static "js/bootstrap-datepicker.js" %}"></script>
-<script src="{% static "js/main_page.js" %}"></script>
+
 
 
 <script>
