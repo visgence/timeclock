@@ -1,8 +1,9 @@
 {% extends "base.html" %}
 
 {% block additional-headers %}
-<link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/jquery-ui-1.10.3.custom.min.css"/>
-<link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/manageShifts.css">
+{% load static %}
+<link rel="stylesheet" type="text/css" href="{% static "css/jquery-ui-1.10.3.custom.min.css" %}"/>
+<link rel="stylesheet" type="text/css" href="{% static "css/manageShifts.css" $}">
 {% endblock additional-headers %}
 
 {% block content %}
@@ -39,7 +40,7 @@
 </script>
 
 
-<h2>Manage Shifts</h2>	
+<h2>Manage Shifts</h2>
 
 <div id="manage-shifts-container">
 
@@ -48,8 +49,8 @@
 			<label class="control-label">Employee</label>
 		</li>
 		<li>
-			<select class="form-control" data-bind="options: employees, 
-			                                        optionsText: 'username', 
+			<select class="form-control" data-bind="options: employees,
+			                                        optionsText: 'username',
 			                                        value: selectedEmployee">
 			</select>
 		</li>
@@ -84,7 +85,7 @@
 			</thead>
 			<tbody>
 				<!-- ko foreach: shifts -->
-			
+
 				<tr data-bind="ifnot: updating">
 					<td>
 <!-- 						<span title="Edit Summary" class="glyphicon glyphicon-list clickable" 
@@ -133,13 +134,13 @@
 {% endblock content %}
 
 {% block additional-scripts %}
-	<script src="{{STATIC_URL}}js/jquery-ui-1.10.3.custom.min.js" type="text/javascript"></script>
-	<script src="{{STATIC_URL}}js/jquery-ui-timepicker-addon.js" type="text/javascript"></script>
-	<script type="text/javascript" src="{{STATIC_URL}}js/jquery-bbq.min.js"></script>
-	<script type="text/javascript" src="{{STATIC_URL}}js/shift.js"></script>
-	<script type="text/javascript" src="{{STATIC_URL}}js/shiftList.js"></script>
-	<script type="text/javascript" src="{{STATIC_URL}}js/manageShifts.js"></script>
-	
+	<script src="{% static "js/jquery-ui-1.10.3.custom.min.js" %}"></script>
+	<script src="{% static "js/jquery-ui-timepicker-addon.js" %}"></script>
+	<script src="{% static "js/jquery-bbq.min.js" %}"></script>
+	<script src="{% static "js/shift.js" %}"></script>
+	<script src="{% static "js/shiftList.js" %}"></script>
+	<script src="{% static "js/manageShifts.js" %}"></script>
+
 	<script>
 		$(function() {
 			var data = {'managingEmployee': {{employee|safe}} };

@@ -2,9 +2,10 @@
 
 
 {% block additional-headers %}
-<link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/jquery-ui-1.10.3.custom.min.css"/>
-<link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/grid.css"> 
-<link rel="stylesheet" type="text/css" href="{{STATIC_URL}}plugins/minicolors/jquery.minicolors.css"> 
+{% load static %}
+<link rel="stylesheet" type="text/css" href="{% static "css/jquery-ui-1.10.3.custom.min.css" %}"/>
+<link rel="stylesheet" type="text/css" href="css/grid.css" %}">
+<link rel="stylesheet" type="text/css" href="plugins/minicolors/jquery.minicolors.css" %}">
 {% endblock additional-headers %}
 
 {% block content %}
@@ -26,14 +27,14 @@
 </script>
 
 {% endblock content %}
-    
+
 {% block additional-scripts %}
-<script src="{{STATIC_URL}}js/jquery-ui-1.10.3.custom.min.js" type="text/javascript"></script>
-<script src="{{STATIC_URL}}js/jquery-ui-timepicker-addon.js" type="text/javascript"></script>
-<script src="{{STATIC_URL}}js/jquery.tmpl.js" type="text/javascript"></script>
-<script src="{{STATIC_URL}}js/spin.min.js" type="text/javascript"></script>
-<script src="{{STATIC_URL}}js/chucho.grid.js" type="text/javascript"></script>
-<script src="{{STATIC_URL}}js/chucho.js" type="text/javascript"></script>
-<script src="{{STATIC_URL}}js/management.js" type="text/javascript"></script>
-<script src="{{STATIC_URL}}plugins/minicolors/jquery.minicolors.min.js" type="text/javascript"></script>
+<script src="{% static "js/jquery-ui-1.10.3.custom.min.js" %}"></script>
+<script src="{% static "js/jquery-ui-timepicker-addon.js" %}"></script>
+<script src="{% static "js/jquery.tmpl.js" %}"></script>
+<script src="{% static "js/spin.min.js" %}"></script>
+<script src="{% static "js/chucho.grid.js" %}"></script>
+<script src="{% static "js/chucho.js" %}"></script>
+<script src="{% static "js/management.js" %}"></script>
+<script src="{% static "plugins/minicolors/jquery.minicolors.min.js" %}"></script>
 {% endblock %}

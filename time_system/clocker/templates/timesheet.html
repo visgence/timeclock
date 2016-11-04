@@ -1,16 +1,21 @@
 <div class="panel-group" id="timesheet-accordion" data-bind="foreach: $data">
 
-    <div class="panel panel-default" data-bind="style: {marginBottom: $root.shouldSeperate($index(), $index()+1) ? '1em':''}">
+
+    <div class="panel" data-bind="style: {marginBottom: $root.shouldSeperate($index(), $index()+1) ? '1em':''},
+                                  css: {'panel-default': !tampered_with(), 'panel-danger': tampered_with()}">
+
         <div class="panel-heading">
             <h4 class="panel-title">
                 <a class="collapse-toggle clickable" data-bind="attr: {'data-target': id}">
                     <!-- ko text: timeperiod --><!-- /ko -->
                     <!-- ko text: employeeName --><!-- /ko -->
                 </a>
-                
-                <img class="job-spinners" src="{{STATIC_URL}}images/spinner.gif" style="height: 20px; display:none;"
-                        data-bind="visible: isBusy">   
-                <i class="pull-right" data-bind="if: signature">Signed</i>
+
+                {% load static %}
+                <img class="job-spinners" src="{% static "images/spinner.gif" %}" style="height: 20px; display:none;"
+                        data-bind="visible: isBusy">
+                <i class="pull-right" data-bind="if: signature">Signed on <!-- ko text: signed_on_format --><!-- /ko --></i>
+
             </h4>
         </div>
         <div class="panel-collapse collapse" data-bind="attr: {id: 'timesheet-'+id}">
@@ -18,7 +23,7 @@
 
             <!-- ko if: !isBusy() && !payData() -->
             <p class="text-info text-center" style="margin-top: 0.5em;">
-                This timesheet contains no shifts.            
+                This timesheet contains no shifts.
             </p>
             <!-- /ko -->
 
@@ -30,7 +35,7 @@
                         <input type="checkbox" data-bind="checked: signAgreement"> Accept Timesheet
                     </label>
                 </div>
-                
+
                 <button type="button" class="btn btn-default" data-bind="click: signTimesheet.bind($data)">Sign</button>
             </div>
             <!-- /ko -->

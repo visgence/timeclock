@@ -1,6 +1,6 @@
 {% load math_helper %}
-
-{% for job, data in jobsBreakdown.jobs.items %} 
+{% load static %}
+{% for job, data in jobsBreakdown.jobs.items %}
     <div class="job-breakdown" data-active="{{data.active}}" {% if not data.active %}style="display:none;"{% endif %}>
         <label>
             {% if data.hours != "0.00" %}
@@ -8,7 +8,7 @@
             {% else %}
             <span>{{job}}</span>
             {% endif %}
-             - {{data.hours}} <span style="font-size: 75%">Billed: <span style="color:green">${{data.billed}}</span> Worked: <span style="color:red">${{data.worked}}</span> Net:  
+             - {{data.hours}} <span style="font-size: 75%">Billed: <span style="color:green">${{data.billed}}</span> Worked: <span style="color:red">${{data.worked}}</span> Net:
              {% if data.net  < 0 %}
                  <span style="color:red">
              {% elif data.net == 0%}
@@ -19,12 +19,12 @@
              ${{data.net}}
              </span>
              </span>
-             <img class="job-spinners" src="{{STATIC_URL}}images/spinner.gif" style="height: 20px; display:none;">
+             <img class="job-spinners" src="{% static "images/spinner.gif" %}" style="height: 20px; display:none;">
         </label>
-        <div class="progress"> 
+        <div class="progress">
             {% for username, percentD in data.percentages.items %}
-                <div class="progress-bar" role="progressbar" aria-valuenow="{{percentD.percentage}}" aria-valuemin="0.0" 
-                     aria-valuemax="{{jobsBreakdown.total_hours}}" 
+                <div class="progress-bar" role="progressbar" aria-valuenow="{{percentD.percentage}}" aria-valuemin="0.0"
+                     aria-valuemax="{{jobsBreakdown.total_hours}}"
                      style="width: {{percentD.percentage}}%; background-color: {{percentD.employee.color}};"
                      data-toggle="tooltip" title="{{percentD.employee}} - {{percentD.hours}}"></div>
             {% endfor %}
@@ -43,7 +43,7 @@
                 </tr>
             </thead>
             <tbody>
-                {% for summary in data.summaries %} 
+                {% for summary in data.summaries %}
                     <tr>
                         <td><span class="badge" style="background-color: {{summary.employee.color}}">&nbsp;</span></td>
                         <td><a href='summary/{{summary.shift.id}}'>{{summary.shift.time_in.date}}</a></td>
@@ -51,7 +51,7 @@
                         <td>{{summary.employee}}</td>
                         <td>{{summary.miles}}</td>
                         <td>{{summary.note}}</td>
-                    </tr> 
+                    </tr>
                 {% endfor %}
             </tbody>
         </table>
@@ -60,7 +60,7 @@
 {% endfor %}
 
 <label><u>Total Hours - {{jobsBreakdown.total_hours}}</u>
-    Billed: <span style="color:green">${{jobsBreakdown.total_billed}}</span> Worked: <span style="color:red">${{jobsBreakdown.total_worked}}</span> Net:  
+    Billed: <span style="color:green">${{jobsBreakdown.total_billed}}</span> Worked: <span style="color:red">${{jobsBreakdown.total_worked}}</span> Net:
      {% if jobsBreakdown.total_net  < 0 %}
          <span style="color:red">
      {% elif jobsBreakdown.total_net == 0%}

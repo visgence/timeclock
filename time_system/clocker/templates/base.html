@@ -2,31 +2,32 @@
 <!DOCTYPE html>
 <html>
     <head>
-    	<script src="{{STATIC_URL}}js/jquery-1.8.3.min.js" type="text/javascript"></script>
-        <script type="text/javascript" src="{{STATIC_URL}}js/bootstrap.min.js"></script>
-        <script src="{{STATIC_URL}}js/utils.js" type="text/javascript"></script>
-        <script src="{{STATIC_URL}}js/knockout-3.1.0.js" type="text/javascript"></script>
- 
-        <link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/bootstrap.min.css">
-        <link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/main_page.css"/>
-        <link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/micro_clearfix.css" />
+        {% load static %}
+    	<script src="{% static "js/jquery-1.8.3.min.js" %}"></script>
+        <script type="text/javascript" src="{% static "js/bootstrap.min.js" %}"></script>
+        <script src="{% static "js/utils.js" %}"></script>
+        <script src="{% static "js/knockout-3.1.0.js" %}"></script>
+
+        <link rel="stylesheet" type="text/css" href="{% static "css/bootstrap.min.css" %}">
+        <link rel="stylesheet" type="text/css" href="{% static "css/main_page.css" %}"/>
+        <link rel="stylesheet" type="text/css" href="{% static "css/micro_clearfix.css" %}" />
         <style>
             #ui-datepicker-div { font-size: 12px; }
         </style>
-        
+
         {% block additional-headers %} {% endblock %}
     </head>
     <body>
     	<div id="container">
 			<div class="visgence_logo">
-				<a href="/timeclock"><img src="/static/images/Visgence_incwhite.png" height="80px" width="150px" /></a>
+				<a href="/timeclock"><img src="{% static "images/Visgence_incwhite.png" %}" height="80px" width="150px" /></a>
 
 			    <div class="timeclock_logo">
-			        <img src="/static/images/timeclock2.png" height="90px" width="320px" />
+			        <img src="{% static "images/timeclock2.png"  %}" height="90px" width="320px" />
 			    </div>
 			</div>
-			
-	
+
+
             <!-- System wide message dialog -->
             <div class="modal fade" id="sys-modal">
                 <div class="modal-dialog">
@@ -41,17 +42,17 @@
                         <div class="modal-footer">
                             <button type="button" class="btn btn-primary" data-dismiss="modal">Ok</button> </div> </div><!-- /.modal-content -->
                 </div><!-- /.modal-dialog -->
-            </div><!-- /.modal --> 
+            </div><!-- /.modal -->
 
 
 	        <div id="content">
-	            
+
 	            {% if user.first_name %}
-                <div style="position: absolute;">	             
+                <div style="position: absolute;">
 		                Hello {{user.first_name}} {{user.last_name}} (<a href="/logout">logout</a>)
                         <br/>
                         <span style="font-size: 8pt;">[<a href="#" id="change-pass-link">Change password</a>]</span>
-                </div><!--end greeting-->    
+                </div><!--end greeting-->
 
                 <!-- Change password dialog -->
                 <div class="modal fade" id="change-pass-modal" style="display: none">
@@ -62,9 +63,9 @@
                                 <h4 class="modal-title">Change Password</h4>
                             </div>
                             <div class="modal-body">
-                                
+
                                 <div class="form-group" id="pass-msg"></div>
-                            
+
                                 <form class="form-horizontal">
                                     <div class="form-group">
                                         <label class="control-label col-lg-4 col-md-4">Username</label>
@@ -76,7 +77,7 @@
                                     <div class="form-group">
                                         <label class="control-label col-lg-4 col-md-4">Old Password</label>
                                         <div class="col-lg-7 col-md-7">
-                                            <input type="password" id="oldPassword" name="oldPassword" class="form-control" 
+                                            <input type="password" id="oldPassword" name="oldPassword" class="form-control"
                                                     placeholder="Old Password">
                                         </div>
                                     </div>
@@ -84,7 +85,7 @@
                                     <div class="form-group">
                                         <label class="control-label col-lg-4 col-md-4">New Password</label>
                                         <div class="col-lg-7 col-md-7">
-                                            <input type="password" id="passwordInput" name="password" class="form-control" 
+                                            <input type="password" id="passwordInput" name="password" class="form-control"
                                                     placeholder="New Password">
                                         </div>
                                     </div>
@@ -92,7 +93,7 @@
                                     <div class="form-group">
                                         <label class="control-label col-lg-4 col-md-4">Verify Password</label>
                                         <div class="col-lg-7 col-md-7">
-                                            <input type="password" id="passwordReinput" class="form-control" 
+                                            <input type="password" id="passwordReinput" class="form-control"
                                                     placeholder="Verify Password">
                                         </div>
                                     </div>
@@ -104,7 +105,7 @@
                             </div>
                         </div><!-- /.modal-content -->
                     </div><!-- /.modal-dialog -->
-                </div><!-- /.modal -->  
+                </div><!-- /.modal -->
 
                 <script>
                     $(function() {
@@ -114,23 +115,23 @@
 
                 {% block additional-greeting %}{% endblock %}
                 {% endif %}
-	          
+
                 <div style="margin-top: 3em;">
                     {% block content %} {%endblock%}
                 </div>
-	            
-			</div> 
+
+			</div>
 		</div>
-		
-		<div class="visweb_link"> 
-			<a href="http://www.visgence.com/" target="_blank"><img src="/static/images/Visgence_grey.png" height="50px" width="110px" /></a>
+
+		<div class="visweb_link">
+			<a href="http://www.visgence.com/" target="_blank"><img src="{% static "images/Visgence_grey.png" %}" height="50px" width="110px" /></a>
 		</div>
-		
+
     </body>
 
     <script>
         $(function() {
-            
+
             $(document).ajaxComplete(function(event, xhr, settings) {
                 if(xhr.responseText && xhr.responseText.trim() !== '') {
                     try {
@@ -141,8 +142,8 @@
                     } catch(e) {console.log(e)}
                 }
 
-            }); 
-            
+            });
+
             $('#sys-modal').modal({
                 show: false
             })
@@ -151,7 +152,7 @@
                 $('#sys-modal .modal-title').html('');
                 $('#sys-modal .modal-body').removeClass(classes).children('span').html('');
             });
-            
+
             setInterval(function() {
                 console.log("checking login");
                 $.get('/login/check/');

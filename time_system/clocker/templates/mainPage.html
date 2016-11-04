@@ -1,7 +1,8 @@
 {%extends "base.html"%}
 
 {%block additional-headers%}
-<link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/datepicker.css">
+{% load static %}
+<link rel="stylesheet" type="text/css" href="{% static "css/datepicker.css" %}">
 {%endblock additional-headers%}
 
 {% block additional-greeting %}
@@ -15,7 +16,7 @@
 {%block content%}
 
 <div class="login">
-					
+
     <form name="clocker" class="clocker-form" method="post" action="{% url 'clock-employee' %}">
 		{% csrf_token %}
 			<div class="clocker-container">
@@ -28,30 +29,30 @@
 	            {% endif %}
 			</div>
 	</form>
-	
+
 	<div class="message">
-	
+
         {{ message }}
         {{ timeStamp }}
-		
+
 	</div> <!--End message-->
-	
-</div> <!--End login-->  
-      	
+
+</div> <!--End login-->
+
 <div class="cf">
 	<div id="hour_management">
 
-        <h4 class="text-muted">View Hours{% if employee.is_superuser %}(Admin){% endif %}</h4>	
+        <h4 class="text-muted">View Hours{% if employee.is_superuser %}(Admin){% endif %}</h4>
         <form name="admin" action="{% url 'get-total-hours' %}" method="post" class="form-horizontal" role="form">
 			{% csrf_token %}
-                 
+
                 <div class="form-group">
                     <label for="from" class="control-label col-lg-3 col-sm-3">From</label>
                     <div class="col-lg-6 col-sm-6">
                         <input type="text" id="from" name="from" class="form-control" placeholder="From"/>
                     </div>
                 </div>
-                
+
                 <div class="form-group">
                     <label for="to" class="control-label col-lg-3 col-sm-3">To</label>
                     <div class="col-lg-6 col-sm-6">
@@ -66,7 +67,7 @@
                             {% for emp in employees %}
                                 <option value="{{emp.username}}">{{emp}}</option>
                             {% endfor %}
-                        </select> 
+                        </select>
                     </div>
                 </div>
 
@@ -77,18 +78,18 @@
                 </div>
 		</form>
 	</div>
-		
+
 	<div id="management">
-        <h4 class="text-muted">Management</h4>	
+        <h4 class="text-muted">Management</h4>
 		{% if employee.is_superuser %}
 			<div class="click">
                 <a class="link_color" href="{% url 'manage-employees' %}">Employees</a>
 			</div>
-			
+
 			<div class="click">
                 <a class="link_color" href="{% url 'manage-jobs' %}">Jobs</a>
 			</div>
-            
+
 		{% endif %}
         <div class="click">
             <a class="link_color" href="{% url 'timesheet-list' %}">Timesheets</a>
@@ -98,19 +99,19 @@
             <a class="link_color" href="{% url 'manage-shifts' %}">Shifts</a>
 		</div>
 	</div>
-</div>	
+</div>
 
 <div id="job-hours" class="cf">
-    <h4 class="text-muted">Jobs Breakdown</h4>	
+    <h4 class="text-muted">Jobs Breakdown</h4>
 
     <div id="job-controls">
         <form action="#" class="form form-inline">
             {% csrf_token %}
-                 
+
                 <div class="form-group">
                     <input type="text" id="from-job" name="from" class="form-control" placeholder="From"/>
                 </div>
-                
+
                 <div class="form-group">
                     <input type="text" id="to-job" name="to" class="form-control" placeholder="To"/>
                 </div>
@@ -124,12 +125,12 @@
                         {% for emp in employees %}
                             <option value="{{emp.username}}">{{emp}}</option>
                         {% endfor %}
-                    </select> 
+                    </select>
                 </div>
-                
+
                 <button type="submit" name="Submit" class="btn btn-default">Submit</button>
                 <button id="csvbutton" type="button" name="CSV" class="btn btn-default">CSV</button>
-                
+
                 <div class="checkbox">
                     <label>
                         <input id="toggle-active-jobs" type="checkbox"> Show Inactive Jobs
@@ -144,9 +145,9 @@
 
 
 {% block additional-scripts %}
-    
-<script type="text/javascript" src="{{STATIC_URL}}js/bootstrap-datepicker.js"></script>
-<script src="{{STATIC_URL}}js/main_page.js" type="text/javascript"></script>
+
+<script src="{% static "js/bootstrap-datepicker.js" %}"></script>
+<script src="{% static "js/main_page.js" %}"></script>
 
 
 <script>
@@ -188,7 +189,7 @@
 
         var fromJob = $('#from-job');
         var toJob = $('#to-job');
-        
+
         $('#csvbutton').click(function(){
             window.location.href = "shiftExport?start=" + fromJob.val() + "&end=" + toJob.val();
         });

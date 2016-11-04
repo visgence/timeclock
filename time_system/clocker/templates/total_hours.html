@@ -1,18 +1,19 @@
 <html>
 
     <head>
-        <link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/total_hours.css"/>
-        <link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/bootstrap.min.css">
+        {% load static %}
+        <link rel="stylesheet" type="text/css" href="{% static "css/total_hours.css" %}">
+        <link rel="stylesheet" type="text/css" href="{% static "css/bootstrap.min.css" %}">
     </head>
 
-<body> 
+<body>
     <div>
-        <span><b>{{employee.first_name}} {{employee.last_name}}:</b> Selected pay period: {{period_begin}} to {{period_end}}</br></br></span> 
+        <span><b>{{employee.first_name}} {{employee.last_name}}:</b> Selected pay period: {{period_begin}} to {{period_end}}</br></br></span>
     </div>
     <div>
 
         {% load math_helper %}
-        
+
         <div id="hours-wrapper" class="clearfix">
             {% for week in pay_period.weekly_info%}
                 <table class="hours-table table-striped">

@@ -1,8 +1,9 @@
 {%extends "base.html"%}
 
 {% block additional-headers %}
-<link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/shiftSummary.css"/>
-<link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/jquery-ui-1.10.3.custom.min.css"/>
+{% load static %}
+<link rel="stylesheet" type="text/css" href="{% static "css/shiftSummary.css" %}"/>
+<link rel="stylesheet" type="text/css" href="{% static "css/jquery-ui-1.10.3.custom.min.css" %}"/>
 {% endblock %}
 
 {%block content%}
@@ -19,9 +20,9 @@
             </td>
         </tr>
         {% for data in jobData %}
-        <tr>            
+        <tr>
              <td>
-                {% if data.hours %} 
+                {% if data.hours %}
                  <span class="ui-icon ui-icon-circle-triangle-s toggle-button"
                  onclick="toggle_section('sub-{{data.job.name|slugify}}', this);">
                  </span>
@@ -43,8 +44,8 @@
              </td>
              <td><div id="{{data.job.id}}" class="job_slider" style="margin-left: 1em;"></div></td>
         </tr>
-            
-        {% if data.hours %} 
+
+        {% if data.hours %}
         <tr class="collapsible" id="sub-{{data.job.name|slugify}}">
         {% else %}
         <tr class="collapsible" id="sub-{{data.job.name|slugify}}" style="display:none;">
@@ -58,15 +59,15 @@
                         <input type="number" class="miles form-control" value="0" id="miles_{{data.job.id}}">
                     {% endif %}
                 </div>
-                <br/> 
+                <br/>
                 <div class="notes_text">Notes:</div>
                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
                     <textarea  class="text_area form-control" rows="5" COLS="50" id="notes_{{data.job.id}}">{{data.note}}</textarea>
                 </div>
             </td>
         </tr>
-        {% endfor %} 
-    </table> 
+        {% endfor %}
+    </table>
     {% if owner %}
         <input type="button" class="submit btn btn-primary" value="Submit" onClick="submit_form('{% url 'save-summaries'  %}')">
         <input type="hidden" id="emp_id" value="{{user.id}}">
@@ -86,7 +87,7 @@
 
 
 {% block additional-scripts %}
-<script src="{{STATIC_URL}}js/jquery-ui-1.10.3.custom.min.js" type="text/javascript"></script>
-<script src="{{STATIC_URL}}js/job_slider.js" type="text/javascript"></script>
-<script src="{{STATIC_URL}}js/jquery-ui-touch.min.js" type="text/javascript"></script>
+<script src="{% static "js/jquery-ui-1.10.3.custom.min.js" %}"></script>
+<script src="{% static "js/job_slider.js" %}"></script>
+<script src="{% static "js/jquery-ui-touch.min.js" %}"></script>
 {%endblock%}
