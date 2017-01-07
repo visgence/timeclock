@@ -1,8 +1,7 @@
 CherryPy==3.8.0
-Django==1.8.7
+Django==1.10
 Jinja2==2.8
 MarkupSafe==0.23
-South==0.8.4
 django-localflavor==1.0
 ipython==4.0.0
 ordereddict==1.1
