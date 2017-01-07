@@ -3,8 +3,8 @@ body
 	font-family: helvetica, arial, sans-serif;
     background-image:url(../images/seamlesstexture29.jpg);
     background-repeat:repeat;
-    font-size: 12pt;  
-    margin: 0px; 
+    font-size: 12pt;
+    margin: 0px;
 }
 
 
@@ -38,7 +38,7 @@ div.timeclock_logo
 .login
 {
  	padding-left: 1.5em;
- 	padding-top: 4em; 
+ 	padding-top: 4em;
  	padding-bottom: 1.5em;
  	border-bottom: 1px solid #cfcfcf;
 }
@@ -59,7 +59,7 @@ div#management h4, div#hour_management h4
 div.click
 {
 	margin-bottom: 5px;
-	
+
 }
 
 .clickable
@@ -185,7 +185,7 @@ div#slider
 
 div.job_name
 {
-	
+
 	font-weight: bold;
 }
 
@@ -206,7 +206,7 @@ div.notes_text
 
 div.job_slider
 {
-	width: 300px;	
+	width: 300px;
 }
 
 div.visweb_link
@@ -215,7 +215,7 @@ div.visweb_link
  	margin-right: auto;
  	min-width: 700px;
  	max-width: 90%;
- 	margin-top: 0.5em;	
+ 	margin-top: 0.5em;
 }
 
 td
