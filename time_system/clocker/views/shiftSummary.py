@@ -4,6 +4,7 @@ from django.views.decorators.http import require_POST
 from django.core.exceptions import ValidationError
 from django.db import transaction
 from clocker.models import ShiftSummary, Shift, Job
+from django.shortcuts import render
 
 try:
     import simplejson as json
@@ -68,7 +69,7 @@ def renderSummary(request, id):
     '
     ' Keyword Args: Id of the Shift we are rendering the summary page for.
     '''
-
+    print "\n\nhello there"
     employee = request.user
     try:
         shift = Shift.objects.get(id=id)
