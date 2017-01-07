@@ -1,4 +1,4 @@
-from django.conf.urls import patterns, include, url
+from django.conf.urls import include, url
 from django.views.generic import RedirectView
 from clocker.views.management import ManageView
 
@@ -8,77 +8,86 @@ from clocker.views.shift import ShiftView
 from clocker.views.employee import EmployeesView
 from clocker.views.employee import EmployeeView
 
+import clocker.views.timesheet
+import clocker.views.clockEmployee
+import clocker.views.mainPage
+import clocker.views.job
+import clocker.views.shiftExport
+import clocker.views.password
+import clocker.views.login
+import clocker.views.shiftSummary
+
 from clocker.views.timesheet import TimesheetsView
 from clocker.views.timesheet import TimesheetView
 
-urlpatterns = patterns('',
+urlpatterns = [
     url(r'^$', RedirectView.as_view(url='/timeclock/')),
     url(r'chucho/', include('chucho.urls')),
-)
+]
 
-#Timesheet
-urlpatterns += patterns('clocker.views.timesheet',
-    url(r'^timeclock/hours/$', 'total_hours', name="get-total-hours"),
+# Timesheet
+urlpatterns += [
+    url(r'^timeclock/hours/$', clocker.views.timesheet.total_hours, name="get-total-hours"),
     url(r'^timeclock/timesheets/$', TimesheetsView.as_view(), name="timesheet-list"),
     url(r'^timeclock/timesheets/(?P<timesheet_id>\d+)/$', TimesheetView.as_view(), name="timesheet-detail"),
-)
+]
 
-#Management
-urlpatterns += patterns('clocker.views.clockEmployee',
-    url(r'^timeclock/manage/employees/$', ManageView.as_view(app="clocker", model="Employee"), name="manage-employees"),
-    url(r'^timeclock/manage/jobs/$', ManageView.as_view(app="clocker", model="Job"), name="manage-jobs"),
-    url(r'^timeclock/manage/summaries/$', ManageView.as_view(app="clocker", model="ShiftSummary"), name="manage-summaries"),
-    url(r'^timeclock/manage/shifts/$', ManageView.as_view(template_name="manageShifts.html"), name="manage-shifts"),
-)
+# #Management
+urlpatterns += [
+     url(r'^timeclock/manage/employees/$', ManageView.as_view(app="clocker", model="Employee"), name="manage-employees"),
+     url(r'^timeclock/manage/jobs/$', ManageView.as_view(app="clocker", model="Job"), name="manage-jobs"),
+     url(r'^timeclock/manage/summaries/$', ManageView.as_view(app="clocker", model="ShiftSummary"), name="manage-summaries"),
+     url(r'^timeclock/manage/shifts/$', ManageView.as_view(template_name="manageShifts.html"), name="manage-shifts"),
+]
 
-#Employee clock in/out 
-urlpatterns += patterns('clocker.views.clockEmployee',
-    url(r'^timeclock/clocker/$', 'clockEmployee', name="clock-employee"),
-)
+# #Employee clock in/out
+urlpatterns += [
+    url(r'^timeclock/clocker/$', clocker.views.clockEmployee.clockEmployee, name="clock-employee"),
+]
 
-#Main page
-urlpatterns += patterns('clocker.views.mainPage',
-    url(r'^timeclock/$', 'mainPage', name="render-main-page"),
-)
+# #Main page
+urlpatterns += [
+    url(r'^timeclock/$', clocker.views.mainPage.mainPage, name="render-main-page"),
+]
 
-#Jobs
-urlpatterns += patterns('clocker.views.job',
-    url(r'^timeclock/jobBreakdown/$', 'jobBreakdown', name="job-breakdown"),
-)
-#Shift Export
-urlpatterns += patterns('clocker.views.shiftExport',
-    url(r'^timeclock/shiftExport/$', 'shiftExport', name="shift-export"),
-)
+# #Jobs
+urlpatterns += [
+    url(r'^timeclock/jobBreakdown/$', clocker.views.job.jobBreakdown, name="job-breakdown"),
+]
+# #Shift Export
+urlpatterns += [
+    url(r'^timeclock/shiftExport/$', clocker.views.shiftExport.shiftExport, name="shift-export"),
+]
 
-#Password views
-urlpatterns += patterns('clocker.views.password',
-    url(r'^passwordForm/$', 'renderForm'),
-    url(r'^changePassword/$', 'changePassword'),
-)
+# #Password views
+urlpatterns += [
+    url(r'^passwordForm/$', clocker.views.password.renderForm),
+    url(r'^changePassword/$', clocker.views.password.changePassword),
+]
 
-#login views
-urlpatterns += patterns('clocker.views.login',
+# #login views
+urlpatterns += [
 
-    url(r'^timeclock/login/$', 'renderLogin', name="render-login"),
-    url(r'^login/$', 'loginUser', name="login"),
-    url(r'^logout/$', 'logoutUser', name="logout"),
-    url(r'^login/check/$', 'isLoggedIn', name="check-login"),
-)
+    url(r'^timeclock/login/$', clocker.views.login.renderLogin, name="render-login"),
+    url(r'^login/$', clocker.views.login.loginUser, name="login"),
+    url(r'^logout/$', clocker.views.login.logoutUser, name="logout"),
+    url(r'^login/check/$', clocker.views.login.isLoggedIn, name="check-login"),
+]
 
-#Employee summary stuff
-urlpatterns += patterns('clocker.views.shiftSummary',
-    url(r'^timeclock/saveSummaries/$', 'summary', name="save-summaries"),
-    url(r'^timeclock/summary/(?P<id>\d+)/$', 'renderSummary', name="render-summary"),
-)
+# #Employee summary stuff
+urlpatterns += [
+    url(r'^timeclock/saveSummaries/$', clocker.views.shiftSummary.summary, name="save-summaries"),
+    url(r'^timeclock/summary/(?P<id>\d+)/$', clocker.views.shiftSummary.renderSummary, name="render-summary"),
+]
 
-#shifts
-urlpatterns += patterns('clocker.views.shift',
+# #shifts
+urlpatterns += [
     url(r'^timeclock/shifts/$', ShiftsView.as_view(), name="shift-list"),
     url(r'^timeclock/shifts/(?P<shift_id>\d+)/$', ShiftView.as_view(), name="shift-detail"),
-)
+]
 
-#employees
-urlpatterns += patterns('clocker.views.employee',
+# #employees
+urlpatterns += [
     url(r'^timeclock/employees/$', EmployeesView.as_view(), name="employee-list"),
     url(r'^timeclock/employees/(?P<employee_id>\d+)/$', EmployeeView.as_view(), name="employee-detail"),
-)
+]
