@@ -2,6 +2,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.template import loader, RequestContext
 from django.contrib.auth import authenticate, login, logout
 from clocker.decorators import login_exempt
+from django.shortcuts import render
 
 
 @login_exempt

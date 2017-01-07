@@ -1,7 +1,7 @@
 
 
 # Django imports
-from django.shortcuts import render_to_response
+from django.shortcuts import render_to_response, render
 from django.template import RequestContext
 from django.views.generic.base import View
 from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseForbidden
@@ -35,7 +35,7 @@ class TimesheetsView(View):
 
         employees = Employee.objects.get_viewable(user)
         employees = employees.filter(is_active=True)
-        ccontext = {
+        context = {
             "employees": json.dumps([e.toDict() for e in employees])
         }
         return render(request, 'manageTimesheets.html', context)

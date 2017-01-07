@@ -3,6 +3,7 @@ from django.http import HttpResponse
 from clocker.models import Employee
 from clocker.views.timesheet import getPayPeriod
 from datetime import date, timedelta
+from django.shortcuts import render
 
 def mainPage(request):
 
@@ -30,8 +31,7 @@ def mainPage(request):
     end_week = start_week + timedelta(7)
     periodData = getPayPeriod(start_week.strftime('%Y-%m-%d'), end_week.strftime('%Y-%m-%d'), employee.username)
 
-    t = loader.get_template('mainPage.html')
-    c = RequestContext(request, {
+    context = {
         'employee': employee,
         'employees': employees,
         'status': status,
@@ -41,6 +41,6 @@ def mainPage(request):
         'today': date.strftime(today, '%Y-%m-%d'),
         'weekly_regular': periodData['pay_period']['period_regular'],
         'weekly_overtime': periodData['pay_period']['period_overtime']
-    })
+    }
 
     return render(request, 'mainPage.html', context)
