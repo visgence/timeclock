@@ -23,7 +23,6 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
 
-        call_command('syncdb', migrate_all=True, interactive=False)
         call_command('migrate', fake=True)
 
         print "Loading fixtures..."
