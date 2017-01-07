@@ -26,13 +26,13 @@ def summary(request):
     except Exception:
         transaction.rollback()
         return HttpResponseServerError("Error getting json data for shift summary")
-    
+
     try:
         shift = Shift.objects.get(id = jsonData['shift_id'], employee=employee)
     except Shift.DoesNotExist:
         transaction.rollback()
         return HttpResponseServerError("Error getting shift while creating shift summary for employee %s" % str(employee))
-  
+
     #Delete previously saved summaries since we're about to replace them
     ShiftSummary.objects.filter(shift=shift).delete()
 
@@ -43,23 +43,23 @@ def summary(request):
         kwargs['note'] = summary['notes']
         try:
             kwargs['job'] = Job.objects.get(id = summary['job_id'])
-        except Job.DoesNotExist: 
+        except Job.DoesNotExist:
             transaction.rollback()
             return HttpResponseServerError("Error getting job while creating shift summary for employee %s" % str(employee))
 
         shift_summary = ShiftSummary(**kwargs)
         try:
             shift_summary.full_clean(exclude="note")
-        except ValidationError as e: 
+        except ValidationError as e:
             transaction.rollback()
             msg = "New shift summary didn't pass validation for employee %s: %s" % (str(employee), str(e))
             return HttpResponseServerError(msg)
 
         shift_summary.save()
-   
+
     transaction.commit()
     return HttpResponseRedirect('/timeclock/')
-   
+
 
 def renderSummary(request, id):
     '''
@@ -75,7 +75,7 @@ def renderSummary(request, id):
         shiftEmployee = shift.employee
     except Shift.DoesNotExist:
         return HttpResponseServerError('Shift does not exist for id %s' % str(id))
-  
+
     owner = True
     if not request.user.is_superuser and request.user != shift.employee:
         return HttpResponseForbidden('Permission denied')
@@ -104,23 +104,21 @@ def renderSummary(request, id):
         except ShiftSummary.DoesNotExist:
             jobData.append(job)
             continue
-        
+
         job['hours'] = summary.hours
         job['miles'] = summary.miles
         job['note'] = summary.note
         jobData.append(job)
 
-    t = loader.get_template('shiftSummary.html')
-    c = RequestContext(request, {
+    context = {
         'totalTime': totalTime,
         'jobData': jobData,
         'shift': shift,
         'summaries': summaries,
         'shiftEmployee': shiftEmployee,
         'owner': owner
-    })
-    print totalTime
-    return HttpResponse(t.render(c), content_type="text/html")
+    }
+    return render(request, 'shiftSummary.html', context)
 
 
 def roundSeconds(seconds):
@@ -131,7 +129,7 @@ def roundSeconds(seconds):
     '''
 
     minutes = seconds / 60
-    remainder = seconds % 60 
+    remainder = seconds % 60
 
     if(remainder >= 30):
         minutes += 1

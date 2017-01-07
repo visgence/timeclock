@@ -16,9 +16,7 @@ def renderLogin(request, context={}):
     if user.is_authenticated() and user.is_active:
         return HttpResponseRedirect('/timeclock/')
 
-    t = loader.get_template('login.html')
-    c = RequestContext(request, context)
-    return HttpResponse(t.render(c), content_type="text/html")
+    return render(request, 'login.html', context)
 
 
 @login_exempt
@@ -30,7 +28,7 @@ def loginUser(request):
     #TODO: proper 404 handling
     if request.method != 'POST':
         return HttpResponse('404');
-    
+
     username = request.POST.get("username", '')
     password = request.POST.get("password", '')
     user = authenticate(username=username, password=password)
@@ -39,7 +37,7 @@ def loginUser(request):
 
     if not user.is_active:
         return renderLogin(request, {'error': "User is deactivated"})
-    
+
     login(request, user)
     return HttpResponseRedirect('/timeclock/')
 

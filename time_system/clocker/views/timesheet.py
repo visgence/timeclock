@@ -1,7 +1,7 @@
 
 
 # Django imports
-from django.shortcuts import render_to_response 
+from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.views.generic.base import View
 from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseForbidden
@@ -35,12 +35,10 @@ class TimesheetsView(View):
 
         employees = Employee.objects.get_viewable(user)
         employees = employees.filter(is_active=True)
-        t = loader.get_template('manageTimesheets.html')
-        c = RequestContext(request, {
+        ccontext = {
             "employees": json.dumps([e.toDict() for e in employees])
-        })
-        return HttpResponse(t.render(c), content_type="text/html")
-
+        }
+        return render(request, 'manageTimesheets.html', context)
 
     def post(self, request):
         user = request.user
@@ -64,7 +62,7 @@ class TimesheetsView(View):
                     "employee": emp,
                     "hourly_rate": emp.hourly_rate
                 })
-            
+
             try:
                 timesheets = Timesheet.objects.create_timesheets(paramsList, user)
             except ValidationError as e:
@@ -73,7 +71,7 @@ class TimesheetsView(View):
             except AssertionError as e:
                 return HttpResponseBadRequest(str(e), content_type='application/json')
 
-            return HttpResponse(json.dumps([ts.toDict() for ts in timesheets], indent=4), content_type="application/json")            
+            return HttpResponse(json.dumps([ts.toDict() for ts in timesheets], indent=4), content_type="application/json")
         else:
             try:
                 employee = Employee.objects.get(id=empId)
@@ -90,7 +88,7 @@ class TimesheetsView(View):
             except AssertionError as e:
                 return HttpResponseBadRequest(str(e), content_type='application/json')
 
-            return HttpResponse(json.dumps(timesheet.toDict(), indent=4), content_type="application/json")            
+            return HttpResponse(json.dumps(timesheet.toDict(), indent=4), content_type="application/json")
 
 
 class TimesheetView(View):
@@ -113,11 +111,9 @@ class TimesheetView(View):
         start = date.fromtimestamp(timesheet.start)
         end = date.fromtimestamp(timesheet.end)
         empUsername = timesheet.employee.username
-        
+
         pay_data = getPayPeriod(str(start), str(end), empUsername, timesheet.hourly_rate)
-        t = loader.get_template('timesheetPayData.html')
-        c = RequestContext(request, pay_data)
-        return HttpResponse(t.render(c), content_type="text/html")
+        return render(request, 'timesheetPayData.html', pay_data)
 
 
     def put(self, request, timesheet_id):
@@ -139,7 +135,7 @@ class TimesheetView(View):
         except AssertionError as e:
             return HttpResponseBadRequest(json.dumps("Problem signing timesheet: %s" % str(e)), content_type='application/json')
 
-        return HttpResponse(json.dumps(timesheet.toDict(), indent=4), content_type="application/json")            
+        return HttpResponse(json.dumps(timesheet.toDict(), indent=4), content_type="application/json")
 
 
 def total_hours(request):
@@ -150,10 +146,10 @@ def total_hours(request):
         start_time = request.POST.get('from')
         end_time = request.POST.get('to')
         user_name = request.POST.get('user_name')
-        
+
         pay_data = getPayPeriod(start_time, end_time, user_name)
         return render_to_response('total_hours.html', pay_data, context_instance=RequestContext(request))
-       
+
     return render_to_response('login.html', context_instance=RequestContext(request))
 
 
@@ -162,7 +158,7 @@ def getPayPeriod(start_time, end_time, user_name, hourly_rate=None):
     employee = Employee.objects.get(username = user_name)
     if not isinstance(hourly_rate, Decimal):
         hourly_rate = employee.hourly_rate
-    
+
     overtime_rate = hourly_rate + (hourly_rate / Decimal(2.0))
     print overtime_rate
     #make sure we have actual date ranges coming in
@@ -183,15 +179,15 @@ def getPayPeriod(start_time, end_time, user_name, hourly_rate=None):
     pay_period = {
         'weekly_info': [],
         'period_total': Decimal(0.0),
-        'period_adjusted': Decimal(0.0), 
+        'period_adjusted': Decimal(0.0),
         'period_overtime': Decimal(0.0),
         'period_regular': Decimal(0.0)
-    } 
-        
+    }
+
     weekDefaults = {
-        'weekly_total': Decimal(0.0), 
-        'weekly_adjusted': Decimal(0.0), 
-        'weekly_regular_hours': Decimal(0.0), 
+        'weekly_total': Decimal(0.0),
+        'weekly_adjusted': Decimal(0.0),
+        'weekly_regular_hours': Decimal(0.0),
         'weekly_overtime': Decimal(0.0),
         'days': []
     }
@@ -202,8 +198,8 @@ def getPayPeriod(start_time, end_time, user_name, hourly_rate=None):
     week['week_start'] = week_begin
     week['week_end'] = week_end
     for single_date in [d for d in (period_begin + timedelta(n) for n in range(day_count)) if d <= end_date]:
-        
-        single_date = date(single_date.year, single_date.month, single_date.day) 
+
+        single_date = date(single_date.year, single_date.month, single_date.day)
         daily_info = get_daily_hours(single_date, start_date, end_date, user_name)
 
         #If we just now will breach 40 hours seperate the hours leading up to 40 and the hours past 40 accordingly
@@ -211,7 +207,7 @@ def getPayPeriod(start_time, end_time, user_name, hourly_rate=None):
             adjusted = Decimal(40.0) - week['weekly_total']
             week['weekly_regular_hours'] += adjusted
             pay_period['period_regular'] += adjusted
-           
+
             overtime =  (week['weekly_total']+daily_info['daily_adjusted']) - Decimal(40.0)
             week['weekly_overtime'] += overtime
             pay_period['period_overtime'] += overtime
@@ -234,8 +230,8 @@ def getPayPeriod(start_time, end_time, user_name, hourly_rate=None):
             week = deepcopy(weekDefaults)
             week['week_start'] = week_begin
             week['week_end'] = week_end
-    
-    pay_period['period_adjusted'] = pay_period['period_adjusted'] - pay_period['period_overtime'] 
+
+    pay_period['period_adjusted'] = pay_period['period_adjusted'] - pay_period['period_overtime']
 
     pay_period['total_regular'] = (pay_period['period_regular'] * hourly_rate).quantize(Decimal('1.00'))
     pay_period['total_overtime'] = (pay_period['period_overtime'] * overtime_rate).quantize(Decimal('1.00'))
@@ -255,7 +251,7 @@ def getPayPeriod(start_time, end_time, user_name, hourly_rate=None):
 
 
 def get_week_range(begin_date, end_date):
-    
+
     new_begin = begin_date - timedelta(days = begin_date.weekday())
     new_end = end_date + timedelta(days = (6 - end_date.weekday()))
     return {'begin':new_begin, 'end':new_end}
@@ -264,9 +260,9 @@ def get_week_range(begin_date, end_date):
 
 def get_daily_hours(date, start, end, user_name):
     '''
-        Gets the total hours and minutes worked for a given date.  
+        Gets the total hours and minutes worked for a given date.
 
-        Paremeters: 
+        Paremeters:
             date      = The date we are calculating hours for
             user_name = The employee that we are calculating hours for
 
@@ -280,7 +276,7 @@ def get_daily_hours(date, start, end, user_name):
     adjusted_time = Decimal(0.0)
     daily_info = None
     shift_info = []
- 
+
     #find all clock in-outs for this day
     shifts = Shift.objects.filter(employee__username = user_name).filter(time_in__year = date.year).filter(time_in__month = date.month).filter(time_in__day = date.day).exclude(time_in = None).exclude(time_out = None).order_by('time_in')
 
@@ -291,22 +287,22 @@ def get_daily_hours(date, start, end, user_name):
         for shift in shifts:
             time_in = shift.time_in
             time_out = shift.time_out
-          
+
             hours = shift.hours
 
-            str_time_in = time_in.strftime('%I:%M %p') 
-            str_time_out = time_out.strftime('%I:%M %p') 
+            str_time_in = time_in.strftime('%I:%M %p')
+            str_time_out = time_out.strftime('%I:%M %p')
 
             if(time_in >= start and time_out <= end):
-                shift_info.append({'in':str_time_in, 'out':str_time_out, 'total':hours, 'display_flag':'True'}) 
+                shift_info.append({'in':str_time_in, 'out':str_time_out, 'total':hours, 'display_flag':'True'})
                 adjusted_time += hours
             else:
-                shift_info.append({'in':str_time_in, 'out':str_time_out, 'total':hours, 'display_flag':'False'}) 
+                shift_info.append({'in':str_time_in, 'out':str_time_out, 'total':hours, 'display_flag':'False'})
 
             daily_total += hours
             if daily_total > Decimal(24.0):
                 raise Exception('A daily total is greater than 24 hours on the date '+str(date.month)+"-"+str(date.day)+"-"+str(date.year))
-                
+
         if(date >= start.date() and date <= end.date()):
             daily_info = {'date': date, 'shifts':shift_info, 'daily_total':daily_total, 'daily_adjusted':adjusted_time, 'display_flag':'True'}
         else:
