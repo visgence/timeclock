@@ -22,6 +22,8 @@ MANAGERS = ADMINS
 
 SESSION_TIMEOUT = 28800
 
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'timeclock.visgence.com']
+
 def GET_PERMISSION_OBJ():
     '''
     ' This function should be modified to return the object that is used to verify permissions in the
