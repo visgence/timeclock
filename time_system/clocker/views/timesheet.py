@@ -93,7 +93,6 @@ class TimesheetsView(View):
 
 class TimesheetView(View):
 
-
     def get(self, request, timesheet_id):
 
         accept = request.META['HTTP_ACCEPT']
@@ -114,7 +113,6 @@ class TimesheetView(View):
 
         pay_data = getPayPeriod(str(start), str(end), empUsername, timesheet.hourly_rate)
         return render(request, 'timesheetPayData.html', pay_data)
-
 
     def put(self, request, timesheet_id):
         user = request.user
@@ -140,28 +138,25 @@ class TimesheetView(View):
 
 def total_hours(request):
 
-    if(request.method == 'POST'):
-        check_db.main()
+    check_db.main()
 
-        start_time = request.POST.get('from')
-        end_time = request.POST.get('to')
-        user_name = request.POST.get('user_name')
+    start_time = request.POST.get('from')
+    end_time = request.POST.get('to')
+    user_name = request.POST.get('user_name')
 
-        pay_data = getPayPeriod(start_time, end_time, user_name)
-        return render_to_response('total_hours.html', pay_data, context_instance=RequestContext(request))
-
-    return render_to_response('login.html', context_instance=RequestContext(request))
+    pay_data = getPayPeriod(start_time, end_time, user_name)
+    return render(request, 'total_hours.html', pay_data)
 
 
 def getPayPeriod(start_time, end_time, user_name, hourly_rate=None):
 
-    employee = Employee.objects.get(username = user_name)
+    employee = Employee.objects.get(username=user_name)
     if not isinstance(hourly_rate, Decimal):
         hourly_rate = employee.hourly_rate
 
     overtime_rate = hourly_rate + (hourly_rate / Decimal(2.0))
     print overtime_rate
-    #make sure we have actual date ranges coming in
+    # make sure we have actual date ranges coming in
     if(start_time == "" or end_time == ""):
         start_time = datetime.strftime(datetime.now(), '%Y-%m-%d')
         end_time = datetime.strftime(datetime.now(), '%Y-%m-%d')
