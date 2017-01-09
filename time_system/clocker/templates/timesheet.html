@@ -1,8 +1,7 @@
 <div class="panel-group" id="timesheet-accordion" data-bind="foreach: $data">
 
 
-    <div class="panel" data-bind="style: {marginBottom: $root.shouldSeperate($index(), $index()+1) ? '1em':''},
-                                  css: {'panel-default': !tampered_with(), 'panel-danger': tampered_with()}">
+    <div class="panel" data-bind="style: {marginBottom: $root.shouldSeperate($index(), $index()+1) ? '1em':''}">
 
         <div class="panel-heading">
             <h4 class="panel-title">
