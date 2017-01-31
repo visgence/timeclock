@@ -3,11 +3,10 @@ $(function() {
 
     var timesheetUrl = "/timeclock/timesheets/";
     var MessageCenter = $.fn.MessageCenter;
-    
-    var Timesheet = function(vars) {
 
+    var Timesheet = function(vars) {
         this.id = null;
-        
+
         this.start = ko.observable().extend({required: "Please specify a pay period."});
         this.startTimestamp = ko.computed({
             read: function() {
@@ -21,7 +20,7 @@ $(function() {
                 this.start(d.toLocaleDateString());
             }
         }, this);
-        
+
         this.end = ko.observable().extend({required: "Please specify a pay period."});;
         this.endTimestamp = ko.computed({
             read: function() {
@@ -35,11 +34,12 @@ $(function() {
                 this.end(d.toLocaleDateString());
             }
         }, this);
-        
+
 
         this.employee = ko.observable().extend({required: "Please select an employee."});
-        
+
         this.signature = ko.observable();
+        this.signedOnMsg = ko.observable();
         this.signAgreement = ko.observable(false).extend({required: "Please Accept the timesheet."});
 
         this.shifts = ko.observableArray();
@@ -66,7 +66,7 @@ $(function() {
         }
 
         this.messageCenter = ko.observable();
-        
+
         var init = function(vars) {
             vars = vars || {};
 
@@ -81,14 +81,17 @@ $(function() {
 
             if (vars.hasOwnProperty('employee'))
                 this.employee(vars.employee);
-                       
+
             if (vars.hasOwnProperty('shifts'))
                 this.shifts(vars.shifts);
-            
+
             if (vars.hasOwnProperty('messageCenter'))
                 this.messageCenter(vars.messageCenter);
             else
                 this.messageCenter(new MessageCenter());
+
+            if(vars.hasOwnProperty('signatureDate'))
+                this.signedOnMsg = "Signed on " + vars.signatureDate;
 
             this.rebuild(vars);
         }.bind(this);
@@ -107,7 +110,7 @@ $(function() {
                 this.messageCenter().setErrors("This timesheet appears to already be created! This should not have happened...");
                 noErrors = false;
             }
-            
+
             if (!this.start.validate()) noErrors = false;
             if (!this.end.validate()) noErrors = false;
             if (!this.employee.validate()) noErrors = false;
@@ -125,7 +128,7 @@ $(function() {
             var payload = {
                 action: "sign"
             };
-            
+
             return this.update(url, requestType, payload).done(__this.rebuild);
         }.bind(this);
 
@@ -137,7 +140,7 @@ $(function() {
             var __this = this;
             var url = timesheetUrl+this.id+"/";
             this.isBusy(true);
-            
+
             return $.get(url, function(resp) {
                 __this.payData(resp);
             })
@@ -157,7 +160,7 @@ $(function() {
 
         this.update = function(url, requestType, payload) {
             this.messageCenter().dismissErrors();
-            
+
             return $.ajax({
                  url: url
                 ,dataType: 'json'
@@ -192,7 +195,7 @@ $(function() {
             }
         };
 
-        init(vars); 
+        init(vars);
     };
 
     $.fn.Timesheet = Timesheet;
