@@ -13,7 +13,9 @@
                 {% load static %}
                 <img class="job-spinners" src="{% static "images/spinner.gif" %}" style="height: 20px; display:none;"
                         data-bind="visible: isBusy">
-                <i class="pull-right" data-bind="if: signature">Signed on </i>
+                <div data-bind="if: signature">
+                    <i class="pull-right" data-bind="text: signedOnMsg">Signed on </i>
+                </div>
 
             </h4>
         </div>

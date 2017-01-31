@@ -803,7 +803,7 @@ class Timesheet(models.Model):
             "end": self.end,
             "employee": self.employee.toDict(),
             "signature": self.signature,
-            "signatureDate": self.signatureDate,
+            "signatureDate": self.signatureDate.strftime(DT_FORMAT),
             "hourly_rate": str(self.hourly_rate)
         }
 
