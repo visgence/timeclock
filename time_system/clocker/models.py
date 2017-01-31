@@ -1,7 +1,7 @@
 
 # Django imports
 from django.db import models
-from django.db import transaction         
+from django.db import transaction
 from django.db.models import Q
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 from django.core.exceptions import ValidationError
@@ -51,7 +51,7 @@ class EmployeeManager(BaseUserManager, ChuchoManager):
         return self.get_editable(user, filter_args, omni)
 
     def get_editable(self, user, filter_args=None, omni=None):
-        ''' 
+        '''
         ' Gets all the users that can be edited by a specified user.
         '
         ' Right now only superusers can edit.
@@ -79,13 +79,13 @@ class EmployeeManager(BaseUserManager, ChuchoManager):
         '''
         ' Get's an instance of Employee specified by a pk if the given user is allowed to edit it.
         '
-        ' Keyword Arguments: 
+        ' Keyword Arguments:
         '   user - User to check if the employee can be edited by them.
         '   pk   - Primary key of Employee to get.
         '
         ' Return: Employee identified by pk if user can edit it, otherwise None.
         '''
-        
+
         if not isinstance(user, Employee):
             raise TypeError('%s is not an Auth User' % str(user))
 
@@ -104,7 +104,7 @@ class EmployeeManager(BaseUserManager, ChuchoManager):
         pattern_name1 = r'^\s*(.+)\s+(.+)\s*$'
         pattern_name2 = r'^\s*(.+),\s*(.+)\s*$'
         pattern_username = r'^\s*(.+)\s*$'
-        
+
         q_list = []
         m = re.match(pattern_name1, search_str, re.I)
         if m is not None:
@@ -202,11 +202,11 @@ class Employee(AbstractBaseUser):
 
     def clock_in(self):
         '''
-        ' Clocks an employee in.  
-        ' 
+        ' Clocks an employee in.
+        '
         ' Returns: The newly saved shift if clocked in successfully.
         '''
-      
+
         assert not self.isClockedIn(), "Error clocking Employee in. Employee is already clocked in."
 
         shift = Shift(employee=self, time_in=datetime.now())
@@ -216,23 +216,23 @@ class Employee(AbstractBaseUser):
         except ValidationError as e:
             msg = "An error occured while clocking you in. %s" % str(e)
             raise ValidationError(msg)
-        
+
         return shift
-        
+
 
     def clock_out(self):
         '''
-        ' Clocks an employee out.  
-        ' 
+        ' Clocks an employee out.
+        '
         ' Returns: The shift used to clock the employee out with.
         '''
-      
+
         shift = self.getCurrentShift()
         now = datetime.now()
         assert self.isClockedIn(), "Error clocking Employee out. Employee is already clocked out"
         assert shift is not None, "Error clocking Employee out. Employee has never clocked in before."
         assert now >= shift.time_in, "Error clocking Employee out. It appears you are clocked in into the future."
-        
+
         shift.time_out = datetime.now()
         try:
             shift.full_clean()
@@ -240,9 +240,9 @@ class Employee(AbstractBaseUser):
         except ValidationError as e:
             msg = "An error occured while clocking you out. %s" % str(e)
             raise ValidationError(msg)
-        
+
         return shift
-       
+
 
     def getCurrentShift(self):
         '''
@@ -264,14 +264,14 @@ class Employee(AbstractBaseUser):
         except Shift.DoesNotExist:
             return None
 
- 
+
     def isClockedIn(self):
         '''
         ' Check if a user is clocked in or out.
-        ' 
+        '
         ' Returns: True if clocked in and False otherwise
         '''
-        
+
         try:
             Shift.objects.get(employee=self, time_out=None)
             return True
@@ -281,7 +281,7 @@ class Employee(AbstractBaseUser):
             msg = "It appears you have multiple shifts that say your clocked in.  Please use the Manage Shifts tool to fix this."
             raise Shift.MultipleObjectsReturned(msg)
 
-    
+
     def getJobHours(self, start, end, job):
         '''
         ' Calculates and returns the total hours worked by the employee for the given job in the timerange
@@ -293,7 +293,7 @@ class Employee(AbstractBaseUser):
         '
         ' Returns: total hours worked on the job for the time range as a float.
         '''
-        
+
         assert isinstance(job, Job), "%s is not a Job instance"%str(job)
 
         summaries = ShiftSummary.objects.filter(shift__deleted=False, employee=self, job=job, shift__time_in__lte=end, shift__time_out__gte=start)
@@ -314,13 +314,13 @@ class ShiftManager(ChuchoManager):
         '''
         ' Get's an instance of Shift specified by a pk if the given user is allowed to edit it.
         '
-        ' Keyword Arguments: 
+        ' Keyword Arguments:
         '   user - User to check if the user can be edited by them.
         '   pk   - Primary key of Shift to get.
         '
         ' Return: Shift identified by pk if user can edit it, otherwise None.
         '''
-        
+
         if not isinstance(user, Employee):
             raise TypeError('%s is not an Auth User' % str(user))
 
@@ -364,7 +364,7 @@ class ShiftManager(ChuchoManager):
 
 
     def get_editable(self, user, filter_args=None, omni=None):
-        ''' 
+        '''
         ' Gets all the shifts that can be edited by a specified user.
         '
         ' Right now only superusers can edit.
@@ -386,7 +386,7 @@ class ShiftManager(ChuchoManager):
 
         if user.is_superuser:
             return objs
-        
+
         return objs.filter(employee = user)
 
 
@@ -422,7 +422,7 @@ class Shift(models.Model):
 
 
     def toDict(self):
-        
+
         return {
             "id": self.id
             ,"employee": self.employee.toDict()
@@ -486,13 +486,13 @@ class ShiftSummaryManager(ChuchoManager):
         '''
         ' Get's an instance of ShiftSummery specified by a pk if the given user is allowed to edit it.
         '
-        ' Keyword Arguments: 
+        ' Keyword Arguments:
         '   user - User to check if the user can be edited by them.
         '   pk   - Primary key of ShiftSummery to get.
         '
         ' Return: ShiftSummery identified by pk if user can edit it, otherwise None.
         '''
-        
+
         if not isinstance(user, Employee):
             raise TypeError('%s is not an Auth User' % str(user))
 
@@ -536,7 +536,7 @@ class ShiftSummaryManager(ChuchoManager):
 
 
     def get_editable(self, user, filter_args=None, omni=None):
-        ''' 
+        '''
         ' Gets all the users that can be edited by a specified user.
         '
         ' Right now only superusers can edit.
@@ -548,7 +548,7 @@ class ShiftSummaryManager(ChuchoManager):
         '''
         if not isinstance(user, Employee):
             raise TypeError("%s is not an Auth User" % str(user))
-        
+
         if filter_args is not None and len(filter_args) > 0:
             objs = self.advanced_search(**filter_args)
         elif omni is not None:
@@ -558,7 +558,7 @@ class ShiftSummaryManager(ChuchoManager):
 
         if user.is_superuser:
             return objs
-        
+
         return objs.filter(employee=user)
 
 
@@ -594,7 +594,7 @@ class JobManager(ChuchoManager):
         '''
         ' Get's an instance of Job specified by a pk if the given user is allowed to edit it.
         '
-        ' Keyword Arguments: 
+        ' Keyword Arguments:
         '   user - User to check if the user can be edited by them.
         '   pk   - Primary key of Job to get.
         '
@@ -641,10 +641,10 @@ class JobManager(ChuchoManager):
         '
         ' Return: QuerySet of Jobs that can be viewed by specified user.
         '''
-       
+
         if not isinstance(user, Employee):
             raise TypeError("%s is not an Auth User" % str(user))
-       
+
         if filter_args is not None:
             objs = self.advanced_search(**filter_args)
         elif omni is not None:
@@ -656,7 +656,7 @@ class JobManager(ChuchoManager):
 
 
     def get_editable(self, user, filter_args=None, omni=None):
-        ''' 
+        '''
         ' Gets all the users that can be edited by a specified user.
         '
         ' Right now only superusers can edit.
@@ -733,12 +733,12 @@ class Job(models.Model):
 class TimesheetManager(models.Manager):
 
     def get_viewable(self, user):
-        
+
         if not isinstance(user, Employee):
             raise TypeError("%s is not an Auth User" % str(user))
 
         if user.is_superuser:
-            return self.all() 
+            return self.all()
 
         return self.filter(employee=user)
 
@@ -755,7 +755,7 @@ class TimesheetManager(models.Manager):
     def create_timesheet(self, data, user):
 
         ts = Timesheet(**data)
-        
+
         timesheets = self.filter(start__lte=ts.end, end__gte=ts.start, employee=ts.employee)
         assert timesheets.count() <= 0, "There is already a timesheet for employee %s for this pay period." % str(ts.employee)
 
@@ -767,7 +767,7 @@ class TimesheetManager(models.Manager):
         start = start.replace(hour=00)
         start = start.replace(minute=00)
         start = start.replace(second=00)
-        
+
         end = datetime.fromtimestamp(ts.end)
         end = end.replace(hour=23)
         end = end.replace(minute=59)
@@ -785,8 +785,9 @@ class Timesheet(models.Model):
     start = models.BigIntegerField()
     end = models.BigIntegerField()
     employee = models.ForeignKey('Employee', related_name="timesheet_set")
-    hourly_rate = models.DecimalField(max_digits = 5, decimal_places = 2)
+    hourly_rate = models.DecimalField(max_digits=5, decimal_places=2)
     signature = models.TextField(blank=True)
+    signatureDate = models.DateTimeField(null=True, blank=True)
 
     objects = TimesheetManager()
 
@@ -802,6 +803,7 @@ class Timesheet(models.Model):
             "end": self.end,
             "employee": self.employee.toDict(),
             "signature": self.signature,
+            "signatureDate": self.signatureDate,
             "hourly_rate": str(self.hourly_rate)
         }
 
@@ -811,11 +813,12 @@ class Timesheet(models.Model):
 
         strToHash = str(self.start) + str(self.end)
         strToHash += self.employee.username
-        strToHash += "".join([s.time_in.strftime('%s')+s.time_out.strftime('%s')+s.employee.username for s in self.shifts.all()]) 
+        strToHash += "".join([s.time_in.strftime('%s')+s.time_out.strftime('%s')+s.employee.username for s in self.shifts.all()])
         self.signature = hash64(strToHash);
+        self.signatureDate = datetime.now()
         self.save()
-         
 
 
 
-        
+
+
