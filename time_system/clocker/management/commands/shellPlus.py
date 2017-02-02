@@ -77,16 +77,17 @@ class Command(BaseCommand):
 
             app_aliases = model_aliases.get(app_name, {})
             model_labels = []
-
+            print "\n"
             for model in app_models:
+
                 try:
-                    imported_object = getattr(__import__(app_mod.__name__, {}, {}, model.__name__), model.__name__)
+                    imported_object = __import__(app_mod.__name__, globals(), locals(), [], -1)
                     model_name = model.__name__
 
                     if "%s.%s" % (app_name, model_name) in dont_load:
                         continue
 
-                    alias = app_aliases.get(model_name, model_name)
+                    alias = app_name
                     imported_objects[alias] = imported_object
                     if model_name == alias:
                         model_labels.append(model_name)
