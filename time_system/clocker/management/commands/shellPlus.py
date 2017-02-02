@@ -66,7 +66,6 @@ class Command(BaseCommand):
         dont_load = dont_load_cli + dont_load_conf
 
         model_aliases = getattr(settings, 'SHELL_PLUS_MODEL_ALIASES', {})
-
         for app_mod in [import_module(appname) for appname in settings.INSTALLED_APPS]:
             app_models = apps.get_models(app_mod)
             if not app_models:
@@ -75,28 +74,12 @@ class Command(BaseCommand):
             if app_name in dont_load:
                 continue
 
-            app_aliases = model_aliases.get(app_name, {})
             model_labels = []
-            print "\n"
             for model in app_models:
+                alias = model.__name__
+                imported_objects[alias] = model
+                model_labels.append(model.__name__)
 
-                try:
-                    imported_object = __import__(app_mod.__name__, globals(), locals(), [], -1)
-                    model_name = model.__name__
-
-                    if "%s.%s" % (app_name, model_name) in dont_load:
-                        continue
-
-                    alias = app_name
-                    imported_objects[alias] = imported_object
-                    if model_name == alias:
-                        model_labels.append(model_name)
-                    else:
-                        model_labels.append("%s (as %s)" % (model_name, alias))
-
-                except AttributeError, e:
-                    print self.style.ERROR("Failed to import '%s' from '%s' reason: %s" % (model.__name__, app_name, str(e)))
-                    continue
             print self.style.SQL_COLTYPE("From '%s' autoload: %s" % (app_mod.__name__, ", ".join(model_labels)))
 
         try:
