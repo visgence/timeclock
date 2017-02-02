@@ -1,32 +1,28 @@
 import os
-from django.core.management.base import NoArgsCommand
 from optparse import make_option
 import time
 
+from django.core.management import BaseCommand
 
-class Command(NoArgsCommand):
-    option_list = NoArgsCommand.option_list + (
-        make_option('--ipython', action='store_true', dest='ipython',
-            help='Tells Django to use IPython, not BPython.'),
-        make_option('--plain', action='store_true', dest='plain',
-            help='Tells Django to use plain Python, not BPython nor IPython.'),
-        make_option('--no-pythonrc', action='store_true', dest='no_pythonrc',
-            help='Tells Django to use plain Python, not IPython.'),
-        make_option('--print-sql', action='store_true', default=False,
-            help="Print SQL queries as they're executed"),
-        make_option('--dont-load', action='append', dest='dont_load', default=[],
-            help='Ignore autoloading of some apps/models. Can be used several times.'),
-    )
+
+class Command(BaseCommand):
+    def add_arguments(self, parser):
+        parser.add_argument('--ipython', action='store_true', dest='ipython', help='Tells Django to use IPython, not BPython.')
+        parser.add_argument('--plain', action='store_true', dest='plain', help='Tells Django to use plain Python, not BPython nor IPython.')
+        parser.add_argument('--no-pythonrc', action='store_true', dest='no_pythonrc', help='Tells Django to use plain Python, not IPython.')
+        parser.add_argument('--print-sql', action='store_true', default=False, help="Print SQL queries as they're executed")
+        parser.add_argument('--dont-load', action='append', dest='dont_load', default=[], help='Ignore autoloading of some apps/models. Can be used several times.')
+
     help = "Like the 'shell' command but autoloads the models of all installed Django apps."
 
     requires_model_validation = True
 
-    def handle_noargs(self, **options):
+    def handle(self, **options):
         # XXX: (Temporary) workaround for ticket #1796: force early loading of all
         # models from installed apps. (this is fixed by now, but leaving it here
         # for people using 0.96 or older trunk (pre [5919]) versions.
-        from django.db.models.loading import get_models, get_apps
-        loaded_models = get_models()
+        from django.apps import apps
+        loaded_models = apps.get_models()
 
         use_ipython = options.get('ipython', False)
         use_plain = options.get('plain', False)
@@ -62,7 +58,8 @@ class Command(NoArgsCommand):
         # that tab completion works on objects that are imported at runtime.
         # See ticket 5082.
         from django.conf import settings
-        imported_objects = {'settings': settings}
+        from django.utils.module_loading import import_module
+        imported_objects = {'settings': settings, 'import_module': import_module}
 
         dont_load_cli = options.get('dont_load') # optparse will set this to [] if it doensnt exists
         dont_load_conf = getattr(settings, 'SHELL_PLUS_DONT_LOAD', [])
@@ -70,12 +67,11 @@ class Command(NoArgsCommand):
 
         model_aliases = getattr(settings, 'SHELL_PLUS_MODEL_ALIASES', {})
 
-        for app_mod in get_apps():
-            app_models = get_models(app_mod)
+        for app_mod in [import_module(appname) for appname in settings.INSTALLED_APPS]:
+            app_models = apps.get_models(app_mod)
             if not app_models:
                 continue
-
-            app_name = app_mod.__name__.split('.')[-2]
+            app_name = app_mod.__name__
             if app_name in dont_load:
                 continue
 
@@ -100,7 +96,7 @@ class Command(NoArgsCommand):
                 except AttributeError, e:
                     print self.style.ERROR("Failed to import '%s' from '%s' reason: %s" % (model.__name__, app_name, str(e)))
                     continue
-            print self.style.SQL_COLTYPE("From '%s' autoload: %s" % (app_mod.__name__.split('.')[-2], ", ".join(model_labels)))
+            print self.style.SQL_COLTYPE("From '%s' autoload: %s" % (app_mod.__name__, ", ".join(model_labels)))
 
         try:
             if use_plain:
