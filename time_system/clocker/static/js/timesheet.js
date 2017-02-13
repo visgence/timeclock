@@ -90,6 +90,9 @@ $(function() {
             else
                 this.messageCenter(new MessageCenter());
 
+            if(vars.hasOwnProperty('signature'))
+                this.signedOnMsg = "Timesheet signed";
+
             if(vars.hasOwnProperty('signatureDate'))
                 this.signedOnMsg = "Signed on " + vars.signatureDate;
 
