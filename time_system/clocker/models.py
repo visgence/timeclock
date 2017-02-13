@@ -738,7 +738,7 @@ class TimesheetManager(models.Manager):
             raise TypeError("%s is not an Auth User" % str(user))
 
         if user.is_superuser:
-            return self.all()
+            return self.order_by('-id')[:50]
 
         return self.filter(employee=user)
 
