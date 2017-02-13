@@ -794,18 +794,19 @@ class Timesheet(models.Model):
     class Meta:
         ordering = ['-end']
 
-
     def toDict(self):
-        return {
+        myDict = {
             "id": self.id,
             "shifts": [s.toDict() for s in self.shifts.all()],
             "start": self.start,
             "end": self.end,
             "employee": self.employee.toDict(),
             "signature": self.signature,
-            "signatureDate": self.signatureDate.strftime(DT_FORMAT),
             "hourly_rate": str(self.hourly_rate)
         }
+        if self.signatureDate is not None:
+            myDict["signatureDate"] = self.signatureDate.strftime(DT_FORMAT)
+        return myDict
 
     def sign(self, user):
         assert self.employee_id == user.id, "You may only sign your own timesheets."
