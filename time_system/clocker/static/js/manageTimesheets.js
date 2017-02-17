@@ -7,7 +7,7 @@ $(function() {
 
 
     var ManageTimesheets = function(vars) {
-        
+
         this.messageCenter = ko.observable(new MessageCenter());
         this.newTimesheet = ko.observable();
 
@@ -36,7 +36,7 @@ $(function() {
         this.shouldSeperate = function(curTsIndex, nextTsIndex) {
             if (this.timesheetList().length <= 1 || nextTsIndex >= this.timesheetList().length)
                 return false;
-            
+
             var curTs = this.timesheetList()[curTsIndex];
             var nextTs = this.timesheetList()[nextTsIndex];
             if (curTs.startTimestamp() == nextTs.startTimestamp())
@@ -78,7 +78,7 @@ $(function() {
 
             if (vars.hasOwnProperty('employeeOptions')) {
                 vars.employeeOptions.unshift({"id": -1, display: "All"});
-                this.employeeOptions(vars.employeeOptions);            
+                this.employeeOptions(vars.employeeOptions);
             }
 
             timesheets.refresh().done(tsRefreshCallback);
@@ -104,6 +104,33 @@ $(function() {
             }
 
         };
+
+        this.pageNum = 1;
+
+        var total = Math.round((this.timesheetList.length/10)+0.5);
+        window.history.pushState("timesheets", "timesheets", "?page="+this.pageNum + "&of="+total)
+
+        console.log(this.timesheetList())
+
+
+
+        this.nextPage = function(){
+            console.log("next page")
+            this.pageNum++;
+            window.history.pushState("timesheets", "timesheets", "?page="+this.pageNum + "&of="+total)
+        }.bind(this);
+
+        this.prevPage = function(){
+
+        }.bind(this);
+
+        this.lastPage = function(){
+
+        }.bind(this);
+
+        this.firstPage = function(){
+
+        }.bind(this)
 
         init(vars);
     };
