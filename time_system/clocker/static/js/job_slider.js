@@ -13,7 +13,7 @@ function create_slider_handler(job_id, total_time)
 
     return $("#" + job_id).slider({
         max:Math.floor(total_time/60),
-        
+
         slide: function(event, ui) {
             var sum = 0;
 
@@ -40,7 +40,7 @@ function create_slider_handler(job_id, total_time)
                 if(hours < 10) hours = '0' + hours;
                 if(minutes < 10) minutes = '0' + minutes;
 
-                $('#hours_' + job_id).val(hours+':'+minutes); 
+                $('#hours_' + job_id).val(hours+':'+minutes);
 
                 value = ui.value - $(this).slider("value");
 
@@ -50,7 +50,7 @@ function create_slider_handler(job_id, total_time)
             }
         }
     }).draggable();
-}//end create_slider_handler 
+}//end create_slider_handler
 
 
 
@@ -58,12 +58,12 @@ $(function ()
 {
     var total_time = $("#total_time").prop('defaultValue');
     var maxTime = total_time;
-    
+
     var job_ids = $(".job_slider");
 
     //create a handler for each slider
-    for (var i = 0; i < job_ids.length; i++) 
-    {   
+    for (var i = 0; i < job_ids.length; i++)
+    {
         var hours = $('#hours_' + job_ids[i].id).prop('defaultValue');
         var hourStr = '00:00';
         if(hours !== '') {
@@ -77,9 +77,9 @@ $(function ()
 
         var slider = create_slider_handler(job_ids[i].id, maxTime);
         $(slider).slider('value', hours);
-        $('#hours_' + job_ids[i].id).val(hourStr); 
+        $('#hours_' + job_ids[i].id).val(hourStr);
     }
-    
+
     $("#total_time").val(sec_to_time(total_time));
 });
 
@@ -90,7 +90,7 @@ function sec_to_time(sec)
 
     if(hours < 10) hours = '0' + hours;
     if(minutes < 10) minutes = '0' + minutes;
-    
+
     return hours + ':' + minutes;
 }//end sec_to_time
 
@@ -100,7 +100,7 @@ function time_to_sec(time)
 {
     //pull the hours out
     var hours = time.substr(0,2);
-    
+
     //alert(hours);
     if(hours != '00')
     {
@@ -136,7 +136,7 @@ function time_to_sec(time)
 
     }
     else{minutes = 0;}
-    
+
     return  ((hours * 3600) + ( minutes * 60));
 }//end sec_to_time
 
@@ -154,7 +154,7 @@ function submit_form(url)
 
 
     //Create json object
-    var json = 
+    var json =
     {
         "emp_id" : $("#emp_id").val(),
         "shift_id": $("#shift_id").val(),
@@ -162,26 +162,31 @@ function submit_form(url)
 
     var job_array = new Array();
 
-    $(".job_slider").each(function() 
-    {
+    $(".job_slider").each(function() {
         job_id = this.id;
 
-        if($("#miles_" + job_id).val() != 0 || time_to_sec($("#hours_" + job_id).val()) != 0)
-        {
-            job_array.push
-            ({
-                "job_id":this.id, 
+        if($("#miles_" + job_id).val() != 0 || time_to_sec($("#hours_" + job_id).val()) != 0){
+            job_array.push({
+                "job_id":this.id,
                 "miles":$("#miles_" + job_id).val(),
                 "notes":$("#notes_" + job_id).val(),
                 "hours":time_to_sec($("#hours_" + job_id).val())
             });
         }
-
     });
-    
+
+    var needsDescription = false;
+    for(var i in job_array){
+        if(job_array[i].hours > 0 && job_array[i].notes == ""){
+            needsDescription = true;
+            alert("Please enter in a description in all fields that have hours.");
+        }
+    }
+    if(needsDescription) return;
+
     json.shift_summary = job_array;
     jsonData = JSON.stringify(json);
-    
+
     $.post(url, {'jsonData': jsonData})
     .fail(function(resp) {
         var btn = [{
