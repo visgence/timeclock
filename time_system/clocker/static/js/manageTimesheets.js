@@ -105,31 +105,45 @@ $(function() {
 
         };
 
+        var pageNum = parseInt(location.search.split("=")[1]);
+        var total = Math.round((this.timesheetList().length/10)+0.5);
+
         this.pageNum = 1;
 
-        var total = Math.round((this.timesheetList.length/10)+0.5);
-        window.history.pushState("timesheets", "timesheets", "?page="+this.pageNum + "&of="+total)
-
-        console.log(this.timesheetList())
-
-
+        if (isNaN(pageNum)){
+            window.history.pushState("timesheets", "timesheets", "?page="+this.pageNum)
+        } else {
+            this.pageNum = pageNum;
+        }
 
         this.nextPage = function(){
-            console.log("next page")
-            this.pageNum++;
-            window.history.pushState("timesheets", "timesheets", "?page="+this.pageNum + "&of="+total)
+            total = location.search.split("&")[1].split("=")[1]
+            if(this.pageNum < total){
+                this.pageNum += 1;
+                window.history.pushState("timesheets", "timesheets", "?page="+this.pageNum + "&of="+total)
+                location.reload();
+            }
         }.bind(this);
 
         this.prevPage = function(){
-
+            total = location.search.split("&")[1].split("=")[1]
+            if(this.pageNum > 1){
+                this.pageNum -= 1;
+                window.history.pushState("timesheets", "timesheets", "?page="+this.pageNum + "&of="+total)
+                location.reload();
+            }
         }.bind(this);
 
         this.lastPage = function(){
-
+            total = location.search.split("&")[1].split("=")[1]
+            window.history.pushState("timesheets", "timesheets", "?page="+total + "&of="+total)
+            location.reload();
         }.bind(this);
 
         this.firstPage = function(){
-
+            total = location.search.split("&")[1].split("=")[1]
+            window.history.pushState("timesheets", "timesheets", "?page="+1 + "&of="+total)
+            location.reload();
         }.bind(this)
 
         init(vars);

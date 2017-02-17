@@ -35,6 +35,8 @@ $(function() {
                 if(i > pageNum*10) break;
                 tmp_tsList.push(new Timesheet(vars.timesheetList[i]));
             }
+            var count = Math.round((vars.timesheetList.length/10)+0.5)
+             window.history.pushState("timesheets", "timesheets", location.search.split("&")[0] + "&of="+count)
 
             this.timesheetList(tmp_tsList);
         }

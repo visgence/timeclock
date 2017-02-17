@@ -47,22 +47,6 @@ $(function() {
 			}
 		}.bind(this);
 
-        this.nextPage = function() {
-            this.reload(this.currentPage()+1);
-        }.bind(this);
-
-        this.prevPage = function() {
-            this.reload(this.currentPage()-1);
-        }.bind(this);
-
-        this.firstPage = function() {
-            this.reload(1);
-        }.bind(this);
-
-        this.lastPage = function() {
-            this.reload(this.totalPages());
-        }.bind(this);
-
 		this.reload = function(page, employee) {
 			var __this = this;
 
