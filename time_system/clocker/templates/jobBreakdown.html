@@ -8,7 +8,11 @@
             {% else %}
             <span>{{job}}</span>
             {% endif %}
-             - {{data.hours}} <span style="font-size: 75%">Billed: <span style="color:green">${{data.billed}}</span> Worked: <span style="color:red">${{data.worked}}</span> Net:
+             - {{data.hours}} <span style="font-size: 75%">
+             {% if jobsBreakdown.is_superuser %}
+             Billed: <span style="color:green">${{data.billed}}</span>
+             Worked: <span style="color:red">${{data.worked}}</span>
+             Net:
              {% if data.net  < 0 %}
                  <span style="color:red">
              {% elif data.net == 0%}
@@ -17,6 +21,7 @@
                  <span style="color:green">
              {% endif %}
              ${{data.net}}
+             {% endif %}
              </span>
              </span>
              <img class="job-spinners" src="{% static "images/spinner.gif" %}" style="height: 20px; display:none;">
@@ -59,8 +64,12 @@
     </div>
 {% endfor %}
 
-<label><u>Total Hours - {{jobsBreakdown.total_hours}}</u>
-    Billed: <span style="color:green">${{jobsBreakdown.total_billed}}</span> Worked: <span style="color:red">${{jobsBreakdown.total_worked}}</span> Net:
+<label>
+    <u>Total Hours - {{jobsBreakdown.total_hours}}</u>
+    {% if jobsBreakdown.is_superuser %}
+    Billed: <span style="color:green">${{jobsBreakdown.total_billed}}</span>
+    Worked: <span style="color:red">${{jobsBreakdown.total_worked}}</span>
+    Net:
      {% if jobsBreakdown.total_net  < 0 %}
          <span style="color:red">
      {% elif jobsBreakdown.total_net == 0%}
@@ -70,7 +79,7 @@
      {% endif %}
      ${{jobsBreakdown.total_net}}
      </span>
-     </span>
+    {% endif %}
 </label>
 <script>
     $(function() {
