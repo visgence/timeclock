@@ -140,9 +140,6 @@ function time_to_sec(time)
     return  ((hours * 3600) + ( minutes * 60));
 }//end sec_to_time
 
-
-
-
 function submit_form(url)
 {
     //If the total time has not been spent, alert
@@ -177,6 +174,7 @@ function submit_form(url)
 
     var needsDescription = false;
     for(var i in job_array){
+        job_array[i].notes = job_array[i].notes.trim();
         if(job_array[i].hours > 0 && job_array[i].notes == ""){
             needsDescription = true;
             alert("Please enter in a description in all fields that have hours.");
