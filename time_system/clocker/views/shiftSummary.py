@@ -50,12 +50,16 @@ def summary(request):
 
         shift_summary = ShiftSummary(**kwargs)
         try:
-            shift_summary.full_clean(exclude="note")
+            shift_summary.full_clean()
         except ValidationError as e:
             transaction.rollback()
             msg = "New shift summary didn't pass validation for employee %s: %s" % (str(employee), str(e))
             return HttpResponseServerError(msg)
 
+        desc = kwargs['note'].strip()
+        if len(desc) < 1:
+            msg = "Please enter in a description in all fields that have hours."
+            return HttpResponseServerError(msg)
         shift_summary.save()
 
     transaction.commit()
@@ -69,7 +73,6 @@ def renderSummary(request, id):
     '
     ' Keyword Args: Id of the Shift we are rendering the summary page for.
     '''
-    print "\n\nhello there"
     employee = request.user
     try:
         shift = Shift.objects.get(id=id)

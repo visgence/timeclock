@@ -187,11 +187,7 @@ function submit_form(url)
 
     $.post(url, {'jsonData': jsonData})
     .fail(function(resp) {
-        var btn = [{
-            text: "Ok",
-            click: function(){ $(this).dialog('close'); }
-        }];
-        makeDialog(resp.responseText, 'Error', btn);
+        alert(resp.responseText);
     });
 }
 
