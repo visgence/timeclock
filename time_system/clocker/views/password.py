@@ -10,7 +10,7 @@ except ImportError:
 
 
 def renderForm(request):
-    
+
     t = loader.get_template('passwordForm.html')
     c = RequestContext(request, {})
     return HttpResponse(json.dumps({'html': t.render(c)}), content_type="application/json")
@@ -26,12 +26,11 @@ def changePassword(request):
     '              oldPassword - string containing user's current password.
     '              newPassword - string containing password to change to.
     '''
-    
+
     employee = request.user
-    jsonData = request.REQUEST.get('jsonData', None)
 
     try:
-        jsonData = json.loads(jsonData)
+        jsonData = json.loads(request.POST['jsonData'])
     except Exception as e:
         return HttpResponse(json.dumps({'errors': 'JSON Exception: %s: %s' % (type(e), e.message)}), content_type="application/json")
 
