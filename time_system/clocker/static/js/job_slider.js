@@ -149,7 +149,6 @@ function submit_form(url)
         return;
     }
 
-
     //Create json object
     var json =
     {
@@ -157,28 +156,31 @@ function submit_form(url)
         "shift_id": $("#shift_id").val(),
     }
 
+    var needsDescription = false;
     var job_array = new Array();
+    var i = 0;
 
     $(".job_slider").each(function() {
         job_id = this.id;
-
+        console.log(job_id)
         if($("#miles_" + job_id).val() != 0 || time_to_sec($("#hours_" + job_id).val()) != 0){
-            job_array.push({
+            var newObj = {
                 "job_id":this.id,
                 "miles":$("#miles_" + job_id).val(),
                 "notes":$("#notes_" + job_id).val(),
                 "hours":time_to_sec($("#hours_" + job_id).val())
-            });
+            };
+            job_array.push(newObj);
+            if(newObj.hours > 0 && newObj.notes == ""){
+                needsDescription = true;
+                $($(".asterix")[i]).css('display', 'block');
+            }
+        } else {
+            $($(".asterix")[i]).css('display', 'none');
         }
+        i++;
     });
 
-    var needsDescription = false;
-    for(var i in job_array){
-        job_array[i].notes = job_array[i].notes.trim();
-        if(job_array[i].hours > 0 && job_array[i].notes == ""){
-            needsDescription = true;
-        }
-    }
     if(needsDescription){
         alert("Please enter in a description in all fields that have hours.");
         return;
