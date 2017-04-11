@@ -177,10 +177,12 @@ function submit_form(url)
         job_array[i].notes = job_array[i].notes.trim();
         if(job_array[i].hours > 0 && job_array[i].notes == ""){
             needsDescription = true;
-            alert("Please enter in a description in all fields that have hours.");
         }
     }
-    if(needsDescription) return;
+    if(needsDescription){
+        alert("Please enter in a description in all fields that have hours.");
+        return;
+    }
 
     json.shift_summary = job_array;
     jsonData = JSON.stringify(json);
