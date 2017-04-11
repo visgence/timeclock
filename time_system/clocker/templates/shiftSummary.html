@@ -22,6 +22,7 @@
             </td>
         </tr>
         {% for data in jobData %}
+
         <tr>
              <td>
                 {% if data.hours %}
@@ -34,9 +35,11 @@
                  </span>
                 {% endif %}
              </td>
+
              <td>
                  <div class="job_name">{{data.job.name}}</div>
              </td>
+
              <td>
                 {% if data.hours %}
                     <input type="text" class="job_time form-control" id ="hours_{{data.job.id}}" value="{{data.hours}}" readonly="readonly" />
@@ -45,6 +48,7 @@
                 {% endif %}
              </td>
              <td><div id="{{data.job.id}}" class="job_slider" style="margin-left: 1em;"></div></td>
+             <td class="asterix " style="color:red; display:none">*</td>
         </tr>
 
         {% if data.hours %}
