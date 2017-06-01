@@ -17,5 +17,5 @@ start = datetime.fromtimestamp(time.time()-month)
 shifts = Shift.objects.filter(time_in__gte=start).exclude(time_out=None)
 for s in shifts:
     if len(ShiftSummary.objects.filter(shift=s)) == 0:
-        print s
+        print s.id, s
 
