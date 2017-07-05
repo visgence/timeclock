@@ -1,9 +1,9 @@
-from django.template import RequestContext, loader
-from django.http import HttpResponse
 from clocker.models import Employee
 from clocker.views.timesheet import getPayPeriod
 from datetime import date, timedelta
+from time import gmtime, strftime
 from django.shortcuts import render
+
 
 def mainPage(request):
 
@@ -20,11 +20,11 @@ def mainPage(request):
                 Please clock in to start using Timeclock!"
 
     if recentShift is not None:
-        timeStamp = recentShift.time_in
+        timeStamp = "{} ({})".format(recentShift.time_in.strftime('%B %d, %Y, %I:%m %p'), strftime("%Z", gmtime()))
         message = "You are clocked in. You clocked in at "
     if recentShift is not None and not status:
         message = "You are clocked out. You last clocked out at "
-        timeStamp = recentShift.time_out
+        timeStamp = "{} ({})".format(recentShift.time_out.strftime('%B %d, %Y, %I:%m %p'), strftime("%Z", gmtime()))
 
     today = date.today()
     start_week = today - timedelta(today.weekday())
