@@ -35,6 +35,15 @@ def jobBreakdown(request):
     breakdown = getJobsBreakdown(employees, start, end)
     breakdown['is_superuser'] = request.user.is_superuser
 
+    total = 0
+    for i in breakdown['jobs']:
+        miles = 0
+        for j in breakdown['jobs'][i]['summaries']:
+            miles += j.miles
+            total += j.miles
+        breakdown['jobs'][i]['total_miles'] = miles
+    breakdown['total_miles'] = total
+
     t = loader.get_template('jobBreakdown.html')
     c = RequestContext(request, {'jobsBreakdown': breakdown})
     return HttpResponse(t.render(c))
@@ -192,5 +201,3 @@ def getJobsBreakdown(employees=None, start=None, end=None):
 
     jobData['total_hours'] = str(Decimal(jobData['total_hours']).quantize(Decimal('1.00')))
     return jobData
-
-

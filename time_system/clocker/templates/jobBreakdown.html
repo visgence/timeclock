@@ -12,6 +12,7 @@
              {% if jobsBreakdown.is_superuser %}
              Billed: <span style="color:green">${{data.billed}}</span>
              Worked: <span style="color:red">${{data.worked}}</span>
+             Miles: <span>{{data.total_miles}}</span>
              Net:
              {% if data.net  < 0 %}
                  <span style="color:red">
@@ -68,6 +69,8 @@
     {% if jobsBreakdown.is_superuser %}
     Billed: <span style="color:green">${{jobsBreakdown.total_billed}}</span>
     Worked: <span style="color:red">${{jobsBreakdown.total_worked}}</span>
+    Miles: <span>{{jobsBreakdown.total_miles}}</span>
+
     Net:
      {% if jobsBreakdown.total_net  < 0 %}
          <span style="color:red">
