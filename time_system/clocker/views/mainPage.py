@@ -20,7 +20,7 @@ def mainPage(request):
                 Please clock in to start using Timeclock!"
 
     if recentShift is not None:
-        timeStamp = "{} ({})".format(recentShift.time_in.strftime('%B %d, %Y, %I:%m %p'), strftime("%Z", gmtime()))
+        timeStamp = "{} ({})".format(recentShift.time_in.strftime('%B %d, %Y, %I:%M %p'), strftime("%Z", gmtime()))
         message = "You are clocked in. You clocked in at "
     if recentShift is not None and not status:
         message = "You are clocked out. You last clocked out at "
