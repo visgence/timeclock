@@ -2,7 +2,7 @@ $(function() {
 	"use strict";
 
 	var Shift = function(vars) {
-		var __this = this;	
+		var __this = this;
 		var shiftUrl = "/timeclock/shifts/";
 
 		this.id = ko.observable();
@@ -12,7 +12,7 @@ $(function() {
 		this.employee = ko.observable();
 
 		this.updating = ko.observable(false);
-		this.shiftToEdit = ko.observable();	
+		this.shiftToEdit = ko.observable();
 
 		this.init = function(vars) {
 			vars = vars || {};
@@ -54,7 +54,7 @@ $(function() {
 		this.editShift = function() {
 			var data = this.toDict();
 			var editShift = new Shift(data);
-			this.shiftToEdit(editShift);		
+			this.shiftToEdit(editShift);
 
 			this.updating(true);
 		}.bind(this);
