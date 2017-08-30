@@ -18,7 +18,16 @@
 {%block content%}
 
 <div class="login">
-
+    {% if missing_shifts %}
+        <div class="alert alert-danger">
+            You have some missing shift summaries:
+            <ul>
+                {% for shift in missing_shifts %}
+                    <li><a href="summary/{{shift.link}}">{{shift.date}}</a></li>
+                {% endfor %}
+            </ul>
+        </div>
+    {% endif %}
     <form name="clocker" class="clocker-form" method="post" action="{% url 'clock-employee' %}">
 		{% csrf_token %}
 			<div class="clocker-container">
