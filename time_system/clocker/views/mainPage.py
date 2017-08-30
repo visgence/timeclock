@@ -1,9 +1,9 @@
-from django.template import RequestContext, loader
-from django.http import HttpResponse
 from clocker.models import Employee
 from clocker.views.timesheet import getPayPeriod
 from datetime import date, timedelta
 from django.shortcuts import render
+from find_missing import findMissing
+
 
 def mainPage(request):
 
@@ -31,6 +31,14 @@ def mainPage(request):
     end_week = start_week + timedelta(7)
     periodData = getPayPeriod(start_week.strftime('%Y-%m-%d'), end_week.strftime('%Y-%m-%d'), employee.username)
 
+    missingShifts = []
+    for i in findMissing():
+        if employee.toDict()['id'] == i.toDict()['employee']['id']:
+            missingShifts.append({
+                "link": i.toDict()['id'],
+                "date": i.toDict()['time_out']
+            })
+
     context = {
         'employee': employee,
         'employees': employees,
@@ -40,7 +48,8 @@ def mainPage(request):
         'start_week': date.strftime(start_week, '%Y-%m-%d'),
         'today': date.strftime(today, '%Y-%m-%d'),
         'weekly_regular': periodData['pay_period']['period_regular'],
-        'weekly_overtime': periodData['pay_period']['period_overtime']
+        'weekly_overtime': periodData['pay_period']['period_overtime'],
+        'missing_shifts': missingShifts
     }
 
     return render(request, 'mainPage.html', context)

@@ -69,7 +69,6 @@ def renderSummary(request, id):
     '
     ' Keyword Args: Id of the Shift we are rendering the summary page for.
     '''
-    print "\n\nhello there"
     employee = request.user
     try:
         shift = Shift.objects.get(id=id)
@@ -83,16 +82,14 @@ def renderSummary(request, id):
     elif request.user != shift.employee:
         owner = False
 
-    #Only complete shifts can have summaries
+    # Only complete shifts can have summaries
     if shift.time_out == None:
         return HttpResponseServerError('You cannot complete any summaries for a shift where you are not clocked out yet.')
 
-    #We only care about tracking time that's at least one minute
     timeDiff = shift.time_out - shift.time_in
     totalTime = roundSeconds(timeDiff.total_seconds())
     if totalTime < 60:
         totalTime = 0
-        return HttpResponseRedirect('/timeclock/')
 
     jobs = Job.objects.filter(is_active=True)
     summaries = ShiftSummary.objects.filter(shift=shift, job__in=jobs)
@@ -136,6 +133,3 @@ def roundSeconds(seconds):
         minutes += 1
 
     return minutes * 60
-
-
-
