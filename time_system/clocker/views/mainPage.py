@@ -26,7 +26,7 @@ def mainPage(request):
         message = "You are clocked in. You clocked in at "
     if recentShift is not None and not status:
         message = "You are clocked out. You last clocked out at "
-        timeStamp = "{} ({})".format(recentShift.time_out.strftime('%B %d, %Y, %I:%m %p'), strftime("%Z", gmtime()))
+        timeStamp = "{} ({})".format(recentShift.time_out.strftime('%B %d, %Y, %I:%M %p'), strftime("%Z", gmtime()))
 
     today = date.today()
     start_week = today - timedelta(today.weekday())
