@@ -1,5 +1,4 @@
-from django.http import HttpResponseRedirect, HttpResponseServerError, HttpResponse, HttpResponseForbidden
-from django.template import RequestContext, loader
+from django.http import HttpResponseRedirect, HttpResponseServerError, HttpResponseForbidden
 from django.views.decorators.http import require_POST
 from django.core.exceptions import ValidationError
 from django.db import transaction
@@ -13,12 +12,9 @@ except ImportError:
 
 
 @require_POST
-#@transaction.commit_manually
+# @transaction.commit_manually
 def summary(request):
-    '''
-    ' Creates new Shift Summaries from the summary page for a shift. If any old summaries exist for that shift
-    ' they are deleted first.
-    '''
+    """Creates new Shift Summaries from the summary page for a shift. If any old summaries exist for that shift they are deleted first."""
 
     employee = request.user
 
@@ -29,12 +25,12 @@ def summary(request):
         return HttpResponseServerError("Error getting json data for shift summary")
 
     try:
-        shift = Shift.objects.get(id = jsonData['shift_id'], employee=employee)
+        shift = Shift.objects.get(id=jsonData['shift_id'], employee=employee)
     except Shift.DoesNotExist:
         transaction.rollback()
         return HttpResponseServerError("Error getting shift while creating shift summary for employee %s" % str(employee))
 
-    #Delete previously saved summaries since we're about to replace them
+    # Delete previously saved summaries since we're about to replace them
     ShiftSummary.objects.filter(shift=shift).delete()
 
     for summary in jsonData['shift_summary']:
@@ -43,7 +39,7 @@ def summary(request):
         kwargs['hours'] = summary['hours']
         kwargs['note'] = summary['notes']
         try:
-            kwargs['job'] = Job.objects.get(id = summary['job_id'])
+            kwargs['job'] = Job.objects.get(id=summary['job_id'])
         except Job.DoesNotExist:
             transaction.rollback()
             return HttpResponseServerError("Error getting job while creating shift summary for employee %s" % str(employee))
@@ -67,13 +63,14 @@ def summary(request):
 
 
 def renderSummary(request, id):
-    '''
-    ' Renders the shift summary page. Makes sure to check if the shift for the given id has any
+    """
+    ' Renders the shift summary page.
+    ' Makes sure to check if the shift for the given id has any
     ' past complete summaries and if so packages them up so the page can pre-fill using their data.
     '
     ' Keyword Args: Id of the Shift we are rendering the summary page for.
-    '''
-    employee = request.user
+    """
+    # employee = request.user
     try:
         shift = Shift.objects.get(id=id)
         shiftEmployee = shift.employee
@@ -87,7 +84,7 @@ def renderSummary(request, id):
         owner = False
 
     # Only complete shifts can have summaries
-    if shift.time_out == None:
+    if shift.time_out is None:
         return HttpResponseServerError('You cannot complete any summaries for a shift where you are not clocked out yet.')
 
     timeDiff = shift.time_out - shift.time_in
@@ -124,11 +121,11 @@ def renderSummary(request, id):
 
 
 def roundSeconds(seconds):
-    '''
+    """
     ' Utility method to round a number of seconds given.
     '
     ' Returns: Seconds rounded to the nearest minute by 30 seconds
-    '''
+    """
 
     minutes = seconds / 60
     remainder = seconds % 60

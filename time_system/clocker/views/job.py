@@ -28,7 +28,7 @@ def jobBreakdown(request):
             try:
                 employees = employees.filter(username=employee, is_active=True)
             except Employee.DoesNotExist:
-                return HttpResponseBadRequest("No employee with username %s" % str(e))
+                return HttpResponseBadRequest("No employee with username %s" % str(employee))
 
     start = str(request.POST.get('start', None))
     end = str(request.POST.get('end', None))

@@ -51,7 +51,7 @@
                 {% for summary in data.summaries %}
                     <tr>
                         <!-- <td><span class="badge" style="background-color: {{summary.employee.color}}">&nbsp;</span></td> -->
-                        <td><a href='summary/{{summary.shift.id}}'>{{summary.shift.time_in.date}}</a></td>
+                        <td><a href='summary/{{summary.shift.id}}'>{{summary.shift.time_in}}</a></td>
                         <td>{{summary.hours|to_hour}}</td>
                         <td><span class="label" style="color: #000; background-color: {{summary.employee.color}}"> {{summary.employee}}</span></td>
                         <td>{{summary.miles}}</td>

@@ -8,7 +8,6 @@ except ImportError:
     import json
 
 
-
 def renderForm(request):
 
     t = loader.get_template('passwordForm.html')
@@ -18,14 +17,14 @@ def renderForm(request):
 
 @require_POST
 def changePassword(request):
-    '''
+    """
     ' This view will allow a user to change their password.
     '
     ' POST arguments:
     '   jsonData - JSON data containing:
     '              oldPassword - string containing user's current password.
     '              newPassword - string containing password to change to.
-    '''
+    """
 
     employee = request.user
 
@@ -52,6 +51,3 @@ def changePassword(request):
     employee.set_password(newPassword)
     employee.save()
     return HttpResponse(json.dumps({'success': 'Password successfully changed!'}), content_type="application/json")
-
-
-

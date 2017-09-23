@@ -1,8 +1,9 @@
 # Django settings for time_system project.
 
-import os, re
+import os
+import re
 program_path = os.path.realpath(__file__)
-APP_PATH = re.sub('settings.py[c]*$','',program_path);
+APP_PATH = re.sub('settings.py[c]*$', '', program_path)
 
 DEBUG = True
 
@@ -10,9 +11,9 @@ ADMINS = (
     # ('Your Name', 'your_email@example.com'),
 )
 
-#AUTH_USER_MODEL = "clocker.Employee"
+# AUTH_USER_MODEL = "clocker.Employee"
 
-#Global time format for datetime objects
+# Global time format for datetime objects
 DT_FORMAT = "%m/%d/%Y %H:%M:%S"
 D_FORMAT = "%m/%d/%Y"
 
@@ -24,21 +25,22 @@ SESSION_TIMEOUT = 28800
 
 ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'timeclock.visgence.com']
 
+
 def GET_PERMISSION_OBJ():
-    '''
-    ' This function should be modified to return the object that is used to verify permissions in the
-    ' object managers.  This is required for the chucho interface.
-    '''
+    """
+    This function should be modified to return the object that is used to verify permissions in the object managers.
+    This is required for the chucho interface.
+    """
     from django.contrib.auth import get_user_model
     return get_user_model()
 
 
 try:
     from local_database_settings import DATABASES
-except:
+except Exception:
     DATABASES = {
         'default': {
-            'ENGINE': 'django.db.backends.sqlite3', #, 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
+            'ENGINE': 'django.db.backends.sqlite3',  # 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
             'NAME': 'time_clock.db',                      # Or path to database file if using sqlite3.
             'USER': '',                      # Not used with sqlite3.
             'PASSWORD': '',                  # Not used with sqlite3.
@@ -69,7 +71,7 @@ USE_I18N = True
 # calendars according to the current locale
 USE_L10N = True
 
-#USE_TZ = True
+# USE_TZ = True
 
 # Absolute filesystem path to the directory that will hold user-uploaded files.
 # Example: "/home/media/media.lawrence.com/media/"
@@ -93,7 +95,7 @@ STATIC_URL = '/static/'
 # URL prefix for admin static files -- CSS, JavaScript and images.
 # Make sure to use a trailing slash.
 # Examples: "http://foo.com/static/admin/", "/static/admin/".
-#ADMIN_MEDIA_PREFIX = '/static/admin/'
+# ADMIN_MEDIA_PREFIX = '/static/admin/'
 # Additional locations of static files
 STATICFILES_DIRS = (
     # Put strings here, like "/home/html/static" or "C:/www/django/static".
@@ -108,7 +110,7 @@ STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.StaticFilesStorage'
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
-#    'django.contrib.staticfiles.finders.DefaultStorageFinder',
+    # 'django.contrib.staticfiles.finders.DefaultStorageFinder',
 )
 
 # Make this unique, and don't share it with anybody.

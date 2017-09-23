@@ -6,9 +6,7 @@ except ImportError:
 
 
 class ManageView(TemplateView):
-    '''
-    ' Generic view that renders a template for the chucho tables to be placed in.
-    '''
+    """Generic view that renders a template for the chucho tables to be placed in."""
 
     template_name = "management.html"
     app = None
@@ -20,4 +18,3 @@ class ManageView(TemplateView):
         context['model'] = self.model
         context['employee'] = json.dumps(self.request.user.toDict())
         return context
-

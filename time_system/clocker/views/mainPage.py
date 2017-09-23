@@ -6,7 +6,6 @@ from django.shortcuts import render
 from find_missing import findMissing
 
 
-
 def mainPage(request):
 
     employee = request.user

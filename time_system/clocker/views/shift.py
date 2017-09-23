@@ -2,7 +2,7 @@
 # Django imports
 from django.views.generic.base import View
 from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseForbidden, HttpResponseNotFound
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.core.paginator import Paginator
 from django.core.exceptions import ValidationError
 
 # Local imports
@@ -11,9 +11,9 @@ from settings import DT_FORMAT
 
 # System imports
 try:
-	import simplejson as json
+    import simplejson as json
 except ImportError:
-	import json
+    import json
 
 from datetime import datetime
 
@@ -21,9 +21,8 @@ from datetime import datetime
 class ShiftView(View):
 
     returnData = {
-        "errors": []    
+        "errors": []
     }
-
 
     @staticmethod
     def updateClient(shift, jsonData, user):
@@ -35,7 +34,7 @@ class ShiftView(View):
             error = 'Invalid data: ' + str(e)
             return HttpResponseBadRequest(json.dumps(error), content_type='application/json')
 
-        #Set fields for shift
+        # Set fields for shift
         for field, value in params.iteritems():
             if field in ['id', 'pk', 'employee']:
                 continue
@@ -58,13 +57,12 @@ class ShiftView(View):
         success = {'shift': shift.toDict()}
         return HttpResponse(json.dumps(success, indent=4), content_type='applicatin/json')
 
-
     def put(self, request, shift_id):
 
         try:
             shift = Shift.objects.get(id=shift_id)
         except Shift.DoesNotExist:
-            error = 'Shift does not exist for id %s'%str(shift_id)
+            error = 'Shift does not exist for id %s' % str(shift_id)
             return HttpResponseNotFound(json.dumps(error), content_type="application/json")
         else:
             if not shift.can_edit(request.user):
@@ -73,13 +71,12 @@ class ShiftView(View):
 
         return ShiftView.updateClient(shift, request.read(), request.user)
 
-
     def delete(self, request, shift_id):
 
         try:
             shift = Shift.objects.get(id=shift_id)
         except Shift.DoesNotExist:
-            error = 'Shift does not exist for id %s'%str(shift_id)
+            error = 'Shift does not exist for id %s' % str(shift_id)
             return HttpResponseNotFound(json.dumps(error), content_type="application/json")
         else:
             if not shift.can_edit(request.user):
@@ -100,9 +97,9 @@ class ShiftView(View):
 
 
 class ShiftsView(View):
-	
+
     returnData = {
-        "errors": []	
+        "errors": []
     }
 
     def get(self, request):
@@ -120,25 +117,26 @@ class ShiftsView(View):
             self.returnData['errors'].append('Invalid permissions')
             return HttpResponseForbidden(json.dumps(self.returnData, indent=4), content_type="application/json")
 
-        shifts = Shift.objects.filter(employee=employee).order_by( '-time_in', 'id')
+        shifts = Shift.objects.filter(employee=employee).order_by('-time_in', 'id')
 
-        # break the data into pages 
+        # break the data into pages
         if 'page' in request.GET and 'per_page' in request.GET:
             paginator = Paginator(shifts, request.GET['per_page'])
             try:
                 shifts = paginator.page(request.GET['page'])
-            except pagenotaninteger:
+            except Exception, pagenotaninteger:
+                print pagenotaninteger
                 shifts = paginator.page(1)
-            except emptypage:
+            except Exception, emptypage:
+                print emptypage
                 shifts = paginator.page(paginator.num_pages)
 
             self.returnData.update({
-                 'shifts':     [s.toDict() for s in shifts]
-                ,'totalPages': paginator.num_pages
-                ,'page':       shifts.number
+                'shifts':     [s.toDict() for s in shifts],
+                'totalPages': paginator.num_pages,
+                'page':       shifts.number
             })
         else:
             self.returnData['shifts'] = [s.toDict() for s in shifts]
 
         return HttpResponse(json.dumps(self.returnData, indent=4), content_type="application/json")
-

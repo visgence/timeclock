@@ -1,5 +1,5 @@
 from django.http import HttpResponse, HttpResponseRedirect
-from django.template import loader, RequestContext
+from django.template import loader
 from django.contrib.auth import authenticate, login, logout
 from clocker.decorators import login_exempt
 from django.shortcuts import render
@@ -7,9 +7,7 @@ from django.shortcuts import render
 
 @login_exempt
 def renderLogin(request, context={}):
-    '''
-    ' Renders the login page of the app
-    '''
+    """Renders the login page of the app"""
 
     assert isinstance(context, dict)
 
@@ -22,13 +20,11 @@ def renderLogin(request, context={}):
 
 @login_exempt
 def loginUser(request):
-    '''
-    ' Logs a user into the app if they provide the proper username and password
-    '''
+    """Logs a user into the app if they provide the proper username and password."""
 
-    #TODO: proper 404 handling
+    # TODO: proper 404 handling
     if request.method != 'POST':
-        return HttpResponse('404');
+        return HttpResponse('404')
 
     username = request.POST.get("username", '')
     password = request.POST.get("password", '')
@@ -45,18 +41,16 @@ def loginUser(request):
 
 @login_exempt
 def logoutUser(request):
-    '''
-    ' Logs a user out of the system and sends them back to the login page
-    '''
+    """Logs a user out of the system and sends them back to the login page."""
 
     logout(request)
     return HttpResponseRedirect("/timeclock/login/")
 
 
 def isLoggedIn(request):
-    '''
-    ' Simply returns the text 'yes' if the user is still logged in.  Checkaccess will catch the request before this
-    ' they are not.
-    '''
+    """
+    Simply returns the text 'yes' if the user is still logged in.
+    Checkaccess will catch the request before this they are not.
+    """
 
     return HttpResponse("yes", content_type="text/html")
