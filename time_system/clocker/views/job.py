@@ -9,7 +9,8 @@ from django.template import RequestContext, loader
 from django.http import HttpResponse, HttpResponseBadRequest
 
 # Local Imports
-from clocker.models import Employee, Job, ShiftSummary
+from clocker.models import Employee, Job
+
 
 def jobBreakdown(request):
 
@@ -50,7 +51,7 @@ def jobBreakdown(request):
 
 
 def getWeekdayRange(start=None, end=None):
-    '''
+    """
     ' Calculates the work week from a start and end time and returns those as datetime objects.
     '
     ' The start and end times will always try to encapsulate a work week if they are not specified.
@@ -65,7 +66,7 @@ def getWeekdayRange(start=None, end=None):
     '               %Y-%m-%d
     '
     ' Returns: tuple (start, end) containing the start of a work week and the end of a work week
-    '''
+    """
 
     dateForm = "%Y-%m-%d"
 
@@ -84,7 +85,6 @@ def getWeekdayRange(start=None, end=None):
         start = today - timedelta(today.weekday())
         end = start + timedelta(6)
 
-
     start = start.replace(hour=00)
     start = start.replace(minute=00)
     start = start.replace(second=00)
@@ -100,7 +100,7 @@ def getWeekdayRange(start=None, end=None):
 
 
 def getJobsBreakdown(employees=None, start=None, end=None):
-    '''
+    """
     ' Calculates the hourly precentages for all jobs within a timerange for an employee or employees.
     ' If no employees are specified then all employees will be used.
     '
@@ -126,17 +126,17 @@ def getJobsBreakdown(employees=None, start=None, end=None):
     '             total_hours: <total hours for all jobs>,
     '             employees: [username1, username2, ...]
     '          }
-    '''
+    """
 
     start, end = getWeekdayRange(start, end)
 
     jobData = {
-        'jobs': OrderedDict()
-        ,'total_hours': 0
-        ,'total_billed': 0
-        ,'total_worked': 0
-        ,'total_net': 0
-        ,'employees': []
+        'jobs': OrderedDict(),
+        'total_hours': 0,
+        'total_billed': 0,
+        'total_worked': 0,
+        'total_net': 0,
+        'employees': []
     }
 
     jobs = Job.objects.all().order_by('name')
@@ -144,7 +144,7 @@ def getJobsBreakdown(employees=None, start=None, end=None):
         jobData['employees'].append(employee.username)
 
         for job in jobs:
-            #initialize data if not in there yet.
+            # initialize data if not in there yet.
             if job.name not in jobData['jobs']:
                 jobData['jobs'][job.name] = {
                     'hours': 0.0,
@@ -156,8 +156,6 @@ def getJobsBreakdown(employees=None, start=None, end=None):
                     'summaries': [],
                     'percentages': {}
                 }
-
-
 
             hours = employee.getJobHours(start, end, job)
             if hours > 0 and employee not in jobData['jobs'][job.name]['percentages']:
@@ -180,11 +178,12 @@ def getJobsBreakdown(employees=None, start=None, end=None):
             jobData['total_worked'] += Decimal(hours * float(employee.hourly_rate)).quantize(Decimal('1.00'))
             jobData['total_net'] = jobData['total_billed'] - jobData['total_worked']
 
-
     for job, data in jobData['jobs'].iteritems():
         data['summaries'] = sorted(data['summaries'], key=lambda summary: summary.shift.time_in, reverse=True)
+        for i in data['summaries']:
+            i.shift.time_in = datetime.date(i.shift.time_in).strftime("%b. %d, %Y")
 
-    #Calculate percentages as a Decimal
+    # Calculate percentages as a Decimal
     for jobN, jobD in jobData['jobs'].iteritems():
         if jobData['total_hours'] > 0:
             jobPercentage = Decimal((jobD['hours']*100) / jobData['total_hours']).quantize(Decimal('1.00'))
@@ -197,7 +196,6 @@ def getJobsBreakdown(employees=None, start=None, end=None):
                 percentageD['hours'] = str(Decimal(percentageD['hours']).quantize(Decimal('1.00')))
 
         jobD['hours'] = str(Decimal(jobD['hours']).quantize(Decimal('1.00')))
-
 
     jobData['total_hours'] = str(Decimal(jobData['total_hours']).quantize(Decimal('1.00')))
     return jobData
