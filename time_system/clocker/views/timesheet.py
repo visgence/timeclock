@@ -93,7 +93,7 @@ class TimesheetView(View):
 
     def get(self, request, timesheet_id):
 
-        accept = request.META['HTTP_ACCEPT']
+        # accept = request.META['HTTP_ACCEPT']
         # user = request.user
 
         try:
@@ -101,8 +101,8 @@ class TimesheetView(View):
         except Timesheet.DoesNotExist:
             return HttpResponseBadRequest(json.dumps("Timesheet %s does not exist" % str(timesheet_id)), content_type="application/json")
 
-        if 'application/json' in accept:
-            return HttpResponse(json.dumps({'timesheetList': timesheets}), content_type="application/json")
+        # if 'application/json' in accept:
+        #     return HttpResponse(json.dumps({'timesheetList': timesheets}), content_type="application/json")
 
         check_db.main()
         start = date.fromtimestamp(timesheet.start)
@@ -269,7 +269,19 @@ def get_daily_hours(date, start, end, user_name):
     shift_info = []
 
     # find all clock in-outs for this day
-    shifts = Shift.objects.filter(employee__username=user_name).filter(time_in__year=date.year).filter(time_in__month=date.month).filter(time_in__day=date.day).exclude(time_in=None).exclude(time_out=None).order_by('time_in')
+    shifts = Shift.objects.filter(
+        employee__username=user_name
+    ).filter(
+        time_in__year=date.year
+    ).filter(
+        time_in__month=date.month
+    ).filter(
+        time_in__day=date.day
+    ).exclude(
+        time_in=None
+    ).exclude(
+        time_out=None
+    ).order_by('time_in')
 
     # No shifts for this day so 00 hours and minutes
     if not shifts:

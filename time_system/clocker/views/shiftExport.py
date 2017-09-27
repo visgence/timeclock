@@ -5,7 +5,7 @@ from clocker.views.job import getWeekdayRange
 from clocker.models import Employee, Job
 
 
-def  shiftExport(request):
+def shiftExport(request):
     # If not super user only do for current employee
     employee = request.user
     employees = [employee]

@@ -1,5 +1,4 @@
 import os
-from optparse import make_option
 import time
 
 from django.core.management import BaseCommand
@@ -22,7 +21,7 @@ class Command(BaseCommand):
         # models from installed apps. (this is fixed by now, but leaving it here
         # for people using 0.96 or older trunk (pre [5919]) versions.
         from django.apps import apps
-        loaded_models = apps.get_models()
+        # loaded_models = apps.get_models()
 
         use_ipython = options.get('ipython', False)
         use_plain = options.get('plain', False)
@@ -61,11 +60,11 @@ class Command(BaseCommand):
         from django.utils.module_loading import import_module
         imported_objects = {'settings': settings, 'import_module': import_module}
 
-        dont_load_cli = options.get('dont_load') # optparse will set this to [] if it doensnt exists
+        dont_load_cli = options.get('dont_load')  # optparse will set this to [] if it doensnt exists
         dont_load_conf = getattr(settings, 'SHELL_PLUS_DONT_LOAD', [])
         dont_load = dont_load_cli + dont_load_conf
 
-        model_aliases = getattr(settings, 'SHELL_PLUS_MODEL_ALIASES', {})
+        # model_aliases = getattr(settings, 'SHELL_PLUS_MODEL_ALIASES', {})
         for app_mod in [import_module(appname) for appname in settings.INSTALLED_APPS]:
             app_models = apps.get_models(app_mod)
             if not app_models:
