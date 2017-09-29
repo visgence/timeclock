@@ -1,7 +1,7 @@
 Timeclock
 =========
 
-A simple web application for tracking employee time
+A simple web application for tracking employee time.
 
 Update 8/5/2014
 ---------------
