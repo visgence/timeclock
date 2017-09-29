@@ -8,23 +8,24 @@ from clocker.models import Employee
 
 # System imports
 try:
-	import simplejson as json
+    import simplejson as json
 except ImportError:
-	import json
+    import json
 
 
 class EmployeeView(View):
 
     returnData = {
-        "errors": []    
+        "errors": []
     }
 
-    #Place holder view until we need it
+    # Place holder view until we need it
+
 
 class EmployeesView(View):
-	
+
     returnData = {
-        "errors": []	
+        "errors": []
     }
 
     def get(self, request):
@@ -33,4 +34,3 @@ class EmployeesView(View):
         self.returnData['employees'] = [e.toDict() for e in employees]
 
         return HttpResponse(json.dumps(self.returnData, indent=4), content_type="application/json")
-

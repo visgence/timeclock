@@ -5,12 +5,11 @@ from clocker.models import Employee, Shift
 
 @require_POST
 def clockEmployee(request):
-    '''
-    ' View that clocks an employee in or out depending on the value of "status"
-    ' in the POST request.
+    """
+    ' View that clocks an employee in or out depending on the value of "status" in the POST request.
     '
     ' Returns HttpResponseRedirect to the next view
-    '''
+    """
 
     status = request.POST.get('status', None)
     if status is None:
@@ -31,12 +30,12 @@ def clockEmployee(request):
 
 
 def clockOutEmployee(employee):
-    '''
+    """
     ' Clocks an employee out.
     '
     ' Returns: Shift used to clock employee out with.
-    '''
-    
+    """
+
     if not isinstance(employee, Employee):
         return HttpResponseNotFound()
 
@@ -47,17 +46,16 @@ def clockOutEmployee(employee):
 
 
 def clockInEmployee(employee):
-    '''
+    """
     ' Clocks an employee in.
     '
     ' Returns: Shift created to clock employee in with.
-    '''
+    """
 
     if not isinstance(employee, Employee):
         return HttpResponseNotFound()
-    
+
     try:
         return employee.clock_in()
     except Exception as e:
         return HttpResponseNotFound(str(e))
-

@@ -36,7 +36,7 @@ class Command(BaseCommand):
         if user_resp == 'n':
             print 'Bye!'
             sys.exit(0)
-            
+
         assert user_resp == 'Y', 'Something Bad Happened!'
 
         # Make sure to clean up first

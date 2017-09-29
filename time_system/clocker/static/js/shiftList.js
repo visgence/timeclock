@@ -48,20 +48,20 @@ $(function() {
 		}.bind(this);
 
         this.nextPage = function() {
-            this.reload(this.currentPage()+1);
-        }.bind(this);
+             this.reload(this.currentPage()+1);
+         }.bind(this);
 
-        this.prevPage = function() {
-            this.reload(this.currentPage()-1);
-        }.bind(this);
+         this.prevPage = function() {
+             this.reload(this.currentPage()-1);
+         }.bind(this);
 
-        this.firstPage = function() {
-            this.reload(1);
-        }.bind(this);
+         this.firstPage = function() {
+             this.reload(1);
+         }.bind(this);
 
-        this.lastPage = function() {
-            this.reload(this.totalPages());
-        }.bind(this);
+         this.lastPage = function() {
+             this.reload(this.totalPages());
+         }.bind(this);
 
 		this.reload = function(page, employee) {
 			var __this = this;
@@ -75,11 +75,11 @@ $(function() {
 			var promise = $.get(shiftUrl, args)
 			.done(function(resp) {
 				if(resp.hasOwnProperty("errors") && resp.errors.length > 0)
-					console.error(resp.errors);	
+					console.error(resp.errors);
 				else if(resp.shifts)
 					__this.rebuild(resp);
 				else
-					console.error("Something unexpected happend!");	
+					console.error("Something unexpected happend!");
 			})
 			.fail(function(resp) {
 				console.error(resp);
@@ -93,3 +93,4 @@ $(function() {
 
 	$.fn.ShiftList = ShiftList;
 });
+

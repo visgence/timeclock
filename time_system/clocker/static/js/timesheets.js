@@ -19,7 +19,6 @@ $(function() {
                 this.messageCenter(new MessageCenter());
 
         }.bind(this);
-
         init(vars);
     };
 
@@ -27,16 +26,18 @@ $(function() {
         this.messageCenter().setErrors(resp)
     };
 
-
     Timesheets.prototype.rebuild = function(vars) {
         vars = vars || {};
         if (vars.hasOwnProperty('timesheetList')) {
             var tmp_tsList = [];
-            $.each(vars.timesheetList, function(i, ts) {
-                var newTs = new Timesheet(ts);
-                tmp_tsList.push(newTs);
-            });
-            
+            var pageNum = parseInt(location.search.split("=")[1])
+            for(var i = pageNum*10-10; i < vars.timesheetList.length; i++){
+                if(i > pageNum*10) break;
+                tmp_tsList.push(new Timesheet(vars.timesheetList[i]));
+            }
+            var count = Math.round((vars.timesheetList.length/10)+0.5)
+             window.history.pushState("timesheets", "timesheets", location.search.split("&")[0] + "&of="+count)
+
             this.timesheetList(tmp_tsList);
         }
     };
@@ -49,7 +50,7 @@ $(function() {
     Timesheets.prototype.createTimesheets = function(data) {
         if (!$.isArray(data))
             return;
-    
+
         return $.ajax({
              url: url
             ,dataType: 'json'
@@ -63,4 +64,6 @@ $(function() {
     };
 
     $.fn.Timesheets = Timesheets;
+
+
 });

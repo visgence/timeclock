@@ -64,12 +64,32 @@
         {% endif %}
 
         {% if user.is_superuser %}
-        <div class="col-xs-8" data-bind="template: {name: 'timesheet-template', data: timesheetList}"></div>
+            <div class="col-xs-8">
         {% else %}
-        <div class="col-xs-12" data-bind="template: {name: 'timesheet-template', data: timesheetList}"></div>
+            <div class="col-xs-12">
         {% endif %}
-    </div>
 
+            <ul class="pager">
+                <li data-bind="click: firstPage" class="previous clickable">
+                    <a>&lt;&lt; First</a>
+                </li>
+                <li data-bind="click: prevPage" class="previous clickable">
+                    <a>&lt; Prev</a>
+                </li>
+
+                <li data-bind="text: pageNum"></li>
+
+                <li data-bind="click: lastPage" class="next clickable">
+                    <a>Last &gt;&gt;</a>
+                </li>
+                <li data-bind="click: nextPage" class="next clickable">
+                    <a>Next &gt;</a>
+                </li>
+            </ul>
+
+            <div data-bind="template: {name: 'timesheet-template', data: timesheetList}"></div>
+        </div>
+    </div>
 </div>
 
 <script type="text/html" id="timesheet-template">

@@ -8,7 +8,12 @@
             {% else %}
             <span>{{job}}</span>
             {% endif %}
-             - {{data.hours}} <span style="font-size: 75%">Billed: <span style="color:green">${{data.billed}}</span> Worked: <span style="color:red">${{data.worked}}</span> Net:
+             - {{data.hours}} <span style="font-size: 75%">
+             {% if jobsBreakdown.is_superuser %}
+             Billed: <span style="color:green">${{data.billed}}</span>
+             Worked: <span style="color:red">${{data.worked}}</span>
+             Miles: <span>{{data.total_miles}}</span>
+             Net:
              {% if data.net  < 0 %}
                  <span style="color:red">
              {% elif data.net == 0%}
@@ -17,6 +22,7 @@
                  <span style="color:green">
              {% endif %}
              ${{data.net}}
+             {% endif %}
              </span>
              </span>
              <img class="job-spinners" src="{% static "images/spinner.gif" %}" style="height: 20px; display:none;">
@@ -34,7 +40,6 @@
         <table class="table table-condensed summary-data" style="display: none">
             <thead>
                 <tr>
-                    <th></th>
                     <th style="width: 8em">Date</th>
                     <th>Hours</th>
                     <th style="width: 8em">Employee</th>
@@ -45,12 +50,12 @@
             <tbody>
                 {% for summary in data.summaries %}
                     <tr>
-                        <td><span class="badge" style="background-color: {{summary.employee.color}}">&nbsp;</span></td>
-                        <td><a href='summary/{{summary.shift.id}}'>{{summary.shift.time_in.date}}</a></td>
+                        <!-- <td><span class="badge" style="background-color: {{summary.employee.color}}">&nbsp;</span></td> -->
+                        <td><a href='summary/{{summary.shift.id}}'>{{summary.shift.time_in}}</a></td>
                         <td>{{summary.hours|to_hour}}</td>
-                        <td>{{summary.employee}}</td>
+                        <td><span class="label" style="color: #000; background-color: {{summary.employee.color}}"> {{summary.employee}}</span></td>
                         <td>{{summary.miles}}</td>
-                        <td>{{summary.note}}</td>
+                        <td><pre>{{summary.note}}</pre></td>
                     </tr>
                 {% endfor %}
             </tbody>
@@ -59,8 +64,14 @@
     </div>
 {% endfor %}
 
-<label><u>Total Hours - {{jobsBreakdown.total_hours}}</u>
-    Billed: <span style="color:green">${{jobsBreakdown.total_billed}}</span> Worked: <span style="color:red">${{jobsBreakdown.total_worked}}</span> Net:
+<label>
+    <u>Total Hours - {{jobsBreakdown.total_hours}}</u>
+    {% if jobsBreakdown.is_superuser %}
+    Billed: <span style="color:green">${{jobsBreakdown.total_billed}}</span>
+    Worked: <span style="color:red">${{jobsBreakdown.total_worked}}</span>
+    Miles: <span>{{jobsBreakdown.total_miles}}</span>
+
+    Net:
      {% if jobsBreakdown.total_net  < 0 %}
          <span style="color:red">
      {% elif jobsBreakdown.total_net == 0%}
@@ -70,7 +81,7 @@
      {% endif %}
      ${{jobsBreakdown.total_net}}
      </span>
-     </span>
+    {% endif %}
 </label>
 <script>
     $(function() {

@@ -7,15 +7,16 @@
 """
 
 # django imports
-from django.core.management.base import BaseCommand, CommandError
+from django.core.management.base import BaseCommand
 
 # system imports
 import os
 import re
 
+
 class Command(BaseCommand):
     help = 'Removes all .pyc files in all subdirectories.  May do other deployment/cleanup tasks in future.'
-    
+
     def handle(self, *args, **options):
         # Regular expression for .pyc files
         pycRe = re.compile(r'.*\.((pyc$)|(swp$))')
@@ -26,7 +27,7 @@ class Command(BaseCommand):
             if '.git' in directories:
                 # Make sure we don't go into repository directories.
                 directories.remove('.git')
-                
+
             # remove files that end in .pyc
             for f in files:
                 if pycRe.match(f) is not None:

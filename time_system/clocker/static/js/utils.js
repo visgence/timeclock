@@ -5,16 +5,16 @@ function initPassDialog() {
         ,'backdrop': 'static'
     })
     .on('hidden.bs.modal show.bs.modal', function() {
-        resetPassForm();   
-    }); 
-        
+        resetPassForm();
+    });
+
     $('#change-pass-link').on('click', function() {
         $('#change-pass-modal').modal('show');
 
         //Return false since it's a link we're clicking on
         return false;
     });
-    
+
     $('#change-pass-btn').on('click', function() {
         changePassword();
     });
@@ -61,7 +61,7 @@ function changePassword() {
         csrfmiddlewaretoken: csrf
         ,jsonData: JSON.stringify(jsonData)
     };
-    
+
     $.post('/changePassword/', postData, function(resp) {
         if(resp.accessError)
             window.location = '/';
@@ -103,4 +103,3 @@ function localeDateFormat() {
 }
 
 Date.prototype.localeDateFormat = localeDateFormat;
-

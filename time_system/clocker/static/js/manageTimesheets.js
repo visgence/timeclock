@@ -7,7 +7,7 @@ $(function() {
 
 
     var ManageTimesheets = function(vars) {
-        
+
         this.messageCenter = ko.observable(new MessageCenter());
         this.newTimesheet = ko.observable();
 
@@ -36,7 +36,7 @@ $(function() {
         this.shouldSeperate = function(curTsIndex, nextTsIndex) {
             if (this.timesheetList().length <= 1 || nextTsIndex >= this.timesheetList().length)
                 return false;
-            
+
             var curTs = this.timesheetList()[curTsIndex];
             var nextTs = this.timesheetList()[nextTsIndex];
             if (curTs.startTimestamp() == nextTs.startTimestamp())
@@ -78,7 +78,7 @@ $(function() {
 
             if (vars.hasOwnProperty('employeeOptions')) {
                 vars.employeeOptions.unshift({"id": -1, display: "All"});
-                this.employeeOptions(vars.employeeOptions);            
+                this.employeeOptions(vars.employeeOptions);
             }
 
             timesheets.refresh().done(tsRefreshCallback);
@@ -104,6 +104,47 @@ $(function() {
             }
 
         };
+
+        var pageNum = parseInt(location.search.split("=")[1]);
+        var total = Math.round((this.timesheetList().length/10)+0.5);
+
+        this.pageNum = 1;
+
+        if (isNaN(pageNum)){
+            window.history.pushState("timesheets", "timesheets", "?page="+this.pageNum)
+        } else {
+            this.pageNum = pageNum;
+        }
+
+        this.nextPage = function(){
+            total = location.search.split("&")[1].split("=")[1]
+            if(this.pageNum < total){
+                this.pageNum += 1;
+                window.history.pushState("timesheets", "timesheets", "?page="+this.pageNum + "&of="+total)
+                location.reload();
+            }
+        }.bind(this);
+
+        this.prevPage = function(){
+            total = location.search.split("&")[1].split("=")[1]
+            if(this.pageNum > 1){
+                this.pageNum -= 1;
+                window.history.pushState("timesheets", "timesheets", "?page="+this.pageNum + "&of="+total)
+                location.reload();
+            }
+        }.bind(this);
+
+        this.lastPage = function(){
+            total = location.search.split("&")[1].split("=")[1]
+            window.history.pushState("timesheets", "timesheets", "?page="+total + "&of="+total)
+            location.reload();
+        }.bind(this);
+
+        this.firstPage = function(){
+            total = location.search.split("&")[1].split("=")[1]
+            window.history.pushState("timesheets", "timesheets", "?page="+1 + "&of="+total)
+            location.reload();
+        }.bind(this)
 
         init(vars);
     };
