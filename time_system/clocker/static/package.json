@@ -1,0 +1,20 @@
+{
+  "author": "Visgence Inc.",
+  "dependencies": {},
+  "description": "Timeclock.",
+  "devDependencies": {
+    "knockout": "3.1.0",
+    "jquery": "1.11.0",
+    "bootstrap": "3.3.7",
+    "bootstrap-datepicker": "1.7.1"
+  },
+  "name": "Timeclock",
+  "private": "true",
+  "scripts": {
+    "htmllint": "./node_modules/.bin/htmlhint --config .htmlhintrc src",
+    "installGitHooks": "printf '%s#!/bin/bash %s\n %s\necho \"running linter\" %s\nnpm run lint' > .git/hooks/pre-push && chmod +x .git/hooks/pre-push",
+    "lint": "npm run htmllint && npm run csslint && npm run jshint && npm run pythonlint",
+    "pythonlint": "pep8 --exclude='*node_modules*' . --max-line-length=200"
+  },
+  "version": "1.0.0"
+}

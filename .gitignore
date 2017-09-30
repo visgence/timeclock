@@ -19,7 +19,7 @@ local_database_settings.py
 .*.swp
 *~
 
-# Collected static files # 
+# Collected static files #
 ##########################
 /static/
 
@@ -33,3 +33,6 @@ local_database_settings.py
 Icon?
 ehthumbs.db
 Thumbs.db
+
+
+node_modules/
