@@ -1,0 +1,67 @@
+{
+  "parserOptions": {
+    "sourceType": "module"
+  },
+  "env": {
+    "browser": true,
+    "node": true
+  },
+  "plugins": [
+    "import"
+  ],
+  "rules": {
+    "no-console": "off",
+    "max-len": ["warn", 150, {"ignoreUrls": true, "ignoreRegExpLiterals": true}],
+    "semi": "error",
+    "quotes": ["error", "single"],
+    "indent": ["error",4, {"SwitchCase": 1}],
+    "comma-spacing": "error",
+    "space-infix-ops": "error",
+    "key-spacing": "error",
+    "prefer-arrow-callback": "error",
+    "comma-dangle": ["error", {
+      "arrays": "always-multiline",
+      "objects": "always-multiline",
+      "imports": "always-multiline",
+      "exports": "always-multiline",
+      "functions": "always-multiline"
+    }],
+    "array-bracket-spacing": "error",
+    "object-curly-spacing": "error",
+    "prefer-const": ["error", {"destructuring": "all"}],
+    "quote-props": ["error", "consistent-as-needed"],
+    "no-useless-concat": "error",
+    "eol-last": "error",
+    "no-multiple-empty-lines": ["error", {"max": 2, "maxBOF": 0, "maxEOF": 0}],
+    "no-case-declarations": "error",
+    "no-fallthrough": "error",
+    "no-unused-vars": ["error", {"args": "none"}],
+    "arrow-parens": ["error", "as-needed", { "requireForBlockBody": true }],
+    "eqeqeq": "error",
+    "no-var": "error",
+    "space-before-blocks": "error",
+    "keyword-spacing": "error",
+    "arrow-spacing": "error",
+    "spaced-comment": ["error", "always", {"block": {"balanced": true}}],
+    "no-trailing-spaces": "error",
+    "no-restricted-syntax": ["error", "ForInStatement"],
+    "one-var": ["error", "never"],
+    "brace-style": "error",
+    "curly": "error",
+    "no-else-return": "error",
+    "space-in-parens": "error",
+    "space-before-function-paren": ["error", {
+      "anonymous": "always",
+      "named": "never",
+      "asyncArrow": "always"
+    }],
+    "array-callback-return": "error",
+    "no-multi-spaces": "error",
+    "import/no-unresolved": "error",
+    "import/first": "error",
+    "import/no-duplicates": "error",
+    "import/extensions": "error",
+    "import/order": ["error", {"newlines-between": "never"}],
+    "import/newline-after-import": "error"
+  }
+}
