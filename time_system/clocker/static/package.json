@@ -6,7 +6,9 @@
     "knockout": "3.1.0",
     "jquery": "1.11.0",
     "bootstrap": "3.3.7",
-    "bootstrap-datepicker": "1.7.1"
+    "bootstrap-datepicker": "1.7.1",
+    "jquery-minicolors": "2.1.10",
+    "spin": "0.0.1"
   },
   "name": "Timeclock",
   "private": "true",
