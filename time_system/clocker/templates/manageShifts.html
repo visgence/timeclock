@@ -2,11 +2,13 @@
 
 {% block additional-headers %}
 {% load static %}
-    <link rel="stylesheet" type="text/css" href="{% static "css/manageShifts.css" %}">
 
-    <script src="{% static "js/jquery-ui-1.10.3.custom.min.js" %}"></script>
-    <script src="{% static "js/jquery-ui-timepicker-addon.js" %}"></script>
-    <script src="{% static "js/jquery-bbq.min.js" %}"></script>
+
+    <script src="{% static "libraries/jquery-ui-1.10.3.custom.min.js" %}"></script>
+    <script src="{% static "libraries/jquery-ui-timepicker-addon.js" %}"></script>
+    <script src="{% static "libraries/jquery-bbq.min.js" %}"></script>
+
+    <link rel="stylesheet" type="text/css" href="{% static "css/manageShifts.css" %}">
     <script src="{% static "js/shift.js" %}"></script>
     <script src="{% static "js/shiftList.js" %}"></script>
     <script src="{% static "js/manageShifts.js" %}"></script>
