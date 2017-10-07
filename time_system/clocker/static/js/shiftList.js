@@ -1,96 +1,97 @@
-$(function() {
+$(() => {
 
-	var ShiftList = function(vars) {
+    const ShiftList = function (consts) {
 
-		var Shift = $.fn.Shift;
-		var shiftUrl = "/timeclock/shifts/"
+        const Shift = $.fn.Shift;
+        const shiftUrl = '/timeclock/shifts/';
 
-		var per_page = 25;
+        let per_page = 25;
 
-		this.shifts = ko.observableArray();
+        this.shifts = ko.observableArray();
 
         this.currentPage = ko.observable();
         this.totalPages = ko.observable();
-        this.pageNum = ko.computed(function() {
-            return this.currentPage() +" of "+ this.totalPages() +" pages";
+        this.pageNum = ko.computed(function() { //eslint-disable-line
+            return this.currentPage() + ' of ' + this.totalPages() + ' pages';
         }.bind(this));
 
+        this.init = function (consts) {
+            consts = consts || {};
 
+            // const __this = this;
 
-		this.init = function(vars) {
-			vars = vars || {};
+            if (consts.hasOwnProperty('per_page')) {
+                per_page = consts.per_page;
+            }
 
-			var __this = this;
+            this.rebuild(consts);
+        }.bind(this);
 
-			if (vars.hasOwnProperty('per_page'))
-				per_page = vars.per_page;
+        this.rebuild = function (consts) {
+            consts = consts || {};
 
-			this.rebuild(vars);
-		}.bind(this);
+            if (consts.hasOwnProperty('page')) {
+                this.currentPage(consts.page);
+            }
 
-		this.rebuild = function(vars) {
-			vars = vars || {};
+            if (consts.hasOwnProperty('totalPages')) {
+                this.totalPages(consts.totalPages);
+            }
 
-			if (vars.hasOwnProperty('page'))
-				this.currentPage(vars.page);
+            if (consts.hasOwnProperty('shifts')) {
+                const newShifts = [];
+                $.each(consts.shifts, function () {
+                    newShifts.push(new Shift(this));
+                });
 
-			if (vars.hasOwnProperty('totalPages'))
-				this.totalPages(vars.totalPages);
+                this.shifts(newShifts);
+            }
+        }.bind(this);
 
-			if (vars.hasOwnProperty('shifts')) {
-				var newShifts = [];
-				$.each(vars.shifts, function() {
-					newShifts.push(new Shift(this));
-				});
+        this.nextPage = function () {
+            this.reload(this.currentPage() + 1);
+        }.bind(this);
 
-				this.shifts(newShifts);
-			}
-		}.bind(this);
+        this.prevPage = function () {
+            this.reload(this.currentPage() - 1);
+        }.bind(this);
 
-        this.nextPage = function() {
-             this.reload(this.currentPage()+1);
-         }.bind(this);
+        this.firstPage = function () {
+            this.reload(1);
+        }.bind(this);
 
-         this.prevPage = function() {
-             this.reload(this.currentPage()-1);
-         }.bind(this);
+        this.lastPage = function () {
+            this.reload(this.totalPages());
+        }.bind(this);
 
-         this.firstPage = function() {
-             this.reload(1);
-         }.bind(this);
+        this.reload = function (page, employee) {
+            const __this = this;
 
-         this.lastPage = function() {
-             this.reload(this.totalPages());
-         }.bind(this);
+            const args = {
+                page: page,
+                per_page: per_page,
+                employee: employee,
+            };
 
-		this.reload = function(page, employee) {
-			var __this = this;
+            const promise = $.get(shiftUrl, args)
+                .done((resp) => {
+                    if (resp.hasOwnProperty('errors') && resp.errors.length > 0) {
+                        console.error(resp.errors);
+                    } else if (resp.shifts) {
+                        __this.rebuild(resp);
+                    } else {
+                        console.error('Something unexpected happend!');
+                    }
+                })
+                .fail((resp) => {
+                    console.error(resp);
+                });
 
-			var args = {
-				 'page': page
-				,'per_page': per_page
-				,'employee': employee
-			}
+            return promise;
+        }.bind(this);
 
-			var promise = $.get(shiftUrl, args)
-			.done(function(resp) {
-				if(resp.hasOwnProperty("errors") && resp.errors.length > 0)
-					console.error(resp.errors);
-				else if(resp.shifts)
-					__this.rebuild(resp);
-				else
-					console.error("Something unexpected happend!");
-			})
-			.fail(function(resp) {
-				console.error(resp);
-			});
+        this.init(consts);
+    };
 
-			return promise;
-		}.bind(this);
-
-		this.init(vars);
-	}
-
-	$.fn.ShiftList = ShiftList;
+    $.fn.ShiftList = ShiftList;
 });
-
