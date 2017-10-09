@@ -111,19 +111,12 @@
                     </div><!-- /.modal-dialog -->
                 </div><!-- /.modal -->
 
-                <script>
-                    $(function() {
-                        initPassDialog();
-                    });
-                </script>
-
                 {% block additional-greeting %}{% endblock %}
                 {% endif %}
 
                 <div class="body-container">
                     {% block content %} {%endblock%}
                 </div>
-
 			</div>
 		</div>
 
@@ -135,32 +128,11 @@
 
     <script>
         $(function() {
+          setInterval(function() {
+              console.log("checking login");
+              $.get('/login/check/');
+          }, ({{SESSION_TIMEOUT}}+3600)*1000);
 
-            $(document).ajaxComplete(function(event, xhr, settings) {
-                if(xhr.responseText && xhr.responseText.trim() !== '') {
-                    try {
-                        jsonData = JSON.parse(xhr.responseText);
-                        if(jsonData.hasOwnProperty('status') && jsonData['status'] == 302) {
-                            window.location = jsonData['location'];
-                        }
-                    } catch(e) {console.log(e)}
-                }
-
-            });
-
-            $('#sys-modal').modal({
-                show: false
-            })
-            .on('hidden.bs.modal', function() {
-                var classes = 'has-error has-success has-warning';
-                $('#sys-modal .modal-title').html('');
-                $('#sys-modal .modal-body').removeClass(classes).children('span').html('');
-            });
-
-            setInterval(function() {
-                console.log("checking login");
-                $.get('/login/check/');
-            }, ({{SESSION_TIMEOUT}}+3600)*1000);
         });
     </script>
 

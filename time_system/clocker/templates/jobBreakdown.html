@@ -1,3 +1,8 @@
+{%block additional-headers%}
+{% load static %}
+    <script src="{% static "js/jobBreakdown.js" %}"></script>
+{%endblock additional-headers%}
+
 {% load math_helper %} {% load static %} {% for job, data in jobsBreakdown.jobs.items %}
 <div class=" job-breakdown" data-active="{{data.active}}" {% if not data.active %}style="display:none"{% endif %}>
     <label>
@@ -88,12 +93,3 @@
      </span>
     {% endif %}
 </label>
-<script>
-    $(function() {
-        $('.progress-bar').tooltip({});
-        $('.job-title').on('click', function(e) {
-            console.log(e.target);
-            $(e.target).closest('label').siblings('table.summary-data').toggle();
-        });
-    });
-</script>

@@ -1,4 +1,30 @@
-function initPassDialog() { // eslint-disable-line
+$(() => {
+    initPassDialog();
+
+    $(document).ajaxComplete((event, xhr, settings) => {
+        if (xhr.responseText && xhr.responseText.trim() !== '') {
+            try {
+                jsonData = JSON.parse(xhr.responseText);
+                if (jsonData.hasOwnProperty('status') && jsonData['status'] === 302) {
+                    window.location = jsonData['location'];
+                }
+            } catch (e) {
+                console.log(e);
+            }
+        }
+    });
+
+    $('#sys-modal').modal({
+        show: false,
+    })
+        .on('hidden.bs.modal', () => {
+            const classes = 'has-error has-success has-warning';
+            $('#sys-modal .modal-title').html('');
+            $('#sys-modal .modal-body').removeClass(classes).children('span').html('');
+        });
+});
+
+function initPassDialog() {
     $('#change-pass-modal').modal({
         show: false,
         backdrop: 'static',
@@ -33,8 +59,8 @@ function resetPassForm() {
 }
 
 /** This method will pop up a dialog that will allow the user to change their password.
-  *
-  */
+ *
+ */
 function changePassword() {
     const csrf = $('input[name="csrfmiddlewaretoken"]').val();
     const jsonData = {
