@@ -65,23 +65,23 @@
 	</ul>
 
 	<div data-bind="with: shiftList">
-	    <ul class="pager">
-	        <li data-bind="ifnot: currentPage()==1, click: firstPage" class="previous clickable">
-	        	<a>&lt;&lt; First</a>
-	        </li>
-	        <li data-bind="ifnot: currentPage()==1, click: prevPage" class="previous clickable">
-	        	<a>&lt; Prev</a>
-	        </li>
+    <ul class="pager">
+      <li data-bind="ifnot: currentPage()==1, click: firstPage" class="previous clickable">
+        <a>&lt;&lt; First</a>
+      </li>
+      <li data-bind="ifnot: currentPage()==1, click: prevPage" class="previous clickable">
+        <a>&lt; Prev</a>
+      </li>
 
-	        <li data-bind="text: pageNum"></li>
+      <li data-bind="text: pageNum"></li>
 
-	        <li data-bind="ifnot: currentPage()==totalPages(), click: lastPage" class="next clickable">
-	        	<a>Last &gt;&gt;</a>
-	        </li>
-	        <li data-bind="ifnot: currentPage()==totalPages(), click: nextPage" class="next clickable">
-	        	<a>Next &gt;</a>
-        	</li>
-	    </ul>
+      <li data-bind="ifnot: currentPage()==totalPages(), click: lastPage" class="next clickable">
+        <a>Last &gt;&gt;</a>
+      </li>
+      <li data-bind="ifnot: currentPage()==totalPages(), click: nextPage" class="next clickable">
+        <a>Next &gt;</a>
+      </li>
+    </ul>
 
 		<table class="table">
 			<thead>
@@ -117,20 +117,20 @@
 	</div>
 
 	<div class="modal fade" id="delete-warning">
-	 	<div class="modal-dialog">
-		    <div class="modal-content">
-		     	<div class="modal-header">
-			        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-			        <h4 class="modal-title">Warning</h4>
-		      	</div>
-			    <div class="modal-body">
-			    	Are you sure you want to delete that shift?
-			    </div>
-		      	<div class="modal-footer">
-			        <button type="button" id="delete-shift-btn" class="btn btn-primary">Delete</button>
-			        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-		      	</div>
-		    </div><!-- /.modal-content -->
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+          <h4 class="modal-title">Warning</h4>
+        </div>
+        <div class="modal-body">
+        Are you sure you want to delete that shift?
+        </div>
+        <div class="modal-footer">
+          <button type="button" id="delete-shift-btn" class="btn btn-primary">Delete</button>
+          <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+        </div>
+      </div><!-- /.modal-content -->
 		</div><!-- /.modal-dialog -->
 	</div><!-- /.modal -->
 
@@ -139,7 +139,6 @@
 {% endblock content %}
 
 {% block additional-scripts %}
-
 
 	<script>
 		$(function() {

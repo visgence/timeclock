@@ -16,6 +16,77 @@ body {
     max-width: 90%;
 }
 
+.hello-phrase {
+    position: absolute;
+}
+
+.password-change {
+    font-size: 8pt;
+}
+
+.timeclock-modal {
+    display: none;
+}
+
+.body-container {
+    margin-top: 3em;
+}
+
+.job-title {
+    text-decoration: none;
+}
+
+.job-spinners {
+    height: 20px;
+    display: none;
+}
+
+.sml-txt {
+    font-size: 75%;
+}
+
+.green-label {
+    color: green;
+}
+
+.red-label {
+    color: red;
+}
+
+.black-label {
+    color: black;
+}
+
+.grey-label {
+    color: grey;
+}
+
+.summary-data {
+    display: none;
+}
+
+.summary-data-head {
+    width: 8em;
+}
+
+.current-hours {
+    float: right;
+}
+
+.management-content {
+    margin-right: 0;
+    margin-left: 0;
+    max-width: 100%;
+}
+
+.text-info {
+    margin-top: 0.5em;
+}
+
+.numeric-column {
+    background-color: yellow;
+}
+
 div#content {
     background-color: white;
     padding: 1em;
@@ -75,13 +146,11 @@ div#job-hours {
 
 div#job-controls {
 
-    /*    width: 30%;
+    /*width: 30%;
     padding-right: 2em;
-    float: left;
-*/
+    float: left;*/
     margin-bottom: 1em;
 }
-
 
 /*div#jobs
 {
@@ -90,7 +159,6 @@ div#job-controls {
     width: 70%;
     border-left: 1px solid;
 }
-
 */
 
 div.clocker-container {
@@ -175,6 +243,7 @@ div.notes_text {
 
 div.job_slider {
     width: 300px;
+    margin-left: 1em;
 }
 
 div.visweb_link {

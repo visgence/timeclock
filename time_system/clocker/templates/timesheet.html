@@ -22,7 +22,7 @@
             <div data-bind="html: payData"></div>
 
             <!-- ko if: !isBusy() && !payData() -->
-            <p class="text-info text-center" style="margin-top: 0.5em;">
+            <p class="text-info text-center">
                 This timesheet contains no shifts.
             </p>
             <!-- /ko -->
@@ -32,7 +32,7 @@
                 <p class="text-danger" data-bind="visible: signAgreement.hasError(), text: signAgreement.validationMessage()"></p>
                 <div class="checkbox">
                     <label>
-                        <input type="checkbox" data-bind="checked: signAgreement"> Accept Timesheet
+                        <input type="checkbox" data-bind="checked: signAgreement" /> Accept Timesheet
                     </label>
                 </div>
 
@@ -42,4 +42,3 @@
         </div>
     </div>
 </div>
-

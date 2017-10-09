@@ -2,18 +2,18 @@
 
 {%block additional-headers%}
 {% load static %}
-<script src="{% static "node_modules/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"%}"></script>
-<link rel="stylesheet" type="text/css" href="{% static "node_modules/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css"%}">
+  <script src="{% static "node_modules/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"%}"></script>
+  <link rel="stylesheet" type="text/css" href="{% static "node_modules/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css"%}">
 
-<script src="{% static "js/main_page.js" %}"></script>
+  <script src="{% static "js/main_page.js" %}"></script>
 {%endblock additional-headers%}
 
 {% block additional-greeting %}
-<div style="float: right;">
-    <b>Regular Hours: {{weekly_regular}}</b>
-    <br/>
-    <b>Overtime: {{weekly_overtime}}</b>
-</div>
+  <div class="current-hours">
+      <b>Regular Hours: {{weekly_regular}}</b>
+      <br/>
+      <b>Overtime: {{weekly_overtime}}</b>
+  </div>
 {%endblock additional-greeting%}
 
 {%block content%}
@@ -33,133 +33,124 @@
 		{% csrf_token %}
 			<div class="clocker-container">
 				{% if not status %}
-                    <button class="btn btn-success btn-lg">Clock In</button>
-                    <input type="hidden" name="status" value="In">
+          <button class="btn btn-success btn-lg">Clock In</button>
+          <input type="hidden" name="status" value="In" />
 				{% elif status %}
-                    <button class="btn btn-danger btn-lg">Clock Out</button>
-                    <input type="hidden" name="status" value="Out">
-	            {% endif %}
+          <button class="btn btn-danger btn-lg">Clock Out</button>
+          <input type="hidden" name="status" value="Out" />
+        {% endif %}
 			</div>
 	</form>
 
 	<div class="message">
-
         {{ message }}
         {{ timeStamp }}
-
 	</div> <!--End message-->
 
 </div> <!--End login-->
 
 <div class="cf">
 	<div id="hour_management">
-
-        <h4 class="text-muted">View Hours{% if employee.is_superuser %}(Admin){% endif %}</h4>
-        <form name="admin" action="{% url 'get-total-hours' %}" method="post" class="form-horizontal" role="form">
+    <h4 class="text-muted">View Hours{% if employee.is_superuser %}(Admin){% endif %}</h4>
+      <form name="admin" action="{% url 'get-total-hours' %}" method="post" class="form-horizontal" role="form">
 			{% csrf_token %}
+        <div class="form-group">
+            <label for="from" class="control-label col-lg-3 col-sm-3">From</label>
+            <div class="col-lg-6 col-sm-6">
+                <input type="text" id="from" name="from" class="form-control" placeholder="From"/>
+            </div>
+        </div>
 
-                <div class="form-group">
-                    <label for="from" class="control-label col-lg-3 col-sm-3">From</label>
-                    <div class="col-lg-6 col-sm-6">
-                        <input type="text" id="from" name="from" class="form-control" placeholder="From"/>
-                    </div>
-                </div>
+        <div class="form-group">
+            <label for="to" class="control-label col-lg-3 col-sm-3">To</label>
+            <div class="col-lg-6 col-sm-6">
+                <input type="text" id="to" name="to" class="form-control" placeholder="To"/>
+            </div>
+        </div>
 
-                <div class="form-group">
-                    <label for="to" class="control-label col-lg-3 col-sm-3">To</label>
-                    <div class="col-lg-6 col-sm-6">
-                        <input type="text" id="to" name="to" class="form-control" placeholder="To"/>
-                    </div>
-                </div>
+        <div class="form-group">
+            <label class="col-lg-3 col-sm-3 control-label">Employee</label>
+            <div class="col-lg-6 col-sm-6">
+                <select name="user_name" class="form-control">
+                    {% for emp in employees %}
+                        <option value="{{emp.username}}">{{emp}}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
 
-                <div class="form-group">
-                    <label class="col-lg-3 col-sm-3 control-label">Employee</label>
-                    <div class="col-lg-6 col-sm-6">
-                        <select name="user_name" class="form-control">
-                            {% for emp in employees %}
-                                <option value="{{emp.username}}">{{emp}}</option>
-                            {% endfor %}
-                        </select>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <div class="col-lg-offset-3 col-sm-offset-3 col-lg-6 col-sm-6">
-                        <button type="submit" name="Submit" class="btn btn-default">Submit</button>
-                    </div>
-                </div>
+        <div class="form-group">
+            <div class="col-lg-offset-3 col-sm-offset-3 col-lg-6 col-sm-6">
+                <button type="submit" name="Submit" class="btn btn-default">Submit</button>
+            </div>
+        </div>
 		</form>
 	</div>
 
 	<div id="management">
-        <h4 class="text-muted">Management</h4>
+    <h4 class="text-muted">Management</h4>
 		{% if employee.is_superuser %}
 			<div class="click">
-                <a class="link_color" href="{% url 'manage-employees' %}">Employees</a>
+        <a class="link_color" href="{% url 'manage-employees' %}">Employees</a>
 			</div>
-
 			<div class="click">
-                <a class="link_color" href="{% url 'manage-jobs' %}">Jobs</a>
+        <a class="link_color" href="{% url 'manage-jobs' %}">Jobs</a>
 			</div>
 
 		{% endif %}
-        <div class="click">
-            <a class="link_color" href="{% url 'timesheet-list' %}">Timesheets</a>
-        </div>
+      <div class="click">
+          <a class="link_color" href="{% url 'timesheet-list' %}">Timesheets</a>
+      </div>
 
-        <div class="click">
-            <a class="link_color" href="{% url 'manage-shifts' %}">Shifts</a>
-		</div>
-	</div>
-</div>
+      <div class="click">
+        <a class="link_color" href="{% url 'manage-shifts' %}">Shifts</a>
+      </div>
+    </div>
+  </div>
 
-<div id="job-hours" class="cf">
+  <div id="job-hours" class="cf">
     <h4 class="text-muted">Jobs Breakdown</h4>
 
     <div id="job-controls">
-        <form action="#" class="form form-inline">
-            {% csrf_token %}
+      <form action="#" class="form form-inline">
+        {% csrf_token %}
 
-                <div class="form-group">
-                    <input type="text" id="from-job" name="from" class="form-control" placeholder="From"/>
-                </div>
+        <div class="form-group">
+          <input type="text" id="from-job" name="from" class="form-control" placeholder="From"/>
+        </div>
 
-                <div class="form-group">
-                    <input type="text" id="to-job" name="to" class="form-control" placeholder="To"/>
-                </div>
+        <div class="form-group">
+          <input type="text" id="to-job" name="to" class="form-control" placeholder="To"/>
+        </div>
 
-                <div class="form-group">
-                    <select name="user_name" id="employees-job" class="form-control">
-                        {% if employee.is_superuser %}
-                            <option value="all-active">All Active Employees</options>
-                            <option value="all">All Employees</options>
-                        {% endif %}
-                        {% for emp in employees %}
-                            <option value="{{emp.username}}">{{emp}}</option>
-                        {% endfor %}
-                    </select>
-                </div>
+        <div class="form-group">
+          <select name="user_name" id="employees-job" class="form-control">
+            {% if employee.is_superuser %}
+              <option value="all-active">All Active Employees</option>
+              <option value="all">All Employees</option>
+            {% endif %}
+            {% for emp in employees %}
+              <option value="{{emp.username}}">{{emp}}</option>
+            {% endfor %}
+          </select>
+        </div>
 
-                <button type="submit" name="Submit" class="btn btn-default">Submit</button>
-                <button id="csvbutton" type="button" name="CSV" class="btn btn-default">CSV</button>
+        <button type="submit" name="Submit" class="btn btn-default">Submit</button>
+        <button id="csvbutton" type="button" name="CSV" class="btn btn-default">CSV</button>
 
-                <div class="checkbox">
-                    <label>
-                        <input id="toggle-active-jobs" type="checkbox"> Show Inactive Jobs
-                    </label>
-                </div>
-        </form>
+        <div class="checkbox">
+          <label>
+            <input id="toggle-active-jobs" type="checkbox"> Show Inactive Jobs
+          </label>
+        </div>
+      </form>
     </div>
 
     <div id="jobs"></div>
 </div>
+
 {%endblock%}
-
-
 {% block additional-scripts %}
-
-
-
 
 <script>
     $(function() {

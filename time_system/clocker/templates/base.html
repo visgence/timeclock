@@ -3,7 +3,8 @@
 <html>
     <head>
         {% load static %}
-    	   <script src="{% static "node_modules/jquery/dist/jquery.min.js" %}"></script>
+        <title>Time Clock</title>
+        <script src="{% static "node_modules/jquery/dist/jquery.min.js" %}"></script>
         <script src="{% static "node_modules/bootstrap/dist/js/bootstrap.min.js" %}"></script>
         <script src="{% static "node_modules/knockout/build/output/knockout-latest.js" %}"></script>
         <link rel="stylesheet" type="text/css" href="{% static "node_modules/bootstrap/dist/css/bootstrap.min.css" %}">
@@ -23,13 +24,13 @@
         {% block additional-headers %} {% endblock %}
     </head>
     <body>
-    	<div id="container">
+      <div id="container">
 			<div class="visgence_logo">
 				<a href="/timeclock"><img src="{% static "images/Visgence_incwhite.png" %}" height="80px" width="150px" /></a>
 
-			    <div class="timeclock_logo">
-			        <img src="{% static "images/timeclock2.png"  %}" height="90px" width="320px" />
-			    </div>
+        <div class="timeclock_logo">
+          <img src="{% static "images/timeclock2.png"  %}" height="90px" width="320px" />
+        </div>
 			</div>
 
 
@@ -49,18 +50,16 @@
                 </div><!-- /.modal-dialog -->
             </div><!-- /.modal -->
 
-
-	        <div id="content">
-
-	            {% if user.first_name %}
-                <div style="position: absolute;">
-		                Hello {{user.first_name}} {{user.last_name}} (<a href="/logout">logout</a>)
-                        <br/>
-                        <span style="font-size: 8pt;">[<a href="#" id="change-pass-link">Change password</a>]</span>
+            <div id="content">
+              {% if user.first_name %}
+              <div class="hello-phrase">
+                Hello {{user.first_name}} {{user.last_name}} (<a href="/logout">logout</a>)
+                <br/>
+                <span class="password-change">[<a href="#" id="change-pass-link">Change password</a>]</span>
                 </div><!--end greeting-->
 
                 <!-- Change password dialog -->
-                <div class="modal fade" id="change-pass-modal" style="display: none">
+                <div class="timeclock-modal modal fade" id="change-pass-modal">
                     <div class="modal-dialog">
                         <div class="modal-content">
                             <div class="modal-header">
@@ -83,7 +82,7 @@
                                         <label class="control-label col-lg-4 col-md-4">Old Password</label>
                                         <div class="col-lg-7 col-md-7">
                                             <input type="password" id="oldPassword" name="oldPassword" class="form-control"
-                                                    placeholder="Old Password">
+                                                    placeholder="Old Password" />
                                         </div>
                                     </div>
 
@@ -91,7 +90,7 @@
                                         <label class="control-label col-lg-4 col-md-4">New Password</label>
                                         <div class="col-lg-7 col-md-7">
                                             <input type="password" id="passwordInput" name="password" class="form-control"
-                                                    placeholder="New Password">
+                                                    placeholder="New Password" />
                                         </div>
                                     </div>
 
@@ -99,7 +98,7 @@
                                         <label class="control-label col-lg-4 col-md-4">Verify Password</label>
                                         <div class="col-lg-7 col-md-7">
                                             <input type="password" id="passwordReinput" class="form-control"
-                                                    placeholder="Verify Password">
+                                                    placeholder="Verify Password" />
                                         </div>
                                     </div>
                                 </form>
@@ -121,7 +120,7 @@
                 {% block additional-greeting %}{% endblock %}
                 {% endif %}
 
-                <div style="margin-top: 3em;">
+                <div class="body-container">
                     {% block content %} {%endblock%}
                 </div>
 
