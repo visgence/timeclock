@@ -50,7 +50,6 @@ $(() => {
         // Called when user clicks on a timesheet to toggle open/close
         const toggleTsCallback = function (e) {
             const state = getHash();
-            console.log(state)
             const ts = $(e.target).data('target');
 
             // If timesheet is already the current state just toggle it
@@ -61,7 +60,7 @@ $(() => {
                     $(collapsable).collapse('toggle');
                 }
             } else {
-              updateHash({timesheet: ts});
+                updateHash({timesheet: ts});
             }
         };
 

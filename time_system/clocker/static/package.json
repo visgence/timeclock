@@ -1,7 +1,5 @@
 {
   "author": "Visgence Inc.",
-  "dependencies": {},
-  "description": "Timeclock.",
   "dependencies": {
     "knockout": "3.4.2",
     "jquery": "2.2.4",
@@ -9,8 +7,10 @@
     "jquery-minicolors": "2.1.10",
     "spin": "0.0.1"
   },
+  "description": "Timeclock.",
   "devDependencies": {
     "eslint": "4.8.0",
+    "eslint-plugin-import": "2.7.0",
     "htmlhint": "0.9.13",
     "stylelint": "8.2.0"
   },
