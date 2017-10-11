@@ -2,15 +2,17 @@
   "author": "Visgence Inc.",
   "dependencies": {},
   "description": "Timeclock.",
-  "devDependencies": {
-    "knockout": "3.1.0",
-    "jquery": "1.11.0",
+  "dependencies": {
+    "knockout": "3.4.2",
+    "jquery": "2.2.4",
     "bootstrap": "3.3.7",
     "jquery-minicolors": "2.1.10",
-    "spin": "0.0.1",
-    "eslint": "4.6.1",
+    "spin": "0.0.1"
+  },
+  "devDependencies": {
+    "eslint": "4.8.0",
     "htmlhint": "0.9.13",
-    "stylelint": "8.1.1"
+    "stylelint": "8.2.0"
   },
   "name": "Timeclock",
   "private": "true",
