@@ -37,8 +37,6 @@ $(() => {
                 }
                 tmp_tsList.push(new Timesheet(consts.timesheetList[i]));
             }
-            const count = Math.round((consts.timesheetList.length / 10) + 0.5);
-            window.history.pushState('timesheets', 'timesheets', location.search.split('&')[0] + '&of=' + count);
 
             this.timesheetList(tmp_tsList);
         }

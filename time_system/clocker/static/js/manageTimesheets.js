@@ -49,7 +49,8 @@ $(() => {
 
         // Called when user clicks on a timesheet to toggle open/close
         const toggleTsCallback = function (e) {
-            const state = $.bbq.getState();
+            const state = getHash();
+            console.log(state)
             const ts = $(e.target).data('target');
 
             // If timesheet is already the current state just toggle it
@@ -60,7 +61,7 @@ $(() => {
                     $(collapsable).collapse('toggle');
                 }
             } else {
-                $.bbq.pushState({timesheet: ts});
+              updateHash({timesheet: ts});
             }
         };
 
@@ -94,7 +95,7 @@ $(() => {
         }.bind(this);
 
         const hashchange = function () {
-            const state = $.bbq.getState();
+            const state = getHash();
 
             if (state.hasOwnProperty('timesheet')) {
                 const collapsable = $('#timesheet-' + state.timesheet);

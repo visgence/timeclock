@@ -128,3 +128,28 @@ function localeDateFormat() {
 }
 
 Date.prototype.localeDateFormat = localeDateFormat;
+
+function getHash() { // eslint-disable-line
+    const hash = location.hash.substring(1).split('&');
+    const obj = {};
+    hash.forEach((item) => {
+        if (item === '') {
+            return;
+        }
+        key = item.split('=')[0];
+        value = item.split('=')[1];
+        obj[key] = value;
+    });
+    console.log(obj);
+    return obj;
+}
+
+function updateHash(newHash) { // eslint-disable-line
+    let str = '#';
+    Object.keys(newHash).forEach((key) => {
+        str += key + '=' + newHash[key] + '&';
+    });
+    // remove trailing &
+    str = str.substring(0, str.length - 1);
+    location.hash = str;
+}
