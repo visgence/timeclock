@@ -168,7 +168,6 @@ INSTALLED_APPS = (
     # 'django.contrib.admindocs',
     'clocker',
     'chucho',
-    'bootstrap'
 )
 
 # A sample logging configuration. The only tangible logging
