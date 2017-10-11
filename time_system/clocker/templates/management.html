@@ -1,24 +1,26 @@
 {% extends "base.html" %}
 
-
 {% block additional-headers %}
 {% load static %}
-<link rel="stylesheet" type="text/css" href="{% static "css/grid.css" %}">
-<link rel="stylesheet" type="text/css" href="{% static "plugins/minicolors/jquery.minicolors.css" %}">
 
-<script src="{% static "js/jquery-ui-1.10.3.custom.min.js" %}"></script>
-<script src="{% static "js/jquery-ui-timepicker-addon.js" %}"></script>
-<script src="{% static "js/jquery.tmpl.js" %}"></script>
-<script src="{% static "js/spin.min.js" %}"></script>
-<script src="{% static "js/chucho.grid.js" %}"></script>
-<script src="{% static "js/chucho.js" %}"></script>
-<script src="{% static "js/management.js" %}"></script>
-<script src="{% static "plugins/minicolors/jquery.minicolors.min.js" %}"></script>
+  <link rel="stylesheet" type="text/css" href="{% static "node_modules/jquery-minicolors/jquery.minicolors.css" %}">
+  <script src="{% static "node_modules/jquery-minicolors/jquery.minicolors.min.js" %}"></script>
+  <script src="{% static "node_modules/spin/dist/spin.min.js" %}"></script>
+
+  <script src="{% static "libraries/jquery.tmpl.js" %}"></script>
+  <script src="{% static "libraries/jquery-ui-1.10.3.custom.min.js" %}"></script>
+  <script src="{% static "libraries/jquery-ui-timepicker-addon.js" %}"></script>
+
+  <link rel="stylesheet" type="text/css" href="{% static "css/grid.css" %}">
+  <script src="{% static "js/chucho.grid.js" %}"></script>
+  <script src="{% static "js/chucho.js" %}"></script>
+  <script src="{% static "js/management.js" %}"></script>
+
 {% endblock additional-headers %}
 
 {% block content %}
 
-<div id="managementContent" class="container" style="margin-right: 0; margin-left: 0; max-width: 100%"></div>
+<div id="managementContent" class="container management-content"></div>
 
 <script>
     $(function() {

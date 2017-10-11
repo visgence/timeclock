@@ -1,65 +1,66 @@
-$(function() {
-    "use strict";
+$(() => {
+    'use strict';
 
-    var url = "/timeclock/timesheets/";
-    var Timesheet = $.fn.Timesheet;
-    var MessageCenter = $.fn.MessageCenter;
+    const url = '/timeclock/timesheets/';
+    const Timesheet = $.fn.Timesheet;
+    const MessageCenter = $.fn.MessageCenter;
 
-    var Timesheets = function(vars) {
+    const Timesheets = function (consts) {
         this.timesheetList = ko.observableArray();
 
         this.messageCenter = ko.observable();
 
-        var init = function(vars) {
-            vars = vars || {};
+        const init = function (consts) {
+            consts = consts || {};
 
-            if (vars.hasOwnProperty('messageCenter'))
-                this.messageCenter(vars.messageCenter);
-            else
+            if (consts.hasOwnProperty('messageCenter')) {
+                this.messageCenter(consts.messageCenter);
+            } else {
                 this.messageCenter(new MessageCenter());
-
-        }.bind(this);
-        init(vars);
-    };
-
-    var failcallback = function(resp) {
-        this.messageCenter().setErrors(resp)
-    };
-
-    Timesheets.prototype.rebuild = function(vars) {
-        vars = vars || {};
-        if (vars.hasOwnProperty('timesheetList')) {
-            var tmp_tsList = [];
-            var pageNum = parseInt(location.search.split("=")[1])
-            for(var i = pageNum*10-10; i < vars.timesheetList.length; i++){
-                if(i > pageNum*10) break;
-                tmp_tsList.push(new Timesheet(vars.timesheetList[i]));
             }
-            var count = Math.round((vars.timesheetList.length/10)+0.5)
-             window.history.pushState("timesheets", "timesheets", location.search.split("&")[0] + "&of="+count)
+        }.bind(this);
+        init(consts);
+    };
+
+    const failcallback = function (resp) {
+        this.messageCenter().setErrors(resp);
+    };
+
+    Timesheets.prototype.rebuild = function (consts) {
+        consts = consts || {};
+        if (consts.hasOwnProperty('timesheetList')) {
+            const tmp_tsList = [];
+            const pageNum = parseInt(location.search.split('=')[1]);
+            for (let i = pageNum * 10 - 10; i < consts.timesheetList.length; i++) {
+                if (i > pageNum * 10) {
+                    break;
+                }
+                tmp_tsList.push(new Timesheet(consts.timesheetList[i]));
+            }
 
             this.timesheetList(tmp_tsList);
         }
     };
 
-    Timesheets.prototype.refresh = function() {
-        var __this = this;
+    Timesheets.prototype.refresh = function () {
+        const __this = this;
         return $.getJSON(url).then(__this.rebuild.bind(__this), failcallback);
     };
 
-    Timesheets.prototype.createTimesheets = function(data) {
-        if (!$.isArray(data))
+    Timesheets.prototype.createTimesheets = function (data) {
+        if (!$.isArray(data)) {
             return;
+        }
 
         return $.ajax({
-             url: url
-            ,dataType: 'json'
-            ,type: "POST"
-            ,beforeSend: function(xhr) {
-                var csrf = $('input[name="csrfmiddlewaretoken"]').val();
+            url: url,
+            dataType: 'json',
+            type: 'POST',
+            beforeSend: function (xhr) {
+                const csrf = $('input[name="csrfmiddlewaretoken"]').val();
                 xhr.setRequestHeader('X-CSRFToken', csrf);
-            }
-            ,data: JSON.stringify(data)
+            },
+            data: JSON.stringify(data),
         });
     };
 

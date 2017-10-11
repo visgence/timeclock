@@ -19,7 +19,7 @@ local_database_settings.py
 .*.swp
 *~
 
-# Collected static files # 
+# Collected static files #
 ##########################
 /static/
 
@@ -28,8 +28,16 @@ local_database_settings.py
 .DS_Store
 .DS_Store?
 ._*
+
 .Spotlight-V100
 .Trashes
 Icon?
 ehthumbs.db
 Thumbs.db
+
+
+node_modules/
+npm-debug.log
+
+# Atom uses this instead of the htmlhint.conf file
+.htmlhintrc

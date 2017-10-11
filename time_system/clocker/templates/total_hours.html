@@ -38,17 +38,17 @@
                                     <td>{{shift.out}}</td>
                                     <td class="numeric-column">{{shift.total}}</td>
                                     {% if forloop.last %}
-                                        <td style="bgcolor:yellow;" class="numeric-column">{{day.daily_total}}</td>
+                                        <td class="numeric-column">{{day.daily_total}}</td>
                                     {% else %}
                                         <td></td>
                                     {% endif %}
                                 {%else%}
-                                    <td style="color:grey;">{{day.date}}</td>
-                                    <td style="color:grey;">{{shift.in}}</td>
-                                    <td style="color:grey;">{{shift.out}}</td>
-                                    <td style="color:grey;" class="numeric-column">{{shift.total}}</td>
+                                    <td class="grey-label">{{day.date}}</td>
+                                    <td class="grey-label">{{shift.in}}</td>
+                                    <td class="grey-label">{{shift.out}}</td>
+                                    <td class="grey-label numeric-column">{{shift.total}}</td>
                                     {% if forloop.last %}
-                                        <td style="color:grey;" class="numeric-column">{{day.daily_total}}</td>
+                                        <td class="grey-label numeric-column">{{day.daily_total}}</td>
                                     {% else %}
                                         <td></td>
                                     {% endif %}

@@ -44,6 +44,10 @@ RUN yum install -y make automake gcc gcc-c++ && yum clean all
 RUN yum install -y python-devel && yum clean all
 RUN yum install -y postgresql-devel && yum clean all
 
+# Install Node
+RUN curl --silent --location https://rpm.nodesource.com/setup_8.x | bash -
+RUN yum install -y nodejs-8.6.0-1nodesource
+
 #PIP Stuff
 COPY pip-requirements.txt /tmp/
 RUN pip install -r /tmp/pip-requirements.txt

@@ -6,7 +6,7 @@
         <h4>Error</h4>
         <p data-bind="text: error"></p>
         <ul data-bind="foreach: errors">
-            <li data-bind="text: $data"></li> 
+            <li data-bind="text: $data"></li>
         </ul>
     </div>
 </script>
@@ -29,9 +29,9 @@
         <h4>Warning</h4>
         <p data-bind="html: warning"></p>
         <p style="margin-top: 1em;" data-bind="foreach: warningButtons, visible: warningButtons().length > 0">
-        <button type="button" class="btn" data-bind="text: text, 
-                                                     css: $parent.buttonStyle($data), 
+            <button type="button" class="btn" data-bind="text: text,
+                                                     css: $parent.buttonStyle($data),
                                                      click: function() {$parent.buttonAction($data);}"></button>
-        <p>
+            <p>
     </div>
 </script>

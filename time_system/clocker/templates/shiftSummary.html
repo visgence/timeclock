@@ -2,9 +2,11 @@
 
 {% block additional-headers %}
 {% load static %}
+
+    <script src="{% static "libraries/jquery-ui-1.10.3.custom.min.js" %}"></script>
+    <script src="{% static "libraries/jquery-ui-touch.min.js" %}"></script>
+
     <link rel="stylesheet" type="text/css" href="{% static "css/shiftSummary.css" %}"/>
-    <script src="{% static "js/jquery-ui-1.10.3.custom.min.js" %}"></script>
-    <script src="{% static "js/jquery-ui-touch.min.js" %}"></script>
     <script src="{% static "js/job_slider.js" %}"></script>
 {% endblock %}
 
@@ -20,10 +22,10 @@
     {% else %}
         <table border="0">
             <tr class="total_time_text">
-            	<td></td>
+              <td></td>
                 <td><b>Total Time Worked</b></td>
                 <td>
-                    <input type="text" class="total_time form-control" id="total_time" value="{{totalTime}}" readonly="readonly">
+                    <input type="text" class="total_time form-control" id="total_time" value="{{totalTime}}" readonly="readonly" />
                 </td>
             </tr>
             {% for data in jobData %}
@@ -49,7 +51,7 @@
                         <input type="text" class="job_time form-control" id ="hours_{{data.job.id}}" readonly="readonly" />
                     {% endif %}
                  </td>
-                 <td><div id="{{data.job.id}}" class="job_slider" style="margin-left: 1em;"></div></td>
+                 <td><div id="{{data.job.id}}" class="job_slider"></div></td>
             </tr>
 
             {% if data.hours %}
@@ -61,24 +63,24 @@
                     <div class="miles_text">Miles:</div>
                     <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
                         {% if data.miles %}
-                            <input type="number" class="miles form-control" value="{{data.miles}}" id="miles_{{data.job.id}}">
+                            <input type="number" class="miles form-control" value="{{data.miles}}" id="miles_{{data.job.id}}" />
                         {% else %}
-                            <input type="number" class="miles form-control" value="0" id="miles_{{data.job.id}}">
+                            <input type="number" class="miles form-control" value="0" id="miles_{{data.job.id}}" />
                         {% endif %}
                     </div>
                     <br/>
                     <div class="notes_text">Notes:</div>
                     <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
-                        <textarea  class="text_area form-control" rows="5" COLS="50" id="notes_{{data.job.id}}">{{data.note}}</textarea>
+                        <textarea  class="text_area form-control" rows="5" cols="50" id="notes_{{data.job.id}}">{{data.note}}</textarea>
                     </div>
                 </td>
             </tr>
             {% endfor %}
         </table>
         {% if owner %}
-            <input type="button" class="submit btn btn-primary" value="Submit" onClick="submit_form('{% url 'save-summaries'  %}')">
-            <input type="hidden" id="emp_id" value="{{user.id}}">
-            <input type="hidden" id="shift_id" value="{{shift.id}}">
+            <input type="button" class="submit btn btn-primary" value="Submit" onclick="submit_form('{% url 'save-summaries'  %}')" />
+            <input type="hidden" id="emp_id" value="{{user.id}}" />
+            <input type="hidden" id="shift_id" value="{{shift.id}}" />
         {% endif %}
 
             <div id ="debug"> </div>
