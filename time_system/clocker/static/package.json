@@ -19,8 +19,7 @@
     "pythonlint": "pep8 --exclude='*node_modules*' . --max-line-length=200",
     "htmllint": "./node_modules/.bin/htmlhint --config htmlhint.conf ./../templates/",
     "eslint": "./node_modules/.bin/eslint ./js",
-    "csslint": "./node_modules/.bin/stylelint ./css/*.css",
-    "pythonlint": "pep8 --exclude='*node_modules*' . --max-line-length=200"
+    "csslint": "./node_modules/.bin/stylelint ./css/*.css"
   },
   "version": "1.0.0"
 }
