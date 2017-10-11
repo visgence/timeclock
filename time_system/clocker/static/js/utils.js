@@ -140,7 +140,6 @@ function getHash() { // eslint-disable-line
         value = item.split('=')[1];
         obj[key] = value;
     });
-    console.log(obj);
     return obj;
 }
 

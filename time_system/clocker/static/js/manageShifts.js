@@ -21,9 +21,7 @@ $(() => {
                 return this.employee();
             },
             write: function (emp) {
-                $.bbq.pushState({
-                    emp: emp.id,
-                }, 0);
+                updateHash({emp: emp.id});
             },
         }, this);
 
@@ -59,9 +57,9 @@ $(() => {
         };
 
         const hashchangeHandler = function (e) {
-            const frags = $.deparam(e.fragment, true);
-            if (frags.hasOwnProperty('emp')) {
-                const empId = frags.emp;
+            const state = getHash();
+            if (state.hasOwnProperty('emp')) {
+                const empId = parseInt(state.emp);
                 $.each(__this.employees(), (i, emp) => {
                     if (empId === emp.id) {
                         __this.employee(emp);
@@ -89,10 +87,10 @@ $(() => {
 
 
         function loadEmployees() {
+            const state = getHash();
             // If we see that there is no preset employee hash we will default to the current user.
-            const frags = $.deparam.fragment(undefined, true);
             let setUser = false;
-            if (!frags.hasOwnProperty('emp')) {
+            if (!state.hasOwnProperty('emp')) {
                 setUser = true;
             }
             return $.get(employeeUrl, (resp) => {
