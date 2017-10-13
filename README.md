@@ -3,6 +3,10 @@ Timeclock
 
 A simple web application for tracking employee time.
 
+### Dependencies
+docker
+All other dependencies will be handled within the docker file.
+
 ### Setup.
 Clone repo
 `git clone https://github.com/visgence/timeclock`
