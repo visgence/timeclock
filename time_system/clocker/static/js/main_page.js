@@ -1,4 +1,5 @@
 $(() => {
+
     $('#statusBtn').button().click(() => {
         console.log('submitting form');
         console.log($(this).parent('form.clocker-form'));

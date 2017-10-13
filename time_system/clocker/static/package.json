@@ -5,6 +5,7 @@
     "jquery": "2.2.4",
     "bootstrap": "3.3.7",
     "jquery-minicolors": "2.1.10",
+    "bootstrap-datepicker": "1.7.1",
     "spin": "0.0.1"
   },
   "description": "Timeclock.",
