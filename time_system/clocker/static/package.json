@@ -3,12 +3,12 @@
   "dependencies": {
     "bootstrap": "3.3.7",
     "bootstrap-datepicker": "1.7.1",
-    "bootstrap-datetimepicker-npm": "^4.17.37-npm",
+    "eonasdan-bootstrap-datetimepicker": "4.17.47",
     "jquery": "2.2.4",
     "jquery-minicolors": "2.1.10",
     "jquery-ui-timepicker-addon": "1.6.3",
     "knockout": "3.4.2",
-    "moment": "^2.19.1",
+    "moment": "2.19.1",
     "spin": "0.0.1"
   },
   "description": "Timeclock.",

@@ -51,15 +51,16 @@
                             <button type="button" class="btn btn-primary" data-dismiss="modal">Ok</button> </div> </div><!-- /.modal-content -->
                 </div><!-- /.modal-dialog -->
             </div><!-- /.modal -->
-
             <div id="content">
+              {% if user.first_name %}
               <div class="row">
                 <div class="col-md-6">
-                  {% if user.first_name %}
                   <div class="hello-phrase">
                     Hello {{user.first_name}} {{user.last_name}} (<a href="/logout">logout</a>)
                     <br/>
-                    <span class="password-change">[<a href="#" id="change-pass-link">Change password</a>]</span>
+                    <span class="password-change">
+                      [<a href="#" id="change-pass-link">Change password</a>]
+                    </span>
                   </div><!--end greeting-->
                 </div>
                 <div class="col-md-6">
