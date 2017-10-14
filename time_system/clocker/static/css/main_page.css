@@ -16,7 +16,7 @@ body {
 }
 
 .top-margin {
-  height: 100px;
+    height: 100px;
 }
 
 .password-change {
@@ -150,6 +150,7 @@ div#job-controls {
     float: left;*/
     margin-bottom: 1em;
 }
+
 
 /*div#jobs
 {

@@ -2,7 +2,6 @@
   "author": "Visgence Inc.",
   "dependencies": {
     "bootstrap": "3.3.7",
-    "bootstrap-datepicker": "1.7.1",
     "eonasdan-bootstrap-datetimepicker": "4.17.47",
     "jquery": "2.2.4",
     "jquery-minicolors": "2.1.10",
