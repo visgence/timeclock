@@ -7,44 +7,34 @@ $(() => {
     });
 
 
-    $('#from').datepicker({
-        autoclose: true,
-        orientation: 'top',
-        endDate: new Date(),
-        format: 'yyyy-mm-dd',
+    $('#from').datetimepicker({
+        format: 'YYYY-MM-DD',
     })
-        .on('changeDate', (ev) => {
-            $('#to').datepicker('setStartDate', ev.date);
+        .on('dp.change', (ev) => {
+            $('#to').data('DateTimePicker').minDate(ev.date);
         });
 
-    $('#to').datepicker({
-        autoclose: true,
-        orientation: 'top',
-        endDate: new Date(),
-        format: 'yyyy-mm-dd',
+    $('#to').datetimepicker({
+        format: 'YYYY-MM-DD',
     })
-        .on('changeDate', (ev) => {
-            $('#from').datepicker('setEndDate', ev.date);
+        .on('dp.change', (ev) => {
+            $('#from').data('DateTimePicker').maxDate(ev.date);
         });
 
 
-    $('#from-job').datepicker({
-        autoclose: true,
-        orientation: 'top',
-        endDate: new Date(),
-        format: 'yyyy-mm-dd',
+    $('#from-job').datetimepicker({
+        // endDate: new Date(),
+        format: 'YYYY-MM-DD',
     })
-        .on('changeDate', (ev) => {
-            $('#to-job').datepicker('setStartDate', ev.date);
+        .on('dp.change', (ev) => {
+            $('#to-job').data('DateTimePicker').minDate(ev.date);
         });
 
-    $('#to-job').datepicker({
-        autoclose: true,
-        orientation: 'top',
-        endDate: new Date(),
-        format: 'yyyy-mm-dd',
+    $('#to-job').datetimepicker({
+        // endDate: new Date(),
+        format: 'YYYY-MM-DD',
     })
-        .on('changeDate', (ev) => {
-            $('#from-job').datepicker('setEndDate', ev.date);
+        .on('dp.change', (ev) => {
+            $('#from-job').data('DateTimePicker').maxDate(ev.date);
         });
 });

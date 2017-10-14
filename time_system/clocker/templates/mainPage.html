@@ -2,11 +2,9 @@
 
 {%block additional-headers%}
 {% load static %}
-    <!-- <link rel="stylesheet" type="text/css" href="{% static "libraries/datepicker.css" %}">
-    <script src="{% static "libraries/bootstrap-datepicker.js" %}"></script> -->
-
-    <link rel="stylesheet" type="text/css" href="{% static "node_modules/bootstrap-datepicker/dist/css/bootstrap-datepicker3.min.css" %}">
-    <script src="{% static "node_modules/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js" %}"></script>
+    <script src="{% static "node_modules/moment/min/moment.min.js" %}"></script>
+    <link rel="stylesheet" type="text/css" href="{% static "node_modules/bootstrap-datetimepicker-npm/build/css/bootstrap-datetimepicker.min.css" %}">
+    <script src="{% static "node_modules/bootstrap-datetimepicker-npm/build/js/bootstrap-datetimepicker.min.js" %}"></script>
 
     <script src="{% static "js/main_page.js" %}"></script>
 {%endblock additional-headers%}
@@ -123,16 +121,16 @@
     <div id="job-controls">
         <form action="#" class="form form-inline">
             {% csrf_token %}
-
-                <div class="form-group">
+            <div class="row">
+                <div class="form-group col-md-1">
                     <input type="text" id="from-job" name="from" class="form-control" placeholder="From"/>
                 </div>
 
-                <div class="form-group">
+                <div class="form-group  col-md-1">
                     <input type="text" id="to-job" name="to" class="form-control" placeholder="To"/>
                 </div>
 
-                <div class="form-group">
+                <div class="form-group  col-md-1">
                     <select name="user_name" id="employees-job" class="form-control">
                         {% if employee.is_superuser %}
                             <option value="all-active">All Active Employees</option>
@@ -143,6 +141,7 @@
                         {% endfor %}
                     </select>
                 </div>
+              <div class="col-md-3">
 
                 <button type="submit" name="Submit" class="btn btn-default">Submit</button>
                 <button id="csvbutton" type="button" name="CSV" class="btn btn-default">CSV</button>
@@ -152,6 +151,7 @@
                         <input id="toggle-active-jobs" type="checkbox" /> Show Inactive Jobs
                     </label>
                 </div>
+              </div>
         </form>
     </div>
 
