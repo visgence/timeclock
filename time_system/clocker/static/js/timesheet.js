@@ -124,7 +124,7 @@ $(() => {
         }.bind(this);
 
         this.validateCreation = function () {
-            const noErrors = true;
+            let noErrors = true;
 
             if (this.id !== null) {
                 this.messageCenter().setErrors('This timesheet appears to already be created! This should not have happened...');
@@ -132,12 +132,15 @@ $(() => {
             }
 
             if (!this.start.validate()) {
+                console.log('fdsa')
                 noErrors = false;
             }
             if (!this.end.validate()) {
+              console.log('fdsa')
                 noErrors = false;
             }
             if (!this.employee.validate()) {
+              console.log('fdsa')
                 noErrors = false;
             }
 

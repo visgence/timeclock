@@ -2,8 +2,9 @@
 {% load static %}
 {%block additional-headers%}
 
-    <script src="{% static "libraries/bootstrap-datepicker.js"%}"></script>
-    <link rel="stylesheet" type="text/css" href="{% static "libraries/datepicker.css"%}">
+<script src="{% static "node_modules/moment/min/moment.min.js" %}"></script>
+<link rel="stylesheet" type="text/css" href="{% static "node_modules/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css" %}">
+<script src="{% static "node_modules/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js" %}"></script>
 
     <script src="{% static "libraries/knockout-custom-extensions.js" %}"></script>
 
@@ -51,9 +52,9 @@
                   <p class="text-danger" data-bind="visible: start.hasError() || end.hasError(),
                                                       text: start.validationMessage() || end.validationMessage()"></p>
                   <div class="input-daterange input-group">
-                    <input type="text" class="form-control" data-bind="value: start" />
+                    <input type="text" class="form-control" id="start-time" data-bind="value: start" />
                     <span class="input-group-addon">to</span>
-                    <input type="text" class="form-control" data-bind="value: end" />
+                    <input type="text" class="form-control" id="end-time" data-bind="value: end" />
                   </div>
                 </div>
                 <button type="button" class="btn btn-default" data-bind="click: $parent.createTimesheet">Create</button>

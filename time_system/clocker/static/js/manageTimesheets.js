@@ -30,7 +30,16 @@ $(() => {
         }.bind(this);
 
         const setupPickers = function () {
-            $('.input-daterange').datepicker();
+            $('#start-time').datetimepicker({
+                format: 'YYYY-MM-DD',
+            }).on('dp.change', (ev) => {
+                $('#end-time').data('DateTimePicker').minDate(ev.date);
+            });
+            $('#end-time').datetimepicker({
+                format: 'YYYY-MM-DD',
+            }).on('dp.change', (ev) => {
+                $('#start-time').data('DateTimePicker').maxDate(ev.date);
+            });
         };
 
         this.shouldSeperate = function (curTsIndex, nextTsIndex) {
