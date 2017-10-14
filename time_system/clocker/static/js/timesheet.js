@@ -4,7 +4,7 @@ $(() => {
     const timesheetUrl = '/timeclock/timesheets/';
     const MessageCenter = $.fn.MessageCenter;
 
-    const Timesheet = function (consts) {
+    const Timesheet = function (vars) {
         this.id = null;
 
         this.start = ko.observable().extend({
@@ -77,49 +77,49 @@ $(() => {
 
         this.messageCenter = ko.observable();
 
-        const init = function (consts) {
-            consts = consts || {};
+        const init = function (vars) {
+            vars = vars || {};
 
-            if (consts.hasOwnProperty('id')) {
-                this.id = consts.id;
+            if (vars.hasOwnProperty('id')) {
+                this.id = vars.id;
             }
 
-            if (consts.hasOwnProperty('start')) {
-                this.startTimestamp(consts.start);
+            if (vars.hasOwnProperty('start')) {
+                this.startTimestamp(vars.start);
             }
 
-            if (consts.hasOwnProperty('end')) {
-                this.endTimestamp(consts.end);
+            if (vars.hasOwnProperty('end')) {
+                this.endTimestamp(vars.end);
             }
 
-            if (consts.hasOwnProperty('employee')) {
-                this.employee(consts.employee);
+            if (vars.hasOwnProperty('employee')) {
+                this.employee(vars.employee);
             }
 
-            if (consts.hasOwnProperty('shifts')) {
-                this.shifts(consts.shifts);
+            if (vars.hasOwnProperty('shifts')) {
+                this.shifts(vars.shifts);
             }
 
-            if (consts.hasOwnProperty('messageCenter')) {
-                this.messageCenter(consts.messageCenter);
+            if (vars.hasOwnProperty('messageCenter')) {
+                this.messageCenter(vars.messageCenter);
             } else {
                 this.messageCenter(new MessageCenter());
             }
-            if (consts.hasOwnProperty('signature')) {
+            if (vars.hasOwnProperty('signature')) {
                 this.signedOnMsg = 'Timesheet signed';
             }
 
-            if (consts.hasOwnProperty('signatureDate')) {
-                this.signedOnMsg = 'Signed on ' + consts.signatureDate;
+            if (vars.hasOwnProperty('signatureDate')) {
+                this.signedOnMsg = 'Signed on ' + vars.signatureDate;
             }
-            this.rebuild(consts);
+            this.rebuild(vars);
         }.bind(this);
 
-        this.rebuild = function (consts) {
-            consts = consts || {};
+        this.rebuild = function (vars) {
+            vars = vars || {};
 
-            if (consts.hasOwnProperty('signature')) {
-                this.signature(consts.signature);
+            if (vars.hasOwnProperty('signature')) {
+                this.signature(vars.signature);
             }
         }.bind(this);
 
@@ -226,7 +226,7 @@ $(() => {
             }
         };
 
-        init(consts);
+        init(vars);
     };
 
     $.fn.Timesheet = Timesheet;
