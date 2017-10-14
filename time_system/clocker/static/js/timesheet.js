@@ -124,6 +124,10 @@ $(() => {
         }.bind(this);
 
         this.validateCreation = function () {
+
+            this.start($('#start-time').data('DateTimePicker').date().unix() * 1000);
+            this.end($('#end-time').data('DateTimePicker').date().unix() * 1000);
+
             let noErrors = true;
 
             if (this.id !== null) {
@@ -132,15 +136,12 @@ $(() => {
             }
 
             if (!this.start.validate()) {
-                console.log('fdsa')
                 noErrors = false;
             }
             if (!this.end.validate()) {
-              console.log('fdsa')
                 noErrors = false;
             }
             if (!this.employee.validate()) {
-              console.log('fdsa')
                 noErrors = false;
             }
 
