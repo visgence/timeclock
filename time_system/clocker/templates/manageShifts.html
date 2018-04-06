@@ -9,7 +9,9 @@
 
     <link rel="stylesheet" type="text/css" href="{% static "css/manageShifts.css" %}">
     <script src="{% static "js/shift.js" %}"></script>
-    <script src="{% static "js/shiftList.js" %}"></script>
+		<script src="{% static "js/shiftList.js" %}"></script>
+
+    <script src="{% static "js/timeline.js" %}"></script>
     <script src="{% static "js/manageShifts.js" %}"></script>
 {% endblock additional-headers %}
 
@@ -61,6 +63,8 @@
 			                                        value: selectedEmployee">
 			</select>
 		</li>
+
+		<div id = "shift-timeline"></div>
 	</ul>
 
 	<div data-bind="with: shiftList">

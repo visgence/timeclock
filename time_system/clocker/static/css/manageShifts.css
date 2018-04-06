@@ -20,3 +20,8 @@ input.icon-input-hide {
     background-position: -20px center;
     text-indent: 0;
 }
+
+#shift-timeline {
+    /* width :80%; */
+    height: 15em;
+}
