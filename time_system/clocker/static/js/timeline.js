@@ -2,97 +2,100 @@
 
 $(() => {
 
-    const ShiftTimeline = function (vars) {
+    const ShiftTimeline = function (lets) {
 
         const __this = this;
         const shiftUrl = '/timeclock/shifts';
+        const oneDayInMs = 86400000;
 
         this.init = function () {
-            DrawTimeline();
+            GetTimelineData();
         };
 
-        function DrawTimeline() {
+        function GetTimelineData() {
 
             processRawShifts = (rawShifts) => {
 
-                const shifts = formatShifts(rawShifts);
+                const WeekOfShifts = FormatShifts(rawShifts);
 
-                buildTimelineData(shifts);
-
+                BuildTimelineData(WeekOfShifts);
             };
 
             handleError = (error) => {
                 alert(error);
             };
 
-            getShifts().then(processRawShifts, handleError);
+            GetShifts().then(processRawShifts, handleError);
 
         }
 
-        function buildTimelineData(shifts) {
+        function BuildTimelineData(WeekOfShifts) {
 
-            const dateLabels = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
-
-            const oneWeekInMs = 86400000;
+            const dateLabels = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
             let timelineData = [];
 
-            let startingTime = new Date().setHours(0, 0, 0, 0);
+            const startingTime = CalculateStartingTime();
 
-            let endingTime = startingTime + oneWeekInMs;
-
-            var wat = startingTime;
-
-            for (var day = 0; day < 8; day++) {
+            for (let day = 0; day < 7; day++) {
 
                 times = []
-                var currDay = new Date(wat).getDay()
-                console.log(shifts);
 
-                if (shifts[currDay]) {
-                    for (var shift = 0; shift < shifts[currDay].length; shift++) {
-                        var start_epoch = new Date(shifts[currDay][shift]['time_in']);
-                        if (shifts[currDay][shift]['time_out']) {
-                            var end_epoch = new Date(shifts[currDay][shift]['time_out']);
+                const date = new Date(startingTime + (day * oneDayInMs));
+
+                if (WeekOfShifts[day]) {
+                    let start_epoch;
+                    let end_epoch;
+
+                    for (let shift = 0; shift < WeekOfShifts[day].length; shift++) {
+
+                        if (shift % 2 === 0) {
+                            shiftColor = 'gray';
                         } else {
-                            var end_epoch = new Date()
+                            shiftColor = 'LightGray';
                         }
+
+                        start_epoch = new Date(WeekOfShifts[day][shift]['time_in']);
+
+                        if (WeekOfShifts[day][shift]['time_out']) {
+                            end_epoch = new Date(WeekOfShifts[day][shift]['time_out']);
+                        } else {
+                            end_epoch = new Date();
+                        }
+
                         times.push({
-                            "starting_time": (start_epoch - (day * -86400000)),
-                            "ending_time": (end_epoch - (day * -86400000)),
-                            "shift_id": shifts[currDay][shift]['id']
+                            'starting_time': NormalizeTimestampToSameDay(start_epoch, day),
+                            'ending_time': NormalizeTimestampToSameDay(end_epoch, day),
+                            'shift_id': WeekOfShifts[day][shift]['id'],
+                            'color': shiftColor
                         });
+
                     }
                 }
 
                 timelineData.push({
-                    label: dateLabels[currDay],
+                    label: dateLabels[day] + ' (' + (date.getMonth() + 1) + '/' + (date.getDay() + 1) + ')',
                     times: times,
                 });
 
-
-                wat = wat - 86400000
-
             }
 
-            drawTimeline(timelineData);
+            DrawTimelineGraph(timelineData);
 
         }
 
-        function DrawTimeline(timelineData) {
+        function DrawTimelineGraph(timelineData) {
 
-            console.log(timelineData);
+            const oneDayInMs = 86400000;
 
-            const oneWeekInMs = 86400000;
+            const startingTime = CalculateStartingTime();
 
-            let startingTime = new Date().setHours(0, 0, 0, 0)
-
-            let endingTime = startingTime + oneWeekInMs;
+            let endingTime = startingTime + oneDayInMs;
 
             const chart = d3.timelines()
                 .stack()
                 .margin({
-                    left: 80,
+                    left: 130,
                     right: 30,
                     top: 0,
                     bottom: 5
@@ -103,41 +106,40 @@ $(() => {
                 .showTimeAxisTick()
                 .beginning(new Date(startingTime))
                 .ending(new Date(endingTime))
-                .click(function (d, i, datum) {
-                    window.location.href = "http://timeclock.visgence.com/timeclock/summary/" + d['shift_id']
+                .click((d, i, datum) => {
+                    window.location.href = 'http://timeclock.visgence.com/timeclock/summary/' + d['shift_id']
                 });
 
-            d3.select('#shift-timeline').append("svg").attr("width", $('#shift-timeline').innerWidth())
-                .attr("height", $('#shift-timeline').innerHeight())
+            d3.select('#shift-timeline').append('svg').attr('width', $('#shift-timeline').innerWidth())
+                .attr('height', $('#shift-timeline').innerHeight())
                 .datum(timelineData)
                 .call(chart);
         }
 
-        function breakIntoDays(shifts) {
-
-            var days = [];
-
-            var shiftDay;
+        function BreakIntoDays(WeekOfShifts) {
 
 
-            for (var i = 0; i < shifts.length; i++) {
-                if (shifts[i]) {
-                    shiftDay = new Date(shifts[i]['time_out']).getDay();
-                    if (days[shiftDay]) {
-                        days[shiftDay].push(shifts[i]);
-                    } else {
-                        days[shiftDay] = [shifts[i]];
-                    }
-                }
+            let days = [];
+
+            for (let i = 0; i < 7; i++) {
+                days[i] = [];
+            }
+
+            let shiftDay;
+
+
+            for (let i = 0; i < WeekOfShifts.length; i++) {
+                shiftDay = new Date(WeekOfShifts[i]['time_out']).getDay();
+                days[shiftDay].push(WeekOfShifts[i]);
             }
 
             return days;
         }
 
-        function getShifts() {
+        function GetShifts() {
 
-            const shifts = {
-                "shifts": [{
+            const WeekOfShifts = {
+                "WeekOfShifts": [{
                         "deleted": false,
                         "hours": null,
                         "time_in": "04/06/2018 08:00:47",
@@ -519,7 +521,7 @@ $(() => {
             }
 
 
-            // return shifts['shifts']
+            // return WeekOfShifts['WeekOfShifts']
 
             const state = getHash();
 
@@ -533,7 +535,7 @@ $(() => {
                     employee: empId,
                 };
 
-                var promise = new Promise((resolve, reject) => {
+                let promise = new Promise((resolve, reject) => {
 
                     $.ajax({
                         url: shiftUrl,
@@ -555,50 +557,48 @@ $(() => {
             }
         }
 
-        function formatShifts(rawShifts) {
+        function FormatShifts(rawShifts) {
 
 
-            var shiftsInPreviousSevenDays = [];
+            let shiftsInPreviousSevenDays = [];
 
-            var startingTimestamp = new Date()
+            let startingTimestamp = CalculateStartingTime();
 
-            startingTimestamp.setHours(0, 0, 0, 0)
+            startingTimestamp = startingTimestamp / 1000 //seconds
 
-            startingTimestamp = startingTimestamp.getTime() / 1000 //seconds
+            let endingTimestamp = startingTimestamp + (oneDayInMs / 1000) * 7
 
-            var endingTimestamp = startingTimestamp - 691200
+            for (let i = 0; i < rawShifts.length; i++) {
 
+                let shiftTimestamp = new Date(rawShifts[i]['time_in']).getTime() / 1000
 
-            for (var i = 0; i < rawShifts.length; i++) {
-
-                var shiftTimestamp = new Date(rawShifts[i]['time_in']).getTime() / 1000
-
-                if (shiftTimestamp > endingTimestamp) {
+                if (shiftTimestamp < endingTimestamp && shiftTimestamp > startingTimestamp) {
                     shiftsInPreviousSevenDays.push(rawShifts[i])
 
                 }
 
             }
 
-            var formattedShifts = breakIntoDays(shiftsInPreviousSevenDays)
+            let formattedShifts = BreakIntoDays(shiftsInPreviousSevenDays)
 
             return formattedShifts
 
         }
 
-        function calculateStartingTime(shifts) {
+        function CalculateStartingTime() {
 
-            // for(var i = 0; i < shifts.length; i++){
-            //     if(shifts[i]['time_out']){
+            const currentDayOfWeek = new Date().getDay()
 
+            const beginningOfWorkWeek = (new Date().setHours(0, 0, 0, 0)) - (currentDayOfWeek * oneDayInMs);
 
-            //     }
-            // }
+            return beginningOfWorkWeek
+        }
 
-            console.log(shifts)
+        function NormalizeTimestampToSameDay(timestamp, daysSinceInitial) {
 
+            const normalizedTimestamp = (timestamp - (daysSinceInitial * oneDayInMs));
 
-            return new Date(shifts[0]['time_in']).setHours(0, 0, 0, 0)
+            return normalizedTimestamp
         }
 
         this.init();
