@@ -4,7 +4,7 @@ $(() => {
     const ManageShifts = function (vars) {
         const __this = this;
         const ShiftList = $.fn.ShiftList;
-        const ShiftTimeline = $.fn.ShiftTimeline;
+        const TimelineShifts = $.fn.TimelineShifts;
         const employeeUrl = '/timeclock/employees/';
 
         const startingPage = 1;
@@ -13,7 +13,7 @@ $(() => {
         };
 
         this.shiftList = ko.observable();
-        this.shiftTimeline = ko.observable();
+        this.timelineShifts = ko.observable();
         this.employees = ko.observableArray();
         this.managingEmployee = ko.observable();
 
@@ -45,7 +45,7 @@ $(() => {
                 this.managingEmployee(vars.managingEmployee);
             }
             this.shiftList(new ShiftList(shiftListData));
-            this.shiftTimeline(new ShiftTimeline());
+            this.timelineShifts(new TimelineShifts());
             // TODO: this will change once I get more time to do something more proper
             $(window).on('shift-updated', () => {
                 __this.shiftList().reload(__this.shiftList().currentPage(), __this.selectedEmployee().id);
@@ -66,7 +66,6 @@ $(() => {
                     if (empId === emp.id) {
                         __this.employee(emp);
                         __this.shiftList().reload(startingPage, emp.id);
-                        // __this.shiftTimeline().reload(startingPage, emp.id);
                         return false;
                     }
                 });

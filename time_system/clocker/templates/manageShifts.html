@@ -11,7 +11,8 @@
     <script src="{% static "js/shift.js" %}"></script>
 		<script src="{% static "js/shiftList.js" %}"></script>
 
-    <script src="{% static "js/timeline.js" %}"></script>
+		<script src="{% static "js/timeline.js" %}"></script>
+    <script src="{% static "js/timelineShifts.js" %}"></script>
     <script src="{% static "js/manageShifts.js" %}"></script>
 {% endblock additional-headers %}
 
@@ -51,6 +52,7 @@
 
 <h2>Manage Shifts</h2>
 
+
 <div id="manage-shifts-container">
 
 	<ul class="list-inline">
@@ -63,9 +65,15 @@
 			                                        value: selectedEmployee">
 			</select>
 		</li>
-
-		<div id = "shift-timeline"></div>
 	</ul>
+	
+	<div data-bind="with: timelineShifts" id = "timeline-label">
+		<h4>Week Of:</h4>
+		<a data-bind="click: prevWeek" id = "prev-week-button" class="previous clickable">&lt;-- Previous Week</a>
+		<a data-bind="click: nextWeek" id = "next-week-button" class="next clickable">Next Week --&gt;</a>
+	</div>
+	<div id="shift-timeline"></div>
+
 
 	<div data-bind="with: shiftList">
     <ul class="pager">
