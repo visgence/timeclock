@@ -66,6 +66,7 @@ $(() => {
                     if (empId === emp.id) {
                         __this.employee(emp);
                         __this.shiftList().reload(startingPage, emp.id);
+                        __this.timelineShifts().reload(emp.id);
                         return false;
                     }
                 });

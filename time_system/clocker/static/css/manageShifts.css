@@ -25,3 +25,7 @@ input.icon-input-hide {
     /* width :80%; */
     height: 15em;
 }
+
+#timeline-label {
+    text-align: center;
+}

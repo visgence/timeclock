@@ -45,13 +45,13 @@ $(() => {
             let timelineData = [];
 
 
-            console.log(startingTime);
-
             for (let day = 0; day < 7; day++) {
 
                 times = [];
 
                 const date = new Date(startingTime + (day * oneDayInMs));
+
+                // console.log(weekOfShifts);
 
                 if (weekOfShifts[day]) {
                     let start_epoch;
@@ -114,7 +114,7 @@ $(() => {
                 .beginning(new Date(startingTime))
                 .ending(new Date(endingTime))
                 .click((d, i, datum) => {
-                    window.location.href = 'http://timeclock.visgence.com/timeclock/summary/' + d['shift_id']
+                    window.location.href = 'http://timeclock.visgence.com/timeclock/summary/' + d['shift_id'];
                 });
 
             let svg = d3.select('#shift-timeline');
