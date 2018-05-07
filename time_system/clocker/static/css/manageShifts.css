@@ -28,4 +28,5 @@ input.icon-input-hide {
 
 #timeline-label {
     text-align: center;
+    user-select: none;
 }

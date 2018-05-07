@@ -260,6 +260,31 @@ $(() => {
 
         this.updateLabels = () => {
 
+            const months = [
+                'January',
+                'February',
+                'March',
+                'April',
+                'May',
+                'June',
+                'July',
+                'August',
+                'September',
+                'October',
+                'November',
+                'December',
+            ];
+
+            const startingDate  = new Date(this.startingTimestamp);
+
+            const endingDate = new Date(this.IncrementTimestampByWeek(this.startingTimestamp));
+            
+            const startingLabel = months[startingDate.getMonth()] + ', ' + startingDate.getDate();
+
+            const endingLabel = months[endingDate.getMonth()] + ', ' + endingDate.getDate();
+
+            $('#week-range-label').text(startingLabel + ' - ' + endingLabel);
+
             if (this.weekOffset === 0) {
                 $('#next-week-button').hide();
             } else {
