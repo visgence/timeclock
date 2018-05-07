@@ -1,31 +1,28 @@
-// import './main.scss';
 $(() => {
     const ShiftTimeline = function () {
 
-        const __this = this;
-        let empId = ''
-        const shiftUrl = '/timeclock/shifts';
+        /* timeline.js
+        Author: Jacob Bakarich
+        Date: May 7, 2018
+
+        This function takes a formatted array of shifts divided into week and weekday, and graphs
+        the shifts on a d3-timeline graph. Since d3-timeline will automatically extend axes to 
+        all the earliest and latest timestamps, all shifts must be further formatted to occur on the 
+        same day, to correctly display shifts from 12am -11:59pm for each day.
+
+        documentation for d3-timelins availible at https://github.com/jiahuang/d3-timeline
+
+        */
+
         const oneDayInMs = 86400000;
-        const oneWeekInMs = 604800000;
-        let isDrawingTimeline = false;
 
-        // const TimelineShifts = $.fn.TimelineShifts;
-
-        this.shifts = ko.observableArray();
-        this.currentWorkWeekStartingTime = ko.observable();
+        this.shifts = [];
+        this.currentWorkWeekStartingTime = 0;
         this.weekOffset = 0;
-        // this.timelineShifts = ko.observable();
-
-        this.init = function () {
-
-            isDrawingTimeline = true;
-
-
-        };
 
         this.rebuild = (weekOfShifts, startingTime) => {
 
-            removePreviousTimeline();
+            RemovePreviousTimeline();
 
             BuildTimelineData(weekOfShifts, startingTime);
 
@@ -37,13 +34,14 @@ $(() => {
             BuildTimelineData(weekOfShifts, startingTime);
         };
 
-
         function BuildTimelineData(weekOfShifts, startingTime) {
+
+            //  function takes a week of shifts, assigns them a date label, and normalizes to occur on the same day
+
 
             const dateLabels = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
-            let timelineData = [];
-
+            const timelineData = [];
 
             for (let day = 0; day < 7; day++) {
 
@@ -51,13 +49,12 @@ $(() => {
 
                 const date = new Date(startingTime + (day * oneDayInMs));
 
-                // console.log(weekOfShifts);
-
                 if (weekOfShifts[day]) {
-                    let start_epoch;
-                    let end_epoch;
+                    let startEpoch;
+                    let endEpoch;
 
                     for (let shift = 0; shift < weekOfShifts[day].length; shift++) {
+
 
                         if (shift % 2 === 0) {
                             shiftColor = 'gray';
@@ -65,19 +62,19 @@ $(() => {
                             shiftColor = 'LightGray';
                         }
 
-                        start_epoch = new Date(weekOfShifts[day][shift]['time_in']);
+                        startEpoch = new Date(weekOfShifts[day][shift]['time_in']);
 
                         if (weekOfShifts[day][shift]['time_out']) {
-                            end_epoch = new Date(weekOfShifts[day][shift]['time_out']);
+                            endEpoch = new Date(weekOfShifts[day][shift]['time_out']);
                         } else {
-                            end_epoch = new Date();
+                            endEpoch = new Date();
                         }
 
                         times.push({
-                            'starting_time': NormalizeTimestampToSameDay(start_epoch, day),
-                            'ending_time': NormalizeTimestampToSameDay(end_epoch, day),
-                            'shift_id': weekOfShifts[day][shift]['id'],
-                            'color': shiftColor
+                            starting_time: NormalizeTimestampToSameDay(startEpoch, day),
+                            ending_time: NormalizeTimestampToSameDay(endEpoch, day),
+                            shift_id: weekOfShifts[day][shift]['id'],
+                            color: shiftColor,
                         });
 
                     }
@@ -102,7 +99,7 @@ $(() => {
             const chart = d3.timelines()
                 .stack()
                 .margin({
-                    left: 130,
+                    left: 140,
                     right: 30,
                     top: 0,
                     bottom: 5,
@@ -117,44 +114,27 @@ $(() => {
                     window.location.href = 'http://timeclock.visgence.com/timeclock/summary/' + d['shift_id'];
                 });
 
-            let svg = d3.select('#shift-timeline');
+            const svg = d3.select('#shift-timeline');
             svg.append('svg').attr('width', $('#shift-timeline').innerWidth())
                 .attr('height', $('#shift-timeline').innerHeight())
                 .datum(timelineData)
                 .call(chart);
-
-            isDrawingTimeline = false;
         }
 
         function NormalizeTimestampToSameDay(timestamp, daysSinceInitial) {
 
             const normalizedTimestamp = (timestamp - (daysSinceInitial * oneDayInMs));
 
-            return normalizedTimestamp
+            return normalizedTimestamp;
         }
 
-        function updateLabels(moreWeeks, prevWeeks) {
-            if (!moreWeeks) {
-                $('#next-week-button').hide();
-            } else {
-                $('#next-week-button').show();
-            }
 
-            if (!prevWeeks) {
-                $('#prev-week-button').hide();
-            } else {
-                $('#prev-week-button').show();
-            }
-
-        }
-
-        function removePreviousTimeline() {
+        function RemovePreviousTimeline() {
             if ($('svg')) {
                 $('svg').remove();
             }
         }
 
-        this.init();
 
     };
 

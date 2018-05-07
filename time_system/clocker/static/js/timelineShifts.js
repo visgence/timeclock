@@ -1,30 +1,44 @@
 $(() => {
     const TimelineShifts = function () {
 
-        // const __this = this;
+        /* timelineShifts.js
+        Author: Jacob Bakarich
+        Date: May 7, 2018
+
+        This function uses the same endpoint as shiftList to get a paginated list of logged shifts,
+        then formats the shifts into work weeks and days, and calls Timeline.js to use d3 to graph formatted
+        shifts.
+
+        The shifts are formatted from a paginated list into an array sorted by work weeks, and week days. 
+        Timeline.js graphs one week at a time, and displaying previous/next weeks are supported via prev
+        week and nextWeek functions. 
+
+
+        Next 'page' of shifts are automatically requested when the current page's worth of shifts is
+        reached. If no more pages are availible, the "previous week" button is hidden.
+
+        */
+
+
         const shiftUrl = '/timeclock/shifts';
         const oneHourInMs = 3600000;
         const oneDayInMs = 86400000;
         const oneWeekInMs = 604800000;
 
-        // this.currentWeek = 0;
-        this.shifts = ko.observableArray();
-        this.startingTimestamp = ko.observable();
-        this.pageNum = ko.observable();
-        this.totalPages = ko.observable();
-        this.empId = ko.observable();
+        this.shiftsDividedIntoWeeks = [];
+        this.startingTimestamp = 0;
+        this.pageNum = 1;
+        this.totalPages = 0;
+        this.empId = '';
         this.weekOffset = 0;
         this.shiftTimeline = ko.observable();
 
         const ShiftTimeline = $.fn.ShiftTimeline;
 
-        this.init = (consts) => {
+        this.init = () => {
 
             this.shiftTimeline(new ShiftTimeline());
 
-            this.pageNum = 1;
-
-            consts = consts || {};
         };
 
         this.reload = function (empId) {
@@ -33,9 +47,11 @@ $(() => {
 
             processShifts = (rawShifts) => {
 
-                this.FormatShifts(rawShifts);
+                FormatShifts(rawShifts);
 
-                this.updateLabels();
+                this.shiftTimeline().rebuild(this.shiftsDividedIntoWeeks[this.weekOffset], this.startingTimestamp);
+
+                updateLabels();
 
             };
 
@@ -43,7 +59,7 @@ $(() => {
                 console.log(error);
             };
 
-            this.getShifts(empId).then(processShifts, handleError);
+            getShifts(empId).then(processShifts, handleError);
 
         }.bind(this);
 
@@ -52,134 +68,145 @@ $(() => {
 
             this.weekOffset -= 1;
 
-            this.startingTimestamp = this.IncrementTimestampByWeek(this.startingTimestamp);
+            this.startingTimestamp = IncrementTimestampByWeek(this.startingTimestamp);
 
-            this.shiftTimeline().rebuild(this.shifts[this.weekOffset], this.startingTimestamp);
+            this.shiftTimeline().rebuild(this.shiftsDividedIntoWeeks[this.weekOffset], this.startingTimestamp);
 
-            this.updateLabels();
+            updateLabels();
 
         }.bind(this);
 
         this.prevWeek = function () {
 
             this.weekOffset += 1;
-            this.startingTimestamp = this.DecrementTimestampByWeek(this.startingTimestamp);
 
-            if (this.weekOffset === this.shifts.length) {
-                this.getNextPageOfShifts();
+            this.startingTimestamp = DecrementTimestampByWeek(this.startingTimestamp);
+
+            if (this.weekOffset === this.shiftsDividedIntoWeeks.length) {
+                getNextPageOfShifts();
             } else {
 
-                this.shiftTimeline().rebuild(this.shifts[this.weekOffset], this.startingTimestamp);
+                this.shiftTimeline().rebuild(this.shiftsDividedIntoWeeks[this.weekOffset], this.startingTimestamp);
 
             }
 
-            this.updateLabels();
+            this.shiftTimeline().rebuild(this.shiftsDividedIntoWeeks[this.weekOffset], this.startingTimestamp);
+
+            updateLabels();
 
         }.bind(this);
 
-        this.rebuild = (consts) => {
-
-        };
+        FormatShifts = (rawShifts) => {
 
 
-        this.FormatShifts = (rawShifts) => {
+            const shiftsDividedIntoWeeks = [];
 
-            let weeks = [];
+            let shiftsInCurrentWeek = [];
 
-            let shiftsInWeek = [];
-
-            let startingTimestamp = this.CalculateStartingTime();
-
-            let weekStartingTime = startingTimestamp;
+            let startingTimestamp = CalculateStartingTime();
 
             const timeOfLastLoggedShift = new Date(rawShifts[0]['time_in']).getTime();
 
-            while (startingTimestamp > timeOfLastLoggedShift) {
-                weeks.push([]);
+            while (startingTimestamp > timeOfLastLoggedShift) { //  Pads blank weeks until last logged shift is in range
+                shiftsDividedIntoWeeks.push([]);
                 startingTimestamp = startingTimestamp - oneWeekInMs;
             }
 
-            startingTimestamp = startingTimestamp / 1000;
+            startingTimestamp = startingTimestamp / 1000; //    timeclock stores timestamps in seconds
 
             let endingTimestamp = startingTimestamp + ((oneDayInMs - 100) / 1000) * 7;
 
             for (let i = 0; i < rawShifts.length; i++) {
 
-                let shiftTimestamp = new Date(rawShifts[i]['time_in']).getTime() / 1000;
+                const shiftTimestamp = new Date(rawShifts[i]['time_in']).getTime() / 1000;
 
-                if (shiftTimestamp < endingTimestamp && shiftTimestamp > startingTimestamp) {
-                    shiftsInWeek.push(rawShifts[i]);
+                if (shiftTimestamp < endingTimestamp && shiftTimestamp > startingTimestamp) { //    shift is within current work week time range
+                    shiftsInCurrentWeek.push(rawShifts[i]);
 
+                } else if (shiftTimestamp < startingTimestamp) { // means that the next shift is in a different work week
 
-                } else if (shiftTimestamp < startingTimestamp) {
                     startingTimestamp -= (oneWeekInMs / 1000);
                     endingTimestamp -= (oneWeekInMs / 1000);
-                    weeks.push(shiftsInWeek);
+                    shiftsDividedIntoWeeks.push(shiftsInCurrentWeek);
 
-                    shiftsInWeek = [];
-                    shiftsInWeek.push(rawShifts[i]);
+                    while (shiftTimestamp < startingTimestamp) { // pads blank weeks if the next shift farther than one work week away
+                        startingTimestamp -= (oneWeekInMs / 1000);
+                        endingTimestamp -= (oneWeekInMs / 1000);
+                        shiftsDividedIntoWeeks.push([]);
+                    }
+
+                    shiftsInCurrentWeek = []; //    new week of shifts
+                    shiftsInCurrentWeek.push(rawShifts[i]);
                 }
 
             }
 
-            weeks.push(shiftsInWeek);
+            shiftsDividedIntoWeeks.push(shiftsInCurrentWeek);
 
-            for (let i = 0; i < weeks.length; i++) {
-                weeks[i] = this.BreakIntoDays(weeks[i]);
+            for (let i = 0; i < shiftsDividedIntoWeeks.length; i++) {//  now break the weeks of shifts into days
+                shiftsDividedIntoWeeks[i] = BreakIntoDays(shiftsDividedIntoWeeks[i]);
             }
 
-            if (this.shifts.length === 0) {
-                this.shifts = weeks;
+            if (this.shiftsDividedIntoWeeks.length === 0) {
+
+                this.shiftsDividedIntoWeeks = shiftsDividedIntoWeeks;
+
             } else {
-                let startingLength = this.shifts.length;
-                for (let i = 0; i < weeks.length; i++) {
-                    this.shifts[startingLength + i] = weeks[i];
+                const startingLength = this.shiftsDividedIntoWeeks.length;
+
+                for (let i = 0; i < shiftsDividedIntoWeeks.length; i++) { //    append new weeks onto previous shift array
+                    this.shiftsDividedIntoWeeks[startingLength + i] = shiftsDividedIntoWeeks[i];
                 }
+
             }
-
-            this.shiftTimeline().rebuild(weeks[0], weekStartingTime);
-
-            this.startingTimestamp = weekStartingTime;
 
         };
 
-        this.DecrementTimestampByWeek = (timestamp) => {
+        DecrementTimestampByWeek = (timestamp) => {
+
+            //  Decrements timestamp by week, accounting for timezone offset
 
             const timezoneOffset = new Date(timestamp).getTimezoneOffset();
 
             const newTimezoneOffset = new Date(timestamp - oneWeekInMs).getTimezoneOffset();
 
+            const totalTimezoneOffset = Math.abs(timezoneOffset - newTimezoneOffset) / 60;
+
             if (timezoneOffset > newTimezoneOffset) {
-                return timestamp - (oneWeekInMs + oneHourInMs);
+                return timestamp - (oneWeekInMs + (oneHourInMs * totalTimezoneOffset));
 
             } else if (timezoneOffset < newTimezoneOffset) {
-                return timestamp - (oneWeekInMs - oneHourInMs);
+                return timestamp - (oneWeekInMs - (oneHourInMs * totalTimezoneOffset));
             }
 
             return timestamp - oneWeekInMs;
 
         };
 
-        this.IncrementTimestampByWeek = (timestamp) => {
+        IncrementTimestampByWeek = (timestamp) => {
+
+            //  Increments timestamp by week, accounting for timezone offset
 
             const timezoneOffset = new Date(timestamp).getTimezoneOffset();
 
             const newTimezoneOffset = new Date(timestamp + oneWeekInMs).getTimezoneOffset();
 
+            const totalTimezoneOffset = Math.abs(timezoneOffset - newTimezoneOffset);
+
             if (timezoneOffset > newTimezoneOffset) {
-                return timestamp + (oneWeekInMs - oneHourInMs);
+                return timestamp + (oneWeekInMs + (oneHourInMs * totalTimezoneOffset));
 
             } else if (timezoneOffset < newTimezoneOffset) {
-                return timestamp + (oneWeekInMs + oneHourInMs);
+                return timestamp + (oneWeekInMs + (oneHourInMs * totalTimezoneOffset));
             }
 
             return timestamp + oneWeekInMs;
 
         };
 
-        this.BreakIntoDays = (weekOfShifts) => {
+        BreakIntoDays = (weekOfShifts) => {
 
-            let days = [];
+            const days = [];
 
             for (let i = 0; i < 7; i++) {
                 days[i] = [];
@@ -196,32 +223,38 @@ $(() => {
             return days;
         };
 
-        this.CalculateStartingTime = () => {
+        CalculateStartingTime = () => {
+
+            //  Returns a starting timestamp for the desired work week, defined as Sunday -> Saturday
+            //  Accounts for timezone offset.
 
             const currentDayOfWeek = new Date().getDay();
 
-            let timezoneOffset = new Date().getTimezoneOffset();
+            const timezoneOffset = new Date().getTimezoneOffset();
 
             let beginningOfWorkWeek = (new Date().setHours(0, 0, 0, 0)) - ((currentDayOfWeek) * oneDayInMs) - (this.weekOffset * oneWeekInMs);
 
-            let newTimezoneOffset = new Date(beginningOfWorkWeek).getTimezoneOffset();
+            const newTimezoneOffset = new Date(beginningOfWorkWeek).getTimezoneOffset();
 
-            if (timezoneOffset > newTimezoneOffset) {
-                beginningOfWorkWeek -= (60000);
+            const totalTimezoneOffset = Math.abs(timezoneOffset - newTimezoneOffset);
+
+            if (timezoneOffset > newTimezoneOffset) { //    add or subtract hours based on UTC Offset changes.
+                beginningOfWorkWeek -= (oneHourInMs * totalTimezoneOffset);
             } else if (timezoneOffset < newTimezoneOffset) {
-                beginningOfWorkWeek += 3600000;
-
+                beginningOfWorkWeek += (oneHourInMs * totalTimezoneOffset);
             }
+
+            this.startingTimestamp = beginningOfWorkWeek;
 
             return beginningOfWorkWeek;
         };
 
-        this.getShifts = () => {
+        getShifts = () => {
 
             const promise = new Promise((resolve, reject) => {
 
                 $.ajax({
-                    url: shiftUrl + '?page=' + this.pageNum + '&per_page=1&employee=' + this.empId,
+                    url: shiftUrl + '?page=' + this.pageNum + '&per_page=50&employee=' + this.empId,
                     type: 'GET',
                     success: (data) => {
                         this.totalPages = data.totalPages;
@@ -238,13 +271,13 @@ $(() => {
 
         };
 
-        this.getNextPageOfShifts = () => {
+        getNextPageOfShifts = () => {
 
             processShifts = (rawShifts) => {
 
-                this.FormatShifts(rawShifts);
+                FormatShifts(rawShifts);
 
-                this.updateLabels();
+                updateLabels();
 
             };
 
@@ -254,11 +287,11 @@ $(() => {
 
             this.pageNum += 1;
 
-            this.getShifts().then(processShifts, handleError);
+            getShifts().then(processShifts, handleError);
 
         };
 
-        this.updateLabels = () => {
+        updateLabels = () => {
 
             const months = [
                 'January',
@@ -275,10 +308,10 @@ $(() => {
                 'December',
             ];
 
-            const startingDate  = new Date(this.startingTimestamp);
+            const startingDate = new Date(this.startingTimestamp);
 
-            const endingDate = new Date(this.IncrementTimestampByWeek(this.startingTimestamp));
-            
+            const endingDate = new Date(IncrementTimestampByWeek(this.startingTimestamp));
+
             const startingLabel = months[startingDate.getMonth()] + ', ' + startingDate.getDate();
 
             const endingLabel = months[endingDate.getMonth()] + ', ' + endingDate.getDate();
@@ -291,7 +324,7 @@ $(() => {
                 $('#next-week-button').show();
             }
 
-            if ((this.pageNum === this.totalPages) && (this.weekOffset === this.shifts.length - 1)) {
+            if ((this.pageNum === this.totalPages) && (this.weekOffset === this.shiftsDividedIntoWeeks.length - 1)) { //    if  
                 $('#prev-week-button').hide();
             } else {
                 $('#prev-week-button').show();
