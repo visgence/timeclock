@@ -6,11 +6,11 @@ $(() => {
         Date: May 7, 2018
 
         This function takes a formatted array of shifts divided into week and weekday, and graphs
-        the shifts on a d3-timeline graph. Since d3-timeline will automatically extend axes to 
+        the shifts on a d3-timeline graph. Since d3-timeline will automatically extend graph axes to 
         all the earliest and latest timestamps, all shifts must be further formatted to occur on the 
         same day, to correctly display shifts from 12am -11:59pm for each day.
 
-        documentation for d3-timelins availible at https://github.com/jiahuang/d3-timeline
+        Documentation for d3-timeline availible at https://github.com/jiahuang/d3-timeline
 
         */
 
@@ -26,7 +26,6 @@ $(() => {
 
             BuildTimelineData(weekOfShifts, startingTime);
 
-
         };
 
         this.build = (weekOfShifts, startingTime) => {
@@ -37,7 +36,6 @@ $(() => {
         function BuildTimelineData(weekOfShifts, startingTime) {
 
             //  function takes a week of shifts, assigns them a date label, and normalizes to occur on the same day
-
 
             const dateLabels = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 

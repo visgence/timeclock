@@ -69,7 +69,7 @@
 	
 	<div data-bind="with: timelineShifts" id = "timeline-label">
 		<h4>Week Of:</h4>
-		<h4 id="week-range-label">May, 6 - May, 12</h4>
+		<h4 id="week-range-label"></h4>
 		<a data-bind="click: prevWeek" id = "prev-week-button" class="previous clickable">&lt;-- Previous Week</a>
 		<a data-bind="click: nextWeek" id = "next-week-button" class="next clickable">Next Week --&gt;</a>
 	</div>
@@ -154,7 +154,7 @@
 
 	<script>
 		$(function() {
-			var data = {'managingEmployee': {{employee|safe}} };
+			var data = {'managingEmployee': {{employee|safe}} }; 
 			var manageShifts = new $.fn.ManageShifts();
 			manageShifts.init(data).then(function() {
 				ko.applyBindings(manageShifts, $('#manage-shifts-container').get(0));

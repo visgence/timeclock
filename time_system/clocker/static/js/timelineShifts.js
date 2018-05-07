@@ -49,8 +49,6 @@ $(() => {
 
                 FormatShifts(rawShifts);
 
-                this.shiftTimeline().rebuild(this.shiftsDividedIntoWeeks[this.weekOffset], this.startingTimestamp);
-
                 updateLabels();
 
             };
@@ -84,13 +82,12 @@ $(() => {
 
             if (this.weekOffset === this.shiftsDividedIntoWeeks.length) {
                 getNextPageOfShifts();
+
             } else {
 
                 this.shiftTimeline().rebuild(this.shiftsDividedIntoWeeks[this.weekOffset], this.startingTimestamp);
 
             }
-
-            this.shiftTimeline().rebuild(this.shiftsDividedIntoWeeks[this.weekOffset], this.startingTimestamp);
 
             updateLabels();
 
@@ -98,6 +95,9 @@ $(() => {
 
         FormatShifts = (rawShifts) => {
 
+            if (rawShifts.length === 0) {
+                return [];
+            }
 
             const shiftsDividedIntoWeeks = [];
 
@@ -109,29 +109,27 @@ $(() => {
 
             while (startingTimestamp > timeOfLastLoggedShift) { //  Pads blank weeks until last logged shift is in range
                 shiftsDividedIntoWeeks.push([]);
-                startingTimestamp = startingTimestamp - oneWeekInMs;
+                startingTimestamp = DecrementTimestampByWeek(startingTimestamp);
             }
 
-            startingTimestamp = startingTimestamp / 1000; //    timeclock stores timestamps in seconds
-
-            let endingTimestamp = startingTimestamp + ((oneDayInMs - 100) / 1000) * 7;
+            let endingTimestamp = IncrementTimestampByWeek(startingTimestamp - 1000);
 
             for (let i = 0; i < rawShifts.length; i++) {
 
-                const shiftTimestamp = new Date(rawShifts[i]['time_in']).getTime() / 1000;
+                const shiftTimestamp = new Date(rawShifts[i]['time_in']).getTime();
 
                 if (shiftTimestamp < endingTimestamp && shiftTimestamp > startingTimestamp) { //    shift is within current work week time range
                     shiftsInCurrentWeek.push(rawShifts[i]);
 
                 } else if (shiftTimestamp < startingTimestamp) { // means that the next shift is in a different work week
 
-                    startingTimestamp -= (oneWeekInMs / 1000);
-                    endingTimestamp -= (oneWeekInMs / 1000);
+                    startingTimestamp = DecrementTimestampByWeek(startingTimestamp);
+                    endingTimestamp = DecrementTimestampByWeek(endingTimestamp);
                     shiftsDividedIntoWeeks.push(shiftsInCurrentWeek);
 
                     while (shiftTimestamp < startingTimestamp) { // pads blank weeks if the next shift farther than one work week away
-                        startingTimestamp -= (oneWeekInMs / 1000);
-                        endingTimestamp -= (oneWeekInMs / 1000);
+                        startingTimestamp = DecrementTimestampByWeek(startingTimestamp);
+                        endingTimestamp = DecrementTimestampByWeek(endingTimestamp);
                         shiftsDividedIntoWeeks.push([]);
                     }
 
@@ -159,6 +157,8 @@ $(() => {
                 }
 
             }
+
+            this.shiftTimeline().rebuild(this.shiftsDividedIntoWeeks[this.weekOffset], this.startingTimestamp);
 
         };
 
@@ -191,10 +191,10 @@ $(() => {
 
             const newTimezoneOffset = new Date(timestamp + oneWeekInMs).getTimezoneOffset();
 
-            const totalTimezoneOffset = Math.abs(timezoneOffset - newTimezoneOffset);
+            const totalTimezoneOffset = Math.abs(timezoneOffset - newTimezoneOffset) / 60;
 
             if (timezoneOffset > newTimezoneOffset) {
-                return timestamp + (oneWeekInMs + (oneHourInMs * totalTimezoneOffset));
+                return timestamp + (oneWeekInMs - (oneHourInMs * totalTimezoneOffset));
 
             } else if (timezoneOffset < newTimezoneOffset) {
                 return timestamp + (oneWeekInMs + (oneHourInMs * totalTimezoneOffset));
@@ -236,7 +236,7 @@ $(() => {
 
             const newTimezoneOffset = new Date(beginningOfWorkWeek).getTimezoneOffset();
 
-            const totalTimezoneOffset = Math.abs(timezoneOffset - newTimezoneOffset);
+            const totalTimezoneOffset = Math.abs(timezoneOffset - newTimezoneOffset) / 60;
 
             if (timezoneOffset > newTimezoneOffset) { //    add or subtract hours based on UTC Offset changes.
                 beginningOfWorkWeek -= (oneHourInMs * totalTimezoneOffset);
