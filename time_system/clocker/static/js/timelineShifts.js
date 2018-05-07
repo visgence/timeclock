@@ -75,8 +75,6 @@ $(() => {
 
             this.updateLabels();
 
-            console.log("Current Offset: " + this.weekOffset + " Shifts: ", this.shifts);
-
         }.bind(this);
 
         this.rebuild = (consts) => {
@@ -118,12 +116,6 @@ $(() => {
                     endingTimestamp -= (oneWeekInMs / 1000);
                     weeks.push(shiftsInWeek);
 
-                    while (shiftTimestamp < startingTimestamp) {
-                        startingTimestamp -= (oneWeekInMs / 1000);
-                        endingTimestamp -= (oneWeekInMs / 1000);
-                        weeks.push([]);
-                    }
-
                     shiftsInWeek = [];
                     shiftsInWeek.push(rawShifts[i]);
                 }
@@ -141,17 +133,13 @@ $(() => {
             } else {
                 let startingLength = this.shifts.length;
                 for (let i = 0; i < weeks.length; i++) {
-                    this.shifts[startingLength] = weeks[i];
+                    this.shifts[startingLength + i] = weeks[i];
                 }
             }
-
-            console.log(this.shifts);
 
             this.shiftTimeline().rebuild(weeks[0], weekStartingTime);
 
             this.startingTimestamp = weekStartingTime;
-
-            // this.weekOffset = 0;
 
         };
 
@@ -237,7 +225,6 @@ $(() => {
                     type: 'GET',
                     success: (data) => {
                         this.totalPages = data.totalPages;
-                        console.log(this.totalPages);
                         resolve(data.shifts);
                     },
                     error: (error) => {
