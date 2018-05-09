@@ -214,7 +214,6 @@ $(() => {
 
             let shiftDay;
 
-
             for (let i = 0; i < weekOfShifts.length; i++) {
                 shiftDay = new Date(weekOfShifts[i]['time_out']).getDay();
                 days[shiftDay].push(weekOfShifts[i]);
@@ -293,6 +292,8 @@ $(() => {
 
         updateLabels = () => {
 
+            // console.log("WAT");
+
             const months = [
                 'January',
                 'February',
@@ -310,7 +311,7 @@ $(() => {
 
             const startingDate = new Date(this.startingTimestamp);
 
-            const endingDate = new Date(IncrementTimestampByWeek(this.startingTimestamp));
+            const endingDate = new Date(IncrementTimestampByWeek(this.startingTimestamp - oneDayInMs));
 
             const startingLabel = months[startingDate.getMonth()] + ', ' + startingDate.getDate();
 
