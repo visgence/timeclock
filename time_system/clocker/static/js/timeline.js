@@ -18,11 +18,15 @@ $(() => {
 
         this.shifts = [];
         this.currentWorkWeekStartingTime = 0;
-        this.weekOffset = 0;
+        // this.weekOffset = 0;
+
+        this.init = () => {
+            this.RemovePreviousTimeline();
+        };
 
         this.rebuild = (weekOfShifts, startingTime) => {
 
-            RemovePreviousTimeline();
+            this.RemovePreviousTimeline();
 
             BuildTimelineData(weekOfShifts, startingTime);
 
@@ -33,7 +37,14 @@ $(() => {
             BuildTimelineData(weekOfShifts, startingTime);
         };
 
+        this.RemovePreviousTimeline = () => {
+            if ($('svg')) {
+                $('svg').remove();
+            }
+        };
+
         function BuildTimelineData(weekOfShifts, startingTime) {
+
 
             //  function takes a week of shifts, assigns them a date label, and normalizes to occur on the same day
 
@@ -130,13 +141,7 @@ $(() => {
             return normalizedTimestamp;
         }
 
-
-        function RemovePreviousTimeline() {
-            if ($('svg')) {
-                $('svg').remove();
-            }
-        }
-
+        this.init();
 
     };
 

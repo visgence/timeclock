@@ -31,25 +31,27 @@ $(() => {
         this.totalPages = 0;
         this.empId = '';
         this.weekOffset = 0;
+        this.isReloading = false;
         this.shiftTimeline = ko.observable();
 
         const ShiftTimeline = $.fn.ShiftTimeline;
 
-        this.init = () => {
+        this.reload = function (empId) {
+
+            this.isReloading = true;
 
             this.shiftTimeline(new ShiftTimeline());
 
-        };
-
-        this.reload = function (empId) {
-
             this.empId = empId;
+
+            this.weekOffset = 0;
+            this.pageNum = 1;
 
             processShifts = (rawShifts) => {
 
                 FormatShifts(rawShifts);
 
-                updateLabels();
+                // updateLabels();
 
             };
 
@@ -57,7 +59,7 @@ $(() => {
                 console.log(error);
             };
 
-            getShifts(empId).then(processShifts, handleError);
+            getShifts().then(processShifts, handleError);
 
         }.bind(this);
 
@@ -145,9 +147,11 @@ $(() => {
                 shiftsDividedIntoWeeks[i] = BreakIntoDays(shiftsDividedIntoWeeks[i]);
             }
 
-            if (this.shiftsDividedIntoWeeks.length === 0) {
+            if (this.isReloading) {
 
                 this.shiftsDividedIntoWeeks = shiftsDividedIntoWeeks;
+                this.isReloading = false;
+
 
             } else {
                 const startingLength = this.shiftsDividedIntoWeeks.length;
@@ -157,6 +161,9 @@ $(() => {
                 }
 
             }
+
+            updateLabels();
+
 
             this.shiftTimeline().rebuild(this.shiftsDividedIntoWeeks[this.weekOffset], this.startingTimestamp);
 
@@ -266,8 +273,6 @@ $(() => {
 
             this.startingTimestamp = beginningOfWorkWeek;
 
-            console.log(new Date(beginningOfWorkWeek));
-
             return beginningOfWorkWeek;
         };
 
@@ -276,7 +281,7 @@ $(() => {
             const promise = new Promise((resolve, reject) => {
 
                 $.ajax({
-                    url: shiftUrl + '?page=' + this.pageNum + '&per_page=50&employee=' + this.empId,
+                    url: shiftUrl + '?page=' + this.pageNum + '&per_page=20&employee=' + this.empId,
                     type: 'GET',
                     success: (data) => {
                         this.totalPages = data.totalPages;
@@ -355,8 +360,6 @@ $(() => {
             }
 
         };
-
-        this.init();
 
     };
 

@@ -40,7 +40,9 @@ class Command(BaseCommand):
             fixtures.append([
                 "clocker/fixtures/jobs.json"
             ])
-
+            fixtures.append([
+                "clocker/fixtures/shifts.json"
+            ])
         # Load fixtures
         for apps in fixtures:
             for fixture in apps:
