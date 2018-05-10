@@ -206,6 +206,8 @@ $(() => {
 
         BreakIntoDays = (weekOfShifts) => {
 
+            // console.log(weekOfShifts);
+
             const days = [];
 
             for (let i = 0; i < 7; i++) {
@@ -216,8 +218,19 @@ $(() => {
 
             for (let i = 0; i < weekOfShifts.length; i++) {
                 shiftDay = new Date(weekOfShifts[i]['time_out']).getDay();
+                // console.log(shiftDay);
+                if (shiftDay === 0) { //    move sunday to last day of week, per billing periods
+                    shiftDay = 6;
+                } else if (shiftDay === 1) { // monday now first day of week
+                    shiftDay = 0;
+                } else {
+                    shiftDay -= 1;
+                }
+
                 days[shiftDay].push(weekOfShifts[i]);
             }
+
+            // console.log(days);
 
             return days;
         };
@@ -227,7 +240,15 @@ $(() => {
             //  Returns a starting timestamp for the desired work week, defined as Sunday -> Saturday
             //  Accounts for timezone offset.
 
-            const currentDayOfWeek = new Date().getDay();
+            let currentDayOfWeek = new Date().getDay(); //  return 0-6 day indexes (Sun- Sat)
+
+            if (currentDayOfWeek === 0) { //    set monday to be start of work week, sunday last, all other days shifted back by 1
+                currentDayOfWeek = 6;
+            } else if (currentDayOfWeek === 1) {
+                currentDayOfWeek = 0;
+            } else {
+                currentDayOfWeek -= 1;
+            }
 
             const timezoneOffset = new Date().getTimezoneOffset();
 
@@ -244,6 +265,8 @@ $(() => {
             }
 
             this.startingTimestamp = beginningOfWorkWeek;
+
+            console.log(new Date(beginningOfWorkWeek));
 
             return beginningOfWorkWeek;
         };
@@ -313,9 +336,9 @@ $(() => {
 
             const endingDate = new Date(IncrementTimestampByWeek(this.startingTimestamp - oneDayInMs));
 
-            const startingLabel = months[startingDate.getMonth()] + ', ' + startingDate.getDate();
+            const startingLabel = months[startingDate.getMonth()] + ' ' + startingDate.getDate() + ', ' + startingDate.getFullYear();
 
-            const endingLabel = months[endingDate.getMonth()] + ', ' + endingDate.getDate();
+            const endingLabel = months[endingDate.getMonth()] + ' ' + endingDate.getDate() + ', ' + endingDate.getFullYear();
 
             $('#week-range-label').text(startingLabel + ' - ' + endingLabel);
 

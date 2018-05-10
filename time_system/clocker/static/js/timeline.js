@@ -37,7 +37,7 @@ $(() => {
 
             //  function takes a week of shifts, assigns them a date label, and normalizes to occur on the same day
 
-            const dateLabels = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+            const dateLabels = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 
             const timelineData = [];
 
@@ -52,7 +52,6 @@ $(() => {
                     let endEpoch;
 
                     for (let shift = 0; shift < weekOfShifts[day].length; shift++) {
-
 
                         if (shift % 2 === 0) {
                             shiftColor = 'gray';
@@ -94,6 +93,8 @@ $(() => {
 
             const endingTime = startingTime + oneDayInMs;
 
+            const zoom = d3.zoom(); //  needed to disable d3-timelines from blocking native scrolling
+
             const chart = d3.timelines()
                 .stack()
                 .margin({
@@ -112,11 +113,14 @@ $(() => {
                     window.location.href = 'http://timeclock.visgence.com/timeclock/summary/' + d['shift_id'];
                 });
 
+
             const svg = d3.select('#shift-timeline');
             svg.append('svg').attr('width', $('#shift-timeline').innerWidth())
                 .attr('height', $('#shift-timeline').innerHeight())
                 .datum(timelineData)
-                .call(chart);
+                .call(chart)
+                .call(zoom)
+                .on('wheel.zoom', null); // prevent scroll events from being blocked
         }
 
         function NormalizeTimestampToSameDay(timestamp, daysSinceInitial) {
