@@ -31,6 +31,7 @@ $(() => {
         this.totalPages = 0;
         this.empId = '';
         this.weekOffset = 0;
+        this.employeeColor = '';
         this.isReloading = false;
         this.shiftTimeline = ko.observable();
 
@@ -70,7 +71,7 @@ $(() => {
 
             this.startingTimestamp = IncrementTimestampByWeek(this.startingTimestamp);
 
-            this.shiftTimeline().rebuild(this.shiftsDividedIntoWeeks[this.weekOffset], this.startingTimestamp);
+            this.shiftTimeline().rebuild(this.shiftsDividedIntoWeeks[this.weekOffset], this.startingTimestamp, this.employeeColor);
 
             updateLabels();
 
@@ -87,7 +88,7 @@ $(() => {
 
             } else {
 
-                this.shiftTimeline().rebuild(this.shiftsDividedIntoWeeks[this.weekOffset], this.startingTimestamp);
+                this.shiftTimeline().rebuild(this.shiftsDividedIntoWeeks[this.weekOffset], this.startingTimestamp, this.employeeColor);
 
             }
 
@@ -165,7 +166,7 @@ $(() => {
             updateLabels();
 
 
-            this.shiftTimeline().rebuild(this.shiftsDividedIntoWeeks[this.weekOffset], this.startingTimestamp);
+            this.shiftTimeline().rebuild(this.shiftsDividedIntoWeeks[this.weekOffset], this.startingTimestamp, this.employeeColor);
 
         };
 
@@ -285,6 +286,7 @@ $(() => {
                     type: 'GET',
                     success: (data) => {
                         this.totalPages = data.totalPages;
+                        this.employeeColor = data.shifts[0].employee.employee_color;
                         resolve(data.shifts);
                     },
                     error: (error) => {

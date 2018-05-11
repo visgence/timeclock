@@ -24,11 +24,11 @@ $(() => {
             this.RemovePreviousTimeline();
         };
 
-        this.rebuild = (weekOfShifts, startingTime) => {
+        this.rebuild = (weekOfShifts, startingTime, employeeColor) => {
 
             this.RemovePreviousTimeline();
 
-            BuildTimelineData(weekOfShifts, startingTime);
+            BuildTimelineData(weekOfShifts, startingTime, employeeColor);
 
         };
 
@@ -43,8 +43,9 @@ $(() => {
             }
         };
 
-        function BuildTimelineData(weekOfShifts, startingTime) {
+        function BuildTimelineData(weekOfShifts, startingTime, employeeColor) {
 
+            employeeColor = generateShiftColors(employeeColor); //  returns RGBA formatted colors, primary shift is fully saturated, secondary is slightly transparent
 
             //  function takes a week of shifts, assigns them a date label, and normalizes to occur on the same day
 
@@ -63,11 +64,10 @@ $(() => {
                     let endEpoch;
 
                     for (let shift = 0; shift < weekOfShifts[day].length; shift++) {
-
                         if (shift % 2 === 0) {
-                            shiftColor = 'gray';
+                            shiftColor = employeeColor.primaryShiftColor;
                         } else {
-                            shiftColor = 'LightGray';
+                            shiftColor = employeeColor.secondaryShiftColor;
                         }
 
                         startEpoch = new Date(weekOfShifts[day][shift]['time_in']);
@@ -139,6 +139,23 @@ $(() => {
             const normalizedTimestamp = (timestamp - (daysSinceInitial * oneDayInMs));
 
             return normalizedTimestamp;
+        }
+
+        function generateShiftColors(hexColor) {
+            if (hexColor) {
+                const m = hexColor.match(/^#?([\da-f]{2})([\da-f]{2})([\da-f]{2})$/i);
+                const rgbString = String(parseInt(m[1], 16)) + ',' + String(parseInt(m[2], 16)) + ',' + String(parseInt(m[3], 16));
+                return {
+                    primaryShiftColor: 'rgba(' + rgbString + ', 1)',
+                    secondaryShiftColor: 'rgba(' + rgbString + ', 0.5)',
+                };
+            }
+            //  else no employee color set
+            return {
+                primaryShiftColor: 'rgba(0, 0, 0, 1)',
+                secondaryShiftColor: 'rgba(0, 0, 0, 0.5)',
+            };
+
         }
 
         this.init();
