@@ -1,3 +1,11 @@
+import $ from 'jquery';
+
+window.jQuery = $;
+window.$ = $;
+// import boostrap from 'bootstrap'
+// import plugin from 'jquery-plugin'
+
+
 $(() => {
     $('#statusBtn').button().click(() => {
         console.log('submitting form');

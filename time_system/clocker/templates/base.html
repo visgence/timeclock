@@ -4,14 +4,16 @@
     <head>
         {% load static %}
         <title>Time Clock</title>
-        <script src="{% static "node_modules/jquery/dist/jquery.min.js" %}"></script>
+        <!-- <script src="{% static "node_modules/jquery/dist/jquery.min.js" %}"></script>
         <script src="{% static "node_modules/bootstrap/dist/js/bootstrap.min.js" %}"></script>
         <script src="{% static "node_modules/knockout/build/output/knockout-latest.js" %}"></script>
         <script src="{% static "node_modules/d3/dist/d3.min.js" %}"></script>
-        <script src="{% static "node_modules/d3-timelines/dist/d3-timelines.js" %}"></script>
-        <link rel="stylesheet" type="text/css" href="{% static "node_modules/bootstrap/dist/css/bootstrap.min.css" %}">
+        <script src="{% static "node_modules/d3-timelines/dist/d3-timelines.js" %}"></script> -->
+        <script src = "{% static "dist/bundle.js" %}"></script>
+        <script src = "{% static "dist/vendor.bundle.js" %}"></script>
+        <!-- <link rel="stylesheet" type="text/css" href="{% static "node_modules/bootstrap/dist/css/bootstrap.min.css" %}"> -->
 
-        <link rel="stylesheet" type="text/css" href="{% static "libraries/jquery-ui-1.10.3.custom.min.css" %}"/>
+        <!-- <link rel="stylesheet" type="text/css" href="{% static "libraries/jquery-ui-1.10.3.custom.min.css" %}"/> -->
 
         <script src="{% static "js/utils.js" %}"></script>
         <link rel="stylesheet" type="text/css" href="{% static "css/main_page.css" %}"/>
