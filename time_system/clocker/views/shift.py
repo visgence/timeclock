@@ -117,13 +117,20 @@ class ShiftsView(View):
             self.returnData['errors'].append('Invalid permissions')
             return HttpResponseForbidden(json.dumps(self.returnData, indent=4), content_type="application/json")
 
+        if('first_shift' in request.GET) :
+            first_shift = Shift.objects.filter(employee=employee).order_by('time_in')[0]
+
+
 
         if 'starting_timestamp' in request.GET and 'ending_timestamp' in request.GET:
+            first_shift = Shift.objects.filter(employee=employee).order_by('time_in')[0]
             starting_date = datetime.fromtimestamp(int(request.GET['starting_timestamp'])).strftime('%Y-%m-%d %H:%S')
             ending_date = datetime.fromtimestamp(int(request.GET['ending_timestamp'])).strftime('%Y-%m-%d %H:%S')
             shifts = Shift.objects.filter(employee=employee, time_in__range=[starting_date, ending_date])
             self.returnData.update({
-                'shifts': [s.toDict() for s in shifts]
+                'shifts': [s.toDict() for s in shifts],
+                'first_shift' : first_shift.toDict()['time_in']
+                
             })
 
         # break the data into pages
