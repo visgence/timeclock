@@ -5,20 +5,15 @@ $(() => {
         Author: Jacob Bakarich
         Date: May 7, 2018
 
-        This function uses the same endpoint as shiftList to get a paginated list of logged shifts,
-        then formats the shifts into work weeks and days, and calls Timeline.js to use d3 to graph formatted
-        shifts.
+        This function uses the shift endpoint on /shifts to return get a list of shifts in a given time range.
+        Shifts returned are formatted to be sorted by day of week, and then passed to ShiftTimeline to be 
+        graphed.
 
-        The shifts are formatted from a paginated list into an array sorted by work weeks, and week days. 
-        Timeline.js graphs one week at a time, and displaying previous/next weeks are supported via prev
-        week and nextWeek functions. 
-
-
-        Next 'page' of shifts are automatically requested when the current page's worth of shifts is
-        reached. If no more pages are availible, the "previous week" button is hidden.
-
+        On selecting the "previous week" button, an additional week of shifts is requested using a new time 
+        range. returned shifts are formatted and appended to an array that will be used to display weeks 
+        again if "Next Week" is selected.
+        
         */
-
 
         const shiftUrl = '/timeclock/shifts/';
         const oneHourInMs = 3600000;
@@ -30,7 +25,6 @@ $(() => {
         this.empId = '';
         this.weekOffset = 0;
         this.employeeColor = '';
-        this.isReloading = false;
         this.firstShiftTimestamp = 0;
         this.shiftTimeline = ko.observable();
 
@@ -72,11 +66,6 @@ $(() => {
 
             this.weekOffset -= 1;
 
-            console.log(this.weekOffset);
-
-            console.log(this.shiftsDividedIntoWeeks);
-            console.log(this.shiftsDividedIntoWeeks[this.weekOffset]);
-
             this.startingTimestamp = IncrementTimestampByWeek(this.startingTimestamp);
 
             this.shiftTimeline().rebuild(this.shiftsDividedIntoWeeks[this.weekOffset], this.startingTimestamp, this.employeeColor);
@@ -109,10 +98,6 @@ $(() => {
 
         FormatShifts = (rawShifts) => {
 
-            if (rawShifts.length === 0) {
-                return [];
-            }
-
             formattedShifts = BreakIntoDays(rawShifts);
 
 
@@ -123,8 +108,6 @@ $(() => {
             }
 
             updateLabels();
-
-            console.log(this.shiftsDividedIntoWeeks);
 
             this.shiftTimeline().rebuild(formattedShifts, this.startingTimestamp, this.employeeColor);
 
@@ -174,8 +157,6 @@ $(() => {
 
         BreakIntoDays = (weekOfShifts) => {
 
-            // console.log(weekOfShifts);
-
             const days = [];
 
             for (let i = 0; i < 7; i++) {
@@ -197,8 +178,6 @@ $(() => {
 
                 days[shiftDay].push(weekOfShifts[i]);
             }
-
-            // console.log(days);
 
             return days;
         };
@@ -241,12 +220,11 @@ $(() => {
 
             const promise = new Promise((resolve, reject) => {
 
-                let startingTimestampInSeconds = this.startingTimestamp / 1000;
-                let endingTimestampinSeconds = (this.startingTimestamp + oneWeekInMs) / 1000;
-
+                const startingTimestampInSeconds = this.startingTimestamp / 1000;
+                const endingTimestampInSeconds = (this.startingTimestamp + oneWeekInMs) / 1000;
 
                 $.ajax({
-                    url: shiftUrl + '?starting_timestamp=' + startingTimestampInSeconds + '&ending_timestamp=' + endingTimestampinSeconds + '&employee=' + this.empId,
+                    url: shiftUrl + '?starting_timestamp=' + startingTimestampInSeconds + '&ending_timestamp=' + endingTimestampInSeconds + '&employee=' + this.empId,
                     type: 'GET',
                     success: (data) => {
 
@@ -290,8 +268,6 @@ $(() => {
         };
 
         updateLabels = () => {
-
-            // console.log("WAT");
 
             const months = [
                 'January',
