@@ -4,9 +4,12 @@ $(() => {
     const Shift = function (consts) {
         const __this = this;
         const shiftUrl = '/timeclock/shifts/';
+        const dayLabels = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
         this.id = ko.observable();
         this.time_in = ko.observable();
+        this.time_in_label = ko.observable();
+        this.time_out_label = ko.observable();
         this.time_out = ko.observable();
         this.hours = ko.observable();
         this.employee = ko.observable();
@@ -28,9 +31,11 @@ $(() => {
             }
             if (consts.hasOwnProperty('time_in')) {
                 this.time_in(consts.time_in);
+                this.time_in_label(this.formatDateString(consts.time_in));
             }
             if (consts.hasOwnProperty('time_out')) {
                 this.time_out(consts.time_out);
+                this.time_out_label(this.formatDateString(consts.time_out));
             }
             if (consts.hasOwnProperty('hours')) {
                 this.hours(consts.hours);
@@ -41,16 +46,34 @@ $(() => {
 
         }.bind(this);
 
-        this.getTimeInDate = function () {
-            if (!this.time_in()) {
-                return '';
+        this.formatDateString = function (time_in) {
+
+            const d = new Date(time_in);
+            const shiftWeekdayIndex = d.getDay();
+            const shiftWeekday = dayLabels[shiftWeekdayIndex];
+
+            let shiftMinutes = d.getMinutes();
+            if (shiftMinutes < 10) {
+                shiftMinutes = '0' + shiftMinutes;
             }
 
-            const d = new Date(this.time_in());
-            const dateStr = (d.getMonth() + 1) + '/' +
-                (d.getDate().length === 1 ? '0' + d.getDate() : d.getDate()) + '/' +
-                d.getFullYear();
+            let shiftHours = d.getHours();
+            if (shiftHours < 10) {
+                shiftHours = '0' + shiftHours;
+            }
+
+            const shiftTime = shiftHours + ':' + shiftMinutes;
+
+            const shiftYear = (d.getFullYear().toString()).slice(2, 4);
+            const shiftMonth = (d.getMonth() + 1);
+            const shiftDay = d.getDate();
+
+            const shiftDate = shiftMonth + '/' + shiftDay + '/' + shiftYear;
+
+            const dateStr = shiftWeekday + ', ' + shiftDate + ', ' + shiftTime;
+
             return dateStr;
+
         }.bind(this);
 
         this.summary = function () {
@@ -101,13 +124,12 @@ $(() => {
                     xhr.setRequestHeader('X-CSRFToken', csrf);
                 },
                 data: JSON.stringify(data),
-            })
-                .done(() => {
-                    $(window).trigger('shift-updated');
-                })
-                .fail((resp) => {
-                    alert(resp.responseText);
-                });
+            }).done(() => {
+                $(window).trigger('shift-updated');
+            }).fail((resp) => {
+                alert(resp.responseText);
+            });
+
         }.bind(this);
 
         this.deleteWarning = function () {
@@ -134,13 +156,16 @@ $(() => {
                 beforeSend: function (xhr) {
                     xhr.setRequestHeader('X-CSRFToken', csrf);
                 },
-            })
-                .done(() => {
-                    $(window).trigger('shift-updated');
-                })
-                .fail((resp) => {
-                    alert(resp.responseText);
-                });
+            }).done(() => {
+
+                $(window).trigger('shift-updated');
+
+            }).fail((resp) => {
+
+                alert(resp.responseText);
+
+            });
+
         }.bind(this);
 
         this.toDict = function () {

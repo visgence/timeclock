@@ -22,6 +22,7 @@ $(() => {
 
         this.shiftsDividedIntoWeeks = [];
         this.startingTimestamp = 0;
+        this.endingTimestamp = 0;
         this.empId = '';
         this.weekOffset = 0;
         this.employeeColor = '';
@@ -30,15 +31,20 @@ $(() => {
 
         const ShiftTimeline = $.fn.ShiftTimeline;
 
-        this.reload = function (empId) {
+        this.reload = function (startingTimestamp, endingTimestamp, empId) {
 
-            this.startingTimestamp = CalculateStartingTime();
+            // this.startingTimestamp = CalculateStartingTime();
 
             this.shiftsDividedIntoWeeks = [];
 
-            this.weekOffset = 0;
+            this.startingTimestamp = startingTimestamp;
 
-            this.isReloading = true;
+            this.endingTimestamp = endingTimestamp;
+
+            console.log(startingTimestamp);
+
+            console.log(empId);
+
 
             this.shiftTimeline(new ShiftTimeline());
 
@@ -221,7 +227,7 @@ $(() => {
             const promise = new Promise((resolve, reject) => {
 
                 const startingTimestampInSeconds = this.startingTimestamp / 1000;
-                const endingTimestampInSeconds = (this.startingTimestamp + oneWeekInMs) / 1000;
+                const endingTimestampInSeconds = this.endingTimestamp / 1000;
 
                 $.ajax({
                     url: shiftUrl + '?starting_timestamp=' + startingTimestampInSeconds + '&ending_timestamp=' + endingTimestampInSeconds + '&employee=' + this.empId,

@@ -5,20 +5,21 @@ $(() => {
         const Shift = $.fn.Shift;
         const shiftUrl = '/timeclock/shifts/';
 
-        let per_page = 25;
+        // let per_page = 25;
 
         this.shifts = ko.observableArray();
 
         this.currentPage = ko.observable();
+        this.startingTimestamp = ko.observable();
+        this.endingTimestamp = ko.observable();
         this.totalPages = ko.observable();
         this.pageNum = ko.computed(function() { //eslint-disable-line
             return this.currentPage() + ' of ' + this.totalPages() + ' pages';
         }.bind(this));
 
+
         this.init = function (consts) {
             consts = consts || {};
-
-            // const __this = this;
 
             if (consts.hasOwnProperty('per_page')) {
                 per_page = consts.per_page;
@@ -64,13 +65,17 @@ $(() => {
             this.reload(this.totalPages());
         }.bind(this);
 
-        this.reload = function (page, employee) {
+        this.reload = function (startingTimestamp, endingTimestamp, employee) {
             const __this = this;
 
+            const startingTimestampInSeconds = startingTimestamp / 1000;
+
+            const endingTimestampInSeconds = endingTimestamp / 1000;
+
             const args = {
-                page: page,
-                per_page: per_page,
                 employee: employee,
+                starting_timestamp: startingTimestampInSeconds,
+                ending_timestamp: endingTimestampInSeconds,
             };
 
             const promise = $.get(shiftUrl, args)
