@@ -64,11 +64,19 @@ $(() => {
 
             const shiftTime = shiftHours + ':' + shiftMinutes;
 
-            const shiftYear = (d.getFullYear().toString()).slice(2, 4);
-            const shiftMonth = (d.getMonth() + 1);
-            const shiftDay = d.getDate();
+            const shiftYear = d.getFullYear();
 
-            const shiftDate = shiftMonth + '/' + shiftDay + '/' + shiftYear;
+            let shiftMonth = (d.getMonth() + 1);
+            if (shiftMonth < 10) {
+                shiftMonth = '0' + shiftMonth;
+            }
+
+            let shiftDay = d.getDate();
+            if (shiftDay < 10) {
+                shiftDay = '0' + shiftDay;
+            }
+
+            const shiftDate = shiftYear + '-' + shiftMonth + '-' + shiftDay;
 
             const dateStr = shiftWeekday + ', ' + shiftDate + ', ' + shiftTime;
 
