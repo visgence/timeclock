@@ -3,7 +3,6 @@ $(() => {
     const ShiftList = function (consts) {
 
         const Shift = $.fn.Shift;
-        const shiftUrl = '/timeclock/shifts/';
 
         // let per_page = 25;
 
@@ -28,20 +27,21 @@ $(() => {
             this.rebuild(consts);
         }.bind(this);
 
-        this.rebuild = function (consts) {
-            consts = consts || {};
+        this.rebuild = function (shifts) {
+            // consts = consts || {};
 
-            if (consts.hasOwnProperty('page')) {
-                this.currentPage(consts.page);
-            }
+            // if (consts.hasOwnProperty('page')) {
+            //     this.currentPage(consts.page);
+            // }
 
-            if (consts.hasOwnProperty('totalPages')) {
-                this.totalPages(consts.totalPages);
-            }
+            // if (consts.hasOwnProperty('totalPages')) {
+            //     this.totalPages(consts.totalPages);
+            // }
 
-            if (consts.hasOwnProperty('shifts')) {
+
+            if (shifts.length > 0) {
                 const newShifts = [];
-                $.each(consts.shifts, function () {
+                $.each(shifts, function () {
                     newShifts.push(new Shift(this));
                 });
 
@@ -65,37 +65,37 @@ $(() => {
             this.reload(this.totalPages());
         }.bind(this);
 
-        this.reload = function (startingTimestamp, endingTimestamp, employee) {
-            const __this = this;
+        // this.reload = function (startingTimestamp, endingTimestamp, employee) {
+        //     const __this = this;
 
-            const startingTimestampInSeconds = startingTimestamp / 1000;
+        //     const startingTimestampInSeconds = startingTimestamp / 1000;
 
-            const endingTimestampInSeconds = endingTimestamp / 1000;
+        //     const endingTimestampInSeconds = endingTimestamp / 1000;
 
-            const args = {
-                employee: employee,
-                starting_timestamp: startingTimestampInSeconds,
-                ending_timestamp: endingTimestampInSeconds,
-            };
+        //     const args = {
+        //         employee: employee,
+        //         starting_timestamp: startingTimestampInSeconds,
+        //         ending_timestamp: endingTimestampInSeconds,
+        //     };
 
-            const promise = $.get(shiftUrl, args)
-                .done((resp) => {
-                    if (resp.hasOwnProperty('errors') && resp.errors.length > 0) {
-                        console.error(resp.errors);
-                    } else if (resp.shifts) {
-                        __this.rebuild(resp);
-                    } else {
-                        console.error('Something unexpected happend!');
-                    }
-                })
-                .fail((resp) => {
-                    console.error(resp);
-                });
+        //     const promise = $.get(shiftUrl, args)
+        //         .done((resp) => {
+        //             if (resp.hasOwnProperty('errors') && resp.errors.length > 0) {
+        //                 console.error(resp.errors);
+        //             } else if (resp.shifts) {
+        //                 __this.rebuild(resp);
+        //             } else {
+        //                 console.error('Something unexpected happend!');
+        //             }
+        //         })
+        //         .fail((resp) => {
+        //             console.error(resp);
+        //         });
 
-            return promise;
-        }.bind(this);
+        //     return promise;
+        // }.bind(this);
 
-        this.init(consts);
+        // this.init(consts);
     };
 
     $.fn.ShiftList = ShiftList;

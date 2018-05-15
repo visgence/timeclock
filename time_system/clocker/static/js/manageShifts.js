@@ -6,14 +6,11 @@ $(() => {
         const ShiftList = $.fn.ShiftList;
         const TimelineShifts = $.fn.TimelineShifts;
         const employeeUrl = '/timeclock/employees/';
+        const shiftUrl = '/timeclock/shifts/';
 
         const oneHourInMs = 3600000;
         const oneDayInMs = 86400000;
         const oneWeekInMs = 604800000;
-
-        const shiftListData = {
-            per_page: 25,
-        };
 
         this.shiftList = ko.observable();
         this.weekOf = ko.observable();
@@ -22,6 +19,7 @@ $(() => {
         this.startingTimestamp = 0;
         this.endingTimestamp = ko.observable();
         this.employees = ko.observableArray();
+        this.employeeColor = '';
         this.managingEmployee = ko.observable();
 
         this.employee = ko.observable();
@@ -54,17 +52,19 @@ $(() => {
                 this.managingEmployee(vars.managingEmployee);
             }
             this.calculateStartingTimestamp();
-            this.shiftList(new ShiftList(shiftListData));
+            this.shiftList(new ShiftList());
             this.timelineShifts(new TimelineShifts());
             // TODO: this will change once I get more time to do something more proper
             $(window).on('shift-updated', () => {
-                __this.shiftList().reload(__this.startingTimestamp, __this.endingTimestamp, __this.selectedEmployee().id);
+                __this.getShifts().then(this.updateShiftElements, this.handleError);
             });
 
             $(window).on('hashchange', hashchangeHandler);
             return loadEmployees().then(() => {
                 $(window).trigger('hashchange');
             });
+
+            this.updateLabels();
             // setInputBindings();
         };
 
@@ -75,43 +75,24 @@ $(() => {
                 $.each(__this.employees(), (i, emp) => {
                     if (empId === emp.id) {
                         __this.employee(emp);
-                        console.log(emp.id);
-                        __this.shiftList().reload(this.startingTimestamp, this.endingTimestamp, emp.id);
-                        __this.timelineShifts().reload(this.startingTimestamp, this.endingTimestamp, emp.id);
+                        __this.getShifts().then(this.updateShiftElements, this.handleError);
+
                         return false;
                     }
                 });
             }
         }.bind(this);
 
-        // Checks if the shift table should add a blank row to seperate groups of shifts by day
-        // this.shouldAddSeperator = function (index, nextIndex) {
-
-        //     if (index >= this.shiftList().shifts().length || nextIndex >= this.shiftList().shifts().length) {
-        //         return false;
-        //     }
-        //     const currentDate = new Date(this.shiftList().shifts()[index].time_in());
-        //     const nextDate = new Date(this.shiftList().shifts()[nextIndex].time_in());
-
-        //     if (currentDate.getDate() !== nextDate.getDate()) {
-        //         return true;
-        //     }
-        //     return false;
-        // }.bind(this);
-
         this.prevPage = function () {
 
             const state = getHash();
             if (state.hasOwnProperty('emp')) {
-                const empId = parseInt(state.emp);
 
                 this.startingTimestamp = this.DecrementTimestampByWeek(this.startingTimestamp);
                 this.endingTimestamp = this.DecrementTimestampByWeek(this.endingTimestamp);
 
+                this.getShifts().then(this.updateShiftElements, this.handleError);
 
-                __this.timelineShifts().reload(this.startingTimestamp, this.endingTimestamp, empId);
-
-                __this.shiftList().reload(this.startingTimestamp, this.endingTimestamp, empId);
 
             }
 
@@ -121,19 +102,29 @@ $(() => {
 
             const state = getHash();
             if (state.hasOwnProperty('emp')) {
-                const empId = parseInt(state.emp);
 
                 this.startingTimestamp = this.IncrementTimestampByWeek(this.startingTimestamp);
                 this.endingTimestamp = this.IncrementTimestampByWeek(this.endingTimestamp);
 
-
-                __this.timelineShifts().reload(this.startingTimestamp, this.endingTimestamp, empId);
-
-                __this.shiftList().reload(this.startingTimestamp, this.endingTimestamp, empId);
+                this.getShifts().then(this.updateShiftElements, this.handleError);
 
             }
 
         }.bind(this);
+
+        this.updateShiftElements = (shifts) => {
+
+            __this.timelineShifts().rebuild(shifts, this.startingTimestamp, this.endingTimestamp, this.employeeColor);
+            __this.shiftList().rebuild(shifts);
+
+
+            this.updateLabels();
+
+        };
+
+        this.handleError = (error) => {
+            alert(error);
+        };
 
 
         this.calculateStartingTimestamp = function () {
@@ -267,6 +258,78 @@ $(() => {
                 }
             }).val('');
         }
+
+        this.getShifts = () => {
+
+            const promise = new Promise((resolve, reject) => {
+
+                const startingTimestampInSeconds = this.startingTimestamp / 1000;
+                const endingTimestampInSeconds = this.endingTimestamp / 1000;
+
+                $.ajax({
+                    url: shiftUrl + '?starting_timestamp=' + startingTimestampInSeconds + '&ending_timestamp=' + endingTimestampInSeconds + '&employee=' + this.employee().id,
+                    type: 'GET',
+                    success: (data) => {
+
+                        if (data.shifts.length > 0) {
+                            this.employeeColor = data.shifts[0].employee.employee_color;
+                            this.firstShiftTimestamp = new Date(data.first_shift).getTime();
+                            resolve(data.shifts);
+                        } else {
+                            resolve([]);
+                        }
+                    },
+                    error: (error) => {
+                        reject(error);
+                    },
+
+                });
+
+            });
+            return promise;
+
+        };
+
+        this.updateLabels = () => {
+
+            const months = [
+                'January',
+                'February',
+                'March',
+                'April',
+                'May',
+                'June',
+                'July',
+                'August',
+                'September',
+                'October',
+                'November',
+                'December',
+            ];
+
+            const startingDate = new Date(this.startingTimestamp);
+
+            const endingDate = new Date(this.endingTimestamp);
+
+            const startingLabel = months[startingDate.getMonth()] + ' ' + startingDate.getDate() + ', ' + startingDate.getFullYear();
+
+            const endingLabel = months[endingDate.getMonth()] + ' ' + endingDate.getDate() + ', ' + endingDate.getFullYear();
+
+            $('#week-range-label').text(startingLabel + ' - ' + endingLabel);
+
+            if (this.weekOffset === 0) {
+                $('#next-week-button').hide();
+            } else {
+                $('#next-week-button').show();
+            }
+
+            if (this.startingTimestamp < this.firstShiftTimestamp) {
+                $('#prev-week-button').hide();
+            } else {
+                $('#prev-week-button').show();
+            }
+        };
+
     };
     $.fn.ManageShifts = ManageShifts;
 });
