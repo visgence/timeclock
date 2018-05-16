@@ -27,6 +27,14 @@ input.icon-input-hide {
     position: static;
 }
 
+#next-week-button {
+    user-select: none;
+}
+
+#prev-week-button {
+    user-select: none;
+}
+
 #timeline-label {
     text-align: center;
     user-select: none;

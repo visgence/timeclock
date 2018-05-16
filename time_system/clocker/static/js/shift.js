@@ -46,9 +46,12 @@ $(() => {
 
         }.bind(this);
 
-        this.formatDateString = function (time_in) {
+        this.formatDateString = function (time) {
+            if (!time) {
+                return '-';
+            }
 
-            const d = new Date(time_in);
+            const d = new Date(time);
             const shiftWeekdayIndex = d.getDay();
             const shiftWeekday = dayLabels[shiftWeekdayIndex];
 
@@ -122,6 +125,20 @@ $(() => {
             if (data.id) {
                 url += data.id + '/';
                 requestType = 'PUT';
+            }
+
+            const startingTimestampToBeSaved = new Date(data.time_in).getTime();
+            const endingTimestampToBeSaved = new Date(data.time_out).getTime();
+            const currentDate = new Date().getTime();
+
+            if (startingTimestampToBeSaved > endingTimestampToBeSaved) {
+                alert('Time In Cannot Be After Time Out, Check Shift On:\n' + data.time_in);
+                return;
+            }
+
+            if ((startingTimestampToBeSaved > currentDate) || (endingTimestampToBeSaved > currentDate)) {
+                alert('Shift Time(s) Cannot Be In the Future, Check Shift On:\n' + data.time_out);
+                return;
             }
 
             return $.ajax({

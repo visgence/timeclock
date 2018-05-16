@@ -41,59 +41,9 @@ $(() => {
 
             this.shiftTimeline(new ShiftTimeline());
 
-            // this.empId = empId;
-
-            // processShifts = (rawShifts) => {
-
             FormatShifts(shifts);
 
-            // updateLabels();
-
-            // };
-
-            // handleError = (error) => {
-            // console.log(error);
-            // };
-
-            // getShifts().then(processShifts, handleError);
-
-
         }.bind(this);
-
-
-        // this.nextWeek = function () {
-
-        //     this.weekOffset -= 1;
-
-        //     this.startingTimestamp = IncrementTimestampByWeek(this.startingTimestamp);
-
-        //     this.shiftTimeline().rebuild(this.shiftsDividedIntoWeeks[this.weekOffset], this.startingTimestamp, this.employeeColor);
-
-        //     updateLabels();
-
-        // }.bind(this);
-
-        // this.prevWeek = function () {
-
-        //     this.weekOffset += 1;
-
-        //     this.startingTimestamp = DecrementTimestampByWeek(this.startingTimestamp);
-
-        //     processShifts = (rawShifts) => {
-
-        //         FormatShifts(rawShifts);
-
-        //     };
-
-        //     handleError = (error) => {
-        //         console.log(error);
-        //     };
-
-        //     getShifts().then(processShifts, handleError);
-
-        //     updateLabels();
-
-        // }.bind(this);
 
         FormatShifts = (rawShifts) => {
 
@@ -111,48 +61,6 @@ $(() => {
             this.shiftTimeline().rebuild(formattedShifts, this.startingTimestamp, this.employeeColor);
 
         };
-
-        // DecrementTimestampByWeek = (timestamp) => {
-
-        //     //  Decrements timestamp by week, accounting for timezone offset
-
-        //     const timezoneOffset = new Date(timestamp).getTimezoneOffset();
-
-        //     const newTimezoneOffset = new Date(timestamp - oneWeekInMs).getTimezoneOffset();
-
-        //     const totalTimezoneOffset = Math.abs(timezoneOffset - newTimezoneOffset) / 60;
-
-        //     if (timezoneOffset > newTimezoneOffset) {
-        //         return timestamp - (oneWeekInMs + (oneHourInMs * totalTimezoneOffset));
-
-        //     } else if (timezoneOffset < newTimezoneOffset) {
-        //         return timestamp - (oneWeekInMs - (oneHourInMs * totalTimezoneOffset));
-        //     }
-
-        //     return timestamp - oneWeekInMs;
-
-        // };
-
-        // IncrementTimestampByWeek = (timestamp) => {
-
-        //     //  Increments timestamp by week, accounting for timezone offset
-
-        //     const timezoneOffset = new Date(timestamp).getTimezoneOffset();
-
-        //     const newTimezoneOffset = new Date(timestamp + oneWeekInMs).getTimezoneOffset();
-
-        //     const totalTimezoneOffset = Math.abs(timezoneOffset - newTimezoneOffset) / 60;
-
-        //     if (timezoneOffset > newTimezoneOffset) {
-        //         return timestamp + (oneWeekInMs - (oneHourInMs * totalTimezoneOffset));
-
-        //     } else if (timezoneOffset < newTimezoneOffset) {
-        //         return timestamp + (oneWeekInMs + (oneHourInMs * totalTimezoneOffset));
-        //     }
-
-        //     return timestamp + oneWeekInMs;
-
-        // };
 
         BreakIntoDays = (weekOfShifts) => {
 
@@ -215,57 +123,7 @@ $(() => {
             return beginningOfWorkWeek;
         };
 
-        // getShifts = () => {
-
-        //     const promise = new Promise((resolve, reject) => {
-
-        //         const startingTimestampInSeconds = this.startingTimestamp / 1000;
-        //         const endingTimestampInSeconds = this.endingTimestamp / 1000;
-
-        //         $.ajax({
-        //             url: shiftUrl + '?starting_timestamp=' + startingTimestampInSeconds + '&ending_timestamp=' + endingTimestampInSeconds + '&employee=' + this.empId,
-        //             type: 'GET',
-        //             success: (data) => {
-
-        //                 if (data.shifts.length > 0) {
-        //                     this.employeeColor = data.shifts[0].employee.employee_color;
-        //                     this.firstShiftTimestamp = new Date(data.first_shift).getTime();
-        //                     resolve(data.shifts);
-        //                 } else {
-        //                     resolve([]);
-        //                 }
-        //             },
-        //             error: (error) => {
-        //                 reject(error);
-        //             },
-
-        //         });
-
-        //     });
-        //     return promise;
-
-        // };
-
-        // getNextPageOfShifts = () => {
-
-        //     processShifts = (rawShifts) => {
-
-        //         FormatShifts(rawShifts);
-
-        //         updateLabels();
-
-        //     };
-
-        //     handleError = (error) => {
-        //         console.log(error);
-        //     };
-
-        //     this.pageNum += 1;
-
-        //     getShifts().then(processShifts, handleError);
-
     };
-
 
     $.fn.TimelineShifts = TimelineShifts;
 });

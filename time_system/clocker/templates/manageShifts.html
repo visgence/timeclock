@@ -70,23 +70,18 @@
 	<div data-bind="with: timelineShifts" id = "timeline-label">
 		<h4>Week Of:</h4>
 		<h4 id="week-range-label"></h4>
-		<!-- <a data-bind="click: prevWeek" id = "prev-week-button" class="previous clickable">&lt;-- Previous Week</a>
-		<a data-bind="click: nextWeek" id = "next-week-button" class="next clickable">Next Week --&gt;</a> -->
 	</div>
 	<div id="shift-timeline"></div>
 
 <ul class="pager">
-	<!-- <li data-bind=", click: firstWeek" class="previous clickable">
-		<a>&lt;&lt; First</a>
-	</li> -->
-	<li data-bind="click: prevPage" class="previous clickable">
+	<li id="prev-week-button" data-bind="click: prevPage" class="previous clickable">
 		<a>&lt;-- Previous Week</a>
 	</li>
 
 	<li data-bind="text: weekOf"></li>
 
 
-	<li data-bind="ifnot: currentWeekOffset() === 0, click: nextPage" class="next clickable">
+	<li id="next-week-button" data-bind="click: nextPage" class="next clickable">
 		<a>Next Week --&gt;</a>
 	</li>
 </ul>

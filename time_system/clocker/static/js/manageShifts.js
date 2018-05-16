@@ -14,6 +14,8 @@ $(() => {
 
         this.shiftList = ko.observable();
         this.weekOf = ko.observable();
+        this.weekOffset = 0;
+        this.firstShiftTimestamp = 0;
         this.currentWeekOffset = ko.observable();
         this.timelineShifts = ko.observable();
         this.startingTimestamp = 0;
@@ -74,6 +76,10 @@ $(() => {
                 const empId = parseInt(state.emp);
                 $.each(__this.employees(), (i, emp) => {
                     if (empId === emp.id) {
+                        __this.startingTimestamp = __this.calculateStartingTimestamp();
+                        __this.endingTimestamp = __this.IncrementTimestampByWeek(__this.startingTimestamp);
+                        __this.weekOffset = 0;
+
                         __this.employee(emp);
                         __this.getShifts().then(this.updateShiftElements, this.handleError);
 
@@ -83,10 +89,69 @@ $(() => {
             }
         }.bind(this);
 
+        function loadEmployees() {
+            const state = getHash();
+            // If we see that there is no preset employee hash we will default to the current user.
+            let setUser = false;
+            if (!state.hasOwnProperty('emp')) {
+                setUser = true;
+            }
+            return $.get(employeeUrl, (resp) => {
+                $.each(resp.employees, (i, emp) => {
+                    __this.employees.push(emp);
+                    if (setUser && emp.id === __this.managingEmployee().id) {
+                        __this.selectedEmployee(emp);
+                    }
+                });
+            });
+        };
+
+        function setInputBindings() { //eslint-disable-line
+            $('input.icon-input').on('input', () => {
+                const currentVal = $(this).val();
+                if (currentVal === '' && !$(this).is(':focus')) {
+                    $(this).removeClass('icon-input-hide');
+                } else {
+                    $(this).addClass('icon-input-hide');
+                }
+            }).focus(() => {
+                $(this).addClass('icon-input-hide');
+            }).focusout(() => {
+                if ($(this).val() === '') {
+                    $(this).removeClass('icon-input-hide');
+                }
+            }).trigger('input');
+
+            $('.date-input').bootstrapDP({
+                autoclose: true,
+                orientation: 'top',
+                format: 'yyyy-mm-dd',
+            }).on('hide', (e) => {
+                $(e.target).trigger('input');
+            });
+
+            $('.time-input').timepicker({
+                showMeridian: false,
+                showSeconds: true,
+                defaultTime: false,
+                minuteStep: 1,
+            }).on('show.timepicker', (e) => {
+                $(e.target).val(e.time.value);
+            }).on('changeTime.timepicker', (e) => {
+                if (e.time.value === '') {
+                    $(e.target).val('0:00:00');
+                } else {
+                    $(e.target).val(e.time.value);
+                }
+            }).val('');
+        }
+
         this.prevPage = function () {
 
             const state = getHash();
             if (state.hasOwnProperty('emp')) {
+
+                this.weekOffset += 1;
 
                 this.startingTimestamp = this.DecrementTimestampByWeek(this.startingTimestamp);
                 this.endingTimestamp = this.DecrementTimestampByWeek(this.endingTimestamp);
@@ -102,6 +167,8 @@ $(() => {
 
             const state = getHash();
             if (state.hasOwnProperty('emp')) {
+
+                this.weekOffset -= 1;
 
                 this.startingTimestamp = this.IncrementTimestampByWeek(this.startingTimestamp);
                 this.endingTimestamp = this.IncrementTimestampByWeek(this.endingTimestamp);
@@ -201,63 +268,6 @@ $(() => {
             return timestamp + oneWeekInMs;
 
         };
-
-        function loadEmployees() {
-            const state = getHash();
-            // If we see that there is no preset employee hash we will default to the current user.
-            let setUser = false;
-            if (!state.hasOwnProperty('emp')) {
-                setUser = true;
-            }
-            return $.get(employeeUrl, (resp) => {
-                $.each(resp.employees, (i, emp) => {
-                    __this.employees.push(emp);
-                    if (setUser && emp.id === __this.managingEmployee().id) {
-                        __this.selectedEmployee(emp);
-                    }
-                });
-            });
-        };
-
-        function setInputBindings() { //eslint-disable-line
-            $('input.icon-input').on('input', () => {
-                const currentVal = $(this).val();
-                if (currentVal === '' && !$(this).is(':focus')) {
-                    $(this).removeClass('icon-input-hide');
-                } else {
-                    $(this).addClass('icon-input-hide');
-                }
-            }).focus(() => {
-                $(this).addClass('icon-input-hide');
-            }).focusout(() => {
-                if ($(this).val() === '') {
-                    $(this).removeClass('icon-input-hide');
-                }
-            }).trigger('input');
-
-            $('.date-input').bootstrapDP({
-                autoclose: true,
-                orientation: 'top',
-                format: 'yyyy-mm-dd',
-            }).on('hide', (e) => {
-                $(e.target).trigger('input');
-            });
-
-            $('.time-input').timepicker({
-                showMeridian: false,
-                showSeconds: true,
-                defaultTime: false,
-                minuteStep: 1,
-            }).on('show.timepicker', (e) => {
-                $(e.target).val(e.time.value);
-            }).on('changeTime.timepicker', (e) => {
-                if (e.time.value === '') {
-                    $(e.target).val('0:00:00');
-                } else {
-                    $(e.target).val(e.time.value);
-                }
-            }).val('');
-        }
 
         this.getShifts = () => {
 

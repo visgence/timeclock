@@ -45,6 +45,8 @@ $(() => {
 
         function BuildTimelineData(weekOfShifts, startingTime, employeeColor) {
 
+            let noShiftsInWeek = true;
+
             employeeColor = generateShiftColors(employeeColor); //  returns RGBA formatted colors, primary shift is fully saturated, secondary is slightly transparent
 
             //  function takes a week of shifts, assigns them a date label, and normalizes to occur on the same day
@@ -59,7 +61,8 @@ $(() => {
 
                 const date = new Date(startingTime + (day * oneDayInMs));
 
-                if (weekOfShifts[day]) {
+                if (weekOfShifts[day].length > 0) {
+                    noShiftsInWeek = false;
                     let startEpoch;
                     let endEpoch;
 
@@ -93,45 +96,89 @@ $(() => {
                     times: times,
                 });
 
-
             }
 
-            DrawTimelineGraph(timelineData, startingTime);
+            DrawTimelineGraph(timelineData, startingTime, noShiftsInWeek);
 
         }
 
-        function DrawTimelineGraph(timelineData, startingTime) {
+        function DrawTimelineGraph(timelineData, startingTime, noShiftsInWeek) {
 
-            const endingTime = startingTime + oneDayInMs;
+            if (noShiftsInWeek) {
+                const endingTime = startingTime + oneDayInMs;
 
-            const zoom = d3.zoom(); //  needed to disable d3-timelines from blocking native scrolling
+                const zoom = d3.zoom(); //  needed to disable d3-timelines from blocking native scrolling
 
-            const chart = d3.timelines()
-                .stack()
-                .margin({
-                    left: 140,
-                    right: 30,
-                    top: 0,
-                    bottom: 5,
-                }).tickFormat({
-                    format: d3.timeFormat('%I:%M %p'),
-                    tickSize: 5,
-                })
-                .showTimeAxisTick()
-                .beginning(new Date(startingTime))
-                .ending(new Date(endingTime))
-                .click((d, i, datum) => {
-                    window.location.href = 'http://timeclock.visgence.com/timeclock/summary/' + d['shift_id'];
-                });
+                const chart = d3.timelines()
+                    .stack()
+                    .margin({
+                        left: 140,
+                        right: 30,
+                        top: 0,
+                        bottom: 5,
+                    }).tickFormat({
+                        format: d3.timeFormat('%I:%M %p'),
+                        tickSize: 5,
+                    })
+                    .beginning(new Date(startingTime))
+                    .ending(new Date(endingTime))
+                    .click((d, i, datum) => {
+                        window.location.href = 'http://timeclock.visgence.com/timeclock/summary/' + d['shift_id'];
+                    });
 
 
-            const svg = d3.select('#shift-timeline');
-            svg.append('svg').attr('width', $('#shift-timeline').innerWidth())
-                .attr('height', $('#shift-timeline').innerHeight())
-                .datum(timelineData)
-                .call(chart)
-                .call(zoom)
-                .on('wheel.zoom', null); // prevent scroll events from being blocked
+                const svg = d3.select('#shift-timeline');
+                svg.append('svg').attr('width', $('#shift-timeline').innerWidth())
+                    .attr('height', $('#shift-timeline').innerHeight())
+                    .datum(timelineData)
+                    .call(chart)
+                    .call(zoom)
+                    .on('wheel.zoom', null) // prevent scroll events from being blocked
+                    .append('text')
+                    .attr('class', 'h3')
+                    .attr('x', '35%')
+                    .attr('y', '40%')
+                    .attr('user-select', 'none')
+                    .attr('cursor', 'default')
+                    .text('No Shifts Found In Date Range');
+
+
+            } else {
+
+                const endingTime = startingTime + oneDayInMs;
+
+                const zoom = d3.zoom(); //  needed to disable d3-timelines from blocking native scrolling
+
+                const chart = d3.timelines()
+                    .stack()
+                    .margin({
+                        left: 140,
+                        right: 30,
+                        top: 0,
+                        bottom: 5,
+                    }).tickFormat({
+                        format: d3.timeFormat('%I:%M %p'),
+                        tickSize: 5,
+                    })
+                    .showTimeAxisTick()
+                    .beginning(new Date(startingTime))
+                    .ending(new Date(endingTime))
+                    .click((d, i, datum) => {
+                        window.location.href = 'http://timeclock.visgence.com/timeclock/summary/' + d['shift_id'];
+                    });
+
+
+                const svg = d3.select('#shift-timeline');
+                svg.append('svg').attr('width', $('#shift-timeline').innerWidth())
+                    .attr('height', $('#shift-timeline').innerHeight())
+                    .datum(timelineData)
+                    .call(chart)
+                    .call(zoom)
+                    .on('wheel.zoom', null); // prevent scroll events from being blocked
+
+                $('svg').find('rect').css('cursor', 'pointer');
+            }
+
         }
 
         function NormalizeTimestampToSameDay(timestamp, daysSinceInitial) {
