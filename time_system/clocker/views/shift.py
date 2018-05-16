@@ -126,7 +126,7 @@ class ShiftsView(View):
             first_shift = Shift.objects.filter(employee=employee).order_by('time_in')[0]
             starting_date = datetime.fromtimestamp(int(request.GET['starting_timestamp'])).strftime('%Y-%m-%d %H:%S')
             ending_date = datetime.fromtimestamp(int(request.GET['ending_timestamp'])).strftime('%Y-%m-%d %H:%S')
-            shifts = Shift.objects.filter(employee=employee, time_in__range=[starting_date, ending_date]).order_by('time_in')
+            shifts = Shift.objects.filter(employee=employee, time_in__range=[starting_date, ending_date]).order_by('-time_in')
             self.returnData.update({
                 'shifts': [s.toDict() for s in shifts],
                 'first_shift' : first_shift.toDict()['time_in']
