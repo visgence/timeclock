@@ -281,9 +281,11 @@ $(() => {
                     type: 'GET',
                     success: (data) => {
 
+
+                        this.firstShiftTimestamp = new Date(data.first_shift).getTime();
                         if (data.shifts.length > 0) {
                             this.employeeColor = data.shifts[0].employee.employee_color;
-                            this.firstShiftTimestamp = new Date(data.first_shift).getTime();
+                            console.log(new Date(this.firstShiftTimestamp));
                             resolve(data.shifts);
                         } else {
                             resolve([]);

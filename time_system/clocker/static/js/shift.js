@@ -131,7 +131,8 @@ $(() => {
             const endingTimestampToBeSaved = new Date(data.time_out).getTime();
             const currentDate = new Date().getTime();
 
-            if (startingTimestampToBeSaved > endingTimestampToBeSaved) {
+
+            if (startingTimestampToBeSaved > endingTimestampToBeSaved && endingTimestampToBeSaved !== 0) {
                 alert('Time In Cannot Be After Time Out, Check Shift On:\n' + data.time_in);
                 return;
             }
