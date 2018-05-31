@@ -19,7 +19,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
 
-        call_command('migrate', fake=True)
+        call_command('migrate', fake=False)
 
         print "Loading fixtures..."
         fixtures = [

@@ -258,3 +258,7 @@ td {
     padding-left: 5px;
     padding-right: 5px;
 }
+
+#signed-label{
+    margin-top: -1em;
+}

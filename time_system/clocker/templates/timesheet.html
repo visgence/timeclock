@@ -12,12 +12,13 @@
                 {% load static %}
                 <img class="job-spinners" src="{% static "images/spinner.gif" %}" style="height: 20px; display:none;"
                         data-bind="visible: isBusy">
+            
                 <div data-bind="if: signature">
-                    <i class="pull-right" data-bind="text: signedOnMsg">Signed on </i>
+                    <i class="pull-right" id="signed-label" data-bind="text: signedOnMsg">Signed on </i>
                 </div>
 
             </h4>
-        </div>
+            </div>
         <div class="panel-collapse collapse" data-bind="attr: {id: 'timesheet-'+id}">
             <div data-bind="html: payData"></div>
 
