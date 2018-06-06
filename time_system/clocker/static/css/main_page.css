@@ -259,6 +259,11 @@ td {
     padding-right: 5px;
 }
 
+pre {
+    white-space: pre-wrap;
+    word-break: keep-all;
+}
+
 #signed-label{
     margin-top: -1em;
 }
