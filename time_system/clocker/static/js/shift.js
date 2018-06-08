@@ -55,6 +55,11 @@ $(() => {
             const shiftWeekdayIndex = d.getDay();
             const shiftWeekday = dayLabels[shiftWeekdayIndex];
 
+            let shiftSeconds = d.getSeconds();
+            if (shiftSeconds < 10) {
+                shiftSeconds = '0' + shiftSeconds;
+            }
+
             let shiftMinutes = d.getMinutes();
             if (shiftMinutes < 10) {
                 shiftMinutes = '0' + shiftMinutes;
@@ -65,7 +70,7 @@ $(() => {
                 shiftHours = '0' + shiftHours;
             }
 
-            const shiftTime = shiftHours + ':' + shiftMinutes;
+            const shiftTime = shiftHours + ':' + shiftMinutes + ':' + shiftSeconds;
 
             const shiftYear = d.getFullYear();
 
@@ -78,6 +83,7 @@ $(() => {
             if (shiftDay < 10) {
                 shiftDay = '0' + shiftDay;
             }
+
 
             const shiftDate = shiftYear + '-' + shiftMonth + '-' + shiftDay;
 
