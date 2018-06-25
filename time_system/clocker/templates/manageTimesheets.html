@@ -9,7 +9,6 @@
 
     <script src="{% static "js/messageCenter.js" %}"></script>
     <script src="{% static "js/timesheet.js" %}"></script>
-    <script src="{% static "js/timesheets.js" %}"></script>
     <script src="{% static "js/manageTimesheets.js" %}"></script>
 
 {%endblock additional-headers%}
@@ -72,21 +71,22 @@
             <li data-bind="click: firstPage" class="previous clickable">
               <a>&lt;&lt; First</a>
             </li>
-            <li data-bind="click: prevPage" class="previous clickable">
+            <li data-bind="click: prevPage, disable: isFirstPage" class="previous clickable">
               <a>&lt; Prev</a>
             </li>
 
-            <li data-bind="text: pageNum"></li>
-
-            <li data-bind="click: lastPage" class="next clickable">
+            <li data-bind="click: lastPage, disable: isLastPage" class="next clickable">
               <a>Last &gt;&gt;</a>
             </li>
-            <li data-bind="click: nextPage" class="next clickable">
+            <li data-bind="click: nextPage, disable: true" class="next clickable">
               <a>Next &gt;</a>
             </li>
           </ul>
-          <div data-bind="template: {name: 'timesheet-template', data: timesheetList}"></div>
+          <div data-bind="template: {name: 'timesheet-template', data: timesheets()}"></div>
+          <div style="text-align:center;" data-bind="text: 'Page: ' + pageNum()"></div>
         </div>
+
+            
       </div>
     </div>
 

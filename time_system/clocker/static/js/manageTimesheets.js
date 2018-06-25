@@ -1,7 +1,6 @@
 $(() => {
     'use strict';
 
-    const Timesheets = $.fn.Timesheets;
     const Timesheet = $.fn.Timesheet;
     const MessageCenter = $.fn.MessageCenter;
 
@@ -10,42 +9,35 @@ $(() => {
 
         this.messageCenter = ko.observable(new MessageCenter());
         this.newTimesheet = ko.observable();
-
-        const timesheets = new Timesheets({messageCenter: this.messageCenter()});
-        this.timesheetList = ko.computed(() => {
-            return timesheets.timesheetList() ? timesheets.timesheetList() : [];
-        }, this);
-
+        this.pageNum = ko.observable(1);
+        this.totalPages = ko.observable();
+        this.currentPage = ko.observable();
+        this.isFirstPage = ko.computed(() => {
+            return this.pageNum() === 1;
+        });
+        this.isLastPage = ko.computed(() => {
+            return this.pageNum() === this.currentPage();
+        });
+        this.timesheets = ko.observableArray();
         this.employeeOptions = ko.observableArray();
 
         this.createTimesheet = function () {
             const __this = this;
 
             this.newTimesheet().create().done(() => {
-                const newTs = {messageCenter: __this.messageCenter()};
+                const newTs = {
+                    messageCenter: __this.messageCenter()
+                };
                 __this.newTimesheet(new Timesheet(newTs));
                 setupPickers();
-                timesheets.refresh().done(prepareCollapses);
+                this.pageNum(1);
+                this.getTimesheets();
             });
         }.bind(this);
 
         const setupPickers = function () {
             $('.input-daterange').datepicker();
         };
-
-        this.shouldSeperate = function (curTsIndex, nextTsIndex) {
-            if (this.timesheetList().length <= 1 || nextTsIndex >= this.timesheetList().length) {
-                return false;
-            }
-
-            const curTs = this.timesheetList()[curTsIndex];
-            const nextTs = this.timesheetList()[nextTsIndex];
-            if (curTs.startTimestamp() === nextTs.startTimestamp()) {
-                return false;
-            }
-
-            return true;
-        }.bind(this);
 
         // Called when user clicks on a timesheet to toggle open/close
         const toggleTsCallback = function (e) {
@@ -60,19 +52,18 @@ $(() => {
                     $(collapsable).collapse('toggle');
                 }
             } else {
-                updateHash({timesheet: ts});
+                updateHash({
+                    timesheet: ts,
+                });
             }
-        };
-
-        // Called when the timesheets list finishes refreshing during module init.
-        const tsRefreshCallback = function (resp) {
-            prepareCollapses();
-            $(window).trigger('hashchange');
-        };
+        }.bind(this);
 
         // Add needed hooks to bootstrap collapse elements for when a user tries to toggle a timesheet.
         const prepareCollapses = function () {
-            $('.panel-collapse').collapse({toggle: false, parent: '#timesheet-accordion'});
+            $('.panel-collapse').collapse({
+                toggle: false,
+                parent: '#timesheet-accordion',
+            });
             $('#timesheet-accordion').on('click', 'a.collapse-toggle', toggleTsCallback);
         };
 
@@ -80,15 +71,21 @@ $(() => {
             consts = consts || {};
 
             if (consts.hasOwnProperty('employeeOptions')) {
-                consts.employeeOptions.unshift({id: -1, display: 'All'});
+                consts.employeeOptions.unshift({
+                    id: -1,
+                    display: 'All',
+                });
                 this.employeeOptions(consts.employeeOptions);
             }
 
-            timesheets.refresh().done(tsRefreshCallback);
+            this.pageNum(1);
+            this.getTimesheets();
 
             setupPickers();
 
-            const newTs = {messageCenter: this.messageCenter()};
+            const newTs = {
+                messageCenter: this.messageCenter(),
+            };
             this.newTimesheet(new Timesheet(newTs));
             $(window).on('hashchange', hashchange);
         }.bind(this);
@@ -108,45 +105,75 @@ $(() => {
 
         };
 
-        const pageNum = parseInt(location.search.split('=')[1]);
-        let total = Math.round((this.timesheetList().length / 10) + 0.5);
+        this.getTimesheets = function () {
 
-        this.pageNum = 1;
+            const url = '/timeclock/timesheets?page=' + this.pageNum() + '&per_page=10';
+            $.ajax({
+                type: "GET",
+                url: url,
+                success: (resp) => {
+                    console.log(resp)
+                    this.buildTimesheets(resp['timesheets']);
+                    this.totalPages(resp['totalPages']);
+                    this.updateButtonVisbility();
+                    prepareCollapses();
+                    $(window).trigger('hashchange');
+                },
+                error: (error) => {
+                    console.log(error);
+                },
+            });
 
-        if (isNaN(pageNum)) {
-            window.history.pushState('timesheets', 'timesheets', '?page=' + this.pageNum);
-        } else {
-            this.pageNum = pageNum;
-        }
+        };
+
+        this.updateButtonVisbility = function () {
+            if (this.pageNum() === 1) {
+                $('.previous').hide();
+            } else {
+                $('.previous').show();
+            }
+            if (this.pageNum() === this.totalPages()) {
+                $('.next').hide();
+            } else {
+                $('.next').show();
+            }
+        };
+
+        this.buildTimesheets = function (timesheets) {
+            const timesheetsArray = [];
+            for (let i = 0; i < timesheets.length; i++) {
+                timesheetsArray.push(new Timesheet(timesheets[i]));
+            }
+            this.timesheets(timesheetsArray);
+        };
+
 
         this.nextPage = function () {
-            total = location.search.split('&')[1].split('=')[1];
-            if (this.pageNum < total) {
-                this.pageNum += 1;
-                window.history.pushState('timesheets', 'timesheets', '?page=' + this.pageNum + '&of=' + total);
-                location.reload();
+            if (this.pageNum() < this.totalPages()) {
+                this.pageNum(this.pageNum() + 1);
+                this.getTimesheets();
+                history.replaceState({}, document.title, ".")
             }
         }.bind(this);
 
         this.prevPage = function () {
-            total = location.search.split('&')[1].split('=')[1];
-            if (this.pageNum > 1) {
-                this.pageNum -= 1;
-                window.history.pushState('timesheets', 'timesheets', '?page=' + this.pageNum + '&of=' + total);
-                location.reload();
+            if (this.pageNum() > 1) {
+                this.pageNum(this.pageNum() - 1);
+                this.getTimesheets();
+                history.replaceState({}, document.title, ".")
             }
         }.bind(this);
 
         this.lastPage = function () {
-            total = location.search.split('&')[1].split('=')[1];
-            window.history.pushState('timesheets', 'timesheets', '?page=' + total + '&of=' + total);
-            location.reload();
+            this.pageNum(this.totalPages());
+            this.getTimesheets();
+            history.replaceState({}, document.title, ".")
         }.bind(this);
 
         this.firstPage = function () {
-            total = location.search.split('&')[1].split('=')[1];
-            window.history.pushState('timesheets', 'timesheets', '?page=' + 1 + '&of=' + total);
-            location.reload();
+            this.pageNum(1);
+            this.getTimesheets();
+            history.replaceState({}, document.title, ".")
         }.bind(this);
 
         init(consts);
