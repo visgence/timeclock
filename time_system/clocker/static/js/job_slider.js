@@ -118,7 +118,7 @@ function time_to_sec(time) {
         // if there is a leading zero, chuck it.
         if (minutes.substr(0, 1) === '0') {
             minutes = parseInt(minutes.substr(1, 1));
-        } else {// both digits are significant
+        } else { // both digits are significant
             minutes = parseInt(minutes.substr(0, 2));
         }
     } else {
@@ -141,44 +141,41 @@ function submit_form(url) { //eslint-disable-line
         shift_id: $('#shift_id').val(),
     };
 
-    let needsDescription = false;
     const job_array = new Array();
-    let i = 0;
+    let summary_error = false;
 
     $('.job_slider').each(function () {
         job_id = this.id;
-        if (parseInt($('#miles_' + job_id).val()) !== 0 || time_to_sec($('#hours_' + job_id).val()) !== 0) {
-            const newObj = {
-                job_id: this.id,
-                miles: $('#miles_' + job_id).val(),
-                notes: $('#notes_' + job_id).val(),
-                hours: time_to_sec($('#hours_' + job_id).val()),
-            };
-            job_array.push(newObj);
-            if (newObj.hours > 0 && newObj.notes === '') {
-                needsDescription = true;
-                $($('.asterix')[i]).css('display', 'block');
-            }
-        } else {
-            $($('.asterix')[i]).css('display', 'none');
+        const newObj = {
+            job_id: this.id,
+            miles: $('#miles_' + job_id).val(),
+            notes: $('#notes_' + job_id).val(),
+            hours: time_to_sec($('#hours_' + job_id).val()),
+        };
+        if (newObj.hours > 0 && !newObj.notes) {
+            alert('Please enter in a description in all fields that have hours.');
+            summary_error = true;
+            return;
         }
-        i++;
+        if (newObj.notes && newObj.hours === 0) {
+            alert('The field "' + $('#name_' + this.id).text() + '" has description but no time worked');
+            summary_error = true;
+            return;
+        }
+        if (newObj.hours !== 0 || newObj.miles !== '0') {
+            job_array.push(newObj);
+        }
     });
-
-    if (needsDescription) {
-        alert('Please enter in a description in all fields that have hours.');
-        return;
-    }
 
     json.shift_summary = job_array;
     jsonData = JSON.stringify(json);
-
-    $.post(url, {
-        jsonData: jsonData,
-    })
-        .fail((resp) => {
+    if (!summary_error) {
+        $.post(url, {
+            jsonData: jsonData,
+        }).fail((resp) => {
             alert(resp.responseText);
         });
+    }
 }
 
 /*
