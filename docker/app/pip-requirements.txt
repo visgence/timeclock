@@ -11,5 +11,5 @@ pyparsing==1.5.6
 pytz==2012d
 simplejson==3.8.1
 uWSGI==2.0.11.2
-urllib3==1.12
+urllib3==1.24.2
 virtualenv==1.10.1
