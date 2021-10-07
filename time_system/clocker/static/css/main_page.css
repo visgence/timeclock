@@ -1,100 +1,154 @@
-body
-{
-	font-family: helvetica, arial, sans-serif;
-    background-image:url(../images/seamlesstexture29.jpg);
-    background-repeat:repeat;
+body {
+    font-family: helvetica, arial, sans-serif;
+    background-image: url(../images/seamlesstexture29.jpg);
+    background-repeat: repeat;
     font-size: 12pt;
     margin: 0px;
 }
 
-
-#container
-{
+#container {
     margin: auto;
     margin-top: 100px;
-    background-image:url(../images/dark_fish_skin.png);
+    background-image: url(../images/dark_fish_skin.png);
     border: 1px solid #aaaaaa;
     box-shadow: 0px 0px 15px #888888;
     min-width: 800px;
     max-width: 90%;
 }
 
-div#content
-{
-	background-color: white;
-	padding: 1em;
+.hello-phrase {
+    position: absolute;
 }
 
-div.visgence_logo
-{
-	margin: 0.9em;
+.password-change {
+    font-size: 8pt;
 }
 
-div.timeclock_logo
-{
-	float: right;
+.timeclock-modal {
+    display: none;
 }
 
-.login
-{
- 	padding-left: 1.5em;
- 	padding-top: 4em;
- 	padding-bottom: 1.5em;
- 	border-bottom: 1px solid #cfcfcf;
+.body-container {
+    margin-top: 3em;
 }
 
-div#management
-{
-	float: left;
-	padding-left: 1.5em;
-	font-weight: bold;
-	height: 100px;
+.job-title {
+    text-decoration: none;
 }
 
-div#management h4, div#hour_management h4
-{
+.job-spinners {
+    height: 20px;
+    display: none;
+}
+
+.sml-txt {
+    font-size: 75%;
+}
+
+.green-label {
+    color: green;
+}
+
+.red-label {
+    color: red;
+}
+
+.black-label {
+    color: black;
+}
+
+.grey-label {
+    color: grey;
+}
+
+.summary-data {
+    display: none;
+}
+
+.summary-data-head {
+    width: 8em;
+}
+
+.current-hours {
+    float: right;
+}
+
+.management-content {
+    margin-right: 0;
+    margin-left: 0;
+    max-width: 100%;
+}
+
+.text-info {
+    margin-top: 0.5em;
+}
+
+.numeric-column {
+    background-color: yellow;
+}
+
+div#content {
+    background-color: white;
+    padding: 1em;
+}
+
+div.visgence_logo {
+    margin: 0.9em;
+}
+
+div.timeclock_logo {
+    float: right;
+}
+
+.login {
+    padding-left: 1.5em;
+    padding-top: 4em;
+    padding-bottom: 1.5em;
+    border-bottom: 1px solid #cfcfcf;
+}
+
+div#management {
+    float: left;
+    padding-left: 1.5em;
+    font-weight: bold;
+    height: 100px;
+}
+
+div#management h4, div#hour_management h4 {
     padding-bottom: 1em;
 }
 
-div.click
-{
-	margin-bottom: 5px;
-
+div.click {
+    margin-bottom: 5px;
 }
 
-.clickable
-{
+.clickable {
     cursor: pointer;
 }
 
-.link_color:hover, a.link_color:hover
-{
+.link_color:hover, a.link_color:hover {
     color: #009900;
 }
 
-.link_color, a.link_color
-{
+.link_color, a.link_color {
     color: #3399ff;
 }
 
-div#hour_management
-{
-	width: 50%;
-	float: left;
-	border-right: 1px solid #cfcfcf;
+div#hour_management {
+    width: 50%;
+    float: left;
+    border-right: 1px solid #cfcfcf;
 }
 
-div#job-hours
-{
+div#job-hours {
     border-top: 1px solid #cfcfcf;
 }
 
-div#job-controls
-{
-/*    width: 30%;
+div#job-controls {
+
+    /*width: 30%;
     padding-right: 2em;
-    float: left;
-*/
+    float: left;*/
     margin-bottom: 1em;
 }
 
@@ -105,10 +159,9 @@ div#job-controls
     width: 70%;
     border-left: 1px solid;
 }
-
 */
-div.clocker-container
-{
+
+div.clocker-container {
     margin-left: auto;
     margin-right: auto;
     width: 9em;
@@ -116,111 +169,101 @@ div.clocker-container
     margin-bottom: 1em;
 }
 
-div.clocker-container span.clock-out
-{
+div.clocker-container span.clock-out {
     color: #CF3C23;
     border: solid #CF3C23;
 }
 
-div.clocker-container span.clock-out:hover
-{
+div.clocker-container span.clock-out:hover {
     color: #EA8E7F;
     border: solid #EA8E7F;
 }
 
-div.clocker-container span.clock-in
-{
+div.clocker-container span.clock-in {
     color: #00A651;
     border: solid #00A651;
 }
 
-div.clocker-container span.clock-in:hover
-{
+div.clocker-container span.clock-in:hover {
     color: #8BD5B0;
     border: solid #8BD5B0;
 }
 
-div.message
-{
-   margin-top: 1.5em;
-   text-align: center;
+div.message {
+    margin-top: 1.5em;
+    text-align: center;
 }
 
-.error
-{
-    	margin-left: auto;
-    	margin-right: auto;
-    	width: 200px;
-    	margin-bottom: 5px;
+.error {
+    margin-left: auto;
+    margin-right: auto;
+    width: 200px;
+    margin-bottom: 5px;
 }
 
-.submit
-{
-	margin-top: 1em;
-	margin-left: 2.8em;
+.submit {
+    margin-top: 1em;
+    margin-left: 2.8em;
 }
 
-input[type="text"], input[type="password"]
-{
+input[type="text"], input[type="password"] {
     border-width: 2;
 }
 
-div.submit_login
-{
-	margin-top: 5px;
+div.submit_login {
+    margin-top: 5px;
 }
 
-div.login-submit
-{
-	padding-top: 35px;
-	margin-right: auto;
-	margin-left: auto;
-	width: 200px;
+div.login-submit {
+    padding-top: 35px;
+    margin-right: auto;
+    margin-left: auto;
+    width: 200px;
 }
 
-div#slider
-{
-	padding: 1em;
+div#slider {
+    padding: 1em;
 }
 
-div.job_name
-{
-
-	font-weight: bold;
+div.job_name {
+    font-weight: bold;
 }
 
-.total_time_text
-{
-	height: 80px;
+.total_time_text {
+    height: 80px;
 }
 
-div.miles_text
-{
-	padding: 1em;
+div.miles_text {
+    padding: 1em;
 }
 
-div.notes_text
-{
-	padding: 1em;
+div.notes_text {
+    padding: 1em;
 }
 
-div.job_slider
-{
-	width: 300px;
+div.job_slider {
+    width: 300px;
+    margin-left: 1em;
 }
 
-div.visweb_link
-{
- 	margin-left: auto;
- 	margin-right: auto;
- 	min-width: 700px;
- 	max-width: 90%;
- 	margin-top: 0.5em;
+div.visweb_link {
+    margin-left: auto;
+    margin-right: auto;
+    min-width: 700px;
+    max-width: 90%;
+    margin-top: 0.5em;
 }
 
-td
-{
-	padding-left: 5px;
-	padding-right: 5px;
+td {
+    padding-left: 5px;
+    padding-right: 5px;
 }
 
+pre {
+    white-space: pre-wrap;
+    word-break: keep-all;
+}
+
+#signed-label{
+    margin-top: -1em;
+}

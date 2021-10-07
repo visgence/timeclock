@@ -178,6 +178,7 @@ class Employee(AbstractBaseUser):
             "last_name":    self.last_name,
             "is_superuser": self.is_superuser,
             "is_active":    self.is_active,
+            "employee_color": self.color
         }
 
     def can_view(self, user):

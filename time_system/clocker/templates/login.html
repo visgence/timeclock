@@ -2,24 +2,22 @@
 {%block content%}
 	<div class="login-submit">
 		<form action="/login/" method="post" class="form-horizontal" role="form">
-		    {% csrf_token %}
-            <div class="form-group has-error">
-                <span class="help-block">{{error}}</span>
-            </div>
-			<div class="user_name form-group"> 
-                <label for="id_username" class="control-label">Username</label> 
-                <input type="text" class="form-control" name="username" maxlength="30" placeholder="Username"/> 
-			</div> 
-			<div class="password form-group"> 
-				<label for="id_password" class="control-label">Password</label>
-                <input type="password" class="form-control" name="password" placeholder="Password"/> 
-			</div> 
-			<div class="submit_login form-group">  
-				<input type="hidden" name="next" value="{{redirect_to}}"/>
-                <button type="submit" class="btn btn-default"/>Log In</button>
-			</div> 
-		</form>    
-	</div>
+      {% csrf_token %}
+      <div class="form-group has-error">
+          <span class="help-block">{{error}}</span>
+      </div>
+		<div class="user_name form-group">
+      <label for="id_username" class="control-label">Username</label>
+      <input type="text" class="form-control" name="username" maxlength="30" placeholder="Username"/>
+		</div>
+		<div class="password form-group">
+			<label for="id_password" class="control-label">Password</label>
+      <input type="password" class="form-control" name="password" placeholder="Password"/>
+		</div>
+		<div class="submit_login form-group">
+			<input type="hidden" name="next" value="{{redirect_to}}"/>
+      <button type="submit" class="btn btn-default">Log In</button>
+		</div>
+	</form>
+</div>
 {%endblock%}
-
-

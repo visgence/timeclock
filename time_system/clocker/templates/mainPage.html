@@ -2,13 +2,13 @@
 
 {%block additional-headers%}
 {% load static %}
-    <link rel="stylesheet" type="text/css" href="{% static "css/datepicker.css" %}">
-    <script src="{% static "js/bootstrap-datepicker.js" %}"></script>
+    <link rel="stylesheet" type="text/css" href="{% static "libraries/datepicker.css" %}">
+    <script src="{% static "libraries/bootstrap-datepicker.js" %}"></script>
     <script src="{% static "js/main_page.js" %}"></script>
 {%endblock additional-headers%}
 
 {% block additional-greeting %}
-<div style="float: right;">
+<div class="current-hours">
     <b>Regular Hours: {{weekly_regular}}</b>
     <br/>
     <b>Overtime: {{weekly_overtime}}</b>
@@ -32,12 +32,12 @@
 		{% csrf_token %}
 			<div class="clocker-container">
 				{% if not status %}
-                    <button class="btn btn-success btn-lg">Clock In</button>
-                    <input type="hidden" name="status" value="In">
+          <button class="btn btn-success btn-lg">Clock In</button>
+          <input type="hidden" name="status" value="In" />
 				{% elif status %}
-                    <button class="btn btn-danger btn-lg">Clock Out</button>
-                    <input type="hidden" name="status" value="Out">
-	            {% endif %}
+              <button class="btn btn-danger btn-lg">Clock Out</button>
+              <input type="hidden" name="status" value="Out" />
+        {% endif %}
 			</div>
 	</form>
 
@@ -130,8 +130,8 @@
                 <div class="form-group">
                     <select name="user_name" id="employees-job" class="form-control">
                         {% if employee.is_superuser %}
-                            <option value="all-active">All Active Employees</options>
-                            <option value="all">All Employees</options>
+                            <option value="all-active">All Active Employees</option>
+                            <option value="all">All Employees</option>
                         {% endif %}
                         {% for emp in employees %}
                             <option value="{{emp.username}}">{{emp}}</option>
@@ -144,7 +144,7 @@
 
                 <div class="checkbox">
                     <label>
-                        <input id="toggle-active-jobs" type="checkbox"> Show Inactive Jobs
+                        <input id="toggle-active-jobs" type="checkbox" /> Show Inactive Jobs
                     </label>
                 </div>
         </form>
@@ -156,9 +156,6 @@
 
 
 {% block additional-scripts %}
-
-
-
 
 <script>
     $(function() {

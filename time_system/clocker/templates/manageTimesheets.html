@@ -2,17 +2,16 @@
 {% load static %}
 {%block additional-headers%}
 
-    <script src="{% static "js/jquery-bbq.min.js" %}"></script>
-    <script src="{% static "js/bootstrap-datepicker.js" %}"></script>
-    <script src="{% static "js/knockout-custom-extensions.js" %}"></script>
+    <script src="{% static "libraries/bootstrap-datepicker.js"%}"></script>
+    <link rel="stylesheet" type="text/css" href="{% static "libraries/datepicker.css"%}">
+
+    <script src="{% static "libraries/knockout-custom-extensions.js" %}"></script>
 
     <script src="{% static "js/messageCenter.js" %}"></script>
     <script src="{% static "js/timesheet.js" %}"></script>
-    <script src="{% static "js/timesheets.js" %}"></script>
     <script src="{% static "js/manageTimesheets.js" %}"></script>
-    <link rel="stylesheet" type="text/css" href="{% static "css/datepicker.css" %}">
-{%endblock additional-headers%}
 
+{%endblock additional-headers%}
 
 {% block content %}
 
@@ -23,91 +22,87 @@
     <!-- ko template: {name: 'error-template', data: messageCenter} --><!-- /ko -->
 
     <div class="row">
-        {% if user.is_superuser %}
+      {% if user.is_superuser %}
         <div class="col-xs-4">
-            <div class="panel panel-default" data-bind="with: newTimesheet">
-                <div class="panel-heading">
-                    <h4 class="panel-title">Create New Timesheet</h4>
-                </div>
-
-                <div class="panel-body">
-                    <form class="form">
-                        <div class="form-group" data-bind="css: {'has-error': employee.hasError()}">
-                            <label class="control-label">Employee</label>
-                            <p class="text-danger" data-bind="visible: employee.hasError(),
-                                                              text: employee.validationMessage()"></p>
-                            <select class="form-control" data-bind="options: $parent.employeeOptions,
-                                                                    optionsText: function(emp) {
-                                                                        if (emp.id === -1) return emp.display;
-
-                                                                        return emp.first_name+' '+emp.last_name
-                                                                    },
-                                                                    optionsValue: 'id',
-                                                                    value: employee">
-                            </select>
-                        </div>
-                        <div class="form-group" data-bind="css: {'has-error': start.hasError() || end.hasError()}">
-                            <label class="control-label">Pay Period</label>
-                            <p class="text-danger" data-bind="visible: start.hasError() || end.hasError(),
-                                                              text: start.validationMessage() || end.validationMessage()"></p>
-                            <div class="input-daterange input-group">
-                                <input type="text" class="form-control" data-bind="value: start">
-                                <span class="input-group-addon">to</span>
-                                <input type="text" class="form-control" data-bind="value: end">
-                            </div>
-                        </div>
-                        <button type="button" class="btn btn-default" data-bind="click: $parent.createTimesheet">Create</button>
-                    </form>
-                </div>
+          <div class="panel panel-default" data-bind="with: newTimesheet">
+            <div class="panel-heading">
+              <h4 class="panel-title">Create New Timesheet</h4>
             </div>
+
+            <div class="panel-body">
+              <form class="form">
+                <div class="form-group" data-bind="css: {'has-error': employee.hasError()}">
+                  <label class="control-label">Employee</label>
+                  <p class="text-danger" data-bind="visible: employee.hasError(),
+                                                              text: employee.validationMessage()"></p>
+                  <select class="form-control" data-bind="options: $parent.employeeOptions,
+                                                                  optionsText: function(emp) {
+                                                                      if (emp.id === -1) return emp.display;
+
+                                                                      return emp.first_name+' '+emp.last_name
+                                                                  },
+                                                                  optionsValue: 'id',
+                                                                  value: employee">
+                  </select>
+                </div>
+                <div class="form-group" data-bind="css: {'has-error': start.hasError() || end.hasError()}">
+                  <label class="control-label">Pay Period</label>
+                  <p class="text-danger" data-bind="visible: start.hasError() || end.hasError(),
+                                                      text: start.validationMessage() || end.validationMessage()"></p>
+                  <div class="input-daterange input-group">
+                    <input type="text" class="form-control" data-bind="value: start" />
+                    <span class="input-group-addon">to</span>
+                    <input type="text" class="form-control" data-bind="value: end" />
+                  </div>
+                </div>
+                <button type="button" class="btn btn-default" data-bind="click: $parent.createTimesheet">Create</button>
+              </form>
+            </div>
+          </div>
         </div>
         {% endif %}
 
         {% if user.is_superuser %}
-            <div class="col-xs-8">
+          <div class="col-xs-8">
         {% else %}
-            <div class="col-xs-12">
+          <div class="col-xs-12">
         {% endif %}
+          <ul class="pager">
+            <li data-bind="click: firstPage" class="previous clickable">
+              <a>&lt;&lt; First</a>
+            </li>
+            <li data-bind="click: prevPage, disable: isFirstPage" class="previous clickable">
+              <a>&lt; Prev</a>
+            </li>
 
-            <ul class="pager">
-                <li data-bind="click: firstPage" class="previous clickable">
-                    <a>&lt;&lt; First</a>
-                </li>
-                <li data-bind="click: prevPage" class="previous clickable">
-                    <a>&lt; Prev</a>
-                </li>
-
-                <li data-bind="text: pageNum"></li>
-
-                <li data-bind="click: lastPage" class="next clickable">
-                    <a>Last &gt;&gt;</a>
-                </li>
-                <li data-bind="click: nextPage" class="next clickable">
-                    <a>Next &gt;</a>
-                </li>
-            </ul>
-
-            <div data-bind="template: {name: 'timesheet-template', data: timesheetList}"></div>
+            <li data-bind="click: lastPage, disable: isLastPage" class="next clickable">
+              <a>Last &gt;&gt;</a>
+            </li>
+            <li data-bind="click: nextPage, disable: true" class="next clickable">
+              <a>Next &gt;</a>
+            </li>
+          </ul>
+          <div data-bind="template: {name: 'timesheet-template', data: timesheets()}"></div>
+          <div style="text-align:center;" data-bind="text: 'Page: ' + pageNum()"></div>
         </div>
+
+            
+      </div>
     </div>
-</div>
 
 <script type="text/html" id="timesheet-template">
     {% include 'timesheet.html' %}
 </script>
 
-
 {% endblock content %}
 
 {% block additional-scripts %}
-
-
-    <script>
-        $(function() {
-            var manageTimesheets = new $.fn.ManageTimesheets({
-                "employeeOptions": JSON.parse("{{employees|escapejs}}")
-            });
-            ko.applyBindings(manageTimesheets, $('#manage-timesheets').get(0));
+<script>
+    $(function() {
+        var manageTimesheets = new $.fn.ManageTimesheets({
+            "employeeOptions": JSON.parse("{{employees|escapejs}}")
         });
-    </script>
+        ko.applyBindings(manageTimesheets, $('#manage-timesheets').get(0));
+    });
+</script>
 {% endblock additional-scripts %}

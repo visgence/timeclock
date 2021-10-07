@@ -19,7 +19,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
 
-        call_command('migrate', fake=True)
+        call_command('migrate', fake=False)
 
         print "Loading fixtures..."
         fixtures = [
@@ -40,7 +40,9 @@ class Command(BaseCommand):
             fixtures.append([
                 "clocker/fixtures/jobs.json"
             ])
-
+            fixtures.append([
+                "clocker/fixtures/shifts.json"
+            ])
         # Load fixtures
         for apps in fixtures:
             for fixture in apps:

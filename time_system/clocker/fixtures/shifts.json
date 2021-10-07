@@ -1,0 +1,2685 @@
+[{
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": null,
+            "time_in": "2018-05-10 12:55:40",
+            "employee" : 2,
+            "time_out": "2018-05-10 18:55:40",
+            "id": 18781
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "3.18",
+            "time_in": "2018-05-10 09:10:21",
+            "employee" : 2,
+            "time_out": "2018-05-10 12:21:16",
+            "id": 18779
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "4.25",
+            "time_in": "2018-05-09 09:07:42",
+            "employee" : 2,
+            "time_out": "2018-05-09 13:22:25",
+            "id": 18769
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "3.16",
+            "time_in": "2018-05-07 12:52:54",
+            "employee" : 2,
+            "time_out": "2018-05-07 16:02:24",
+            "id": 18743
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "3.07",
+            "time_in": "2018-05-07 09:09:08",
+            "employee" : 2,
+            "time_out": "2018-05-07 12:13:24",
+            "id": 18739
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "0.25",
+            "time_in": "2018-05-05 15:20:46",
+            "employee" : 2,
+            "time_out": "2018-05-05 15:35:30",
+            "id": 18734
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "1.97",
+            "time_in": "2018-05-05 13:18:28",
+            "employee" : 2,
+            "time_out": "2018-05-05 15:16:26",
+            "id": 18733
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "3.91",
+            "time_in": "2018-05-05 09:03:00",
+            "employee" : 2,
+            "time_out": "2018-05-05 12:57:31",
+            "id": 18730
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "2.51",
+            "time_in": "2018-05-02 12:56:20",
+            "employee" : 2,
+            "time_out": "2018-05-02 15:27:01",
+            "id": 18699
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "3.18",
+            "time_in": "2018-05-02 09:10:34",
+            "employee" : 2,
+            "time_out": "2018-05-02 12:21:33",
+            "id": 18697
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "2.94",
+            "time_in": "2018-04-30 13:22:26",
+            "employee" : 2,
+            "time_out": "2018-04-30 16:19:01",
+            "id": 18671
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "3.53",
+            "time_in": "2018-04-30 09:11:46",
+            "employee" : 2,
+            "time_out": "2018-04-30 12:43:41",
+            "id": 18664
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "3.22",
+            "time_in": "2018-04-28 12:38:29",
+            "employee" : 2,
+            "time_out": "2018-04-28 15:51:39",
+            "id": 18658
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "2.83",
+            "time_in": "2018-04-28 09:15:39",
+            "employee" : 2,
+            "time_out": "2018-04-28 12:05:14",
+            "id": 18656
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "3.25",
+            "time_in": "2018-04-27 09:12:38",
+            "employee" : 2,
+            "time_out": "2018-04-27 12:27:43",
+            "id": 18644
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "3.14",
+            "time_in": "2018-04-25 12:33:00",
+            "employee" : 2,
+            "time_out": "2018-04-25 15:41:28",
+            "id": 18619
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "2.95",
+            "time_in": "2018-04-25 09:07:16",
+            "employee" : 2,
+            "time_out": "2018-04-25 12:04:12",
+            "id": 18614
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "3.74",
+            "time_in": "2018-04-23 12:35:44",
+            "employee" : 2,
+            "time_out": "2018-04-23 16:20:16",
+            "id": 18591
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "2.92",
+            "time_in": "2018-04-23 09:07:22",
+            "employee" : 2,
+            "time_out": "2018-04-23 12:02:40",
+            "id": 18588
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "0.86",
+            "time_in": "2018-04-21 13:08:48",
+            "employee" : 2,
+            "time_out": "2018-04-21 14:00:25",
+            "id": 18586
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "3.54",
+            "time_in": "2018-04-21 09:07:02",
+            "employee" : 2,
+            "time_out": "2018-04-21 12:39:19",
+            "id": 18583
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "3.35",
+            "time_in": "2018-04-20 09:08:31",
+            "employee" : 2,
+            "time_out": "2018-04-20 12:29:37",
+            "id": 18568
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "2.80",
+            "time_in": "2018-04-16 13:46:27",
+            "employee" : 2,
+            "time_out": "2018-04-16 16:34:29",
+            "id": 18520
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "4.23",
+            "time_in": "2018-04-16 09:00:43",
+            "employee" : 2,
+            "time_out": "2018-04-16 13:14:25",
+            "id": 18515
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "3.81",
+            "time_in": "2018-04-14 12:50:12",
+            "employee" : 2,
+            "time_out": "2018-04-14 16:38:31",
+            "id": 18511
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "3.34",
+            "time_in": "2018-04-13 09:06:51",
+            "employee" : 2,
+            "time_out": "2018-04-13 12:27:28",
+            "id": 18503
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "2.85",
+            "time_in": "2018-04-11 12:48:12",
+            "employee" : 2,
+            "time_out": "2018-04-11 15:38:58",
+            "id": 18477
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "3.04",
+            "time_in": "2018-04-11 09:14:18",
+            "employee" : 2,
+            "time_out": "2018-04-11 12:16:28",
+            "id": 18473
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "3.10",
+            "time_in": "2018-04-09 12:45:51",
+            "employee" : 2,
+            "time_out": "2018-04-09 15:51:35",
+            "id": 18442
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "3.09",
+            "time_in": "2018-04-09 09:09:08",
+            "employee" : 2,
+            "time_out": "2018-04-09 12:14:32",
+            "id": 18437
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "2.94",
+            "time_in": "2018-04-07 13:02:24",
+            "employee" : 2,
+            "time_out": "2018-04-07 15:59:02",
+            "id": 18433
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "3.44",
+            "time_in": "2018-04-07 09:11:22",
+            "employee" : 2,
+            "time_out": "2018-04-07 12:37:36",
+            "id": 18431
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "3.48",
+            "time_in": "2018-04-06 09:04:15",
+            "employee" : 2,
+            "time_out": "2018-04-06 12:32:48",
+            "id": 18415
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "2.60",
+            "time_in": "2018-04-04 13:03:27",
+            "employee" : 2,
+            "time_out": "2018-04-04 15:39:10",
+            "id": 18390
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "2.81",
+            "time_in": "2018-04-04 09:33:22",
+            "employee" : 2,
+            "time_out": "2018-04-04 12:21:54",
+            "id": 18386
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "3.06",
+            "time_in": "2018-04-02 13:19:58",
+            "employee" : 2,
+            "time_out": "2018-04-02 16:23:42",
+            "id": 18361
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "3.58",
+            "time_in": "2018-04-02 09:11:31",
+            "employee" : 2,
+            "time_out": "2018-04-02 12:46:05",
+            "id": 18357
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "2.88",
+            "time_in": "2018-03-31 13:07:08",
+            "employee" : 2,
+            "time_out": "2018-03-31 16:00:04",
+            "id": 18352
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "3.51",
+            "time_in": "2018-03-31 09:04:33",
+            "employee" : 2,
+            "time_out": "2018-03-31 12:34:57",
+            "id": 18348
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "2.50",
+            "time_in": "2018-03-30 13:42:30",
+            "employee" : 2,
+            "time_out": "2018-03-30 16:12:34",
+            "id": 18345
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "3.93",
+            "time_in": "2018-03-30 09:06:59",
+            "employee" : 2,
+            "time_out": "2018-03-30 13:02:29",
+            "id": 18341
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "2.57",
+            "time_in": "2018-03-28 12:59:25",
+            "employee" : 2,
+            "time_out": "2018-03-28 15:33:36",
+            "id": 18320
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "3.17",
+            "time_in": "2018-03-28 09:13:11",
+            "employee" : 2,
+            "time_out": "2018-03-28 12:23:37",
+            "id": 18316
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "6.51",
+            "time_in": "2018-03-26 09:19:17",
+            "employee" : 2,
+            "time_out": "2018-03-26 15:49:46",
+            "id": 18286
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "2.66",
+            "time_in": "2018-03-24 13:29:04",
+            "employee" : 2,
+            "time_out": "2018-03-24 16:08:55",
+            "id": 18276
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "3.91",
+            "time_in": "2018-03-24 09:05:00",
+            "employee" : 2,
+            "time_out": "2018-03-24 12:59:27",
+            "id": 18270
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "6.68",
+            "time_in": "2018-03-19 09:12:46",
+            "employee" : 2,
+            "time_out": "2018-03-19 15:53:34",
+            "id": 18221
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "6.62",
+            "time_in": "2018-03-17 09:13:36",
+            "employee" : 2,
+            "time_out": "2018-03-17 15:50:47",
+            "id": 18215
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "2.08",
+            "time_in": "2018-03-12 14:05:07",
+            "employee" : 2,
+            "time_out": "2018-03-12 16:09:58",
+            "id": 18156
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "4.56",
+            "time_in": "2018-03-12 09:04:42",
+            "employee" : 2,
+            "time_out": "2018-03-12 13:38:32",
+            "id": 18150
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "3.41",
+            "time_in": "2018-03-10 12:35:28",
+            "employee" : 2,
+            "time_out": "2018-03-10 15:59:55",
+            "id": 18147
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "2.85",
+            "time_in": "2018-03-09 09:14:02",
+            "employee" : 2,
+            "time_out": "2018-03-09 12:05:19",
+            "id": 18131
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "6.17",
+            "time_in": "2018-03-07 09:19:49",
+            "employee" : 2,
+            "time_out": "2018-03-07 15:29:51",
+            "id": 18104
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "6.97",
+            "time_in": "2018-03-05 09:08:03",
+            "employee" : 2,
+            "time_out": "2018-03-05 16:06:09",
+            "id": 18069
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "2.53",
+            "time_in": "2018-03-03 13:30:29",
+            "employee" : 2,
+            "time_out": "2018-03-03 16:02:03",
+            "id": 18064
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "3.76",
+            "time_in": "2018-03-03 09:07:56",
+            "employee" : 2,
+            "time_out": "2018-03-03 12:53:29",
+            "id": 18061
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "6.13",
+            "time_in": "2018-02-28 09:12:09",
+            "employee" : 2,
+            "time_out": "2018-02-28 15:20:07",
+            "id": 18019
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "6.95",
+            "time_in": "2018-02-26 09:06:19",
+            "employee" : 2,
+            "time_out": "2018-02-26 16:03:34",
+            "id": 17993
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "3.40",
+            "time_in": "2018-02-24 13:11:39",
+            "employee" : 2,
+            "time_out": "2018-02-24 16:35:34",
+            "id": 17983
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "3.45",
+            "time_in": "2018-02-24 09:12:12",
+            "employee" : 2,
+            "time_out": "2018-02-24 12:38:58",
+            "id": 17976
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "3.51",
+            "time_in": "2018-02-23 09:09:45",
+            "employee" : 2,
+            "time_out": "2018-02-23 12:40:21",
+            "id": 17967
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "6.32",
+            "time_in": "2018-02-21 09:11:35",
+            "employee" : 2,
+            "time_out": "2018-02-21 15:30:33",
+            "id": 17934
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "6.76",
+            "time_in": "2018-02-19 09:13:08",
+            "employee" : 2,
+            "time_out": "2018-02-19 15:58:52",
+            "id": 17912
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "4.44",
+            "time_in": "2018-02-17 11:23:31",
+            "employee" : 2,
+            "time_out": "2018-02-17 15:49:47",
+            "id": 17903
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "3.07",
+            "time_in": "2018-02-16 09:17:20",
+            "employee" : 2,
+            "time_out": "2018-02-16 12:21:37",
+            "id": 17894
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "6.46",
+            "time_in": "2018-02-14 09:12:36",
+            "employee" : 2,
+            "time_out": "2018-02-14 15:40:28",
+            "id": 17868
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "6.74",
+            "time_in": "2018-02-12 09:11:04",
+            "employee" : 2,
+            "time_out": "2018-02-12 15:55:14",
+            "id": 17838
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "2.39",
+            "time_in": "2018-02-10 13:29:09",
+            "employee" : 2,
+            "time_out": "2018-02-10 15:52:39",
+            "id": 17833
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "3.89",
+            "time_in": "2018-02-10 09:09:48",
+            "employee" : 2,
+            "time_out": "2018-02-10 13:03:24",
+            "id": 17829
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "3.25",
+            "time_in": "2018-02-09 09:07:58",
+            "employee" : 2,
+            "time_out": "2018-02-09 12:23:12",
+            "id": 17822
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "2.57",
+            "time_in": "2018-02-07 13:15:48",
+            "employee" : 2,
+            "time_out": "2018-02-07 15:50:17",
+            "id": 17799
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "2.38",
+            "time_in": "2018-02-07 10:18:11",
+            "employee" : 2,
+            "time_out": "2018-02-07 12:41:03",
+            "id": 17797
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "1.16",
+            "time_in": "2018-02-07 09:04:12",
+            "employee" : 2,
+            "time_out": "2018-02-07 10:14:01",
+            "id": 17793
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "6.80",
+            "time_in": "2018-02-05 09:16:27",
+            "employee" : 2,
+            "time_out": "2018-02-05 16:04:21",
+            "id": 17767
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "3.54",
+            "time_in": "2018-02-03 13:03:59",
+            "employee" : 2,
+            "time_out": "2018-02-03 16:36:31",
+            "id": 17761
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "3.46",
+            "time_in": "2018-02-03 09:01:44",
+            "employee" : 2,
+            "time_out": "2018-02-03 12:29:35",
+            "id": 17758
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "5.98",
+            "time_in": "2018-01-31 09:13:34",
+            "employee" : 2,
+            "time_out": "2018-01-31 15:12:35",
+            "id": 17713
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "7.26",
+            "time_in": "2018-01-29 09:14:45",
+            "employee" : 2,
+            "time_out": "2018-01-29 16:30:27",
+            "id": 17683
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "3.74",
+            "time_in": "2018-01-27 12:23:20",
+            "employee" : 2,
+            "time_out": "2018-01-27 16:07:38",
+            "id": 17670
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "2.95",
+            "time_in": "2018-01-27 09:04:15",
+            "employee" : 2,
+            "time_out": "2018-01-27 12:01:27",
+            "id": 17667
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "4.70",
+            "time_in": "2018-01-26 09:05:39",
+            "employee" : 2,
+            "time_out": "2018-01-26 13:47:50",
+            "id": 17652
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "6.85",
+            "time_in": "2018-01-24 09:10:25",
+            "employee" : 2,
+            "time_out": "2018-01-24 16:01:29",
+            "id": 17615
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "7.59",
+            "time_in": "2018-01-22 09:05:22",
+            "employee" : 2,
+            "time_out": "2018-01-22 16:40:44",
+            "id": 17580
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "2.75",
+            "time_in": "2018-01-20 13:21:01",
+            "employee" : 2,
+            "time_out": "2018-01-20 16:06:03",
+            "id": 17574
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "3.50",
+            "time_in": "2018-01-20 09:16:57",
+            "employee" : 2,
+            "time_out": "2018-01-20 12:47:08",
+            "id": 17569
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "4.58",
+            "time_in": "2018-01-19 09:10:10",
+            "employee" : 2,
+            "time_out": "2018-01-19 13:45:07",
+            "id": 17557
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "1.25",
+            "time_in": "2018-01-18 10:48:09",
+            "employee" : 2,
+            "time_out": "2018-01-18 12:03:09",
+            "id": 17542
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "1.66",
+            "time_in": "2018-01-18 09:05:54",
+            "employee" : 2,
+            "time_out": "2018-01-18 10:45:35",
+            "id": 17537
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "6.98",
+            "time_in": "2018-01-16 09:02:38",
+            "employee" : 2,
+            "time_out": "2018-01-16 16:01:11",
+            "id": 17506
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "0.69",
+            "time_in": "2018-01-15 15:40:03",
+            "employee" : 2,
+            "time_out": "2018-01-15 16:21:16",
+            "id": 17499
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "0.55",
+            "time_in": "2018-01-15 15:06:48",
+            "employee" : 2,
+            "time_out": "2018-01-15 15:39:30",
+            "id": 17496
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "1.84",
+            "time_in": "2018-01-15 13:14:47",
+            "employee" : 2,
+            "time_out": "2018-01-15 15:05:11",
+            "id": 17495
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "3.72",
+            "time_in": "2018-01-15 09:06:26",
+            "employee" : 2,
+            "time_out": "2018-01-15 12:49:50",
+            "id": 17490
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "2.87",
+            "time_in": "2018-01-12 09:09:13",
+            "employee" : 2,
+            "time_out": "2018-01-12 12:01:11",
+            "id": 17476
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "7.43",
+            "time_in": "2018-01-11 09:04:12",
+            "employee" : 2,
+            "time_out": "2018-01-11 16:30:00",
+            "id": 17459
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "3.07",
+            "time_in": "2018-01-10 13:13:18",
+            "employee" : 2,
+            "time_out": "2018-01-10 16:17:21",
+            "id": 17449
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "3.61",
+            "time_in": "2018-01-10 09:05:52",
+            "employee" : 2,
+            "time_out": "2018-01-10 12:42:20",
+            "id": 17441
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "3.22",
+            "time_in": "2018-01-09 13:38:50",
+            "employee" : 2,
+            "time_out": "2018-01-09 16:51:51",
+            "id": 17426
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "4.12",
+            "time_in": "2018-01-09 09:04:25",
+            "employee" : 2,
+            "time_out": "2018-01-09 13:11:41",
+            "id": 17421
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "3.16",
+            "time_in": "2018-01-08 13:31:57",
+            "employee" : 2,
+            "time_out": "2018-01-08 16:41:18",
+            "id": 17407
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "3.72",
+            "time_in": "2018-01-08 09:07:05",
+            "employee" : 2,
+            "time_out": "2018-01-08 12:50:20",
+            "id": 17402
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "7.08",
+            "time_in": "2018-01-05 09:15:26",
+            "employee" : 2,
+            "time_out": "2018-01-05 16:20:02",
+            "id": 17374
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "2.67",
+            "time_in": "2018-01-04 13:26:47",
+            "employee" : 2,
+            "time_out": "2018-01-04 16:07:05",
+            "id": 17360
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "3.90",
+            "time_in": "2018-01-04 09:00:00",
+            "employee" : 2,
+            "time_out": "2018-01-04 12:53:59",
+            "id": 17352
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "3.55",
+            "time_in": "2018-01-03 13:04:07",
+            "employee" : 2,
+            "time_out": "2018-01-03 16:37:03",
+            "id": 17344
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "3.23",
+            "time_in": "2018-01-03 09:05:08",
+            "employee" : 2,
+            "time_out": "2018-01-03 12:18:40",
+            "id": 17337
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "7.47",
+            "time_in": "2018-01-02 09:02:25",
+            "employee" : 2,
+            "time_out": "2018-01-02 16:30:24",
+            "id": 17319
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "5.94",
+            "time_in": "2017-12-30 08:58:16",
+            "employee" : 2,
+            "time_out": "2017-12-30 14:54:54",
+            "id": 17306
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "7.27",
+            "time_in": "2017-12-29 09:06:30",
+            "employee" : 2,
+            "time_out": "2017-12-29 16:22:56",
+            "id": 17296
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "2.54",
+            "time_in": "2017-12-22 13:03:14",
+            "employee" : 2,
+            "time_out": "2017-12-22 15:35:55",
+            "id": 17257
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "3.25",
+            "time_in": "2017-12-22 09:06:38",
+            "employee" : 2,
+            "time_out": "2017-12-22 12:21:49",
+            "id": 17250
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "3.56",
+            "time_in": "2017-12-21 12:55:12",
+            "employee" : 2,
+            "time_out": "2017-12-21 16:28:34",
+            "id": 17240
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "3.32",
+            "time_in": "2017-12-21 09:07:20",
+            "employee" : 2,
+            "time_out": "2017-12-21 12:26:39",
+            "id": 17233
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "3.30",
+            "time_in": "2017-12-20 12:58:55",
+            "employee" : 2,
+            "time_out": "2017-12-20 16:16:43",
+            "id": 17219
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "3.43",
+            "time_in": "2017-12-20 09:06:32",
+            "employee" : 2,
+            "time_out": "2017-12-20 12:32:16",
+            "id": 17214
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "4.72",
+            "time_in": "2017-12-19 13:16:24",
+            "employee" : 2,
+            "time_out": "2017-12-19 17:59:42",
+            "id": 17201
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "3.75",
+            "time_in": "2017-12-19 09:03:20",
+            "employee" : 2,
+            "time_out": "2017-12-19 12:48:35",
+            "id": 17198
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "3.14",
+            "time_in": "2017-12-18 13:00:10",
+            "employee" : 2,
+            "time_out": "2017-12-18 16:08:36",
+            "id": 17186
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "3.54",
+            "time_in": "2017-12-18 09:04:43",
+            "employee" : 2,
+            "time_out": "2017-12-18 12:36:58",
+            "id": 17181
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "3.45",
+            "time_in": "2017-12-15 12:26:18",
+            "employee" : 2,
+            "time_out": "2017-12-15 15:53:09",
+            "id": 17157
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "2.85",
+            "time_in": "2017-12-15 09:04:51",
+            "employee" : 2,
+            "time_out": "2017-12-15 11:56:06",
+            "id": 17153
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "1.61",
+            "time_in": "2017-12-14 14:49:50",
+            "employee" : 2,
+            "time_out": "2017-12-14 16:26:43",
+            "id": 17145
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "4.94",
+            "time_in": "2017-12-14 09:32:45",
+            "employee" : 2,
+            "time_out": "2017-12-14 14:29:11",
+            "id": 17141
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "6.91",
+            "time_in": "2017-12-13 09:07:28",
+            "employee" : 2,
+            "time_out": "2017-12-13 16:01:50",
+            "id": 17126
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "3.33",
+            "time_in": "2017-12-12 13:19:44",
+            "employee" : 2,
+            "time_out": "2017-12-12 16:39:23",
+            "id": 17113
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "3.73",
+            "time_in": "2017-12-12 09:03:19",
+            "employee" : 2,
+            "time_out": "2017-12-12 12:46:50",
+            "id": 17108
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "7.11",
+            "time_in": "2017-12-11 09:00:07",
+            "employee" : 2,
+            "time_out": "2017-12-11 16:06:26",
+            "id": 17091
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "2.99",
+            "time_in": "2017-12-09 12:31:24",
+            "employee" : 2,
+            "time_out": "2017-12-09 15:30:32",
+            "id": 17082
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "3.19",
+            "time_in": "2017-12-09 08:52:29",
+            "employee" : 2,
+            "time_out": "2017-12-09 12:04:07",
+            "id": 17078
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "0.69",
+            "time_in": "2017-12-06 11:13:01",
+            "employee" : 2,
+            "time_out": "2017-12-06 11:54:42",
+            "id": 17043
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "2.12",
+            "time_in": "2017-12-06 09:01:04",
+            "employee" : 2,
+            "time_out": "2017-12-06 11:07:58",
+            "id": 17040
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "2.76",
+            "time_in": "2017-12-04 09:07:05",
+            "employee" : 2,
+            "time_out": "2017-12-04 11:52:49",
+            "id": 17005
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "7.41",
+            "time_in": "2017-12-02 08:59:03",
+            "employee" : 2,
+            "time_out": "2017-12-02 16:23:27",
+            "id": 17000
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "2.84",
+            "time_in": "2017-12-01 08:57:50",
+            "employee" : 2,
+            "time_out": "2017-12-01 11:48:27",
+            "id": 16992
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "2.94",
+            "time_in": "2017-11-30 13:46:12",
+            "employee" : 2,
+            "time_out": "2017-11-30 16:42:28",
+            "id": 16986
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "2.68",
+            "time_in": "2017-11-29 09:01:28",
+            "employee" : 2,
+            "time_out": "2017-11-29 11:42:11",
+            "id": 16970
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "3.19",
+            "time_in": "2017-11-25 13:20:57",
+            "employee" : 2,
+            "time_out": "2017-11-25 16:32:35",
+            "id": 16943
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "4.04",
+            "time_in": "2017-11-25 08:49:25",
+            "employee" : 2,
+            "time_out": "2017-11-25 12:51:57",
+            "id": 16940
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "1.35",
+            "time_in": "2017-11-22 14:09:44",
+            "employee" : 2,
+            "time_out": "2017-11-22 15:30:56",
+            "id": 16934
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "4.67",
+            "time_in": "2017-11-22 09:00:01",
+            "employee" : 2,
+            "time_out": "2017-11-22 13:40:00",
+            "id": 16933
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "2.32",
+            "time_in": "2017-11-21 13:49:55",
+            "employee" : 2,
+            "time_out": "2017-11-21 16:09:05",
+            "id": 16923
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "4.36",
+            "time_in": "2017-11-21 09:01:49",
+            "employee" : 2,
+            "time_out": "2017-11-21 13:23:16",
+            "id": 16916
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "7.80",
+            "time_in": "2017-11-20 08:43:30",
+            "employee" : 2,
+            "time_out": "2017-11-20 16:31:27",
+            "id": 16901
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "2.73",
+            "time_in": "2017-11-11 13:18:18",
+            "employee" : 2,
+            "time_out": "2017-11-11 16:02:05",
+            "id": 16832
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "3.19",
+            "time_in": "2017-11-11 09:26:07",
+            "employee" : 2,
+            "time_out": "2017-11-11 12:37:39",
+            "id": 16828
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "2.15",
+            "time_in": "2017-11-10 14:24:10",
+            "employee" : 2,
+            "time_out": "2017-11-10 16:33:22",
+            "id": 16823
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "2.67",
+            "time_in": "2017-11-10 09:04:29",
+            "employee" : 2,
+            "time_out": "2017-11-10 11:44:43",
+            "id": 16817
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "1.23",
+            "time_in": "2017-11-09 14:24:11",
+            "employee" : 2,
+            "time_out": "2017-11-09 15:38:01",
+            "id": 16807
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "2.28",
+            "time_in": "2017-11-09 12:06:13",
+            "employee" : 2,
+            "time_out": "2017-11-09 14:22:54",
+            "id": 16804
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "1.69",
+            "time_in": "2017-11-08 20:56:33",
+            "employee" : 2,
+            "time_out": "2017-11-08 22:38:00",
+            "id": 16799
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "0.10",
+            "time_in": "2017-11-08 12:45:25",
+            "employee" : 2,
+            "time_out": "2017-11-08 12:51:12",
+            "id": 16796
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "2.85",
+            "time_in": "2017-11-08 08:57:11",
+            "employee" : 2,
+            "time_out": "2017-11-08 11:48:00",
+            "id": 16788
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "0.99",
+            "time_in": "2017-11-06 22:14:18",
+            "employee" : 2,
+            "time_out": "2017-11-06 23:13:29",
+            "id": 16779
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "3.16",
+            "time_in": "2017-11-06 08:40:52",
+            "employee" : 2,
+            "time_out": "2017-11-06 11:50:45",
+            "id": 16772
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "4.06",
+            "time_in": "2017-11-04 12:00:25",
+            "employee" : 2,
+            "time_out": "2017-11-04 16:03:47",
+            "id": 16763
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "2.35",
+            "time_in": "2017-11-03 13:58:47",
+            "employee" : 2,
+            "time_out": "2017-11-03 16:19:46",
+            "id": 16756
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "2.83",
+            "time_in": "2017-11-03 09:00:14",
+            "employee" : 2,
+            "time_out": "2017-11-03 11:49:51",
+            "id": 16749
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "4.57",
+            "time_in": "2017-11-02 12:22:15",
+            "employee" : 2,
+            "time_out": "2017-11-02 16:56:16",
+            "id": 16740
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "2.08",
+            "time_in": "2017-11-01 09:01:17",
+            "employee" : 2,
+            "time_out": "2017-11-01 11:05:53",
+            "id": 16723
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "2.79",
+            "time_in": "2017-10-30 08:59:20",
+            "employee" : 2,
+            "time_out": "2017-10-30 11:46:41",
+            "id": 16699
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "3.03",
+            "time_in": "2017-10-28 13:00:43",
+            "employee" : 2,
+            "time_out": "2017-10-28 16:02:45",
+            "id": 16693
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "3.48",
+            "time_in": "2017-10-28 09:01:59",
+            "employee" : 2,
+            "time_out": "2017-10-28 12:30:55",
+            "id": 16689
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "2.91",
+            "time_in": "2017-10-27 14:11:51",
+            "employee" : 2,
+            "time_out": "2017-10-27 17:06:20",
+            "id": 16686
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "2.90",
+            "time_in": "2017-10-27 08:55:28",
+            "employee" : 2,
+            "time_out": "2017-10-27 11:49:27",
+            "id": 16680
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "3.16",
+            "time_in": "2017-10-26 13:06:09",
+            "employee" : 2,
+            "time_out": "2017-10-26 16:15:38",
+            "id": 16671
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "2.97",
+            "time_in": "2017-10-25 08:52:23",
+            "employee" : 2,
+            "time_out": "2017-10-25 11:50:37",
+            "id": 16652
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "2.71",
+            "time_in": "2017-10-23 09:05:48",
+            "employee" : 2,
+            "time_out": "2017-10-23 11:48:34",
+            "id": 16630
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "2.19",
+            "time_in": "2017-10-21 14:48:24",
+            "employee" : 2,
+            "time_out": "2017-10-21 17:00:03",
+            "id": 16626
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "1.26",
+            "time_in": "2017-10-21 13:31:51",
+            "employee" : 2,
+            "time_out": "2017-10-21 14:47:25",
+            "id": 16625
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "2.80",
+            "time_in": "2017-10-21 10:28:21",
+            "employee" : 2,
+            "time_out": "2017-10-21 13:16:19",
+            "id": 16622
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "3.27",
+            "time_in": "2017-10-20 13:47:22",
+            "employee" : 2,
+            "time_out": "2017-10-20 17:03:33",
+            "id": 16613
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "2.86",
+            "time_in": "2017-10-20 08:55:42",
+            "employee" : 2,
+            "time_out": "2017-10-20 11:47:33",
+            "id": 16605
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "2.12",
+            "time_in": "2017-10-19 14:56:22",
+            "employee" : 2,
+            "time_out": "2017-10-19 17:03:31",
+            "id": 16602
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "2.70",
+            "time_in": "2017-10-18 09:13:07",
+            "employee" : 2,
+            "time_out": "2017-10-18 11:55:16",
+            "id": 16582
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "2.74",
+            "time_in": "2017-10-16 09:03:23",
+            "employee" : 2,
+            "time_out": "2017-10-16 11:47:32",
+            "id": 16556
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "3.76",
+            "time_in": "2017-10-14 12:45:41",
+            "employee" : 2,
+            "time_out": "2017-10-14 16:31:24",
+            "id": 16549
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "3.33",
+            "time_in": "2017-10-14 08:59:30",
+            "employee" : 2,
+            "time_out": "2017-10-14 12:19:27",
+            "id": 16546
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "2.46",
+            "time_in": "2017-10-13 14:27:29",
+            "employee" : 2,
+            "time_out": "2017-10-13 16:55:21",
+            "id": 16537
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "2.58",
+            "time_in": "2017-10-13 09:00:09",
+            "employee" : 2,
+            "time_out": "2017-10-13 11:35:08",
+            "id": 16532
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "1.36",
+            "time_in": "2017-10-12 15:33:46",
+            "employee" : 2,
+            "time_out": "2017-10-12 16:55:15",
+            "id": 16527
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "2.75",
+            "time_in": "2017-10-12 12:41:36",
+            "employee" : 2,
+            "time_out": "2017-10-12 15:26:23",
+            "id": 16523
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "2.45",
+            "time_in": "2017-10-11 09:11:24",
+            "employee" : 2,
+            "time_out": "2017-10-11 11:38:23",
+            "id": 16507
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "2.93",
+            "time_in": "2017-10-09 09:00:37",
+            "employee" : 2,
+            "time_out": "2017-10-09 11:56:27",
+            "id": 16481
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "3.17",
+            "time_in": "2017-10-06 13:44:29",
+            "employee" : 2,
+            "time_out": "2017-10-06 16:54:28",
+            "id": 16468
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "2.74",
+            "time_in": "2017-10-06 09:10:39",
+            "employee" : 2,
+            "time_out": "2017-10-06 11:55:20",
+            "id": 16466
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "3.17",
+            "time_in": "2017-10-05 13:37:20",
+            "employee" : 2,
+            "time_out": "2017-10-05 16:47:31",
+            "id": 16460
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "2.62",
+            "time_in": "2017-10-04 09:07:32",
+            "employee" : 2,
+            "time_out": "2017-10-04 11:45:01",
+            "id": 16463
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "2.74",
+            "time_in": "2017-10-02 09:06:26",
+            "employee" : 2,
+            "time_out": "2017-10-02 11:50:49",
+            "id": 16427
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "2.85",
+            "time_in": "2017-09-30 13:15:54",
+            "employee" : 2,
+            "time_out": "2017-09-30 16:06:40",
+            "id": 16424
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "3.67",
+            "time_in": "2017-09-30 09:08:05",
+            "employee" : 2,
+            "time_out": "2017-09-30 12:48:25",
+            "id": 16421
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "3.72",
+            "time_in": "2017-09-29 13:44:16",
+            "employee" : 2,
+            "time_out": "2017-09-29 17:27:42",
+            "id": 16416
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "2.79",
+            "time_in": "2017-09-29 09:12:08",
+            "employee" : 2,
+            "time_out": "2017-09-29 11:59:17",
+            "id": 16413
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "3.65",
+            "time_in": "2017-09-28 13:23:17",
+            "employee" : 2,
+            "time_out": "2017-09-28 17:02:14",
+            "id": 16406
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "2.56",
+            "time_in": "2017-09-27 09:17:47",
+            "employee" : 2,
+            "time_out": "2017-09-27 11:51:22",
+            "id": 16384
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "2.81",
+            "time_in": "2017-09-25 09:02:20",
+            "employee" : 2,
+            "time_out": "2017-09-25 11:51:08",
+            "id": 16357
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "3.19",
+            "time_in": "2017-09-23 13:01:12",
+            "employee" : 2,
+            "time_out": "2017-09-23 16:12:50",
+            "id": 16353
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "3.31",
+            "time_in": "2017-09-23 09:09:48",
+            "employee" : 2,
+            "time_out": "2017-09-23 12:28:14",
+            "id": 16348
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "3.59",
+            "time_in": "2017-09-22 13:56:34",
+            "employee" : 2,
+            "time_out": "2017-09-22 17:32:09",
+            "id": 16343
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "2.60",
+            "time_in": "2017-09-22 09:09:14",
+            "employee" : 2,
+            "time_out": "2017-09-22 11:45:01",
+            "id": 16336
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "3.87",
+            "time_in": "2017-09-21 13:37:12",
+            "employee" : 2,
+            "time_out": "2017-09-21 17:29:16",
+            "id": 16329
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "2.58",
+            "time_in": "2017-09-20 09:08:42",
+            "employee" : 2,
+            "time_out": "2017-09-20 11:43:38",
+            "id": 16305
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "2.97",
+            "time_in": "2017-09-18 08:53:20",
+            "employee" : 2,
+            "time_out": "2017-09-18 11:51:27",
+            "id": 16283
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "2.82",
+            "time_in": "2017-09-13 09:09:05",
+            "employee" : 2,
+            "time_out": "2017-09-13 11:58:08",
+            "id": 16244
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "2.40",
+            "time_in": "2017-09-11 09:15:30",
+            "employee" : 2,
+            "time_out": "2017-09-11 11:39:29",
+            "id": 16223
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "3.33",
+            "time_in": "2017-09-09 12:57:01",
+            "employee" : 2,
+            "time_out": "2017-09-09 16:16:40",
+            "id": 16213
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "3.35",
+            "time_in": "2017-09-09 09:11:14",
+            "employee" : 2,
+            "time_out": "2017-09-09 12:32:30",
+            "id": 16210
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "3.45",
+            "time_in": "2017-09-08 13:35:19",
+            "employee" : 2,
+            "time_out": "2017-09-08 17:02:13",
+            "id": 16206
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "2.63",
+            "time_in": "2017-09-08 09:07:05",
+            "employee" : 2,
+            "time_out": "2017-09-08 11:45:10",
+            "id": 16200
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "4.23",
+            "time_in": "2017-09-07 13:33:13",
+            "employee" : 2,
+            "time_out": "2017-09-07 17:47:05",
+            "id": 16189
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "2.66",
+            "time_in": "2017-09-06 09:10:35",
+            "employee" : 2,
+            "time_out": "2017-09-06 11:50:03",
+            "id": 16168
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "5.14",
+            "time_in": "2017-09-04 09:15:36",
+            "employee" : 2,
+            "time_out": "2017-09-04 14:23:46",
+            "id": 16146
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "5.97",
+            "time_in": "2017-09-02 09:15:51",
+            "employee" : 2,
+            "time_out": "2017-09-02 15:13:48",
+            "id": 16136
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "3.23",
+            "time_in": "2017-09-01 14:05:45",
+            "employee" : 2,
+            "time_out": "2017-09-01 17:19:20",
+            "id": 16132
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "2.68",
+            "time_in": "2017-09-01 09:09:11",
+            "employee" : 2,
+            "time_out": "2017-09-01 11:49:51",
+            "id": 16127
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "4.16",
+            "time_in": "2017-08-31 13:58:07",
+            "employee" : 2,
+            "time_out": "2017-08-31 18:07:28",
+            "id": 16115
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "2.76",
+            "time_in": "2017-08-30 09:13:02",
+            "employee" : 2,
+            "time_out": "2017-08-30 11:58:46",
+            "id": 16097
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "4.49",
+            "time_in": "2017-08-29 13:28:29",
+            "employee" : 2,
+            "time_out": "2017-08-29 17:57:53",
+            "id": 16087
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "2.72",
+            "time_in": "2017-08-28 09:10:06",
+            "employee" : 2,
+            "time_out": "2017-08-28 11:53:07",
+            "id": 16069
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "3.60",
+            "time_in": "2017-08-25 13:54:48",
+            "employee" : 2,
+            "time_out": "2017-08-25 17:31:06",
+            "id": 16050
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "2.85",
+            "time_in": "2017-08-25 09:02:51",
+            "employee" : 2,
+            "time_out": "2017-08-25 11:53:43",
+            "id": 16041
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "2.85",
+            "time_in": "2017-08-23 09:05:51",
+            "employee" : 2,
+            "time_out": "2017-08-23 11:56:35",
+            "id": 16017
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "2.84",
+            "time_in": "2017-08-21 09:07:52",
+            "employee" : 2,
+            "time_out": "2017-08-21 11:58:12",
+            "id": 15997
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "2.99",
+            "time_in": "2017-08-19 13:12:11",
+            "employee" : 2,
+            "time_out": "2017-08-19 16:11:50",
+            "id": 15988
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "3.53",
+            "time_in": "2017-08-19 09:05:16",
+            "employee" : 2,
+            "time_out": "2017-08-19 12:36:47",
+            "id": 15985
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "3.15",
+            "time_in": "2017-08-18 13:47:01",
+            "employee" : 2,
+            "time_out": "2017-08-18 16:56:08",
+            "id": 15981
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "2.88",
+            "time_in": "2017-08-18 09:07:34",
+            "employee" : 2,
+            "time_out": "2017-08-18 12:00:37",
+            "id": 15973
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "4.67",
+            "time_in": "2017-08-16 13:47:34",
+            "employee" : 2,
+            "time_out": "2017-08-16 18:28:01",
+            "id": 15955
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "6.42",
+            "time_in": "2017-08-15 10:50:01",
+            "employee" : 2,
+            "time_out": "2017-08-15 17:14:58",
+            "id": 15939
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "2.02",
+            "time_in": "2017-08-14 14:24:31",
+            "employee" : 2,
+            "time_out": "2017-08-14 16:25:53",
+            "id": 15932
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "4.96",
+            "time_in": "2017-08-14 09:03:50",
+            "employee" : 2,
+            "time_out": "2017-08-14 14:01:40",
+            "id": 15929
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "2.86",
+            "time_in": "2017-08-10 13:23:21",
+            "employee" : 2,
+            "time_out": "2017-08-10 16:15:09",
+            "id": 15898
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "4.07",
+            "time_in": "2017-08-10 08:55:13",
+            "employee" : 2,
+            "time_out": "2017-08-10 12:59:08",
+            "id": 15887
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "7.17",
+            "time_in": "2017-08-09 09:04:31",
+            "employee" : 2,
+            "time_out": "2017-08-09 16:14:34",
+            "id": 15871
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "6.98",
+            "time_in": "2017-08-08 09:03:31",
+            "employee" : 2,
+            "time_out": "2017-08-08 16:02:27",
+            "id": 15855
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "7.02",
+            "time_in": "2017-08-07 09:03:24",
+            "employee" : 2,
+            "time_out": "2017-08-07 16:04:53",
+            "id": 15840
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "5.31",
+            "time_in": "2017-08-05 09:02:32",
+            "employee" : 2,
+            "time_out": "2017-08-05 14:21:18",
+            "id": 15830
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "3.06",
+            "time_in": "2017-08-04 12:46:12",
+            "employee" : 2,
+            "time_out": "2017-08-04 15:49:47",
+            "id": 15822
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "3.09",
+            "time_in": "2017-08-04 09:07:23",
+            "employee" : 2,
+            "time_out": "2017-08-04 12:12:33",
+            "id": 15814
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "6.95",
+            "time_in": "2017-07-29 09:00:47",
+            "employee" : 2,
+            "time_out": "2017-07-29 15:57:52",
+            "id": 15747
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "2.06",
+            "time_in": "2017-07-28 13:53:30",
+            "employee" : 2,
+            "time_out": "2017-07-28 15:57:18",
+            "id": 15745
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "4.33",
+            "time_in": "2017-07-28 09:02:23",
+            "employee" : 2,
+            "time_out": "2017-07-28 13:22:25",
+            "id": 15736
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "5.97",
+            "time_in": "2017-07-22 09:03:29",
+            "employee" : 2,
+            "time_out": "2017-07-22 15:01:38",
+            "id": 15659
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "2.56",
+            "time_in": "2017-07-21 13:27:05",
+            "employee" : 2,
+            "time_out": "2017-07-21 16:00:39",
+            "id": 15652
+        }
+    },
+    {
+        "model": "clocker.Shift",
+        "fields": {
+            "deleted": false,
+            "hours": "3.84",
+            "time_in": "2017-07-21 09:07:25",
+            "employee" : 2,
+            "time_out": "2017-07-21 12:58:07",
+            "id": 15648
+        }
+    }
+]

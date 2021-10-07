@@ -4,6 +4,7 @@
 from django.shortcuts import render
 from django.views.generic.base import View
 from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseForbidden
+from django.core.paginator import Paginator
 from django.core.exceptions import ValidationError
 
 # Local imports
@@ -13,6 +14,7 @@ import check_db
 # System imports
 from datetime import timedelta, datetime, date
 from decimal import Decimal
+from django.db.models import Q
 from copy import deepcopy
 try:
     import simplejson as json
@@ -21,8 +23,12 @@ except ImportError:
 
 
 class TimesheetsView(View):
+    returnData = {
+        "errors": []
+    }
 
     def get(self, request):
+        print(json.dumps(request.GET, indent =4))
 
         accept = request.META['HTTP_ACCEPT']
         user = request.user
@@ -30,6 +36,35 @@ class TimesheetsView(View):
         if 'application/json' in accept:
             timesheets = [t.toDict() for t in Timesheet.objects.get_viewable(user)]
             return HttpResponse(json.dumps({'timesheetList': timesheets}), content_type="application/json")
+        
+        # break the data into pages
+        elif 'page' in request.GET and 'per_page' in request.GET:
+            employees = Employee.objects.get_viewable(user)
+            employees = employees.filter(is_active=True)
+            timesheets = []
+            query = Q()
+            for employee in employees:
+                query = query | Q(employee=employee)
+            timesheets = Timesheet.objects.filter(query).order_by('-start')
+            paginator = Paginator(timesheets, request.GET['per_page'])
+            try:
+               timesheets = paginator.page(request.GET['page'])
+            except Exception, pagenotaninteger:
+                print pagenotaninteger
+                shifts = paginator.page(1)
+            except Exception, emptypage:
+                print emptypage
+                shifts = paginator.page(paginator.num_pages)
+
+            self.returnData.update({
+                'timesheets':     [s.toDict() for s in timesheets],
+                'totalPages': paginator.num_pages,
+                'page':       timesheets.number
+            })
+        # else:
+        #     self.returnData['timesheets'] = [s.toDict() for s in timesheets]
+
+            return HttpResponse(json.dumps(self.returnData, indent=4), content_type="application/json")
 
         employees = Employee.objects.get_viewable(user)
         employees = employees.filter(is_active=True)

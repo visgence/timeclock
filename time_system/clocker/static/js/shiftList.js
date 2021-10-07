@@ -1,96 +1,37 @@
-$(function() {
+$(() => {
 
-	var ShiftList = function(vars) {
+    const ShiftList = function (consts) {
 
-		var Shift = $.fn.Shift;
-		var shiftUrl = "/timeclock/shifts/"
+        const Shift = $.fn.Shift;
 
-		var per_page = 25;
+        this.shifts = ko.observableArray();
 
-		this.shifts = ko.observableArray();
+        this.init = function (consts) {
+            consts = consts || {};
 
-        this.currentPage = ko.observable();
-        this.totalPages = ko.observable();
-        this.pageNum = ko.computed(function() {
-            return this.currentPage() +" of "+ this.totalPages() +" pages";
-        }.bind(this));
+            if (consts.hasOwnProperty('per_page')) {
+                per_page = consts.per_page;
+            }
 
+            this.rebuild(consts);
+        }.bind(this);
 
+        this.rebuild = function (shifts) {
 
-		this.init = function(vars) {
-			vars = vars || {};
+            if (shifts.length > 0) {
+                const newShifts = [];
+                $.each(shifts, function () {
+                    newShifts.push(new Shift(this));
+                });
 
-			var __this = this;
+                this.shifts(newShifts);
+            } else {
+                this.shifts([]); // wipes previous shifts if there are no new ones.
+            }
 
-			if (vars.hasOwnProperty('per_page'))
-				per_page = vars.per_page;
+        }.bind(this);
 
-			this.rebuild(vars);
-		}.bind(this);
+    };
 
-		this.rebuild = function(vars) {
-			vars = vars || {};
-
-			if (vars.hasOwnProperty('page'))
-				this.currentPage(vars.page);
-
-			if (vars.hasOwnProperty('totalPages'))
-				this.totalPages(vars.totalPages);
-
-			if (vars.hasOwnProperty('shifts')) {
-				var newShifts = [];
-				$.each(vars.shifts, function() {
-					newShifts.push(new Shift(this));
-				});
-
-				this.shifts(newShifts);
-			}
-		}.bind(this);
-
-        this.nextPage = function() {
-             this.reload(this.currentPage()+1);
-         }.bind(this);
-
-         this.prevPage = function() {
-             this.reload(this.currentPage()-1);
-         }.bind(this);
-
-         this.firstPage = function() {
-             this.reload(1);
-         }.bind(this);
-
-         this.lastPage = function() {
-             this.reload(this.totalPages());
-         }.bind(this);
-
-		this.reload = function(page, employee) {
-			var __this = this;
-
-			var args = {
-				 'page': page
-				,'per_page': per_page
-				,'employee': employee
-			}
-
-			var promise = $.get(shiftUrl, args)
-			.done(function(resp) {
-				if(resp.hasOwnProperty("errors") && resp.errors.length > 0)
-					console.error(resp.errors);
-				else if(resp.shifts)
-					__this.rebuild(resp);
-				else
-					console.error("Something unexpected happend!");
-			})
-			.fail(function(resp) {
-				console.error(resp);
-			});
-
-			return promise;
-		}.bind(this);
-
-		this.init(vars);
-	}
-
-	$.fn.ShiftList = ShiftList;
+    $.fn.ShiftList = ShiftList;
 });
-

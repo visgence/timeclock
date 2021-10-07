@@ -117,10 +117,32 @@ class ShiftsView(View):
             self.returnData['errors'].append('Invalid permissions')
             return HttpResponseForbidden(json.dumps(self.returnData, indent=4), content_type="application/json")
 
-        shifts = Shift.objects.filter(employee=employee).order_by('-time_in', 'id')
+        if('first_shift' in request.GET) :
+            first_shift = Shift.objects.filter(employee=employee).order_by('time_in')[0]
+
+
+
+        if 'starting_timestamp' in request.GET and 'ending_timestamp' in request.GET:
+            try:
+                first_shift = Shift.objects.filter(employee=employee).order_by('time_in')[0]
+            except Exception:
+                self.returnData.update({
+                    'shifts': [],
+                    'first_shift': str(datetime.now())
+                })
+            else:
+                starting_date = datetime.fromtimestamp(int(request.GET['starting_timestamp'])).strftime('%Y-%m-%d %H:%S')
+                ending_date = datetime.fromtimestamp(int(request.GET['ending_timestamp'])).strftime('%Y-%m-%d %H:%S')
+                shifts = Shift.objects.filter(employee=employee, time_in__range=[starting_date, ending_date]).order_by('-time_in')
+                self.returnData.update({
+                    'shifts': [s.toDict() for s in shifts],
+                    'first_shift' : first_shift.toDict()['time_in']
+                
+                })
 
         # break the data into pages
-        if 'page' in request.GET and 'per_page' in request.GET:
+        elif 'page' in request.GET and 'per_page' in request.GET:
+            shifts = Shift.objects.filter(employee=employee).order_by('-time_in', 'id')
             paginator = Paginator(shifts, request.GET['per_page'])
             try:
                 shifts = paginator.page(request.GET['page'])

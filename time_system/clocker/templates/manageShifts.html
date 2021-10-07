@@ -2,13 +2,17 @@
 
 {% block additional-headers %}
 {% load static %}
-    <link rel="stylesheet" type="text/css" href="{% static "css/manageShifts.css" %}">
 
-    <script src="{% static "js/jquery-ui-1.10.3.custom.min.js" %}"></script>
-    <script src="{% static "js/jquery-ui-timepicker-addon.js" %}"></script>
-    <script src="{% static "js/jquery-bbq.min.js" %}"></script>
+
+    <script src="{% static "libraries/jquery-ui-1.10.3.custom.min.js" %}"></script>
+    <script src="{% static "libraries/jquery-ui-timepicker-addon.js" %}"></script>
+
+    <link rel="stylesheet" type="text/css" href="{% static "css/manageShifts.css" %}">
     <script src="{% static "js/shift.js" %}"></script>
-    <script src="{% static "js/shiftList.js" %}"></script>
+		<script src="{% static "js/shiftList.js" %}"></script>
+
+		<script src="{% static "js/timeline.js" %}"></script>
+    <script src="{% static "js/timelineShifts.js" %}"></script>
     <script src="{% static "js/manageShifts.js" %}"></script>
 {% endblock additional-headers %}
 
@@ -48,6 +52,7 @@
 
 <h2>Manage Shifts</h2>
 
+
 <div id="manage-shifts-container">
 
 	<ul class="list-inline">
@@ -61,25 +66,28 @@
 			</select>
 		</li>
 	</ul>
+	
+	<div data-bind="with: timelineShifts" id = "timeline-label">
+		<h4>Week Of:</h4>
+		<h4 id="week-range-label"></h4>
+	</div>
+	<div id="shift-timeline"></div>
+
+<ul class="pager">
+	<li id="prev-week-button" data-bind="click: prevPage" class="previous clickable">
+		<a>&lt;-- Previous Week</a>
+	</li>
+
+	<li data-bind="text: weekOf"></li>
+
+
+	<li id="next-week-button" data-bind="click: nextPage" class="next clickable">
+		<a>Next Week --&gt;</a>
+	</li>
+</ul>
+
 
 	<div data-bind="with: shiftList">
-	    <ul class="pager">
-	        <li data-bind="ifnot: currentPage()==1, click: firstPage" class="previous clickable">
-	        	<a>&lt;&lt; First</a>
-	        </li>
-	        <li data-bind="ifnot: currentPage()==1, click: prevPage" class="previous clickable">
-	        	<a>&lt; Prev</a>
-	        </li>
-
-	        <li data-bind="text: pageNum"></li>
-
-	        <li data-bind="ifnot: currentPage()==totalPages(), click: lastPage" class="next clickable">
-	        	<a>Last &gt;&gt;</a>
-	        </li>
-	        <li data-bind="ifnot: currentPage()==totalPages(), click: nextPage" class="next clickable">
-	        	<a>Next &gt;</a>
-        	</li>
-	    </ul>
 
 		<table class="table">
 			<thead>
@@ -101,34 +109,33 @@
 						<span title="Delete Shift" class="glyphicon glyphicon-trash clickable" data-bind="click: deleteWarning"></span>
 					</td>
 					<td data-bind="text: employee().username"></td>
-					<td data-bind="text: time_in"></td>
-					<td data-bind="text: time_out"></td>
+					<td data-bind="text: time_in_label"></td>
+					<td data-bind="text: time_out_label"></td>
 					<td data-bind="text: hours"></td>
 				</tr>
 
 				<!-- ko template: {name: "edit-shift-template", if: updating, afterRender: bindInputs} --><!-- /ko -->
 
-				<tr data-bind="if: $root.shouldAddSeperator($index(), $index()+1)"><td colspan="5"></td></tr>
 				<!-- /ko -->
 			</tbody>
 		</table>
 	</div>
 
 	<div class="modal fade" id="delete-warning">
-	 	<div class="modal-dialog">
-		    <div class="modal-content">
-		     	<div class="modal-header">
-			        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-			        <h4 class="modal-title">Warning</h4>
-		      	</div>
-			    <div class="modal-body">
-			    	Are you sure you want to delete that shift?
-			    </div>
-		      	<div class="modal-footer">
-			        <button type="button" id="delete-shift-btn" class="btn btn-primary">Delete</button>
-			        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-		      	</div>
-		    </div><!-- /.modal-content -->
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+          <h4 class="modal-title">Warning</h4>
+        </div>
+        <div class="modal-body">
+        Are you sure you want to delete that shift?
+        </div>
+        <div class="modal-footer">
+          <button type="button" id="delete-shift-btn" class="btn btn-primary">Delete</button>
+          <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+        </div>
+      </div><!-- /.modal-content -->
 		</div><!-- /.modal-dialog -->
 	</div><!-- /.modal -->
 
@@ -138,10 +145,9 @@
 
 {% block additional-scripts %}
 
-
 	<script>
 		$(function() {
-			var data = {'managingEmployee': {{employee|safe}} };
+			var data = {'managingEmployee': {{employee|safe}} }; 
 			var manageShifts = new $.fn.ManageShifts();
 			manageShifts.init(data).then(function() {
 				ko.applyBindings(manageShifts, $('#manage-shifts-container').get(0));

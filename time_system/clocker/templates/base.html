@@ -3,17 +3,22 @@
 <html>
     <head>
         {% load static %}
-    	<script src="{% static "js/jquery-1.8.3.min.js" %}"></script>
-        <script src="{% static "js/bootstrap.min.js" %}"></script>
-        <script src="{% static "js/utils.js" %}"></script>
-        <script src="{% static "js/knockout-3.1.0.js" %}"></script>
+        <title>Time Clock</title>
+        <script src="{% static "node_modules/jquery/dist/jquery.min.js" %}"></script>
+        <script src="{% static "node_modules/bootstrap/dist/js/bootstrap.min.js" %}"></script>
+        <script src="{% static "node_modules/knockout/build/output/knockout-latest.js" %}"></script>
+        <script src="{% static "node_modules/d3/dist/d3.min.js" %}"></script>
+        <script src="{% static "node_modules/d3-timelines/dist/d3-timelines.js" %}"></script>
+        <link rel="stylesheet" type="text/css" href="{% static "node_modules/bootstrap/dist/css/bootstrap.min.css" %}">
 
-        <link rel="stylesheet" type="text/css" href="{% static "css/jquery-ui-1.10.3.custom.min.css" %}"/>
-        <link rel="stylesheet" type="text/css" href="{% static "css/bootstrap.min.css" %}">
+        <link rel="stylesheet" type="text/css" href="{% static "libraries/jquery-ui-1.10.3.custom.min.css" %}"/>
+
+        <script src="{% static "js/utils.js" %}"></script>
         <link rel="stylesheet" type="text/css" href="{% static "css/main_page.css" %}"/>
         <link rel="stylesheet" type="text/css" href="{% static "css/micro_clearfix.css" %}" />
 
         <link rel="shortcut icon" type="image/png" href="{% static "images/favicon.ico" %}"/>
+
         <style>
             #ui-datepicker-div { font-size: 12px; }
         </style>
@@ -21,13 +26,13 @@
         {% block additional-headers %} {% endblock %}
     </head>
     <body>
-    	<div id="container">
+      <div id="container">
 			<div class="visgence_logo">
 				<a href="/timeclock"><img src="{% static "images/Visgence_incwhite.png" %}" height="80px" width="150px" /></a>
 
-			    <div class="timeclock_logo">
-			        <img src="{% static "images/timeclock2.png"  %}" height="90px" width="320px" />
-			    </div>
+        <div class="timeclock_logo">
+          <img src="{% static "images/timeclock2.png"  %}" height="90px" width="320px" />
+        </div>
 			</div>
 
 
@@ -47,18 +52,16 @@
                 </div><!-- /.modal-dialog -->
             </div><!-- /.modal -->
 
-
-	        <div id="content">
-
-	            {% if user.first_name %}
-                <div style="position: absolute;">
-		                Hello {{user.first_name}} {{user.last_name}} (<a href="/logout">logout</a>)
-                        <br/>
-                        <span style="font-size: 8pt;">[<a href="#" id="change-pass-link">Change password</a>]</span>
+            <div id="content">
+              {% if user.first_name %}
+              <div class="hello-phrase">
+                Hello {{user.first_name}} {{user.last_name}} (<a href="/logout">logout</a>)
+                <br/>
+                <span class="password-change">[<a href="#" id="change-pass-link">Change password</a>]</span>
                 </div><!--end greeting-->
 
                 <!-- Change password dialog -->
-                <div class="modal fade" id="change-pass-modal" style="display: none">
+                <div class="timeclock-modal modal fade" id="change-pass-modal">
                     <div class="modal-dialog">
                         <div class="modal-content">
                             <div class="modal-header">
@@ -81,7 +84,7 @@
                                         <label class="control-label col-lg-4 col-md-4">Old Password</label>
                                         <div class="col-lg-7 col-md-7">
                                             <input type="password" id="oldPassword" name="oldPassword" class="form-control"
-                                                    placeholder="Old Password">
+                                                    placeholder="Old Password" />
                                         </div>
                                     </div>
 
@@ -89,7 +92,7 @@
                                         <label class="control-label col-lg-4 col-md-4">New Password</label>
                                         <div class="col-lg-7 col-md-7">
                                             <input type="password" id="passwordInput" name="password" class="form-control"
-                                                    placeholder="New Password">
+                                                    placeholder="New Password" />
                                         </div>
                                     </div>
 
@@ -97,7 +100,7 @@
                                         <label class="control-label col-lg-4 col-md-4">Verify Password</label>
                                         <div class="col-lg-7 col-md-7">
                                             <input type="password" id="passwordReinput" class="form-control"
-                                                    placeholder="Verify Password">
+                                                    placeholder="Verify Password" />
                                         </div>
                                     </div>
                                 </form>
@@ -110,19 +113,12 @@
                     </div><!-- /.modal-dialog -->
                 </div><!-- /.modal -->
 
-                <script>
-                    $(function() {
-                        initPassDialog();
-                    });
-                </script>
-
                 {% block additional-greeting %}{% endblock %}
                 {% endif %}
 
-                <div style="margin-top: 3em;">
+                <div class="body-container">
                     {% block content %} {%endblock%}
                 </div>
-
 			</div>
 		</div>
 
@@ -134,37 +130,13 @@
 
     <script>
         $(function() {
+          setInterval(function() {
+              console.log("checking login");
+              $.get('/login/check/');
+          }, ({{SESSION_TIMEOUT}}+3600)*1000);
 
-            $(document).ajaxComplete(function(event, xhr, settings) {
-                if(xhr.responseText && xhr.responseText.trim() !== '') {
-                    try {
-                        jsonData = JSON.parse(xhr.responseText);
-                        if(jsonData.hasOwnProperty('status') && jsonData['status'] == 302) {
-                            window.location = jsonData['location'];
-                        }
-                    } catch(e) {console.log(e)}
-                }
-
-            });
-
-            $('#sys-modal').modal({
-                show: false
-            })
-            .on('hidden.bs.modal', function() {
-                var classes = 'has-error has-success has-warning';
-                $('#sys-modal .modal-title').html('');
-                $('#sys-modal .modal-body').removeClass(classes).children('span').html('');
-            });
-
-            setInterval(function() {
-                console.log("checking login");
-                $.get('/login/check/');
-            }, ({{SESSION_TIMEOUT}}+3600)*1000);
         });
     </script>
 
     {% block additional-scripts %}{% endblock %}
 </html>
-
-
-
