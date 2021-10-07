@@ -45,7 +45,7 @@ class TimesheetsView(View):
             query = Q()
             for employee in employees:
                 query = query | Q(employee=employee)
-            timesheets = Timesheet.objects.filter(query).order_by('start')
+            timesheets = Timesheet.objects.filter(query).order_by('-start')
             paginator = Paginator(timesheets, request.GET['per_page'])
             try:
                timesheets = paginator.page(request.GET['page'])
