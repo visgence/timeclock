@@ -1,7 +1,7 @@
 {
   "author": "Visgence Inc.",
   "dependencies": {
-    "knockout": "3.4.2",
+    "knockout": "3.5.0",
     "jquery": "2.2.4",
     "bootstrap": "3.3.7",
     "jquery-minicolors": "2.1.10",
