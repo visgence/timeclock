@@ -35,8 +35,8 @@ class Clocker:
                 return True
             return False
 
-        except sqlite3.Error, e:
-            print "Error with executing statement in user_exists():", e.args[0]
+        except sqlite3.Error as e:
+            print("Error with executing statement in user_exists():", e.args[0])
 
     def can_clock(self, user_name, status, connection):
         """
@@ -72,11 +72,11 @@ class Clocker:
             elif((status == 'Out' or status == 'out') and result[1] is not None and result[2] is None):
                 return True
 
-            print user_name + " is not able to clock " + status  # DEBUG
+            print(user_name + " is not able to clock " + status)  # DEBUG
             return False
 
-        except sqlite3.Error, e:
-            print "Error with executing statement in can_clock():", e.args[0]
+        except sqlite3.Error as e:
+            print("Error with executing statement in can_clock():", e.args[0])
 
     def clock_in_out(self, user_name, status, connection):
         """
@@ -108,5 +108,5 @@ class Clocker:
 
             cur.close()
             connection.commit()
-        except sqlite3.Error, e:
-            print "Error with executing statement in clock_in_out():", e.args[0]
+        except sqlite3.Error as e:
+            print("Error with executing statement in clock_in_out():", e.args[0])

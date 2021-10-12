@@ -22,19 +22,19 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
 
         if settings.DATABASES['default']['NAME'].rpartition('/')[2] != 'timeclock.db':
-            print 'It appears you are using custom database settings.  This command only works for timeclock.db.'
+            print('It appears you are using custom database settings.  This command only works for timeclock.db.')
             sys.exit(1)
 
-        print 'This command will wipe your database and start fresh.  Are you sure you want to continue?'
+        print('This command will wipe your database and start fresh.  Are you sure you want to continue?')
         user_resp = None
-        user_resp = raw_input('(Y/n) ')
+        user_resp = input('(Y/n) ')
         while user_resp not in ['Y', 'n']:
-            print 'Did not understand your response.  Please enter \'Y\' or \'n\'.'
-            print 'This command will wipe your database and start fresh.  Are you sure you want to continue?'
-            user_resp = raw_input('(Y/n) ')
+            print('Did not understand your response.  Please enter \'Y\' or \'n\'.')
+            print('This command will wipe your database and start fresh.  Are you sure you want to continue?')
+            user_resp = input('(Y/n) ')
 
         if user_resp == 'n':
-            print 'Bye!'
+            print('Bye!')
             sys.exit(0)
 
         assert user_resp == 'Y', 'Something Bad Happened!'

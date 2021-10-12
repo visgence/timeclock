@@ -22,7 +22,7 @@ summaries[0].shift
 summaries[0].shift.employee
 summaries[0].miles
 for i in summaries:
-    print i.miles
+    print(i.miles)
 
 total_miles = 0
 for i in summaries:

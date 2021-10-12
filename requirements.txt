@@ -7,5 +7,6 @@ pyparsing
 simplejson
 pylint
 autopep8
+delorean
 wheel
 
