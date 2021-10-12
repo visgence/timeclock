@@ -178,18 +178,18 @@ def getJobsBreakdown(employees=None, start=None, end=None):
             jobData['total_worked'] += Decimal(hours * float(employee.hourly_rate)).quantize(Decimal('1.00'))
             jobData['total_net'] = jobData['total_billed'] - jobData['total_worked']
 
-    for job, data in jobData['jobs'].iteritems():
+    for job, data in jobData['jobs'].items():
         data['summaries'] = sorted(data['summaries'], key=lambda summary: summary.shift.time_in, reverse=True)
         for i in data['summaries']:
             i.shift.time_in = datetime.date(i.shift.time_in).strftime("%b. %d, %Y")
 
     # Calculate percentages as a Decimal
-    for jobN, jobD in jobData['jobs'].iteritems():
+    for jobN, jobD in jobData['jobs'].items():
         if jobData['total_hours'] > 0:
             jobPercentage = Decimal((jobD['hours']*100) / jobData['total_hours']).quantize(Decimal('1.00'))
             jobD['percentage'] = str(jobPercentage)
 
-        for username, percentageD in jobD['percentages'].iteritems():
+        for username, percentageD in jobD['percentages'].items():
             if percentageD['hours'] > 0:
                 percentage = str((Decimal((percentageD['hours']*100) / jobData['total_hours'])).quantize(Decimal('1.00')))
                 percentageD['percentage'] = percentage

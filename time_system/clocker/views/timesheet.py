@@ -28,7 +28,7 @@ class TimesheetsView(View):
     }
 
     def get(self, request):
-        print(json.dumps(request.GET, indent =4))
+        print((json.dumps(request.GET, indent =4)))
 
         accept = request.META['HTTP_ACCEPT']
         user = request.user
@@ -49,11 +49,11 @@ class TimesheetsView(View):
             paginator = Paginator(timesheets, request.GET['per_page'])
             try:
                timesheets = paginator.page(request.GET['page'])
-            except Exception, pagenotaninteger:
-                print pagenotaninteger
+            except Exception as pagenotaninteger:
+                print(pagenotaninteger)
                 shifts = paginator.page(1)
-            except Exception, emptypage:
-                print emptypage
+            except Exception as emptypage:
+                print(emptypage)
                 shifts = paginator.page(paginator.num_pages)
 
             self.returnData.update({
@@ -99,7 +99,7 @@ class TimesheetsView(View):
             try:
                 timesheets = Timesheet.objects.create_timesheets(paramsList, user)
             except ValidationError as e:
-                errors = [{x: y} for x, y in e.message_dict.iteritems()]
+                errors = [{x: y} for x, y in e.message_dict.items()]
                 return HttpResponseBadRequest(json.dumps(errors), content_type='application/json')
             except AssertionError as e:
                 return HttpResponseBadRequest(str(e), content_type='application/json')
@@ -116,7 +116,7 @@ class TimesheetsView(View):
             try:
                 timesheet = Timesheet.objects.create_timesheet(params, user)
             except ValidationError as e:
-                errors = [{x: y} for x, y in e.message_dict.iteritems()]
+                errors = [{x: y} for x, y in e.message_dict.items()]
                 return HttpResponseBadRequest(json.dumps(errors), content_type='application/json')
             except AssertionError as e:
                 return HttpResponseBadRequest(str(e), content_type='application/json')
@@ -188,7 +188,7 @@ def getPayPeriod(start_time, end_time, user_name, hourly_rate=None):
         hourly_rate = employee.hourly_rate
 
     overtime_rate = hourly_rate + (hourly_rate / Decimal(2.0))
-    print overtime_rate
+    print(overtime_rate)
     # make sure we have actual date ranges coming in
     if(start_time == "" or end_time == ""):
         start_time = datetime.strftime(datetime.now(), '%Y-%m-%d')

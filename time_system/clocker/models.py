@@ -13,7 +13,7 @@ import re
 
 # Local imports
 from chucho.models import ChuchoManager
-from hashMethods import hash64
+from clocker.hashMethods import hash64
 from settings import DT_FORMAT
 
 
@@ -383,7 +383,7 @@ class ShiftManager(ChuchoManager):
 
 
 class Shift(models.Model):
-    employee = models.ForeignKey('Employee')
+    employee = models.ForeignKey('Employee', on_delete=models.PROTECT)
     time_in = models.DateTimeField('clock in time')
     time_out = models.DateTimeField('clock out time', null=True, blank=True)
     hours = models.DecimalField(null=True, blank=True, decimal_places=2, max_digits=4)
@@ -549,9 +549,9 @@ class ShiftSummaryManager(ChuchoManager):
 
 
 class ShiftSummary(models.Model):
-    job = models.ForeignKey('Job')
-    employee = models.ForeignKey('Employee')
-    shift = models.ForeignKey('Shift')
+    job = models.ForeignKey('Job', on_delete=models.PROTECT)
+    employee = models.ForeignKey('Employee', on_delete=models.PROTECT)
+    shift = models.ForeignKey('Shift', on_delete=models.PROTECT)
     hours = models.IntegerField('total hours')
     miles = models.DecimalField(max_digits=6, decimal_places=2, null=True, blank=True)
     note = models.TextField('notes about job', blank=True)
@@ -657,7 +657,7 @@ class JobManager(ChuchoManager):
             if filter_args is not None and len(filter_args) > 0:
                 return self.advanced_search(**filter_args)
             elif omni is not None:
-                print omni
+                print(omni)
                 return self.search(omni)
             else:
                 return self.all()
@@ -767,7 +767,7 @@ class Timesheet(models.Model):
     shifts = models.ManyToManyField('shift')
     start = models.BigIntegerField()
     end = models.BigIntegerField()
-    employee = models.ForeignKey('Employee', related_name="timesheet_set")
+    employee = models.ForeignKey('Employee', related_name="timesheet_set", on_delete=models.PROTECT)
     hourly_rate = models.DecimalField(max_digits=5, decimal_places=2)
     signature = models.TextField(blank=True)
     signatureDate = models.DateTimeField(null=True, blank=True)

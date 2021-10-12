@@ -21,20 +21,20 @@ class Command(BaseCommand):
 
         call_command('migrate', fake=False)
 
-        print "Loading fixtures..."
+        print("Loading fixtures...")
         fixtures = [
             [
                 "clocker/fixtures/employees.json"
             ]
         ]
 
-        print 'Do you wish to load sample data?'
+        print('Do you wish to load sample data?')
         user_resp = None
-        user_resp = raw_input('(y/n) ')
+        user_resp = input('(y/n) ')
         while user_resp not in ['y', 'Y', 'n', 'N']:
-            print 'Sorry, I did not understand your response.  Please enter \'y\' or \'n\'.'
-            print 'Do you wish to load sample data?'
-            user_resp = raw_input('(y/n) ')
+            print('Sorry, I did not understand your response.  Please enter \'y\' or \'n\'.')
+            print('Do you wish to load sample data?')
+            user_resp = input('(y/n) ')
 
         if user_resp in ['y', 'Y']:
             fixtures.append([

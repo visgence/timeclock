@@ -23,7 +23,7 @@ def findMissing():
     shiftsArr = []
     for s in shifts:
         if len(ShiftSummary.objects.filter(shift=s)) == 0:
-            print s
+            print(s)
             shiftsArr.append(s)
     return shiftsArr
 

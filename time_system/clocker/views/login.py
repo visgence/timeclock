@@ -12,7 +12,7 @@ def renderLogin(request, context={}):
     assert isinstance(context, dict)
 
     user = request.user
-    if user.is_authenticated() and user.is_active:
+    if user.is_authenticated and user.is_active:
         return HttpResponseRedirect('/timeclock/')
 
     return render(request, 'login.html', context)
