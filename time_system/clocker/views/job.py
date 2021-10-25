@@ -46,7 +46,7 @@ def jobBreakdown(request):
     breakdown['total_miles'] = total
 
     t = loader.get_template('jobBreakdown.html')
-    c = RequestContext(request, {'jobsBreakdown': breakdown})
+    c = {'jobsBreakdown': breakdown}
     return HttpResponse(t.render(c))
 
 
@@ -169,7 +169,7 @@ def getJobsBreakdown(employees=None, start=None, end=None):
             jobData['total_hours'] += hours
             jobData['jobs'][job.name]['summaries'].extend(job.get_summaries(employee, start, end))
             jobData['jobs'][job.name]['hours'] += hours
-            if job.billable_rate > 0:
+            if job.billable_rate is not None and job.billable_rate > 0:
                 jobData['jobs'][job.name]['billed'] += Decimal(hours * float(job.billable_rate)).quantize(Decimal('1.00'))
                 jobData['total_billed'] += Decimal(hours * float(job.billable_rate)).quantize(Decimal('1.00'))
             jobData['jobs'][job.name]['worked'] += Decimal(hours * float(employee.hourly_rate)).quantize(Decimal('1.00'))
