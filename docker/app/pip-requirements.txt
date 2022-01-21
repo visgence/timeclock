@@ -3,7 +3,7 @@ Django==1.10
 Jinja2==2.8
 MarkupSafe==0.23
 django-localflavor==1.0
-ipython==4.0.0
+ipython==7.16.3
 ordereddict==1.1
 pep8==1.6.2
 psycopg2==2.5.1
