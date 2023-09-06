@@ -272,8 +272,7 @@ def getPayPeriod(start_time, end_time, user_name, hourly_rate=None):
         'employee': employee,
         'overtime_rate': overtime_rate,
         'hourly_rate': hourly_rate,
-        'total': total,
-        'employee': employee
+        'total': total
     }
 
 

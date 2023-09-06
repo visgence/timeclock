@@ -757,7 +757,7 @@ class TimesheetManager(models.Manager):
         end = end.replace(second=59)
 
         shifts = Shift.objects.filter(time_in__gte=start, time_out__lte=end, deleted=False, employee=ts.employee)
-        ts.shifts = shifts
+        ts.shifts.set(shifts)
 
         return ts
 

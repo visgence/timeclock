@@ -2,7 +2,7 @@
 Django==3.*
 django-localflavor
 ipython==7.*
-psycopg2==2.8.*
+psycopg2-binary==2.8.*
 pyparsing
 simplejson
 pylint
