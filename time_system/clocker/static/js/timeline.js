@@ -123,7 +123,7 @@ $(() => {
                     .beginning(new Date(startingTime))
                     .ending(new Date(endingTime))
                     .click((d, i, datum) => {
-                        window.location.href = 'http://timeclock.visgence.com/timeclock/summary/' + d['shift_id'];
+                        window.location.href = '/timeclock/summary/' + d['shift_id'];
                     });
 
 
@@ -164,7 +164,7 @@ $(() => {
                     .beginning(new Date(startingTime))
                     .ending(new Date(endingTime))
                     .click((d, i, datum) => {
-                        window.location.href = 'http://timeclock.visgence.com/timeclock/summary/' + d['shift_id'];
+                        window.location.href = '/timeclock/summary/' + d['shift_id'];
                     });
 
 

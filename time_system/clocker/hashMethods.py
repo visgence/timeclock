@@ -15,7 +15,6 @@ def hash64(data):
 
     data = data.encode('utf-8')
     h = base64.b64encode(hashlib.sha1(data).digest())
-    print(h)
 
     # Fix the hash so it is URL Safe
     h = str(h).replace('+', '-')

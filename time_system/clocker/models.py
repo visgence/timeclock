@@ -165,6 +165,8 @@ class Employee(AbstractBaseUser):
         return self.first_name + " " + self.last_name
 
     def save(self, *args, **kwargs):
+        if not self.hourly_rate:
+            self.hourly_rate = 0.00
         self.first_name = self.first_name.strip()
         self.last_name = self.last_name.strip()
         self.username = self.username.strip()

@@ -97,10 +97,12 @@
                 <a class="link_color" href="{% url 'manage-employees' %}">Employees</a>
 			</div>
 
+		{% if enable_jobs %}
 			<div class="click">
                 <a class="link_color" href="{% url 'manage-jobs' %}">Jobs</a>
 			</div>
 
+		{% endif %}
 		{% endif %}
         <div class="click">
             <a class="link_color" href="{% url 'timesheet-list' %}">Timesheets</a>
@@ -113,8 +115,11 @@
 </div>
 
 <div id="job-hours" class="cf">
+{% if enable_jobs %}
     <h4 class="text-muted">Jobs Breakdown</h4>
-
+{% else %}
+    <h4 class="text-muted">Time Export</h4>
+{% endif %}
     <div id="job-controls">
         <form action="#" class="form form-inline">
             {% csrf_token %}
@@ -141,16 +146,18 @@
 
                 <button type="submit" name="Submit" class="btn btn-default">Submit</button>
                 <button id="csvbutton" type="button" name="CSV" class="btn btn-default">CSV</button>
-
+                {% if enable_jobs %}
                 <div class="checkbox">
                     <label>
                         <input id="toggle-active-jobs" type="checkbox" /> Show Inactive Jobs
                     </label>
                 </div>
+                {% endif %}
         </form>
     </div>
-
+{% if enable_jobs %}
     <div id="jobs"></div>
+{% endif %}
 </div>
 {%endblock%}
 

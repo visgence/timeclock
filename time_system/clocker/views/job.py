@@ -10,9 +10,12 @@ from django.http import HttpResponse, HttpResponseBadRequest
 
 # Local Imports
 from clocker.models import Employee, Job
+from settings import ENABLE_JOBS
 
 
 def jobBreakdown(request):
+    if not ENABLE_JOBS:
+        return HttpResponse("")
 
     user = request.user
     employees = []
@@ -40,8 +43,8 @@ def jobBreakdown(request):
     for i in breakdown['jobs']:
         miles = 0
         for j in breakdown['jobs'][i]['summaries']:
-            miles += j.miles
-            total += j.miles
+            miles += j.miles if j.miles else 0.00
+            total += j.miles if j.miles else 0.00
         breakdown['jobs'][i]['total_miles'] = miles
     breakdown['total_miles'] = total
 
@@ -142,6 +145,8 @@ def getJobsBreakdown(employees=None, start=None, end=None):
     jobs = Job.objects.all().order_by('name')
     for employee in employees:
         jobData['employees'].append(employee.username)
+        if not employee.hourly_rate:
+            employee.hourly_rate = 0.00
 
         for job in jobs:
             # initialize data if not in there yet.

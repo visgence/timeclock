@@ -19,6 +19,7 @@ import clocker.views.shiftSummary
 
 from clocker.views.timesheet import TimesheetsView
 from clocker.views.timesheet import TimesheetView
+from settings import ENABLE_JOBS
 
 urlpatterns = [
     url(r'^$', RedirectView.as_view(url='/timeclock/')),
@@ -35,10 +36,14 @@ urlpatterns += [
 # #Management
 urlpatterns += [
      url(r'^timeclock/manage/employees/$', ManageView.as_view(app="clocker", model="Employee"), name="manage-employees"),
-     url(r'^timeclock/manage/jobs/$', ManageView.as_view(app="clocker", model="Job"), name="manage-jobs"),
      url(r'^timeclock/manage/summaries/$', ManageView.as_view(app="clocker", model="ShiftSummary"), name="manage-summaries"),
-     url(r'^timeclock/manage/shifts/$', ManageView.as_view(template_name="manageShifts.html"), name="manage-shifts"),
+     url(r'^timeclock/manage/shifts/$', ManageView.as_view(template_name="manageShifts.html"), name="manage-shifts", kwargs={'enable_jobs': ENABLE_JOBS}),
 ]
+
+if ENABLE_JOBS:
+    urlpatterns += [url(r'^timeclock/manage/jobs/$', ManageView.as_view(app="clocker", model="Job"), name="manage-jobs"),]
+else:
+    urlpatterns += [url(r'^timeclock/manage/jobs/$', RedirectView.as_view(url='/timeclock/')),]
 
 # #Employee clock in/out
 urlpatterns += [
@@ -74,11 +79,17 @@ urlpatterns += [
     url(r'^login/check/$', clocker.views.login.isLoggedIn, name="check-login"),
 ]
 
-# #Employee summary stuff
-urlpatterns += [
-    url(r'^timeclock/saveSummaries/$', clocker.views.shiftSummary.summary, name="save-summaries"),
-    url(r'^timeclock/summary/(?P<id>\d+)/$', clocker.views.shiftSummary.renderSummary, name="render-summary"),
-]
+if ENABLE_JOBS:
+    # #Employee summary stuff
+    urlpatterns += [
+        url(r'^timeclock/saveSummaries/$', clocker.views.shiftSummary.summary, name="save-summaries"),
+        url(r'^timeclock/summary/(?P<id>\d+)/$', clocker.views.shiftSummary.renderSummary, name="render-summary"),
+    ]
+else:
+    urlpatterns += [
+        url(r'^timeclock/saveSummaries/$', RedirectView.as_view(url='/timeclock/')),
+        url(r'^timeclock/summary/(?P<id>\d+)/$', RedirectView.as_view(url='/timeclock/')),
+    ]
 
 # #shifts
 urlpatterns += [
