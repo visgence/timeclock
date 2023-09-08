@@ -22,17 +22,20 @@ class Command(BaseCommand):
 
         call_command('migrate', fake=False)
 
+        print("Loading fixtures...")
+        fixtures = [
+            [
+                "clocker/fixtures/employees.json"
+            ]
+        ]
+
         if not ENABLE_JOBS:
-            call_command('loaddata', "clocker/fixtures/defaultJob.json", verbosity=1)
+            print("Adding admin user and default job...")
+            fixtures.append([
+                    "clocker/fixtures/defaultJob.json"
+                ])
 
         else:
-            print("Loading fixtures...")
-            fixtures = [
-                [
-                    "clocker/fixtures/employees.json"
-                ]
-            ]
-
             print('Do you wish to load sample data?')
             user_resp = None
             user_resp = input('(y/n) ')
@@ -48,7 +51,7 @@ class Command(BaseCommand):
                 fixtures.append([
                     "clocker/fixtures/shifts.json"
                 ])
-            # Load fixtures
-            for apps in fixtures:
-                for fixture in apps:
-                    call_command('loaddata', fixture, verbosity=1)
+        # Load fixtures
+        for apps in fixtures:
+            for fixture in apps:
+                call_command('loaddata', fixture, verbosity=1)

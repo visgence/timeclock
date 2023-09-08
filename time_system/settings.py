@@ -194,6 +194,6 @@ LOGGING = {
     }
 }
 
-DEFAULT_AUTO_FIELD='django.db.models.BigAutoField' 
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-ENABLE_JOBS = False
+ENABLE_JOBS = True
