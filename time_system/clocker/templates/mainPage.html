@@ -96,13 +96,11 @@
 			<div class="click">
                 <a class="link_color" href="{% url 'manage-employees' %}">Employees</a>
 			</div>
-
-		{% if enable_jobs %}
-			<div class="click">
-                <a class="link_color" href="{% url 'manage-jobs' %}">Jobs</a>
-			</div>
-
-		{% endif %}
+			{% if enable_jobs %}
+                <div class="click">
+	                <a class="link_color" href="{% url 'manage-jobs' %}">Jobs</a>
+                </div>
+			{% endif %}
 		{% endif %}
         <div class="click">
             <a class="link_color" href="{% url 'timesheet-list' %}">Timesheets</a>
@@ -111,6 +109,13 @@
         <div class="click">
             <a class="link_color" href="{% url 'manage-shifts' %}">Shifts</a>
 		</div>
+		{% if employee.is_superuser %}
+			{% if enable_jobs %}
+		        <div class="click">
+		            <a class="link_color" href="{% url 'manage-missing-shifts' %}">Missing Shifts</a>
+		        </div>
+			{% endif %}
+		{% endif %}
 	</div>
 </div>
 
