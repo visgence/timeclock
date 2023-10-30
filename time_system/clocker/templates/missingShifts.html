@@ -1,0 +1,77 @@
+{%extends "base.html"%}
+
+{%block additional-headers%}
+{% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static "libraries/datepicker.css" %}">
+    <script src="{% static "libraries/bootstrap-datepicker.js" %}"></script>
+    <script src="{% static "js/main_page.js" %}"></script>
+{%endblock additional-headers%}
+
+{%block content%}
+
+<div id="job-hours" class="cf">
+    <h4 class="text-muted">Search for Missing Shifts</h4>
+    <div id="job-controls">
+        <form action="#" class="form form-inline">
+            {% csrf_token %}
+
+                <div class="form-group">
+                    <input type="text" id="from-job" name="from" class="form-control" placeholder="From" autocomplete="off" />
+                </div>
+
+                <div class="form-group">
+                    <input type="text" id="to-job" name="to" class="form-control" placeholder="To" autocomplete="off" />
+                </div>
+
+                <button type="submit" name="Submit" class="btn btn-default">Submit</button>
+        </form>
+    </div>
+</div>
+<div id="shifts">
+</div>
+{%endblock%}
+
+{% block additional-scripts %}
+
+<script>
+    $(function() {
+        $('#job-controls form').on('submit', function() {
+            var data = {
+                'csrfmiddlewaretoken': $('input[name="csrfmiddlewaretoken"]').val()
+                ,'start': $('#from-job').val()
+                ,'end': $('#to-job').val()
+            };
+
+//            $('#job-controls form button[type="submit"]').attr('disabled', "");
+            $('.job-spinners').show();
+            $.post("{% url 'missing-shifts' %}", data, function(resp) {
+                $('#shifts').html(resp);
+            })
+            .fail(function(resp) {
+                $('#jobs').html("Something unexpected occured while loading the missing shifts.");
+                console.error(resp);
+            })
+            .always(function() {
+                $('#job-controls form button[type="submit"]').removeAttr('disabled');
+                $('.job-spinners').hide();
+            });
+
+            return false;
+        });
+
+        var fromJob = $('#from-job');
+        var toJob = $('#to-job');
+
+        $('#csvbutton').click(function(){
+            window.location.href = "shiftExport?start=" + fromJob.val() + "&end=" + toJob.val();
+        });
+
+        if($(fromJob).val() == '' && $(toJob).val() == '') {
+            $(fromJob).val('{{start_week}}');
+            $(toJob).val('{{today}}');
+        }
+
+        $('#job-controls form').trigger('submit');
+    });
+</script>
+{% endblock %}

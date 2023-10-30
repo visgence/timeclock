@@ -33,7 +33,7 @@ for m in range(1, 13):
         })
 
 assert len(workdays) == 365  # working pretty hard this year...
-print workdays[0]['t']
+print(workdays[0]['t'])
 
 # regular hours - number of hours worked in a week up to 40
 # overtime = number of hours worked above 40 from sunday to monday
@@ -47,10 +47,10 @@ payPeriod_overtime = 0
 for i in workdays:
     if i['t'].tm_mday == 1 or i['t'].tm_mday == 16:
 
-        print "regular: %d" % (payPeriod_regular)
-        print "overtime: %d" % (payPeriod_overtime)
-        print "sub total: %d" % (payPeriod_regular + payPeriod_overtime)
-        print ""
+        print("regular: %d" % (payPeriod_regular))
+        print("overtime: %d" % (payPeriod_overtime))
+        print("sub total: %d" % (payPeriod_regular + payPeriod_overtime))
+        print("")
         regular += payPeriod_regular
         overtime += payPeriod_overtime
         payPeriod_regular = 0
@@ -65,9 +65,9 @@ total = 0
 for i in workdays:
     total += i['h']
 
-print "================"
-print "regular: %d" % (regular)
-print "overtime: %d" % (overtime)
-print "total: %d" % (total)
-print "discrepancy: %d" % (total - (regular+overtime))
+print("================")
+print("regular: %d" % (regular))
+print("overtime: %d" % (overtime))
+print("total: %d" % (total))
+print("discrepancy: %d" % (total - (regular+overtime)))
 assert regular + overtime == total

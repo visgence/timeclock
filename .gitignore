@@ -38,6 +38,6 @@ Thumbs.db
 
 node_modules/
 npm-debug.log
-
+env/
 # Atom uses this instead of the htmlhint.conf file
 .htmlhintrc

@@ -1,5 +1,5 @@
 
-from settings import SESSION_TIMEOUT
+from .settings import SESSION_TIMEOUT
 
 
 def timeout(request):

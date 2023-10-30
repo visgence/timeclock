@@ -55,7 +55,7 @@ class Migration(migrations.Migration):
                 ('time_out', models.DateTimeField(null=True, verbose_name=b'clock out time', blank=True)),
                 ('hours', models.DecimalField(null=True, max_digits=4, decimal_places=2, blank=True)),
                 ('deleted', models.BooleanField(default=False)),
-                ('employee', models.ForeignKey(to=settings.AUTH_USER_MODEL)),
+                ('employee', models.ForeignKey(to=settings.AUTH_USER_MODEL, on_delete=models.PROTECT)),
             ],
             options={
                 'ordering': ['-time_in', 'employee'],
@@ -69,9 +69,9 @@ class Migration(migrations.Migration):
                 ('hours', models.IntegerField(verbose_name=b'total hours')),
                 ('miles', models.DecimalField(null=True, max_digits=6, decimal_places=2, blank=True)),
                 ('note', models.TextField(verbose_name=b'notes about job', blank=True)),
-                ('employee', models.ForeignKey(to=settings.AUTH_USER_MODEL)),
-                ('job', models.ForeignKey(to='clocker.Job')),
-                ('shift', models.ForeignKey(to='clocker.Shift')),
+                ('employee', models.ForeignKey(to=settings.AUTH_USER_MODEL, on_delete=models.PROTECT)),
+                ('job', models.ForeignKey(to='clocker.Job', on_delete=models.PROTECT)),
+                ('shift', models.ForeignKey(to='clocker.Shift', on_delete=models.PROTECT)),
             ],
             options={
                 'ordering': ['shift', 'employee', 'job'],
@@ -86,7 +86,7 @@ class Migration(migrations.Migration):
                 ('end', models.BigIntegerField()),
                 ('hourly_rate', models.DecimalField(max_digits=5, decimal_places=2)),
                 ('signature', models.TextField(blank=True)),
-                ('employee', models.ForeignKey(related_name='timesheet_set', to=settings.AUTH_USER_MODEL)),
+                ('employee', models.ForeignKey(related_name='timesheet_set', to=settings.AUTH_USER_MODEL, on_delete=models.PROTECT)),
                 ('shifts', models.ManyToManyField(to='clocker.Shift')),
             ],
             options={

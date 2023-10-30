@@ -43,10 +43,10 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
 
         if options['start'] is False:
-            print "Start required. Use --start=123"
+            print("Start required. Use --start=123")
             return
         if options['end'] is False:
-            print "End required. Use --end=123"
+            print("End required. Use --end=123")
             return
 
         startArr = options['start'].split('-')
@@ -73,8 +73,8 @@ class Command(BaseCommand):
                     employees[shift_summary.shift.employee.id]['reimbursement_amount'] += float(options['rate'])*float(shift_summary.miles)
         if not options['all']:
             tempObj = copy(employees)
-            for key, value in employees.iteritems():
+            for key, value in employees.items():
                 if value['miles'] == 0:
                     tempObj.pop(key)
             employees = tempObj
-        print json.dumps(employees, indent=4)
+        print(json.dumps(employees, indent=4))

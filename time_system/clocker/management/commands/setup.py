@@ -9,6 +9,7 @@
 # System Imports
 from django.core.management import call_command
 from django.core.management.base import BaseCommand
+from settings import ENABLE_JOBS
 
 
 # local imports
@@ -21,28 +22,35 @@ class Command(BaseCommand):
 
         call_command('migrate', fake=False)
 
-        print "Loading fixtures..."
+        print("Loading fixtures...")
         fixtures = [
             [
                 "clocker/fixtures/employees.json"
             ]
         ]
 
-        print 'Do you wish to load sample data?'
-        user_resp = None
-        user_resp = raw_input('(y/n) ')
-        while user_resp not in ['y', 'Y', 'n', 'N']:
-            print 'Sorry, I did not understand your response.  Please enter \'y\' or \'n\'.'
-            print 'Do you wish to load sample data?'
-            user_resp = raw_input('(y/n) ')
+        if not ENABLE_JOBS:
+            print("Adding admin user and default job...")
+            fixtures.append([
+                    "clocker/fixtures/defaultJob.json"
+                ])
 
-        if user_resp in ['y', 'Y']:
-            fixtures.append([
-                "clocker/fixtures/jobs.json"
-            ])
-            fixtures.append([
-                "clocker/fixtures/shifts.json"
-            ])
+        else:
+            print('Do you wish to load sample data?')
+            user_resp = None
+            user_resp = input('(y/n) ')
+            while user_resp not in ['y', 'Y', 'n', 'N']:
+                print('Sorry, I did not understand your response.  Please enter \'y\' or \'n\'.')
+                print('Do you wish to load sample data?')
+                user_resp = input('(y/n) ')
+
+            if user_resp in ['y', 'Y']:
+                fixtures.append([
+                    "clocker/fixtures/jobs.json"
+                ])
+                fixtures.append([
+                    "clocker/fixtures/shifts.json"
+                ])
         # Load fixtures
         for apps in fixtures:
             for fixture in apps:

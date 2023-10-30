@@ -1,4 +1,5 @@
 from django.http import HttpResponseRedirect, HttpResponse
+from django.utils.deprecation import MiddlewareMixin
 from settings import SESSION_TIMEOUT
 
 try:
@@ -7,7 +8,7 @@ except ImportError:
     import json
 
 
-class CheckAccess():
+class CheckAccess(MiddlewareMixin):
     """
     ' Middleware that validates that a user is logged into the app and is active.
     """
@@ -21,7 +22,7 @@ class CheckAccess():
                     return None
 
         # Boot back to login page
-        if not request.user.is_authenticated():
+        if not request.user.is_authenticated:
             return HttpResponseRedirect('/timeclock/login/')
 
         # Give custom page telling them they are no longer active

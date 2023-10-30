@@ -1,0 +1,11 @@
+[
+  {
+    "model": "clocker.Job",
+    "pk": 1,
+    "fields": {
+      "name": "Default Job",
+      "description": "Required when jobs are disabled",
+      "is_active": true
+    }
+  }
+]

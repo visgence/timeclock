@@ -4,5 +4,5 @@ docker run -t -i -P -d \
     -e POSTGRES_DB=timeclock \
     -e POSTGRES_USER=timeclock \
     -e POSTGRES_PASSWORD=password \
-    postgres:9.2
+    postgres:11
 

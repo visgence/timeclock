@@ -44,12 +44,12 @@ class Command(BaseCommand):
                         raw_sql = self.db.ops.last_executed_query(self.cursor, sql, params)
                         execution_time = time.time() - starttime
                         if sqlparse:
-                            print sqlparse.format(raw_sql, reindent=True)
+                            print(sqlparse.format(raw_sql, reindent=True))
                         else:
-                            print raw_sql
-                        print
-                        print 'Execution time: %.6fs' % execution_time
-                        print
+                            print(raw_sql)
+                        print()
+                        print('Execution time: %.6fs' % execution_time)
+                        print()
 
             util.CursorDebugWrapper = PrintQueryWrapper
 
@@ -79,7 +79,7 @@ class Command(BaseCommand):
                 imported_objects[alias] = model
                 model_labels.append(model.__name__)
 
-            print self.style.SQL_COLTYPE("From '%s' autoload: %s" % (app_mod.__name__, ", ".join(model_labels)))
+            print(self.style.SQL_COLTYPE("From '%s' autoload: %s" % (app_mod.__name__, ", ".join(model_labels))))
 
         try:
             if use_plain:
@@ -127,7 +127,7 @@ class Command(BaseCommand):
                 pythonrc = os.environ.get("PYTHONSTARTUP")
                 if pythonrc and os.path.isfile(pythonrc):
                     try:
-                        execfile(pythonrc)
+                        exec(compile(open(pythonrc, "rb").read(), pythonrc, 'exec'))
                     except NameError:
                         pass
                 # This will import .pythonrc.py as a side-effect
