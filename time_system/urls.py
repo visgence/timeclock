@@ -1,4 +1,6 @@
 from django.conf.urls import include, url
+from django.urls import path
+from django.contrib import admin
 from django.views.generic import RedirectView
 from clocker.views.management import ManageView
 
@@ -102,3 +104,10 @@ urlpatterns += [
     url(r'^timeclock/employees/$', EmployeesView.as_view(), name="employee-list"),
     url(r'^timeclock/employees/(?P<employee_id>\d+)/$', EmployeeView.as_view(), name="employee-detail"),
 ]
+
+urlpatterns += [
+    #path('openid/', include('django_jwt.urls')),
+    path('accounts/', include('allauth.urls')),
+    path('admin/', admin.site.urls),
+]
+

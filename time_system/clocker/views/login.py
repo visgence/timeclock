@@ -52,5 +52,5 @@ def isLoggedIn(request):
     Simply returns the text 'yes' if the user is still logged in.
     Checkaccess will catch the request before this they are not.
     """
-
+    print('user',request.user)
     return HttpResponse("yes", content_type="text/html")
