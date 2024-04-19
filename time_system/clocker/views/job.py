@@ -6,11 +6,16 @@ from collections import OrderedDict
 
 # Django Imports
 from django.template import RequestContext, loader
-from django.http import HttpResponse, HttpResponseBadRequest
-
+from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseRedirect
+from django.shortcuts import render
+from operator import itemgetter
 # Local Imports
 from clocker.models import Employee, Job
 from settings import ENABLE_JOBS
+from datetime import date, timedelta
+from time import gmtime, strftime
+from find_missing_by_date import findMissingByDate
+from clocker.views.timesheet import getPayPeriod
 
 
 def jobBreakdown(request):
@@ -204,3 +209,40 @@ def getJobsBreakdown(employees=None, start=None, end=None):
 
     jobData['total_hours'] = str(Decimal(jobData['total_hours']).quantize(Decimal('1.00')))
     return jobData
+
+
+def missingShifts(request):
+
+    employee = request.user
+    if not employee.is_superuser or not ENABLE_JOBS:
+        return HttpResponseRedirect('/timeclock/')
+
+    today = date.today()
+    start_week = today - timedelta(today.weekday())
+
+    missing_shifts = []
+
+    if request.POST.get("start"):
+        start = request.POST.get("start")
+    else:
+        start = date.strftime(start_week, '%Y-%m-%d')
+
+    if request.POST.get("end"):
+        end = request.POST.get("end")
+    else:
+        end = date.strftime(today, '%Y-%m-%d')
+    for i in findMissingByDate(start, end):
+        missing_shifts.append({
+            "user": i.toDict()['employee']['username'],
+            "link": i.toDict()['id'],
+            "date": i.toDict()['time_out']
+        })
+    missing_shifts.sort(key=itemgetter("user"))
+    context = {
+        'start': start,
+        'end': end,
+        'missing_shifts': missing_shifts,
+    }
+
+    t = loader.get_template('missingShiftContent.html')
+    return HttpResponse(t.render(context))

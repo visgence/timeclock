@@ -95,6 +95,8 @@ else:
 urlpatterns += [
     url(r'^timeclock/shifts/$', ShiftsView.as_view(), name="shift-list"),
     url(r'^timeclock/shifts/(?P<shift_id>\d+)/$', ShiftView.as_view(), name="shift-detail"),
+    url(r'^timeclock/manage/missingshifts/$', ManageView.as_view(template_name="missingShifts.html"), name="manage-missing-shifts"),
+    url(r'^timeclock/missingShifts/$', clocker.views.job.missingShifts, name="missing-shifts"),
 ]
 
 # #employees

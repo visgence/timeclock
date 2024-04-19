@@ -1,0 +1,14 @@
+{% if missing_shifts %}
+<div class="alert alert-danger">
+    There are some missing shift summaries for <b>{{start}} - {{end}}</b>:
+    <table>
+        {% for shift in missing_shifts %}
+            <tr><td>{{ forloop.counter }}</td><td>{{shift.user}}</td><td><a href="/timeclock/summary/{{shift.link}}">{{shift.date}}</a></td></tr>
+        {% endfor %}
+    </table>
+</div>
+{% else %}
+<div>
+	<h3>There are no missing shifts for <b>{{start}} - {{end}}</b>.</h3>
+</div>
+{% endif %}
