@@ -137,14 +137,24 @@ class Employee(AbstractBaseUser):
     has_salary = models.BooleanField(default=False)
     hourly_rate = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True)
     salary = models.DecimalField(max_digits=8, decimal_places=2, null=True, blank=True)
-    username = models.TextField(unique=True)
+    username = models.TextField(unique=True,max_length=40)
     first_name = models.TextField()
     last_name = models.TextField()
+    email = models.EmailField('email address', blank=True)
     is_superuser = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
     date_joined = models.DateTimeField(default=datetime.now)
     color = models.CharField(max_length=32, blank=True)
     objects = EmployeeManager()
+
+    is_staff = True
+    
+    
+    def has_module_perms(self, app_label):
+        return True
+    
+    def has_perm(self, perm_list, obj=None):
+        return True
 
     USERNAME_FIELD = "username"
 
