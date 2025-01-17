@@ -35,19 +35,16 @@ def GET_PERMISSION_OBJ():
     return get_user_model()
 
 
-try:
-    from local_database_settings import DATABASES
-except Exception:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',  # 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
-            'NAME': 'time_clock.db',                      # Or path to database file if using sqlite3.
-            'USER': '',                      # Not used with sqlite3.
-            'PASSWORD': '',                  # Not used with sqlite3.
-            'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
-            'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
-        }
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'timeclock',
+        'USER': 'timeclock',
+        'PASSWORD': 'password',
+        'HOST': 'timeclock-postgres',
+        'PORT': 5432,
     }
+}
 
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name

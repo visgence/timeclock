@@ -1,5 +1,5 @@
 FROM almalinux:9
-LABEL Visgence Inc <info@visgence.com>
+LABEL description="Visgence Inc <info@visgence.com>"
 
 RUN systemctl mask firewalld.service
 RUN yum install -y epel-release
@@ -14,28 +14,23 @@ RUN dnf install -y mlocate python3-pip
 RUN dnf install -y nodejs
 RUN updatedb
 
+RUN adduser --uid 1000 timeclock
+
 #PIP Stuff
 RUN ln -fs /usr/bin/python3 /usr/bin/python
 RUN ln -fs /usr/bin/pip3 /usr/bin/pip
-COPY pip-requirements.txt /tmp/
-RUN pip3 install -r /tmp/pip-requirements.txt
+COPY ./requirements.txt /tmp/
+COPY ./run.sh /home/timeclock/timeclock/
+RUN pip3 install -r /tmp/requirements.txt
 
 ## Set up files and local settings
-RUN adduser timeclock
+RUN chmod u+x /home/timeclock/timeclock/run.sh
+RUN chown -R timeclock:timeclock /home/timeclock/timeclock/*
+RUN mkdir /home/timeclock/.npm
+RUN chown -R timeclock:timeclock /home/timeclock/.npm
 
 USER timeclock
-WORKDIR /home/timeclock/timeclock/docker/app
-
-USER root
-ADD gen_pgpass.sh /home/timeclock
-RUN chmod u+x /home/timeclock/gen_pgpass.sh
-RUN chown timeclock:timeclock /home/timeclock/gen_pgpass.sh
-USER timeclock
-
-RUN echo "~/gen_pgpass.sh > ~/.pgpass" >> ~/.bashrc
-RUN echo "chmod 0600 ~/.pgpass" >> ~/.bashrc
-RUN echo "cd /home/timeclock/" >> ~/.bashrc
-RUN echo "export DOCKER=true" >> ~/.bashrc
+WORKDIR /home/timeclock/timeclock/
 
 VOLUME ["/home/timeclock/timeclock"]
 
