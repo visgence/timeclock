@@ -4,7 +4,7 @@ A simple web application for tracking employee time.
 
 ### Dependencies
 
-docker
+docker, nodejs
 OPTIONAL - podman and podman-compose
 All other dependencies will be handled within the docker file.
 

@@ -21,7 +21,7 @@ services:
     env_file: .env
     user: "1000:1000"
     volumes:
-      - .:/home/timeclock/timeclock/time_system
+      - .:/home/timeclock/timeclock/time_system:z,U
     ports:
       - 8000:8000
     expose:
