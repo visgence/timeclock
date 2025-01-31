@@ -38,10 +38,10 @@ def GET_PERMISSION_OBJ():
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'timeclock',
-        'USER': 'timeclock',
-        'PASSWORD': 'password',
-        'HOST': 'timeclock-postgres',
+        'NAME': os.environ.get('DB_NAME', 'timeclock'),
+        'USER': os.environ.get('DB_USER', 'timeclock'),
+        'PASSWORD': os.environ.get('DB_PASSWORD','password'),
+        'HOST': os.environ.get('DB_HOST','localhost'),
         'PORT': 5432,
     }
 }

@@ -36,8 +36,6 @@ services:
     depends_on:
       - timeclock-postgres
     command: bash -c "/home/timeclock/timeclock/run.sh"
-    links:
-      - timeclock-postgres:postgres
 
 volumes:
   pgdata:
