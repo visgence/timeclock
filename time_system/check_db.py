@@ -1,4 +1,13 @@
 #!/usr/bin/python
+import os
+import re
+import sys
+import django
+program_path = os.path.realpath(__file__)
+APP_PATH = re.sub('settings.py[c]*$', '', program_path)
+sys.path.append(os.path.join(APP_PATH, 'time_system'))
+os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
+django.setup()
 
 from clocker.models import Shift
 from datetime import datetime, timedelta
@@ -8,8 +17,8 @@ def correct_record(record):
     """
     Takes a time record from the database and checks it for errors in the clock in and clock out times.
     If it spots an employee that stayed clocked in past midnight then it will delete that record
-    and inserts time records that have the employee clocked out before midnight each day and clocked in right after midnight the next day.  It will recognize that an employee is still clocked in and
-    simply make the last inserted record not have a clock out time so that the employee can do so.
+    and inserts time records that have the employee clocked out before midnight each day and clocked in right after midnight the next day.
+    It will recognize that an employee is still clocked in and simply make the last inserted record not have a clock out time so that the employee can do so.
     """
 
     if(record.time_out is None):
