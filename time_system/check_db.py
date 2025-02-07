@@ -3,13 +3,14 @@ import os
 import re
 import sys
 import django
+from django.core.exceptions import ObjectDoesNotExist
 program_path = os.path.realpath(__file__)
 APP_PATH = re.sub('settings.py[c]*$', '', program_path)
 sys.path.append(os.path.join(APP_PATH, 'time_system'))
 os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
 django.setup()
 
-from clocker.models import Shift
+from clocker.models import Shift, ShiftSummary
 from datetime import datetime, timedelta
 
 
@@ -23,8 +24,13 @@ def correct_record(record):
 
     if(record.time_out is None):
         end_time = datetime.now()
+        shift_summary = None
     else:
         end_time = record.time_out
+        try:
+            shift_summary = ShiftSummary.objects.get(shift_id=record.id)
+        except ObjectDoesNotExist:
+            shift_summary = None
 
     # If there is a difference in days then an employee was clocked in past midnight.  We only consider days and not months as that would be rediculous.
     # Insert new records starting from the time_in and ending at just before midnight and do this for everyday up until time_out
@@ -42,6 +48,12 @@ def correct_record(record):
             time_out=datetime(year, month, day, 23, 59)
         )
         date_time.save()
+        if shift_summary is not None:
+            time_difference: timedelta = datetime(year, month, day, 23, 59) - record.time_in
+            seconds_difference: float = time_difference.total_seconds()
+            new_summary = ShiftSummary(hours=seconds_difference, miles=shift_summary.miles, note=shift_summary.note,
+                                employee_id=shift_summary.employee_id, job_id=shift_summary.job_id, shift_id=date_time.id)
+            new_summary.save()
 
         i = 1
         # Insert the in-between dates
@@ -55,6 +67,10 @@ def correct_record(record):
                 time_out=datetime(year, month, day, 23, 59)
             )
             date_time.save()
+            if shift_summary is not None:
+                new_summary = ShiftSummary(hours=86400, miles=shift_summary.miles, note=shift_summary.note,
+                                    employee_id=shift_summary.employee_id, job_id=shift_summary.job_id, shift_id=date_time.id)
+                new_summary.save()
             i += 1
 
         # Insert the last day and make sure to keep the employee clocked in if they were when this started.
@@ -73,6 +89,13 @@ def correct_record(record):
                 time_out=end_time
             )
         date_time.save()
+        if shift_summary is not None:
+            time_difference: timedelta = end_time - datetime(end_year, end_month, end_day, 00, 00)
+            seconds_difference: float = time_difference.total_seconds()
+            new_summary = ShiftSummary(hours=seconds_difference, miles=shift_summary.miles, note=shift_summary.note,
+                                employee_id=shift_summary.employee_id, job_id=shift_summary.job_id, shift_id=date_time.id)
+            new_summary.save()
+            shift_summary.delete()
 
         record.delete()
 
