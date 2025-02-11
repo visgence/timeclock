@@ -12,6 +12,7 @@ django.setup()
 
 from clocker.models import Shift, ShiftSummary
 from datetime import datetime, timedelta
+from settings import ENABLE_JOBS
 
 
 def correct_record(record):
@@ -21,6 +22,12 @@ def correct_record(record):
     and inserts time records that have the employee clocked out before midnight each day and clocked in right after midnight the next day.
     It will recognize that an employee is still clocked in and simply make the last inserted record not have a clock out time so that the employee can do so.
     """
+
+    def add_summary(time_in, time_out, date_time):
+        sec = (time_out - time_in).total_seconds()
+        new_summary = ShiftSummary(hours=sec, miles=shift_summary.miles, note=shift_summary.note,
+                                employee_id=shift_summary.employee_id, job_id=shift_summary.job_id, shift_id=date_time.id)
+        new_summary.save()
 
     if(record.time_out is None):
         end_time = datetime.now()
@@ -48,12 +55,8 @@ def correct_record(record):
             time_out=datetime(year, month, day, 23, 59)
         )
         date_time.save()
-        if shift_summary is not None:
-            time_difference: timedelta = datetime(year, month, day, 23, 59) - record.time_in
-            seconds_difference: float = time_difference.total_seconds()
-            new_summary = ShiftSummary(hours=seconds_difference, miles=shift_summary.miles, note=shift_summary.note,
-                                employee_id=shift_summary.employee_id, job_id=shift_summary.job_id, shift_id=date_time.id)
-            new_summary.save()
+        if shift_summary is not None and ENABLE_JOBS:
+            add_summary(record.time_in, datetime(year, month, day, 23, 59), date_time)
 
         i = 1
         # Insert the in-between dates
@@ -67,10 +70,8 @@ def correct_record(record):
                 time_out=datetime(year, month, day, 23, 59)
             )
             date_time.save()
-            if shift_summary is not None:
-                new_summary = ShiftSummary(hours=86400, miles=shift_summary.miles, note=shift_summary.note,
-                                    employee_id=shift_summary.employee_id, job_id=shift_summary.job_id, shift_id=date_time.id)
-                new_summary.save()
+            if shift_summary is not None and ENABLE_JOBS:
+                add_summary(datetime(year, month, day, 00, 00), datetime(year, month, day, 23, 59), date_time)
             i += 1
 
         # Insert the last day and make sure to keep the employee clocked in if they were when this started.
@@ -89,12 +90,10 @@ def correct_record(record):
                 time_out=end_time
             )
         date_time.save()
+        if shift_summary is not None and record.time_out is not None and ENABLE_JOBS:
+            add_summary(datetime(end_year, end_month, end_day, 00, 00), record.time_out, date_time)
+
         if shift_summary is not None:
-            time_difference: timedelta = end_time - datetime(end_year, end_month, end_day, 00, 00)
-            seconds_difference: float = time_difference.total_seconds()
-            new_summary = ShiftSummary(hours=seconds_difference, miles=shift_summary.miles, note=shift_summary.note,
-                                employee_id=shift_summary.employee_id, job_id=shift_summary.job_id, shift_id=date_time.id)
-            new_summary.save()
             shift_summary.delete()
 
         record.delete()
