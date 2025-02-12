@@ -26,13 +26,6 @@ def correct_record(record):
     else:
         end_time = record.time_out
 
-    if ENABLE_JOBS:
-        try:
-            shift_summary = ShiftSummary.objects.get(shift_id=record.id)
-            shift_summary.delete()
-        except ObjectDoesNotExist:
-            pass
-
     # If there is a difference in days then an employee was clocked in past midnight.
     if(end_time.day - record.time_in.day != 0):
         year = record.time_in.year
@@ -40,6 +33,13 @@ def correct_record(record):
         day = record.time_in.day
         record.time_out=datetime(year, month, day, 23, 59)
         record.save()
+
+        if ENABLE_JOBS:
+            try:
+                shift_summaries = ShiftSummary.objects.filter(shift_id=record.id)
+                shift_summaries.delete()
+            except ObjectDoesNotExist:
+                pass
 
 def main():
 
