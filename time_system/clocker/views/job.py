@@ -44,12 +44,12 @@ def jobBreakdown(request):
     breakdown = getJobsBreakdown(employees, start, end)
     breakdown['is_superuser'] = request.user.is_superuser
 
-    total = 0
+    total = Decimal(0.00)
     for i in breakdown['jobs']:
-        miles = 0
+        miles = Decimal(0.00)
         for j in breakdown['jobs'][i]['summaries']:
-            miles += j.miles if j.miles else 0.00
-            total += j.miles if j.miles else 0.00
+            miles += Decimal(j.miles) if j.miles else Decimal(0.00)
+            total += Decimal(j.miles) if j.miles else Decimal(0.00)
         breakdown['jobs'][i]['total_miles'] = miles
     breakdown['total_miles'] = total
 
