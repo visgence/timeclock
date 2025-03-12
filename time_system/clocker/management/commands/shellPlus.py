@@ -2,6 +2,8 @@ import os
 import time
 
 from django.core.management import BaseCommand
+import logging
+logger = logging.getLogger(__name__)
 
 
 class Command(BaseCommand):
@@ -44,12 +46,12 @@ class Command(BaseCommand):
                         raw_sql = self.db.ops.last_executed_query(self.cursor, sql, params)
                         execution_time = time.time() - starttime
                         if sqlparse:
-                            print(sqlparse.format(raw_sql, reindent=True))
+                            logger.info(sqlparse.format(raw_sql, reindent=True))
                         else:
-                            print(raw_sql)
-                        print()
-                        print('Execution time: %.6fs' % execution_time)
-                        print()
+                            logger.info(raw_sql)
+                        logger.info()
+                        logger.info('Execution time: %.6fs' % execution_time)
+                        logger.info()
 
             util.CursorDebugWrapper = PrintQueryWrapper
 
@@ -79,7 +81,7 @@ class Command(BaseCommand):
                 imported_objects[alias] = model
                 model_labels.append(model.__name__)
 
-            print(self.style.SQL_COLTYPE("From '%s' autoload: %s" % (app_mod.__name__, ", ".join(model_labels))))
+            logger.info(self.style.SQL_COLTYPE("From '%s' autoload: %s" % (app_mod.__name__, ", ".join(model_labels))))
 
         try:
             if use_plain:

@@ -15,6 +15,8 @@ import re
 from chucho.models import ChuchoManager
 from clocker.hashMethods import hash64
 from settings import DT_FORMAT
+import logging
+logger = logging.getLogger(__name__)
 
 
 class EmployeeManager(BaseUserManager, ChuchoManager):
@@ -669,7 +671,7 @@ class JobManager(ChuchoManager):
             if filter_args is not None and len(filter_args) > 0:
                 return self.advanced_search(**filter_args)
             elif omni is not None:
-                print(omni)
+                logger.debug(omni)
                 return self.search(omni)
             else:
                 return self.all()

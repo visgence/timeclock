@@ -10,6 +10,8 @@
 from django.core.management import call_command
 from django.core.management.base import BaseCommand
 from settings import ENABLE_JOBS
+import logging
+logger = logging.getLogger(__name__)
 
 
 # local imports
@@ -22,7 +24,7 @@ class Command(BaseCommand):
 
         call_command('migrate', fake=False)
 
-        print("Loading fixtures...")
+        logger.info("Loading fixtures...")
         fixtures = [
             [
                 "clocker/fixtures/employees.json"
@@ -30,18 +32,18 @@ class Command(BaseCommand):
         ]
 
         if not ENABLE_JOBS:
-            print("Adding admin user and default job...")
+            logger.info("Adding admin user and default job...")
             fixtures.append([
                     "clocker/fixtures/defaultJob.json"
                 ])
 
         else:
-            print('Do you wish to load sample data?')
+            logger.info('Do you wish to load sample data?')
             user_resp = None
             user_resp = input('(y/n) ')
             while user_resp not in ['y', 'Y', 'n', 'N']:
-                print('Sorry, I did not understand your response.  Please enter \'y\' or \'n\'.')
-                print('Do you wish to load sample data?')
+                logger.info('Sorry, I did not understand your response.  Please enter \'y\' or \'n\'.')
+                logger.info('Do you wish to load sample data?')
                 user_resp = input('(y/n) ')
 
             if user_resp in ['y', 'Y']:

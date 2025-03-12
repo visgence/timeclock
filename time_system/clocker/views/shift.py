@@ -8,6 +8,8 @@ from django.core.exceptions import ValidationError
 # Local imports
 from clocker.models import Shift, Employee
 from settings import DT_FORMAT
+import logging
+logger = logging.getLogger(__name__)
 
 # System imports
 try:
@@ -147,10 +149,10 @@ class ShiftsView(View):
             try:
                 shifts = paginator.page(request.GET['page'])
             except Exception as pagenotaninteger:
-                print(pagenotaninteger)
+                logger.debug(pagenotaninteger)
                 shifts = paginator.page(1)
             except Exception as emptypage:
-                print(emptypage)
+                logger.debug(emptypage)
                 shifts = paginator.page(paginator.num_pages)
 
             self.returnData.update({

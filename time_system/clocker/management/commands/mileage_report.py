@@ -7,7 +7,8 @@ import datetime
 from time import gmtime, strftime
 import json
 from copy import copy
-
+import logging
+logger = logging.getLogger(__name__)
 
 class Command(BaseCommand):
 
@@ -43,10 +44,10 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
 
         if options['start'] is False:
-            print("Start required. Use --start=123")
+            logger.info("Start required. Use --start=123")
             return
         if options['end'] is False:
-            print("End required. Use --end=123")
+            logger.info("End required. Use --end=123")
             return
 
         startArr = options['start'].split('-')
@@ -77,4 +78,4 @@ class Command(BaseCommand):
                 if value['miles'] == 0:
                     tempObj.pop(key)
             employees = tempObj
-        print(json.dumps(employees, indent=4))
+        logger.info(json.dumps(employees, indent=4))

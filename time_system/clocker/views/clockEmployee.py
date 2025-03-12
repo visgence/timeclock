@@ -4,6 +4,8 @@ from django.core.exceptions import ValidationError
 from django.db import transaction
 from clocker.models import Employee, Shift, ShiftSummary, Job
 from settings import ENABLE_JOBS
+import logging
+logger = logging.getLogger(__name__)
 
 
 @require_POST
@@ -55,7 +57,7 @@ def clockOutEmployee(employee):
         try:
             shift_summary.full_clean()
         except ValidationError as e:
-            print(e)
+            logger.debug(e)
             transaction.rollback()
             msg = "New shift summary didn't pass validation for employee %s: %s" % (str(employee), str(e))
             return HttpResponseServerError(msg)
@@ -63,7 +65,7 @@ def clockOutEmployee(employee):
         transaction.commit()
         return shift
     except Exception as e:
-        print(e)
+        logger.debug(e)
         return HttpResponseNotFound(str(e))
 
 

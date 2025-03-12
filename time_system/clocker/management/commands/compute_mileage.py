@@ -1,4 +1,6 @@
 # compute mileage, this stuff is just the output of an iPython session and needs to be made into a proper command
+import logging
+logger = logging.getLogger(__name__)
 
 s = Shift.object.all()
 s = Shift.objects.all()
@@ -22,7 +24,7 @@ summaries[0].shift
 summaries[0].shift.employee
 summaries[0].miles
 for i in summaries:
-    print(i.miles)
+    logger.info(i.miles)
 
 total_miles = 0
 for i in summaries:
