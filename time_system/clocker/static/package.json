@@ -15,7 +15,7 @@
     "d3-scale": "2.0.0",
     "eslint-plugin-import": "2.7.0",
     "htmlhint": "0.9.13",
-    "stylelint": "8.2.0"
+    "stylelint": "16.18.0"
   },
   "name": "Timeclock",
   "private": "true",
