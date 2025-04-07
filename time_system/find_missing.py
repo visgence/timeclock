@@ -5,7 +5,8 @@ import sys
 import time
 from datetime import datetime
 import django
-
+import logging
+logger = logging.getLogger(__name__)
 # local imports
 from clocker.models import Shift, ShiftSummary
 
@@ -23,7 +24,7 @@ def findMissing():
     shiftsArr = []
     for s in shifts:
         if len(ShiftSummary.objects.filter(shift=s)) == 0:
-            print s
+            logger.info(s)
             shiftsArr.append(s)
     return shiftsArr
 

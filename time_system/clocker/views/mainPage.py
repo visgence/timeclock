@@ -4,6 +4,7 @@ from datetime import date, timedelta
 from time import gmtime, strftime
 from django.shortcuts import render
 from find_missing import findMissing
+from settings import ENABLE_JOBS
 
 
 def mainPage(request):
@@ -33,12 +34,13 @@ def mainPage(request):
     periodData = getPayPeriod(start_week.strftime('%Y-%m-%d'), end_week.strftime('%Y-%m-%d'), employee.username)
 
     missingShifts = []
-    for i in findMissing():
-        if employee.toDict()['id'] == i.toDict()['employee']['id']:
-            missingShifts.append({
-                "link": i.toDict()['id'],
-                "date": i.toDict()['time_out']
-            })
+    if ENABLE_JOBS:
+        for i in findMissing():
+            if employee.toDict()['id'] == i.toDict()['employee']['id']:
+                missingShifts.append({
+                    "link": i.toDict()['id'],
+                    "date": i.toDict()['time_out']
+                })
 
     context = {
         'employee': employee,
@@ -50,7 +52,8 @@ def mainPage(request):
         'today': date.strftime(today, '%Y-%m-%d'),
         'weekly_regular': periodData['pay_period']['period_regular'],
         'weekly_overtime': periodData['pay_period']['period_overtime'],
-        'missing_shifts': missingShifts
+        'missing_shifts': missingShifts,
+        'enable_jobs': ENABLE_JOBS
     }
 
     return render(request, 'mainPage.html', context)

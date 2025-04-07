@@ -4,7 +4,7 @@
 
 # Local dev files #
 ###################
-local_database_settings.py
+.env
 
 # Compiled Source #
 ###################
@@ -38,6 +38,7 @@ Thumbs.db
 
 node_modules/
 npm-debug.log
-
+env/
+venv/
 # Atom uses this instead of the htmlhint.conf file
 .htmlhintrc

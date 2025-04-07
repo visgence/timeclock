@@ -13,8 +13,10 @@ import re
 
 # Local imports
 from chucho.models import ChuchoManager
-from hashMethods import hash64
+from clocker.hashMethods import hash64
 from settings import DT_FORMAT
+import logging
+logger = logging.getLogger(__name__)
 
 
 class EmployeeManager(BaseUserManager, ChuchoManager):
@@ -137,14 +139,24 @@ class Employee(AbstractBaseUser):
     has_salary = models.BooleanField(default=False)
     hourly_rate = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True)
     salary = models.DecimalField(max_digits=8, decimal_places=2, null=True, blank=True)
-    username = models.TextField(unique=True)
+    username = models.TextField(unique=True,max_length=40)
     first_name = models.TextField()
     last_name = models.TextField()
+    email = models.EmailField('email address', blank=True)
     is_superuser = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
     date_joined = models.DateTimeField(default=datetime.now)
     color = models.CharField(max_length=32, blank=True)
     objects = EmployeeManager()
+
+    is_staff = True
+    
+    
+    def has_module_perms(self, app_label):
+        return True
+    
+    def has_perm(self, perm_list, obj=None):
+        return True
 
     USERNAME_FIELD = "username"
 
@@ -165,6 +177,8 @@ class Employee(AbstractBaseUser):
         return self.first_name + " " + self.last_name
 
     def save(self, *args, **kwargs):
+        if not self.hourly_rate:
+            self.hourly_rate = 0.00
         self.first_name = self.first_name.strip()
         self.last_name = self.last_name.strip()
         self.username = self.username.strip()
@@ -383,7 +397,7 @@ class ShiftManager(ChuchoManager):
 
 
 class Shift(models.Model):
-    employee = models.ForeignKey('Employee')
+    employee = models.ForeignKey('Employee', on_delete=models.PROTECT)
     time_in = models.DateTimeField('clock in time')
     time_out = models.DateTimeField('clock out time', null=True, blank=True)
     hours = models.DecimalField(null=True, blank=True, decimal_places=2, max_digits=4)
@@ -549,9 +563,9 @@ class ShiftSummaryManager(ChuchoManager):
 
 
 class ShiftSummary(models.Model):
-    job = models.ForeignKey('Job')
-    employee = models.ForeignKey('Employee')
-    shift = models.ForeignKey('Shift')
+    job = models.ForeignKey('Job', on_delete=models.PROTECT)
+    employee = models.ForeignKey('Employee', on_delete=models.PROTECT)
+    shift = models.ForeignKey('Shift', on_delete=models.PROTECT)
     hours = models.IntegerField('total hours')
     miles = models.DecimalField(max_digits=6, decimal_places=2, null=True, blank=True)
     note = models.TextField('notes about job', blank=True)
@@ -657,7 +671,7 @@ class JobManager(ChuchoManager):
             if filter_args is not None and len(filter_args) > 0:
                 return self.advanced_search(**filter_args)
             elif omni is not None:
-                print omni
+                logger.debug(omni)
                 return self.search(omni)
             else:
                 return self.all()
@@ -757,7 +771,7 @@ class TimesheetManager(models.Manager):
         end = end.replace(second=59)
 
         shifts = Shift.objects.filter(time_in__gte=start, time_out__lte=end, deleted=False, employee=ts.employee)
-        ts.shifts = shifts
+        ts.shifts.set(shifts)
 
         return ts
 
@@ -767,7 +781,7 @@ class Timesheet(models.Model):
     shifts = models.ManyToManyField('shift')
     start = models.BigIntegerField()
     end = models.BigIntegerField()
-    employee = models.ForeignKey('Employee', related_name="timesheet_set")
+    employee = models.ForeignKey('Employee', related_name="timesheet_set", on_delete=models.PROTECT)
     hourly_rate = models.DecimalField(max_digits=5, decimal_places=2)
     signature = models.TextField(blank=True)
     signatureDate = models.DateTimeField(null=True, blank=True)

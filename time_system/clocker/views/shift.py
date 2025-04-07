@@ -8,6 +8,8 @@ from django.core.exceptions import ValidationError
 # Local imports
 from clocker.models import Shift, Employee
 from settings import DT_FORMAT
+import logging
+logger = logging.getLogger(__name__)
 
 # System imports
 try:
@@ -35,12 +37,12 @@ class ShiftView(View):
             return HttpResponseBadRequest(json.dumps(error), content_type='application/json')
 
         # Set fields for shift
-        for field, value in params.iteritems():
+        for field, value in params.items():
             if field in ['id', 'pk', 'employee']:
                 continue
 
             if field in ['time_in', 'time_out'] and value is not None:
-                if value == u'':
+                if value == '':
                     value = None
                 else:
                     value = datetime.strptime(value, DT_FORMAT)
@@ -50,7 +52,7 @@ class ShiftView(View):
         try:
             shift.full_clean()
         except ValidationError as e:
-            errors = [{x: y} for x, y in e.message_dict.iteritems()]
+            errors = [{x: y} for x, y in e.message_dict.items()]
             return HttpResponseBadRequest(json.dumps(errors), content_type='application/json')
 
         shift.save()
@@ -88,7 +90,7 @@ class ShiftView(View):
         try:
             shift.full_clean()
         except ValidationError as e:
-            errors = [{x: y} for x, y in e.message_dict.iteritems()]
+            errors = [{x: y} for x, y in e.message_dict.items()]
             return HttpResponseBadRequest(json.dumps(errors), content_type='application/json')
 
         shift.save()
@@ -146,11 +148,11 @@ class ShiftsView(View):
             paginator = Paginator(shifts, request.GET['per_page'])
             try:
                 shifts = paginator.page(request.GET['page'])
-            except Exception, pagenotaninteger:
-                print pagenotaninteger
+            except Exception as pagenotaninteger:
+                logger.debug(pagenotaninteger)
                 shifts = paginator.page(1)
-            except Exception, emptypage:
-                print emptypage
+            except Exception as emptypage:
+                logger.debug(emptypage)
                 shifts = paginator.page(paginator.num_pages)
 
             self.returnData.update({

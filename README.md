@@ -1,37 +1,41 @@
-Timeclock
-=========
+# Timeclock
 
 A simple web application for tracking employee time.
 
 ### Dependencies
-docker
+
+docker, nodejs
+OPTIONAL - podman and podman-compose
 All other dependencies will be handled within the docker file.
 
-### Setup.
+### Setup (docker compose OR podman-compose)
+
 Clone repo  
-`git clone https://github.com/visgence/timeclock`  
+`git clone https://github.com/visgence/timeclock`
 Submodule chucho  
 `git submodule init`  
-`git submodule update`  
+`git submodule update`
 
-Build docker container  
-cd to docker/app  
-`./build.sh`  
-cd to docker/postgres  
-`./run.sh`  
-cd to root of folder  
-`./docker/app/run.sh`  
-In docker shell, setup dependencies  
-cd to timeclock/time_system/clocker/static  
-`npm install`  
+copy `.env-template` to `.env` and edit with passwords
 
-Setup Django  
-cd to timeclock/time_system  
-`python manage.py migrate`  
-`python manage.py setup`  
+run `docker compose build` and `docker compose up` from base directory
+OR
+run `podman-compose build` and `podman-compose up` from base directory
 
-### Running the server
-`python manage.py runserver IP:Port`  
+go to `localhost:8000` in browser
 
-### Notes
-If you decided to load fixtures in setup. You can log in with username: `admin`, password: `password`
+You can log in with username: `admin`, password: `password`
+
+### Reset database
+
+run `docker compose down`
+run `docker volume rm timeclock_pgdata`
+
+### Disable Jobs
+
+In `settings.py` set `ENABLE_JOBS` to `False`  
+Running `python manage.py setup` will set up the required default job
+
+### Custom Branding
+
+Replace `time_system/clocker/static/images/logo.png` with your png logo file

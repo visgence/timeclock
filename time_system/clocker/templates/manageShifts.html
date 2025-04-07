@@ -102,9 +102,11 @@
 
 				<tr data-bind="ifnot: updating">
 					<td>
+                                                {% if enable_jobs %}
 						<span title="Edit Summary" class="glyphicon glyphicon-list clickable"
 							data-bind="click: summary">
 						</span>
+                                                {% endif %}
 						<span title="Edit Shift" class="glyphicon glyphicon-pencil clickable" data-bind="click: editShift"></span>
 						<span title="Delete Shift" class="glyphicon glyphicon-trash clickable" data-bind="click: deleteWarning"></span>
 					</td>

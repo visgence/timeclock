@@ -35,19 +35,16 @@ def GET_PERMISSION_OBJ():
     return get_user_model()
 
 
-try:
-    from local_database_settings import DATABASES
-except Exception:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',  # 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
-            'NAME': 'time_clock.db',                      # Or path to database file if using sqlite3.
-            'USER': '',                      # Not used with sqlite3.
-            'PASSWORD': '',                  # Not used with sqlite3.
-            'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
-            'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
-        }
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': os.environ.get('DB_NAME', 'timeclock'),
+        'USER': os.environ.get('DB_USER', 'timeclock'),
+        'PASSWORD': os.environ.get('DB_PASSWORD','password'),
+        'HOST': os.environ.get('DB_HOST','localhost'),
+        'PORT': 5432,
     }
+}
 
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
@@ -116,9 +113,10 @@ STATICFILES_FINDERS = (
 # Make this unique, and don't share it with anybody.
 SECRET_KEY = '1=_^^$ol#3vhymf5qt9#ecky6cnq48_@u&b-%_%!w(ou12y0o^'
 
-MIDDLEWARE_CLASSES = (
-    'django.middleware.common.CommonMiddleware',
+MIDDLEWARE = (
+    'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
@@ -192,3 +190,7 @@ LOGGING = {
         },
     }
 }
+
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+ENABLE_JOBS = True

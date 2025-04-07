@@ -1,6 +1,7 @@
 [submodule "time_system/chucho"]
 	path = time_system/chucho
-	url = git@github.com:visgence/django-chucho.git
+	url = https://github.com/visgence/django-chucho.git
+	branch = python3
 [submodule "time_system/clocker/static/plugins/minicolors"]
 	path = time_system/clocker/static/plugins/minicolors
 	url = https://github.com/claviska/jquery-minicolors.git

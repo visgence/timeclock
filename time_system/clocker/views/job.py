@@ -6,13 +6,21 @@ from collections import OrderedDict
 
 # Django Imports
 from django.template import RequestContext, loader
-from django.http import HttpResponse, HttpResponseBadRequest
-
+from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseRedirect
+from django.shortcuts import render
+from operator import itemgetter
 # Local Imports
 from clocker.models import Employee, Job
+from settings import ENABLE_JOBS
+from datetime import date, timedelta
+from time import gmtime, strftime
+from find_missing_by_date import findMissingByDate
+from clocker.views.timesheet import getPayPeriod
 
 
 def jobBreakdown(request):
+    if not ENABLE_JOBS:
+        return HttpResponse("")
 
     user = request.user
     employees = []
@@ -36,17 +44,17 @@ def jobBreakdown(request):
     breakdown = getJobsBreakdown(employees, start, end)
     breakdown['is_superuser'] = request.user.is_superuser
 
-    total = 0
+    total = Decimal(0.00)
     for i in breakdown['jobs']:
-        miles = 0
+        miles = Decimal(0.00)
         for j in breakdown['jobs'][i]['summaries']:
-            miles += j.miles
-            total += j.miles
+            miles += Decimal(j.miles) if j.miles else Decimal(0.00)
+            total += Decimal(j.miles) if j.miles else Decimal(0.00)
         breakdown['jobs'][i]['total_miles'] = miles
     breakdown['total_miles'] = total
 
     t = loader.get_template('jobBreakdown.html')
-    c = RequestContext(request, {'jobsBreakdown': breakdown})
+    c = {'jobsBreakdown': breakdown}
     return HttpResponse(t.render(c))
 
 
@@ -142,6 +150,8 @@ def getJobsBreakdown(employees=None, start=None, end=None):
     jobs = Job.objects.all().order_by('name')
     for employee in employees:
         jobData['employees'].append(employee.username)
+        if not employee.hourly_rate:
+            employee.hourly_rate = 0.00
 
         for job in jobs:
             # initialize data if not in there yet.
@@ -169,7 +179,7 @@ def getJobsBreakdown(employees=None, start=None, end=None):
             jobData['total_hours'] += hours
             jobData['jobs'][job.name]['summaries'].extend(job.get_summaries(employee, start, end))
             jobData['jobs'][job.name]['hours'] += hours
-            if job.billable_rate > 0:
+            if job.billable_rate is not None and job.billable_rate > 0:
                 jobData['jobs'][job.name]['billed'] += Decimal(hours * float(job.billable_rate)).quantize(Decimal('1.00'))
                 jobData['total_billed'] += Decimal(hours * float(job.billable_rate)).quantize(Decimal('1.00'))
             jobData['jobs'][job.name]['worked'] += Decimal(hours * float(employee.hourly_rate)).quantize(Decimal('1.00'))
@@ -178,18 +188,18 @@ def getJobsBreakdown(employees=None, start=None, end=None):
             jobData['total_worked'] += Decimal(hours * float(employee.hourly_rate)).quantize(Decimal('1.00'))
             jobData['total_net'] = jobData['total_billed'] - jobData['total_worked']
 
-    for job, data in jobData['jobs'].iteritems():
+    for job, data in jobData['jobs'].items():
         data['summaries'] = sorted(data['summaries'], key=lambda summary: summary.shift.time_in, reverse=True)
         for i in data['summaries']:
             i.shift.time_in = datetime.date(i.shift.time_in).strftime("%b. %d, %Y")
 
     # Calculate percentages as a Decimal
-    for jobN, jobD in jobData['jobs'].iteritems():
+    for jobN, jobD in jobData['jobs'].items():
         if jobData['total_hours'] > 0:
             jobPercentage = Decimal((jobD['hours']*100) / jobData['total_hours']).quantize(Decimal('1.00'))
             jobD['percentage'] = str(jobPercentage)
 
-        for username, percentageD in jobD['percentages'].iteritems():
+        for username, percentageD in jobD['percentages'].items():
             if percentageD['hours'] > 0:
                 percentage = str((Decimal((percentageD['hours']*100) / jobData['total_hours'])).quantize(Decimal('1.00')))
                 percentageD['percentage'] = percentage
@@ -199,3 +209,40 @@ def getJobsBreakdown(employees=None, start=None, end=None):
 
     jobData['total_hours'] = str(Decimal(jobData['total_hours']).quantize(Decimal('1.00')))
     return jobData
+
+
+def missingShifts(request):
+
+    employee = request.user
+    if not employee.is_superuser or not ENABLE_JOBS:
+        return HttpResponseRedirect('/timeclock/')
+
+    today = date.today()
+    start_week = today - timedelta(today.weekday())
+
+    missing_shifts = []
+
+    if request.POST.get("start"):
+        start = request.POST.get("start")
+    else:
+        start = date.strftime(start_week, '%Y-%m-%d')
+
+    if request.POST.get("end"):
+        end = request.POST.get("end")
+    else:
+        end = date.strftime(today, '%Y-%m-%d')
+    for i in findMissingByDate(start, end):
+        missing_shifts.append({
+            "user": i.toDict()['employee']['username'],
+            "link": i.toDict()['id'],
+            "date": i.toDict()['time_out']
+        })
+    missing_shifts.sort(key=itemgetter("user"))
+    context = {
+        'start': start,
+        'end': end,
+        'missing_shifts': missing_shifts,
+    }
+
+    t = loader.get_template('missingShiftContent.html')
+    return HttpResponse(t.render(context))

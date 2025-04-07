@@ -1,6 +1,11 @@
 from django.views.decorators.http import require_POST
-from django.http import HttpResponseNotFound, HttpResponseRedirect
-from clocker.models import Employee, Shift
+from django.http import HttpResponseNotFound, HttpResponseRedirect, HttpResponseServerError
+from django.core.exceptions import ValidationError
+from django.db import transaction
+from clocker.models import Employee, Shift, ShiftSummary, Job
+from settings import ENABLE_JOBS
+import logging
+logger = logging.getLogger(__name__)
 
 
 @require_POST
@@ -40,8 +45,27 @@ def clockOutEmployee(employee):
         return HttpResponseNotFound()
 
     try:
-        return employee.clock_out()
+        if ENABLE_JOBS:
+            return employee.clock_out()
+
+        shift = employee.clock_out()
+        kwargs = {'employee': shift.employee, 'shift': shift, 'hours': int(shift.hours * 60 * 60)}
+        kwargs['miles'] = 0.00
+        kwargs['note'] = 'default job'
+        kwargs['job'] = Job.objects.get(id=1)
+        shift_summary = ShiftSummary(**kwargs)
+        try:
+            shift_summary.full_clean()
+        except ValidationError as e:
+            logger.debug(e)
+            transaction.rollback()
+            msg = "New shift summary didn't pass validation for employee %s: %s" % (str(employee), str(e))
+            return HttpResponseServerError(msg)
+        shift_summary.save()
+        transaction.commit()
+        return shift
     except Exception as e:
+        logger.debug(e)
         return HttpResponseNotFound(str(e))
 
 
