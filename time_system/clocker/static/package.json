@@ -9,13 +9,13 @@
   },
   "description": "Timeclock.",
   "devDependencies": {
-    "eslint": "4.8.0",
+    "eslint": "9.39.1",
     "d3": "5.0.0",
     "d3-timelines": "1.3.1",
     "d3-scale": "2.0.0",
-    "eslint-plugin-import": "2.7.0",
+    "eslint-plugin-import": "2.32.0",
     "htmlhint": "0.9.13",
-    "stylelint": "8.2.0"
+    "stylelint": "16.25.0"
   },
   "name": "Timeclock",
   "private": "true",
